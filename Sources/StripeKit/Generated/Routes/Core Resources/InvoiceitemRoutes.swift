@@ -30,7 +30,7 @@ public struct InvoiceitemRoutes: Sendable {
 
     /// Deletes an invoice item, removing it from an invoice. Deleting invoice items is only possible when
     /// they’re not attached to invoices, or if it’s attached to a draft invoice.
-    public var delete: @Sendable (_ invoiceitem: String, _ expand: [String]?) async throws -> Invoiceitem
+    public var delete: @Sendable (_ invoiceitem: String, _ expand: [String]?) async throws -> DeletedInvoiceitem
 }
 
 extension InvoiceitemRoutes {
@@ -77,7 +77,7 @@ extension InvoiceitemRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Invoiceitem
+                ) as DeletedInvoiceitem
             }
         )
     }

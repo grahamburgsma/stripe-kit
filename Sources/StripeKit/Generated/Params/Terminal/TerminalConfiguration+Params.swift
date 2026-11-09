@@ -56,6 +56,55 @@ public struct TerminalConfigurationCreateParams: StripeParams {
     }
 }
 
+public struct TerminalConfigurationUpdateParams: StripeParams {
+    /// An object containing device type specific settings for BBPOS WisePad 3 readers.
+    public var bbposWisepad3: TerminalConfigurationUpdateBbposWisepad3?
+    /// An object containing device type specific settings for BBPOS WisePOS E readers.
+    public var bbposWiseposE: TerminalConfigurationUpdateBbposWiseposE?
+    /// Specifies which fields in the response should be expanded.
+    public var expand: [String]?
+    /// Name of the configuration
+    public var name: String?
+    /// Configurations for collecting transactions offline.
+    public var offline: TerminalConfigurationUpdateOffline?
+    /// Reboot time settings for readers. that support customized reboot time configuration.
+    public var rebootWindow: TerminalConfigurationUpdateRebootWindow?
+    /// An object containing device type specific settings for Stripe S700 readers.
+    public var stripeS700: TerminalConfigurationUpdateStripeS700?
+    /// Tipping configurations for readers. supporting on-reader tips
+    public var tipping: TerminalConfigurationUpdateTipping?
+    /// An object containing device type specific settings for Verifone P400 readers.
+    public var verifoneP400: TerminalConfigurationUpdateVerifoneP400?
+    /// Configurations for connecting to a WiFi network.
+    public var wifi: TerminalConfigurationUpdateWifi?
+
+    public init(bbposWisepad3: TerminalConfigurationUpdateBbposWisepad3? = nil, bbposWiseposE: TerminalConfigurationUpdateBbposWiseposE? = nil, expand: [String]? = nil, name: String? = nil, offline: TerminalConfigurationUpdateOffline? = nil, rebootWindow: TerminalConfigurationUpdateRebootWindow? = nil, stripeS700: TerminalConfigurationUpdateStripeS700? = nil, tipping: TerminalConfigurationUpdateTipping? = nil, verifoneP400: TerminalConfigurationUpdateVerifoneP400? = nil, wifi: TerminalConfigurationUpdateWifi? = nil) {
+        self.bbposWisepad3 = bbposWisepad3
+        self.bbposWiseposE = bbposWiseposE
+        self.expand = expand
+        self.name = name
+        self.offline = offline
+        self.rebootWindow = rebootWindow
+        self.stripeS700 = stripeS700
+        self.tipping = tipping
+        self.verifoneP400 = verifoneP400
+        self.wifi = wifi
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case bbposWisepad3 = "bbpos_wisepad3"
+        case bbposWiseposE = "bbpos_wisepos_e"
+        case expand
+        case name
+        case offline
+        case rebootWindow = "reboot_window"
+        case stripeS700 = "stripe_s700"
+        case tipping
+        case verifoneP400 = "verifone_p400"
+        case wifi
+    }
+}
+
 /// An object containing device type specific settings for BBPOS WisePad 3 readers.
 public struct TerminalConfigurationCreateBbposWisepad3: StripeParams {
     /// A File ID representing an image you want to display on the reader.
@@ -739,6 +788,695 @@ public struct TerminalConfigurationCreateWifiEnterpriseEapTls: StripeParams {
 
 /// Credentials for a WPA-Personal WiFi network.
 public struct TerminalConfigurationCreateWifiPersonalPsk: StripeParams {
+    /// Password for connecting to the WiFi network
+    public var password: String
+    /// Name of the WiFi network
+    public var ssid: String
+
+    public init(password: String, ssid: String) {
+        self.password = password
+        self.ssid = ssid
+    }
+}
+
+public struct TerminalConfigurationUpdateBbposWisepad3: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateBbposWiseposE: StripeParams {
+    /// A File ID representing an image to display on the reader
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateOffline: StripeParams {
+    /// Determines whether to allow transactions to be collected while reader is offline. Defaults to false.
+    public var enabled: Bool
+
+    public init(enabled: Bool) {
+        self.enabled = enabled
+    }
+}
+
+public struct TerminalConfigurationUpdateRebootWindow: StripeParams {
+    /// Integer between 0 to 23 that represents the end hour of the reboot time window. The value must be
+    /// different than the start_hour.
+    public var endHour: Int
+    /// Integer between 0 to 23 that represents the start hour of the reboot time window.
+    public var startHour: Int
+
+    public init(endHour: Int, startHour: Int) {
+        self.endHour = endHour
+        self.startHour = startHour
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case endHour = "end_hour"
+        case startHour = "start_hour"
+    }
+}
+
+public struct TerminalConfigurationUpdateStripeS700: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateTipping: StripeParams {
+    /// Tipping configuration for AED
+    public var aed: TerminalConfigurationUpdateTippingAed?
+    /// Tipping configuration for AUD
+    public var aud: TerminalConfigurationUpdateTippingAud?
+    /// Tipping configuration for CAD
+    public var cad: TerminalConfigurationUpdateTippingCad?
+    /// Tipping configuration for CHF
+    public var chf: TerminalConfigurationUpdateTippingChf?
+    /// Tipping configuration for CZK
+    public var czk: TerminalConfigurationUpdateTippingCzk?
+    /// Tipping configuration for DKK
+    public var dkk: TerminalConfigurationUpdateTippingDkk?
+    /// Tipping configuration for EUR
+    public var eur: TerminalConfigurationUpdateTippingEur?
+    /// Tipping configuration for GBP
+    public var gbp: TerminalConfigurationUpdateTippingGbp?
+    /// Tipping configuration for GIP
+    public var gip: TerminalConfigurationUpdateTippingGip?
+    /// Tipping configuration for HKD
+    public var hkd: TerminalConfigurationUpdateTippingHkd?
+    /// Tipping configuration for HUF
+    public var huf: TerminalConfigurationUpdateTippingHuf?
+    /// Tipping configuration for JPY
+    public var jpy: TerminalConfigurationUpdateTippingJpy?
+    /// Tipping configuration for MXN
+    public var mxn: TerminalConfigurationUpdateTippingMxn?
+    /// Tipping configuration for MYR
+    public var myr: TerminalConfigurationUpdateTippingMyr?
+    /// Tipping configuration for NOK
+    public var nok: TerminalConfigurationUpdateTippingNok?
+    /// Tipping configuration for NZD
+    public var nzd: TerminalConfigurationUpdateTippingNzd?
+    /// Tipping configuration for PLN
+    public var pln: TerminalConfigurationUpdateTippingPln?
+    /// Tipping configuration for RON
+    public var ron: TerminalConfigurationUpdateTippingRon?
+    /// Tipping configuration for SEK
+    public var sek: TerminalConfigurationUpdateTippingSek?
+    /// Tipping configuration for SGD
+    public var sgd: TerminalConfigurationUpdateTippingSgd?
+    /// Tipping configuration for USD
+    public var usd: TerminalConfigurationUpdateTippingUsd?
+
+    public init(aed: TerminalConfigurationUpdateTippingAed? = nil, aud: TerminalConfigurationUpdateTippingAud? = nil, cad: TerminalConfigurationUpdateTippingCad? = nil, chf: TerminalConfigurationUpdateTippingChf? = nil, czk: TerminalConfigurationUpdateTippingCzk? = nil, dkk: TerminalConfigurationUpdateTippingDkk? = nil, eur: TerminalConfigurationUpdateTippingEur? = nil, gbp: TerminalConfigurationUpdateTippingGbp? = nil, gip: TerminalConfigurationUpdateTippingGip? = nil, hkd: TerminalConfigurationUpdateTippingHkd? = nil, huf: TerminalConfigurationUpdateTippingHuf? = nil, jpy: TerminalConfigurationUpdateTippingJpy? = nil, mxn: TerminalConfigurationUpdateTippingMxn? = nil, myr: TerminalConfigurationUpdateTippingMyr? = nil, nok: TerminalConfigurationUpdateTippingNok? = nil, nzd: TerminalConfigurationUpdateTippingNzd? = nil, pln: TerminalConfigurationUpdateTippingPln? = nil, ron: TerminalConfigurationUpdateTippingRon? = nil, sek: TerminalConfigurationUpdateTippingSek? = nil, sgd: TerminalConfigurationUpdateTippingSgd? = nil, usd: TerminalConfigurationUpdateTippingUsd? = nil) {
+        self.aed = aed
+        self.aud = aud
+        self.cad = cad
+        self.chf = chf
+        self.czk = czk
+        self.dkk = dkk
+        self.eur = eur
+        self.gbp = gbp
+        self.gip = gip
+        self.hkd = hkd
+        self.huf = huf
+        self.jpy = jpy
+        self.mxn = mxn
+        self.myr = myr
+        self.nok = nok
+        self.nzd = nzd
+        self.pln = pln
+        self.ron = ron
+        self.sek = sek
+        self.sgd = sgd
+        self.usd = usd
+    }
+}
+
+/// Tipping configuration for AED
+public struct TerminalConfigurationUpdateTippingAed: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for AUD
+public struct TerminalConfigurationUpdateTippingAud: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for CAD
+public struct TerminalConfigurationUpdateTippingCad: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for CHF
+public struct TerminalConfigurationUpdateTippingChf: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for CZK
+public struct TerminalConfigurationUpdateTippingCzk: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for DKK
+public struct TerminalConfigurationUpdateTippingDkk: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for EUR
+public struct TerminalConfigurationUpdateTippingEur: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for GBP
+public struct TerminalConfigurationUpdateTippingGbp: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for GIP
+public struct TerminalConfigurationUpdateTippingGip: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for HKD
+public struct TerminalConfigurationUpdateTippingHkd: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for HUF
+public struct TerminalConfigurationUpdateTippingHuf: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for JPY
+public struct TerminalConfigurationUpdateTippingJpy: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for MXN
+public struct TerminalConfigurationUpdateTippingMxn: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for MYR
+public struct TerminalConfigurationUpdateTippingMyr: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for NOK
+public struct TerminalConfigurationUpdateTippingNok: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for NZD
+public struct TerminalConfigurationUpdateTippingNzd: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for PLN
+public struct TerminalConfigurationUpdateTippingPln: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for RON
+public struct TerminalConfigurationUpdateTippingRon: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for SEK
+public struct TerminalConfigurationUpdateTippingSek: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for SGD
+public struct TerminalConfigurationUpdateTippingSgd: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+/// Tipping configuration for USD
+public struct TerminalConfigurationUpdateTippingUsd: StripeParams {
+    /// Fixed amounts displayed when collecting a tip
+    public var fixedAmounts: [Int]?
+    /// Percentages displayed when collecting a tip
+    public var percentages: [Int]?
+    /// Below this amount, fixed amounts will be displayed; above it, percentages will be displayed
+    public var smartTipThreshold: Int?
+
+    public init(fixedAmounts: [Int]? = nil, percentages: [Int]? = nil, smartTipThreshold: Int? = nil) {
+        self.fixedAmounts = fixedAmounts
+        self.percentages = percentages
+        self.smartTipThreshold = smartTipThreshold
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case fixedAmounts = "fixed_amounts"
+        case percentages
+        case smartTipThreshold = "smart_tip_threshold"
+    }
+}
+
+public struct TerminalConfigurationUpdateVerifoneP400: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateWifi: StripeParams {
+    /// Security type of the WiFi network. Fill out the hash with the corresponding name to provide the set
+    /// of credentials for this security type.
+    public var type: TerminalConfigurationUpdateWifiType
+    /// Credentials for a WPA-Enterprise WiFi network using the EAP-PEAP authentication method.
+    public var enterpriseEapPeap: TerminalConfigurationUpdateWifiEnterpriseEapPeap?
+    /// Credentials for a WPA-Enterprise WiFi network using the EAP-TLS authentication method.
+    public var enterpriseEapTls: TerminalConfigurationUpdateWifiEnterpriseEapTls?
+    /// Credentials for a WPA-Personal WiFi network.
+    public var personalPsk: TerminalConfigurationUpdateWifiPersonalPsk?
+
+    public init(type: TerminalConfigurationUpdateWifiType, enterpriseEapPeap: TerminalConfigurationUpdateWifiEnterpriseEapPeap? = nil, enterpriseEapTls: TerminalConfigurationUpdateWifiEnterpriseEapTls? = nil, personalPsk: TerminalConfigurationUpdateWifiPersonalPsk? = nil) {
+        self.type = type
+        self.enterpriseEapPeap = enterpriseEapPeap
+        self.enterpriseEapTls = enterpriseEapTls
+        self.personalPsk = personalPsk
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case enterpriseEapPeap = "enterprise_eap_peap"
+        case enterpriseEapTls = "enterprise_eap_tls"
+        case personalPsk = "personal_psk"
+        case type
+    }
+}
+
+/// Credentials for a WPA-Enterprise WiFi network using the EAP-PEAP authentication method.
+public struct TerminalConfigurationUpdateWifiEnterpriseEapPeap: StripeParams {
+    /// Password for connecting to the WiFi network
+    public var password: String
+    /// Name of the WiFi network
+    public var ssid: String
+    /// Username for connecting to the WiFi network
+    public var username: String
+    /// A File ID representing a PEM file containing the server certificate
+    public var caCertificateFile: String?
+
+    public init(password: String, ssid: String, username: String, caCertificateFile: String? = nil) {
+        self.password = password
+        self.ssid = ssid
+        self.username = username
+        self.caCertificateFile = caCertificateFile
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case caCertificateFile = "ca_certificate_file"
+        case password
+        case ssid
+        case username
+    }
+}
+
+/// Credentials for a WPA-Enterprise WiFi network using the EAP-TLS authentication method.
+public struct TerminalConfigurationUpdateWifiEnterpriseEapTls: StripeParams {
+    /// A File ID representing a PEM file containing the client certificate
+    public var clientCertificateFile: String
+    /// A File ID representing a PEM file containing the client RSA private key
+    public var privateKeyFile: String
+    /// Name of the WiFi network
+    public var ssid: String
+    /// A File ID representing a PEM file containing the server certificate
+    public var caCertificateFile: String?
+    /// Password for the private key file
+    public var privateKeyFilePassword: String?
+
+    public init(clientCertificateFile: String, privateKeyFile: String, ssid: String, caCertificateFile: String? = nil, privateKeyFilePassword: String? = nil) {
+        self.clientCertificateFile = clientCertificateFile
+        self.privateKeyFile = privateKeyFile
+        self.ssid = ssid
+        self.caCertificateFile = caCertificateFile
+        self.privateKeyFilePassword = privateKeyFilePassword
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case caCertificateFile = "ca_certificate_file"
+        case clientCertificateFile = "client_certificate_file"
+        case privateKeyFile = "private_key_file"
+        case privateKeyFilePassword = "private_key_file_password"
+        case ssid
+    }
+}
+
+/// Credentials for a WPA-Personal WiFi network.
+public struct TerminalConfigurationUpdateWifiPersonalPsk: StripeParams {
     /// Password for connecting to the WiFi network
     public var password: String
     /// Name of the WiFi network

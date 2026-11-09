@@ -36,7 +36,7 @@ public struct Invoice: Codable, Sendable {
     /// invoice.
     public var accountName: String?
     /// The account tax IDs associated with the invoice. Only editable when the invoice is a draft.
-    public var accountTaxIds: [[String: String]]?
+    public var accountTaxIds: [[String: AnyCodableValue]]?
     /// Final amount due at this time for this invoice. If the invoice's total is smaller than the minimum
     /// charge amount, for example, or if there is account credit that can be applied to the invoice, the
     /// `amount_due` may be 0. If there is a positive `starting_balance` for the invoice (the customer owes
@@ -150,7 +150,7 @@ public struct Invoice: Codable, Sendable {
     public var description: String?
     /// The discounts applied to the invoice. Line item discounts are applied before invoice discounts. Use
     /// `expand[]=discounts` to expand each discount.
-    public var discounts: [[String: String]]
+    public var discounts: [[String: AnyCodableValue]]
     /// The date on which payment for this invoice is due. This value will be `null` for invoices where
     /// `collection_method=charge_automatically`.
     public var dueDate: Int?

@@ -27,7 +27,7 @@ public struct SubscriptionItemRoutes: Sendable {
 
     /// Deletes an item from the subscription. Removing a subscription item from a subscription will not
     /// cancel the subscription.
-    public var delete: @Sendable (_ item: String, _ expand: [String]?) async throws -> SubscriptionItem
+    public var delete: @Sendable (_ item: String, _ expand: [String]?) async throws -> DeletedSubscriptionItem
 }
 
 extension SubscriptionItemRoutes {
@@ -74,7 +74,7 @@ extension SubscriptionItemRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as SubscriptionItem
+                ) as DeletedSubscriptionItem
             }
         )
     }

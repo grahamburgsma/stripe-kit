@@ -23,7 +23,7 @@ public struct ProductFeatureRoutes: Sendable {
     public var list: @Sendable (_ product: String, _ expand: [String]?) async throws -> ProductFeatureList
 
     /// Deletes the feature attachment to a product
-    public var delete: @Sendable (_ product: String, _ id: String, _ expand: [String]?) async throws -> ProductFeature
+    public var delete: @Sendable (_ product: String, _ id: String, _ expand: [String]?) async throws -> DeletedProductFeature
 }
 
 extension ProductFeatureRoutes {
@@ -62,7 +62,7 @@ extension ProductFeatureRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as ProductFeature
+                ) as DeletedProductFeature
             }
         )
     }

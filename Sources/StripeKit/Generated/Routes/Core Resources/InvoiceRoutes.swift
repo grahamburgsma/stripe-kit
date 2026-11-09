@@ -39,7 +39,7 @@ public struct InvoiceRoutes: Sendable {
     /// Permanently deletes a one-off invoice draft. This cannot be undone. Attempts to delete invoices that
     /// are no longer in a draft state will fail; once an invoice has been finalized or if an invoice is for
     /// a subscription, it must be voided.
-    public var delete: @Sendable (_ invoice: String, _ expand: [String]?) async throws -> Invoice
+    public var delete: @Sendable (_ invoice: String, _ expand: [String]?) async throws -> DeletedInvoice
 
     /// Adds multiple line items to an invoice. This is only possible when an invoice is still a draft.
     public var addLines: @Sendable (_ invoice: String, _ params: InvoiceAddLinesParams) async throws -> Invoice
@@ -156,7 +156,7 @@ extension InvoiceRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Invoice
+                ) as DeletedInvoice
             },
             addLines: { invoice, params in
                 let body = params.toFormBody()

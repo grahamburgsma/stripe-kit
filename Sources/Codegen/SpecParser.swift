@@ -47,6 +47,24 @@ struct SpecParser {
                 if let ref = schema.ref {
                     let schemaName = refToSchemaName(ref)
                     mapping[schemaName, default: []].append((method, path))
+
+                    // DELETE returning only "deleted_X" belongs to X
+                    // (otherwise e.g. DELETE /v1/terminal/locations/{location} is never generated)
+                    if method == "DELETE", schemaName.starts(with: SpecParser.deletedPrefix) {
+                        let live = String(schemaName.dropFirst(SpecParser.deletedPrefix.count))
+                        if spec.components.schemas[live] != nil {
+                            mapping[live, default: []].append((method, path))
+                        }
+                    }
+                }
+
+                // "X | deleted_X" → X's endpoint (e.g. GET /v1/terminal/readers/{reader})
+                if let refs = schema.anyOf?.compactMap({ $0.ref.map(refToSchemaName) }),
+                   refs.count == schema.anyOf?.count {
+                    let live = refs.filter { !$0.starts(with: SpecParser.deletedPrefix) }
+                    if live.count == 1, refs.contains(SpecParser.deletedPrefix + live[0]) {
+                        mapping[live[0], default: []].append((method, path))
+                    }
                 }
                 
                 // List wrapper → data.items.$ref
@@ -112,10 +130,12 @@ struct SpecParser {
     /// Filtering is handled externally by SchemaClassifier's transitive closure.
     func parseInlineSchemas() -> [StripeResource] {
         var resources: [StripeResource] = []
-        
+
         for (schemaName, schema) in spec.components.schemas {
-            guard schema.xResourceId == nil else { continue }
-            guard !schemaName.starts(with: "deleted_") else { continue }
+            // Deleted objects (some carry an x-resourceId) are plain response types:
+            // generate them here rather than as resources, which would also get routes and params.
+            let isDeleted = schemaName.starts(with: SpecParser.deletedPrefix)
+            guard schema.xResourceId == nil || isDeleted else { continue }
             // Skip dot-named schemas that collide with a real underscore-named schema
             // e.g. "payment_intent.processing" → "payment_intent_processing" already exists
             if schemaName.contains(".") {
@@ -145,13 +165,16 @@ struct SpecParser {
                 properties: properties,
                 expandableFields: Set(expandable),
                 requiredFields: Set(required),
-                anyOfVariants: nil
+                // Polymorphic deleted objects (deleted_external_account → deleted_bank_account | deleted_card)
+                anyOfVariants: isDeleted ? schema.anyOf.map { refs in
+                    refs.compactMap { $0.ref.map(refToSchemaName) }
+                } : nil
             ))
         }
-        
+
         return resources.sorted { $0.swiftTypeName < $1.swiftTypeName }
     }
-    
+
     // MARK: - Property Resolution
     
     private func resolveProperty(
@@ -346,6 +369,9 @@ struct SpecParser {
     }
     
     /// Compute the base Swift type from just the last segment
+    /// Prefix of the spec's deleted-object schemas (e.g. "deleted_customer"), returned by DELETE endpoints.
+    static let deletedPrefix = "deleted_"
+
     private static func baseSwiftType(_ name: String) -> String {
         let baseName: String
         if name.contains(".") {
@@ -363,8 +389,13 @@ struct SpecParser {
     /// Includes the namespace prefix when base name collides (e.g. CheckoutSession, IssuingCard).
     /// Inline schemas (no dot) are treated as-is (e.g. "thresholds_resource_usage_threshold_config").
     func schemaNameToSwiftType(_ name: String) -> String {
+        // Deleted objects mirror their resource's name: "deleted_terminal.location" → "DeletedLocation"
+        if name.starts(with: SpecParser.deletedPrefix) {
+            return "Deleted" + schemaNameToSwiftType(String(name.dropFirst(SpecParser.deletedPrefix.count)))
+        }
+
         let baseName = SpecParser.baseSwiftType(name)
-        
+
         if name.contains(".") && collidingBaseNames.contains(baseName) {
             // Include namespace: "checkout.session" → "CheckoutSession"
             // "financial_connections.session" → "FinancialConnectionsSession"

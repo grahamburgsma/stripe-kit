@@ -35,7 +35,7 @@ public struct CouponRoutes: Sendable {
     /// You can delete coupons via the coupon management page of the Stripe dashboard. However, deleting a
     /// coupon does not affect any customers who have already applied the coupon; it means that new
     /// customers can’t redeem the coupon. You can also delete coupons via the API.
-    public var delete: @Sendable (_ coupon: String, _ expand: [String]?) async throws -> Coupon
+    public var delete: @Sendable (_ coupon: String, _ expand: [String]?) async throws -> DeletedCoupon
 }
 
 extension CouponRoutes {
@@ -82,7 +82,7 @@ extension CouponRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Coupon
+                ) as DeletedCoupon
             }
         )
     }

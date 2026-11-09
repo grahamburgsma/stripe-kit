@@ -29,7 +29,7 @@ public struct PaymentSourceRoutes: Sendable {
     public var list: @Sendable (_ customer: String, _ expand: [String]?) async throws -> PaymentSourceList
 
     /// Delete a specified source for a given customer.
-    public var delete: @Sendable (_ customer: String, _ id: String, _ expand: [String]?) async throws -> PaymentSource
+    public var delete: @Sendable (_ customer: String, _ id: String, _ expand: [String]?) async throws -> ObjectOrDeleted<PaymentSource, DeletedPaymentSource>
 }
 
 extension PaymentSourceRoutes {
@@ -76,7 +76,7 @@ extension PaymentSourceRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as PaymentSource
+                ) as ObjectOrDeleted<PaymentSource, DeletedPaymentSource>
             }
         )
     }

@@ -30,7 +30,7 @@ public struct PersonRoutes: Sendable {
     /// relationship for an account can be deleted through the API, except if the person is the
     /// account_opener. If your integration is using the executive parameter, you cannot delete the only
     /// verified executive on file.
-    public var delete: @Sendable (_ account: String, _ person: String, _ expand: [String]?) async throws -> Person
+    public var delete: @Sendable (_ account: String, _ person: String, _ expand: [String]?) async throws -> DeletedPerson
 }
 
 extension PersonRoutes {
@@ -77,7 +77,7 @@ extension PersonRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Person
+                ) as DeletedPerson
             }
         )
     }

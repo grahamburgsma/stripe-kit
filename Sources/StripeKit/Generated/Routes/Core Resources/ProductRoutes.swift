@@ -37,7 +37,7 @@ public struct ProductRoutes: Sendable {
     /// Delete a product. Deleting a product is only possible if it has no prices associated with it.
     /// Additionally, deleting a product with type=good is only possible if it has no SKUs associated with
     /// it.
-    public var delete: @Sendable (_ id: String, _ expand: [String]?) async throws -> Product
+    public var delete: @Sendable (_ id: String, _ expand: [String]?) async throws -> DeletedProduct
 }
 
 extension ProductRoutes {
@@ -93,7 +93,7 @@ extension ProductRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Product
+                ) as DeletedProduct
             }
         )
     }

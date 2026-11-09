@@ -31,7 +31,7 @@ public struct ExternalAccountRoutes: Sendable {
     public var list: @Sendable (_ account: String, _ expand: [String]?) async throws -> ExternalAccountList
 
     /// Delete a specified external account for a given account.
-    public var delete: @Sendable (_ account: String, _ id: String, _ expand: [String]?) async throws -> ExternalAccount
+    public var delete: @Sendable (_ account: String, _ id: String, _ expand: [String]?) async throws -> DeletedExternalAccount
 }
 
 extension ExternalAccountRoutes {
@@ -78,7 +78,7 @@ extension ExternalAccountRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as ExternalAccount
+                ) as DeletedExternalAccount
             }
         )
     }

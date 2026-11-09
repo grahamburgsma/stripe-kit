@@ -17,8 +17,18 @@ public struct LocationRoutes: Sendable {
     /// each country, see the Manage locations guide.
     public var create: @Sendable (_ params: LocationCreateParams?) async throws -> Location
 
+    /// Retrieves a Location object.
+    public var retrieve: @Sendable (_ location: String, _ expand: [String]?) async throws -> ObjectOrDeleted<Location, DeletedLocation>
+
+    /// Updates a Location object by setting the values of the parameters passed. Any parameters not
+    /// provided will be left unchanged.
+    public var update: @Sendable (_ location: String, _ params: LocationUpdateParams?) async throws -> ObjectOrDeleted<Location, DeletedLocation>
+
     /// Returns a list of Location objects.
     public var list: @Sendable (_ expand: [String]?) async throws -> LocationList
+
+    /// Deletes a Location object.
+    public var delete: @Sendable (_ location: String, _ expand: [String]?) async throws -> DeletedLocation
 }
 
 extension LocationRoutes {
@@ -32,6 +42,23 @@ extension LocationRoutes {
                     body: .bytes(ByteBuffer(string: body))
                 ) as Location
             },
+            retrieve: { location, expand in
+                var query = ""
+                if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
+                let path = query.isEmpty ? "/v1/terminal/locations/\(location)" : "/v1/terminal/locations/\(location)?\(query)"
+                return try await handler.send(
+                    method: .GET,
+                    path: path
+                ) as ObjectOrDeleted<Location, DeletedLocation>
+            },
+            update: { location, params in
+                let body = params?.toFormBody() ?? ""
+                return try await handler.send(
+                    method: .POST,
+                    path: "/v1/terminal/locations/\(location)",
+                    body: .bytes(ByteBuffer(string: body))
+                ) as ObjectOrDeleted<Location, DeletedLocation>
+            },
             list: { expand in
                 var query = ""
                 if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
@@ -40,6 +67,15 @@ extension LocationRoutes {
                     method: .GET,
                     path: path
                 ) as LocationList
+            },
+            delete: { location, expand in
+                var query = ""
+                if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
+                let path = query.isEmpty ? "/v1/terminal/locations/\(location)" : "/v1/terminal/locations/\(location)?\(query)"
+                return try await handler.send(
+                    method: .DELETE,
+                    path: path
+                ) as DeletedLocation
             }
         )
     }

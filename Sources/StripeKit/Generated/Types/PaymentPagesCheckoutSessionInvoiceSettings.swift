@@ -9,7 +9,7 @@ import Foundation
 
 public struct PaymentPagesCheckoutSessionInvoiceSettings: Codable, Sendable {
     /// The account tax IDs associated with the invoice.
-    public var accountTaxIds: [[String: String]]?
+    public var accountTaxIds: [[String: AnyCodableValue]]?
     /// Custom fields displayed on the invoice.
     @ExpandableCollection<InvoiceSettingCustomField>
     public var customFields: [String]?

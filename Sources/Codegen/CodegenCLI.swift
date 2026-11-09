@@ -9,6 +9,8 @@
 //     ├── Params/           — Typed param structs for create/update operations
 //     ├── Types/            — Inline schemas (shared sub-types referenced by resources)
 //     └── StripeClient.swift — Auto-wired client with all route properties
+//   Tests/StripeKitTests/Generated/
+//     └── FixtureTypes.swift — Schema name → Swift type map for fixture decoding tests
 //
 // What stays hand-written (Infrastructure/):
 //     ├── StripeAPIHandler.swift   — HTTP transport, request encoding
@@ -35,6 +37,9 @@ struct CodegenCLI: AsyncParsableCommand {
 
     @Option(name: [.long, .customShort("o")], help: "Output directory")
     var output: String = "Sources/StripeKit"
+
+    @Option(name: [.long, .customShort("t")], help: "Test target directory (for the fixture type registry)")
+    var testsOutput: String = "Tests/StripeKitTests"
 
     func run() async throws {
         printHeader()
@@ -177,6 +182,15 @@ struct CodegenCLI: AsyncParsableCommand {
             encoding: .utf8
         )
         
+        // ── 9. Generate test fixture type registry ────────────────
+        let testsGeneratedURL = URL(filePath: testsOutput).appending(path: "Generated")
+        try FileManager.default.createDirectory(at: testsGeneratedURL, withIntermediateDirectories: true)
+        try infraGen.generateFixtureTypeRegistry(inlineSchemas: inlineSchemas).write(
+            to: testsGeneratedURL.appending(path: "FixtureTypes.swift"),
+            atomically: true,
+            encoding: .utf8
+        )
+
         // ── Summary ───────────────────────────────────────────────
         print()
         print("  Generated/")

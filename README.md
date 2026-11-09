@@ -66,8 +66,8 @@ params.email = "jane@example.com"
 params.name = "Jane Doe"
 let customer = try await stripe.customers.create(params)
 
-// Retrieve with expanded fields
-let full = try await stripe.customers.retrieve(customer.id, ["default_source"])
+// Retrieve with expanded fields (nil if the customer was deleted)
+let full = try await stripe.customers.retrieve(customer.id, ["default_source"]).object
 
 // Create a payment intent
 var piParams = PaymentIntentCreateParams()
@@ -92,12 +92,28 @@ Every route struct uses `@Sendable` closures:
 ```swift
 public struct CustomerRoutes: Sendable {
     public var create:   @Sendable (_ params: CustomerCreateParams?) async throws -> Customer
-    public var retrieve: @Sendable (_ customer: String, _ expand: [String]?) async throws -> Customer
+    public var retrieve: @Sendable (_ customer: String, _ expand: [String]?) async throws -> ObjectOrDeleted<Customer, DeletedCustomer>
     public var update:   @Sendable (_ customer: String, _ params: CustomerUpdateParams?) async throws -> Customer
     public var list:     @Sendable (_ expand: [String]?) async throws -> CustomerList
-    public var delete:   @Sendable (_ customer: String, _ expand: [String]?) async throws -> Customer
+    public var delete:   @Sendable (_ customer: String, _ expand: [String]?) async throws -> DeletedCustomer
 }
 ```
+
+### Deleted Objects
+
+Delete endpoints return a `Deleted*` type (`id`, `object`, `deleted: true`), not the full object.
+Where Stripe can return either one, such as retrieving a customer that may have been deleted,
+the route returns `ObjectOrDeleted`:
+
+```swift
+switch try await stripe.customers.retrieve("cus_123", nil) {
+case .object(let customer): print(customer.email ?? "")
+case .deleted(let deleted): print("\(deleted.id) was deleted")
+}
+```
+
+Return types follow Stripe's API spec, the same approach as the async-stripe Rust SDK.
+Expandable fields expand to the live object only.
 
 ### Params (Typed + Form-Encoded)
 
@@ -122,7 +138,7 @@ Stripe returns IDs by default but can expand nested objects on request. StripeKi
 The most common pattern. A field is either a string ID or a fully expanded object:
 
 ```swift
-let customer = try await stripe.customers.retrieve("cus_xxx", ["default_source"])
+guard let customer = try await stripe.customers.retrieve("cus_xxx", ["default_source"]).object else { return }
 
 // wrappedValue → the ID (always available)
 let sourceId: String? = customer.defaultSource

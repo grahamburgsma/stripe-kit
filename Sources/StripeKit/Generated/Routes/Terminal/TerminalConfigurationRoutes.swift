@@ -16,8 +16,17 @@ public struct TerminalConfigurationRoutes: Sendable {
     /// Creates a new Configuration object.
     public var create: @Sendable (_ params: TerminalConfigurationCreateParams?) async throws -> TerminalConfiguration
 
+    /// Retrieves a Configuration object.
+    public var retrieve: @Sendable (_ configuration: String, _ expand: [String]?) async throws -> ObjectOrDeleted<TerminalConfiguration, DeletedTerminalConfiguration>
+
+    /// Updates a new Configuration object.
+    public var update: @Sendable (_ configuration: String, _ params: TerminalConfigurationUpdateParams?) async throws -> ObjectOrDeleted<TerminalConfiguration, DeletedTerminalConfiguration>
+
     /// Returns a list of Configuration objects.
     public var list: @Sendable (_ expand: [String]?) async throws -> TerminalConfigurationList
+
+    /// Deletes a Configuration object.
+    public var delete: @Sendable (_ configuration: String, _ expand: [String]?) async throws -> DeletedTerminalConfiguration
 }
 
 extension TerminalConfigurationRoutes {
@@ -31,6 +40,23 @@ extension TerminalConfigurationRoutes {
                     body: .bytes(ByteBuffer(string: body))
                 ) as TerminalConfiguration
             },
+            retrieve: { configuration, expand in
+                var query = ""
+                if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
+                let path = query.isEmpty ? "/v1/terminal/configurations/\(configuration)" : "/v1/terminal/configurations/\(configuration)?\(query)"
+                return try await handler.send(
+                    method: .GET,
+                    path: path
+                ) as ObjectOrDeleted<TerminalConfiguration, DeletedTerminalConfiguration>
+            },
+            update: { configuration, params in
+                let body = params?.toFormBody() ?? ""
+                return try await handler.send(
+                    method: .POST,
+                    path: "/v1/terminal/configurations/\(configuration)",
+                    body: .bytes(ByteBuffer(string: body))
+                ) as ObjectOrDeleted<TerminalConfiguration, DeletedTerminalConfiguration>
+            },
             list: { expand in
                 var query = ""
                 if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
@@ -39,6 +65,15 @@ extension TerminalConfigurationRoutes {
                     method: .GET,
                     path: path
                 ) as TerminalConfigurationList
+            },
+            delete: { configuration, expand in
+                var query = ""
+                if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
+                let path = query.isEmpty ? "/v1/terminal/configurations/\(configuration)" : "/v1/terminal/configurations/\(configuration)?\(query)"
+                return try await handler.send(
+                    method: .DELETE,
+                    path: path
+                ) as DeletedTerminalConfiguration
             }
         )
     }

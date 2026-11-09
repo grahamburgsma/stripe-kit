@@ -17,7 +17,7 @@ public struct CustomerRoutes: Sendable {
     public var create: @Sendable (_ params: CustomerCreateParams?) async throws -> Customer
 
     /// Retrieves a Customer object.
-    public var retrieve: @Sendable (_ customer: String, _ expand: [String]?) async throws -> Customer
+    public var retrieve: @Sendable (_ customer: String, _ expand: [String]?) async throws -> ObjectOrDeleted<Customer, DeletedCustomer>
 
     /// Updates the specified customer by setting the values of the parameters passed. Any parameters not
     /// provided are left unchanged. For example, if you pass the source parameter, that becomes the
@@ -43,7 +43,7 @@ public struct CustomerRoutes: Sendable {
 
     /// Permanently deletes a customer. It cannot be undone. Also immediately cancels any active
     /// subscriptions on the customer.
-    public var delete: @Sendable (_ customer: String, _ expand: [String]?) async throws -> Customer
+    public var delete: @Sendable (_ customer: String, _ expand: [String]?) async throws -> DeletedCustomer
 }
 
 extension CustomerRoutes {
@@ -64,7 +64,7 @@ extension CustomerRoutes {
                 return try await handler.send(
                     method: .GET,
                     path: path
-                ) as Customer
+                ) as ObjectOrDeleted<Customer, DeletedCustomer>
             },
             update: { customer, params in
                 let body = params?.toFormBody() ?? ""
@@ -99,7 +99,7 @@ extension CustomerRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Customer
+                ) as DeletedCustomer
             }
         )
     }

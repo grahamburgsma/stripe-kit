@@ -16,12 +16,18 @@ public struct ReaderRoutes: Sendable {
     /// Creates a new Reader object.
     public var create: @Sendable (_ params: ReaderCreateParams) async throws -> Reader
 
-    /// Presents a payment method on a simulated reader. Can be used to simulate accepting a payment, saving
-    /// a card or refunding a transaction.
-    public var update: @Sendable (_ reader: String, _ params: ReaderUpdateParams?) async throws -> Reader
+    /// Retrieves a Reader object.
+    public var retrieve: @Sendable (_ reader: String, _ expand: [String]?) async throws -> ObjectOrDeleted<Reader, DeletedReader>
+
+    /// Updates a Reader object by setting the values of the parameters passed. Any parameters not provided
+    /// will be left unchanged.
+    public var update: @Sendable (_ reader: String, _ params: ReaderUpdateParams?) async throws -> ObjectOrDeleted<Reader, DeletedReader>
 
     /// Returns a list of Reader objects.
     public var list: @Sendable (_ expand: [String]?) async throws -> ReaderList
+
+    /// Deletes a Reader object.
+    public var delete: @Sendable (_ reader: String, _ expand: [String]?) async throws -> DeletedReader
 
     /// Cancels the current reader action. See Programmatic Cancellation for more details.
     public var cancelAction: @Sendable (_ reader: String, _ params: ReaderCancelActionParams?) async throws -> Reader
@@ -61,13 +67,22 @@ extension ReaderRoutes {
                     body: .bytes(ByteBuffer(string: body))
                 ) as Reader
             },
+            retrieve: { reader, expand in
+                var query = ""
+                if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
+                let path = query.isEmpty ? "/v1/terminal/readers/\(reader)" : "/v1/terminal/readers/\(reader)?\(query)"
+                return try await handler.send(
+                    method: .GET,
+                    path: path
+                ) as ObjectOrDeleted<Reader, DeletedReader>
+            },
             update: { reader, params in
                 let body = params?.toFormBody() ?? ""
                 return try await handler.send(
                     method: .POST,
-                    path: "/v1/test_helpers/terminal/readers/\(reader)/present_payment_method",
+                    path: "/v1/terminal/readers/\(reader)",
                     body: .bytes(ByteBuffer(string: body))
-                ) as Reader
+                ) as ObjectOrDeleted<Reader, DeletedReader>
             },
             list: { expand in
                 var query = ""
@@ -77,6 +92,15 @@ extension ReaderRoutes {
                     method: .GET,
                     path: path
                 ) as ReaderList
+            },
+            delete: { reader, expand in
+                var query = ""
+                if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
+                let path = query.isEmpty ? "/v1/terminal/readers/\(reader)" : "/v1/terminal/readers/\(reader)?\(query)"
+                return try await handler.send(
+                    method: .DELETE,
+                    path: path
+                ) as DeletedReader
             },
             cancelAction: { reader, params in
                 let body = params?.toFormBody() ?? ""

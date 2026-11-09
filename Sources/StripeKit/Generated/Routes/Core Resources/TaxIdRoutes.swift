@@ -26,7 +26,7 @@ public struct TaxIdRoutes: Sendable {
     public var list: @Sendable (_ expand: [String]?) async throws -> TaxIdList
 
     /// Deletes an existing account or customer tax_id object.
-    public var delete: @Sendable (_ id: String, _ expand: [String]?) async throws -> TaxId
+    public var delete: @Sendable (_ id: String, _ expand: [String]?) async throws -> DeletedTaxId
 }
 
 extension TaxIdRoutes {
@@ -73,7 +73,7 @@ extension TaxIdRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as TaxId
+                ) as DeletedTaxId
             }
         )
     }

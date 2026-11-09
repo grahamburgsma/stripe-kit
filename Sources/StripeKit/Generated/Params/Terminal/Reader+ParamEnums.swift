@@ -47,9 +47,3 @@ public enum ReaderProcessSetupIntentAllowRedisplay: String, Codable, Sendable {
 public enum ReaderSetReaderDisplayType: String, Codable, Sendable {
     case cart
 }
-
-public enum ReaderUpdateType: String, Codable, Sendable {
-    case card
-    case cardPresent = "card_present"
-    case interacPresent = "interac_present"
-}

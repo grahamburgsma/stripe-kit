@@ -9,7 +9,7 @@ import Foundation
 
 /// Occurs whenever an external account is created.
 public struct AccountExternalAccountCreated: Codable, Sendable {
-    public var object: [String: String]
+    public var object: [String: AnyCodableValue]
 }
 
 public struct AccountExternalAccountCreatedList: Codable, Sendable {

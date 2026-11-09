@@ -23,7 +23,7 @@ public struct TestClockRoutes: Sendable {
     public var list: @Sendable (_ expand: [String]?) async throws -> TestClockList
 
     /// Deletes a test clock.
-    public var delete: @Sendable (_ testClock: String, _ expand: [String]?) async throws -> TestClock
+    public var delete: @Sendable (_ testClock: String, _ expand: [String]?) async throws -> DeletedTestClock
 
     /// Starts advancing a test clock to a specified time in the future. Advancement is done when status
     /// changes to Ready.
@@ -66,7 +66,7 @@ extension TestClockRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as TestClock
+                ) as DeletedTestClock
             },
             advance: { testClock, params in
                 let body = params.toFormBody()

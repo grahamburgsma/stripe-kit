@@ -115,7 +115,9 @@ struct ModelGenerator {
         let optionalMark = (isNonOptional && !isExpandableType) ? "" : "?"
         
         // Expandable property wrapper annotations
-        // Filter out Deleted* types (not generated) and cap DynamicExpandable at 2 type params
+        // Filter out Deleted* types and cap DynamicExpandable at 2 type params.
+        // Deleted* types are generated (for route responses), but expandable fields deliberately
+        // expand to the live object only, like async-stripe and the official typed Stripe SDKs.
         switch property.type {
         case .expandable(let wrappedType):
             if !wrappedType.starts(with: "Deleted") {
@@ -169,7 +171,9 @@ struct ModelGenerator {
                 return "\(resourceName)\(capitalize(propertyName))"
             }
             return "String"
-        case .hash: return "[String: String]"
+        // Free-form objects (no declared fields or value type) and unresolvable anyOf unions:
+        // values can be any JSON, so [String: String] would fail on numbers, bools and nulls.
+        case .hash: return "[String: AnyCodableValue]"
         case .any: return "String"
         }
     }
@@ -249,7 +253,7 @@ struct ModelGenerator {
         lines.append("        let object = try container.decode(String.self, forKey: .object)")
         lines.append("        switch object {")
         for v in variantInfos {
-            lines.append("        case \"\(v.id)\":")
+            lines.append("        case \"\(objectValue(forVariant: v.id))\":")
             lines.append("            self = .\(v.caseName)(try \(v.swiftType)(from: decoder))")
         }
         lines.append("        default:")
@@ -294,6 +298,12 @@ struct ModelGenerator {
         return lines.joined(separator: "\n")
     }
     
+    /// The `object` value that identifies a variant. A deleted object keeps its resource's
+    /// value: "deleted_card" has `"object": "card"`.
+    private func objectValue(forVariant id: String) -> String {
+        id.starts(with: SpecParser.deletedPrefix) ? String(id.dropFirst(SpecParser.deletedPrefix.count)) : id
+    }
+
     /// Generate a polymorphic list type that decodes items into typed arrays
     private func generatePolymorphicListType(
         resource: StripeResource,
@@ -368,7 +378,7 @@ struct ModelGenerator {
         lines.append("                let discriminator = try dataContainer.decode(ObjectDiscriminator.self)")
         lines.append("                switch discriminator.object {")
         for v in variantInfos {
-            lines.append("                case \"\(v.id)\":")
+            lines.append("                case \"\(objectValue(forVariant: v.id))\":")
             lines.append("                    \(pluralPropertyName(v.caseName)).append(try itemsContainer.decode(\(v.swiftType).self))")
         }
         lines.append("                default:")

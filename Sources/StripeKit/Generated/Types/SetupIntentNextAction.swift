@@ -19,7 +19,7 @@ public struct SetupIntentNextAction: Codable, Sendable {
     /// When confirming a SetupIntent with Stripe.js, Stripe.js depends on the contents of this dictionary
     /// to invoke authentication flows. The shape of the contents is subject to change and is only intended
     /// to be used by Stripe.js.
-    public var useStripeSdk: [String: String]?
+    public var useStripeSdk: [String: AnyCodableValue]?
     @Expandable<SetupIntentNextActionVerifyWithMicrodeposits>
     public var verifyWithMicrodeposits: String?
 

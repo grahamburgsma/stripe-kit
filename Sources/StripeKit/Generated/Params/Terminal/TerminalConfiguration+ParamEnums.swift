@@ -12,3 +12,9 @@ public enum TerminalConfigurationCreateWifiType: String, Codable, Sendable {
     case enterpriseEapTls = "enterprise_eap_tls"
     case personalPsk = "personal_psk"
 }
+
+public enum TerminalConfigurationUpdateWifiType: String, Codable, Sendable {
+    case enterpriseEapPeap = "enterprise_eap_peap"
+    case enterpriseEapTls = "enterprise_eap_tls"
+    case personalPsk = "personal_psk"
+}

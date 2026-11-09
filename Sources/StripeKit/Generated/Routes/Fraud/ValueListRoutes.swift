@@ -29,7 +29,7 @@ public struct ValueListRoutes: Sendable {
 
     /// Deletes a ValueList object, also deleting any items contained within the value list. To be deleted,
     /// a value list must not be referenced in any rules.
-    public var delete: @Sendable (_ valueList: String, _ expand: [String]?) async throws -> ValueList
+    public var delete: @Sendable (_ valueList: String, _ expand: [String]?) async throws -> DeletedValueList
 }
 
 extension ValueListRoutes {
@@ -76,7 +76,7 @@ extension ValueListRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as ValueList
+                ) as DeletedValueList
             }
         )
     }

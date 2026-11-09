@@ -40,7 +40,7 @@ public struct AccountRoutes: Sendable {
     /// account balances cannot be deleted, which includes Standard accounts. All other Live-mode accounts,
     /// can be deleted when all balances are zero. If you want to delete your own account, use the account
     /// information tab in your account settings instead.
-    public var delete: @Sendable (_ account: String, _ expand: [String]?) async throws -> Account
+    public var delete: @Sendable (_ account: String, _ expand: [String]?) async throws -> DeletedAccount
 
     /// With Connect, you can reject accounts that you have flagged as suspicious. Only accounts where your
     /// platform is liable for negative account balances, which includes Custom and Express accounts, can be
@@ -93,7 +93,7 @@ extension AccountRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Account
+                ) as DeletedAccount
             },
             reject: { account, params in
                 let body = params.toFormBody()

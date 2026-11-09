@@ -32,7 +32,7 @@ public struct WebhookEndpointRoutes: Sendable {
 
     /// You can also delete webhook endpoints via the webhook endpoint management page of the Stripe
     /// dashboard.
-    public var delete: @Sendable (_ webhookEndpoint: String, _ expand: [String]?) async throws -> WebhookEndpoint
+    public var delete: @Sendable (_ webhookEndpoint: String, _ expand: [String]?) async throws -> DeletedWebhookEndpoint
 }
 
 extension WebhookEndpointRoutes {
@@ -79,7 +79,7 @@ extension WebhookEndpointRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as WebhookEndpoint
+                ) as DeletedWebhookEndpoint
             }
         )
     }

@@ -29,7 +29,7 @@ public struct PlanRoutes: Sendable {
     public var list: @Sendable (_ expand: [String]?) async throws -> PlanList
 
     /// Deleting plans means new subscribers can’t be added. Existing subscribers aren’t affected.
-    public var delete: @Sendable (_ plan: String, _ expand: [String]?) async throws -> Plan
+    public var delete: @Sendable (_ plan: String, _ expand: [String]?) async throws -> DeletedPlan
 }
 
 extension PlanRoutes {
@@ -76,7 +76,7 @@ extension PlanRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as Plan
+                ) as DeletedPlan
             }
         )
     }

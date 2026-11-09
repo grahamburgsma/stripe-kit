@@ -223,35 +223,20 @@ public struct ReaderSetReaderDisplayParams: StripeParams {
 }
 
 public struct ReaderUpdateParams: StripeParams {
-    /// Simulated on-reader tip amount.
-    public var amountTip: Int?
-    /// Simulated data for the card payment method.
-    public var card: ReaderUpdateCard?
-    /// Simulated data for the card_present payment method.
-    public var cardPresent: ReaderUpdateCardPresent?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
-    /// Simulated data for the interac_present payment method.
-    public var interacPresent: ReaderUpdateInteracPresent?
-    /// Simulated payment type.
-    public var type: ReaderUpdateType?
+    /// The new label of the reader.
+    public var label: String?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
+    /// empty value to `metadata`.
+    public var metadata: [String: String]?
 
-    public init(amountTip: Int? = nil, card: ReaderUpdateCard? = nil, cardPresent: ReaderUpdateCardPresent? = nil, expand: [String]? = nil, interacPresent: ReaderUpdateInteracPresent? = nil, type: ReaderUpdateType? = nil) {
-        self.amountTip = amountTip
-        self.card = card
-        self.cardPresent = cardPresent
+    public init(expand: [String]? = nil, label: String? = nil, metadata: [String: String]? = nil) {
         self.expand = expand
-        self.interacPresent = interacPresent
-        self.type = type
-    }
-
-    public enum CodingKeys: String, CodingKey {
-        case amountTip = "amount_tip"
-        case card
-        case cardPresent = "card_present"
-        case expand
-        case interacPresent = "interac_present"
-        case type
+        self.label = label
+        self.metadata = metadata
     }
 }
 
@@ -538,51 +523,5 @@ public struct ReaderSetReaderDisplayCartLineItems: StripeParams {
         self.amount = amount
         self.description = description
         self.quantity = quantity
-    }
-}
-
-/// Simulated data for the card payment method.
-public struct ReaderUpdateCard: StripeParams {
-    /// Two-digit number representing the card's expiration month.
-    public var expMonth: Int
-    /// Two- or four-digit number representing the card's expiration year.
-    public var expYear: Int
-    /// The card number, as a string without any separators.
-    public var number: String
-    /// Card security code.
-    public var cvc: String?
-
-    public init(expMonth: Int, expYear: Int, number: String, cvc: String? = nil) {
-        self.expMonth = expMonth
-        self.expYear = expYear
-        self.number = number
-        self.cvc = cvc
-    }
-
-    public enum CodingKeys: String, CodingKey {
-        case cvc
-        case expMonth = "exp_month"
-        case expYear = "exp_year"
-        case number
-    }
-}
-
-/// Simulated data for the card_present payment method.
-public struct ReaderUpdateCardPresent: StripeParams {
-    /// The card number, as a string without any separators.
-    public var number: String?
-
-    public init(number: String? = nil) {
-        self.number = number
-    }
-}
-
-/// Simulated data for the interac_present payment method.
-public struct ReaderUpdateInteracPresent: StripeParams {
-    /// The Interac card number.
-    public var number: String?
-
-    public init(number: String? = nil) {
-        self.number = number
     }
 }

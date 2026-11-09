@@ -23,7 +23,7 @@ public struct ApplePayDomainRoutes: Sendable {
     public var list: @Sendable (_ expand: [String]?) async throws -> ApplePayDomainList
 
     /// Delete an apple pay domain.
-    public var delete: @Sendable (_ domain: String, _ expand: [String]?) async throws -> ApplePayDomain
+    public var delete: @Sendable (_ domain: String, _ expand: [String]?) async throws -> DeletedApplePayDomain
 }
 
 extension ApplePayDomainRoutes {
@@ -62,7 +62,7 @@ extension ApplePayDomainRoutes {
                 return try await handler.send(
                     method: .DELETE,
                     path: path
-                ) as ApplePayDomain
+                ) as DeletedApplePayDomain
             }
         )
     }

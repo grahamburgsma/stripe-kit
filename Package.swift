@@ -29,8 +29,15 @@ let package = Package(
             ],
             path: "Sources/Codegen"
         ),
-        .testTarget(name: "StripeKitTests", dependencies: [
-            .target(name: "StripeKit")
-        ])
+        .testTarget(
+            name: "StripeKitTests",
+            dependencies: [
+                .target(name: "StripeKit")
+            ],
+            resources: [
+                // Stripe's published fixtures, from the same stripe/openapi commit as spec3.sdk.json
+                .copy("Resources/fixtures3.json")
+            ]
+        )
     ]
 )

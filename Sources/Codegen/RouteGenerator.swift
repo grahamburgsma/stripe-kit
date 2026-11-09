@@ -215,6 +215,27 @@ struct RouteGenerator {
         let returnType: String?  // nil means use resource type
     }
     
+    /// The return type an operation declares when its response is, or can be, a deleted object:
+    /// - `deleted_customer` (DELETE /v1/customers/{customer}) → `DeletedCustomer`
+    /// - `customer | deleted_customer` (GET /v1/customers/{customer}) → `ObjectOrDeleted<Customer, DeletedCustomer>`
+    /// Returns nil for every other response, which then uses the resource type.
+    /// Same approach as the async-stripe Rust SDK, which also follows the spec's response types.
+    private func deletedResponseType(_ op: OperationObject) -> String? {
+        guard let schema = op.responses?["200"]?.content?["application/json"]?.schema else { return nil }
+        let refName = { (ref: String) in String(ref.split(separator: "/").last ?? Substring(ref)) }
+
+        if let ref = schema.ref {
+            let name = refName(ref)
+            return name.starts(with: SpecParser.deletedPrefix) ? parser.schemaNameToSwiftType(name) : nil
+        }
+
+        let names = (schema.anyOf ?? []).compactMap { $0.ref.map(refName) }
+        let deleted = names.filter { $0.starts(with: SpecParser.deletedPrefix) }
+        let objects = names.filter { !$0.starts(with: SpecParser.deletedPrefix) }
+        guard names.count == 2, deleted.count == 1, objects.count == 1 else { return nil }
+        return "ObjectOrDeleted<\(parser.schemaNameToSwiftType(objects[0])), \(parser.schemaNameToSwiftType(deleted[0]))>"
+    }
+
     private func findOperations(for resource: StripeResource) -> [RouteOperation] {
         var results: [RouteOperation] = []
         
@@ -275,7 +296,8 @@ struct RouteGenerator {
                 if funcName == "list" || (isListOrSearch && !path.contains("search")) {
                     returnType = "\(resource.swiftTypeName)List"
                 } else {
-                    returnType = nil  // uses resource type
+                    // A deleted object type when the spec's response can be one; otherwise the resource type
+                    returnType = deletedResponseType(op)
                 }
                 
                 results.append(RouteOperation(
