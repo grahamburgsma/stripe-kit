@@ -18,6 +18,8 @@ public struct SetupAttemptPaymentMethodDetails: Codable, Sendable {
     public var bacsDebit: String?
     @Expandable<SetupAttemptPaymentMethodDetailsBancontact>
     public var bancontact: String?
+    @Expandable<SetupAttemptPaymentMethodDetailsBlik>
+    public var blik: String?
     @Expandable<SetupAttemptPaymentMethodDetailsBoleto>
     public var boleto: String?
     @Expandable<SetupAttemptPaymentMethodDetailsCard>
@@ -44,16 +46,24 @@ public struct SetupAttemptPaymentMethodDetails: Codable, Sendable {
     public var paypal: String?
     @Expandable<SetupAttemptPaymentMethodDetailsPayto>
     public var payto: String?
+    @Expandable<SetupAttemptPaymentMethodDetailsPix>
+    public var pix: String?
     @Expandable<SetupAttemptPaymentMethodDetailsRevolutPay>
     public var revolutPay: String?
+    @Expandable<PaymentFlowsPrivatePaymentMethodsSatispaySetupAttemptDetails>
+    public var satispay: String?
     @Expandable<SetupAttemptPaymentMethodDetailsSepaDebit>
     public var sepaDebit: String?
     @Expandable<SetupAttemptPaymentMethodDetailsSofort>
     public var sofort: String?
+    @Expandable<SetupAttemptPaymentMethodDetailsTwint>
+    public var twint: String?
     /// The type of the payment method used in the SetupIntent (e.g., `card`). An additional hash is
     /// included on `payment_method_details` with a name matching this value. It contains
     /// confirmation-specific information for the payment method.
     public var type: String
+    @Expandable<SetupAttemptPaymentMethodDetailsUpi>
+    public var upi: String?
     @Expandable<SetupAttemptPaymentMethodDetailsUsBankAccount>
     public var usBankAccount: String?
 
@@ -63,6 +73,7 @@ public struct SetupAttemptPaymentMethodDetails: Codable, Sendable {
         case auBecsDebit = "au_becs_debit"
         case bacsDebit = "bacs_debit"
         case bancontact
+        case blik
         case boleto
         case card
         case cardPresent = "card_present"
@@ -76,10 +87,14 @@ public struct SetupAttemptPaymentMethodDetails: Codable, Sendable {
         case nzBankAccount = "nz_bank_account"
         case paypal
         case payto
+        case pix
         case revolutPay = "revolut_pay"
+        case satispay
         case sepaDebit = "sepa_debit"
         case sofort
+        case twint
         case type
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }

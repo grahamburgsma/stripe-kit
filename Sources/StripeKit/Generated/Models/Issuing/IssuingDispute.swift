@@ -26,8 +26,8 @@ public struct IssuingDispute: Codable, Sendable {
     public var evidence: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// The enum that describes the dispute loss outcome. If the dispute is not lost, this field will be
     /// absent. New enum values may be added in the future, so be sure to handle unknown values.
@@ -43,7 +43,7 @@ public struct IssuingDispute: Codable, Sendable {
     @Expandable<IssuingTransaction>
     public var transaction: String?
     /// [Treasury](https://docs.stripe.com/api/treasury) details related to this dispute if it was created
-    /// on a [FinancialAccount](/docs/api/treasury/financial_accounts
+    /// on a [FinancialAccount](https://docs.stripe.com/api/treasury/financial_accounts)
     @Expandable<IssuingDisputeTreasury>
     public var treasury: String?
 

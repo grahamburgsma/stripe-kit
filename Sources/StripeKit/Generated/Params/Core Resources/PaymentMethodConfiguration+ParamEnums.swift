@@ -79,6 +79,12 @@ public enum PaymentMethodConfigurationCreateBillieDisplayPreferencePreference: S
     case on
 }
 
+public enum PaymentMethodConfigurationCreateBizumDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
 public enum PaymentMethodConfigurationCreateBlikDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
@@ -265,6 +271,12 @@ public enum PaymentMethodConfigurationCreatePaypalDisplayPreferencePreference: S
     case on
 }
 
+public enum PaymentMethodConfigurationCreatePaypayDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
 public enum PaymentMethodConfigurationCreatePaytoDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
@@ -301,13 +313,31 @@ public enum PaymentMethodConfigurationCreateSatispayDisplayPreferencePreference:
     case on
 }
 
+public enum PaymentMethodConfigurationCreateScalapayDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
 public enum PaymentMethodConfigurationCreateSepaDebitDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
     case on
 }
 
+public enum PaymentMethodConfigurationCreateSequraDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
 public enum PaymentMethodConfigurationCreateSofortDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
+public enum PaymentMethodConfigurationCreateSunbitDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
     case on
@@ -320,6 +350,12 @@ public enum PaymentMethodConfigurationCreateSwishDisplayPreferencePreference: St
 }
 
 public enum PaymentMethodConfigurationCreateTwintDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
+public enum PaymentMethodConfigurationCreateUpiDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
     case on
@@ -410,6 +446,12 @@ public enum PaymentMethodConfigurationUpdateBancontactDisplayPreferencePreferenc
 }
 
 public enum PaymentMethodConfigurationUpdateBillieDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
+public enum PaymentMethodConfigurationUpdateBizumDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
     case on
@@ -601,6 +643,12 @@ public enum PaymentMethodConfigurationUpdatePaypalDisplayPreferencePreference: S
     case on
 }
 
+public enum PaymentMethodConfigurationUpdatePaypayDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
 public enum PaymentMethodConfigurationUpdatePaytoDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
@@ -637,13 +685,31 @@ public enum PaymentMethodConfigurationUpdateSatispayDisplayPreferencePreference:
     case on
 }
 
+public enum PaymentMethodConfigurationUpdateScalapayDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
 public enum PaymentMethodConfigurationUpdateSepaDebitDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
     case on
 }
 
+public enum PaymentMethodConfigurationUpdateSequraDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
 public enum PaymentMethodConfigurationUpdateSofortDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
+public enum PaymentMethodConfigurationUpdateSunbitDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
     case on
@@ -656,6 +722,12 @@ public enum PaymentMethodConfigurationUpdateSwishDisplayPreferencePreference: St
 }
 
 public enum PaymentMethodConfigurationUpdateTwintDisplayPreferencePreference: String, Codable, Sendable {
+    case none
+    case off
+    case on
+}
+
+public enum PaymentMethodConfigurationUpdateUpiDisplayPreferencePreference: String, Codable, Sendable {
     case none
     case off
     case on

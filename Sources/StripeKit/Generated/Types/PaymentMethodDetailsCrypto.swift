@@ -31,13 +31,19 @@ public enum PaymentMethodDetailsCryptoNetwork: String, Codable, Sendable {
     case ethereum
     case polygon
     case solana
+    case sui
+    case tempo
 }
 
 /// The token currency that the transaction was sent with.
 public enum PaymentMethodDetailsCryptoTokenCurrency: String, Codable, Sendable {
+    case ousd
+    case phantomCash = "phantom_cash"
     case usdc
     case usdg
     case usdp
+    case usdsui
+    case usdt
 }
 
 public struct PaymentMethodDetailsCryptoList: Codable, Sendable {

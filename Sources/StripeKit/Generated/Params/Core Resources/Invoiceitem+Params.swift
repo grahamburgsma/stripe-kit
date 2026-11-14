@@ -51,8 +51,12 @@ public struct InvoiceitemCreateParams: StripeParams {
     public var priceData: InvoiceitemCreatePriceData?
     /// The pricing information for the invoice item.
     public var pricing: InvoiceitemCreatePricing?
-    /// Non-negative integer. The quantity of units for the invoice item.
+    /// Non-negative integer. The quantity of units for the invoice item. Use `quantity_decimal` instead to
+    /// provide decimal precision. This field will be deprecated in favor of `quantity_decimal` in a future
+    /// version.
     public var quantity: Int?
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the invoice item.
+    public var quantityDecimal: String?
     /// The ID of a subscription to add this invoice item to. When left blank, the invoice item is added to
     /// the next upcoming scheduled invoice. When set, scheduled invoices for subscriptions other than the
     /// specified subscription will ignore the invoice item. Use this when you want to express that an
@@ -75,7 +79,7 @@ public struct InvoiceitemCreateParams: StripeParams {
     /// most 12 decimal places.
     public var unitAmountDecimal: String?
 
-    public init(amount: Int? = nil, currency: String? = nil, customer: String? = nil, customerAccount: String? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceitemCreateDiscounts]? = nil, expand: [String]? = nil, invoice: String? = nil, metadata: [String: String]? = nil, period: InvoiceitemCreatePeriod? = nil, priceData: InvoiceitemCreatePriceData? = nil, pricing: InvoiceitemCreatePricing? = nil, quantity: Int? = nil, subscription: String? = nil, taxBehavior: InvoiceitemCreateTaxBehavior? = nil, taxCode: String? = nil, taxRates: [String]? = nil, unitAmountDecimal: String? = nil) {
+    public init(amount: Int? = nil, currency: String? = nil, customer: String? = nil, customerAccount: String? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceitemCreateDiscounts]? = nil, expand: [String]? = nil, invoice: String? = nil, metadata: [String: String]? = nil, period: InvoiceitemCreatePeriod? = nil, priceData: InvoiceitemCreatePriceData? = nil, pricing: InvoiceitemCreatePricing? = nil, quantity: Int? = nil, quantityDecimal: String? = nil, subscription: String? = nil, taxBehavior: InvoiceitemCreateTaxBehavior? = nil, taxCode: String? = nil, taxRates: [String]? = nil, unitAmountDecimal: String? = nil) {
         self.amount = amount
         self.currency = currency
         self.customer = customer
@@ -90,6 +94,7 @@ public struct InvoiceitemCreateParams: StripeParams {
         self.priceData = priceData
         self.pricing = pricing
         self.quantity = quantity
+        self.quantityDecimal = quantityDecimal
         self.subscription = subscription
         self.taxBehavior = taxBehavior
         self.taxCode = taxCode
@@ -112,6 +117,7 @@ public struct InvoiceitemCreateParams: StripeParams {
         case priceData = "price_data"
         case pricing
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case subscription
         case taxBehavior = "tax_behavior"
         case taxCode = "tax_code"
@@ -136,6 +142,9 @@ public struct InvoiceitemUpdateParams: StripeParams {
     public var discounts: [InvoiceitemUpdateDiscounts]?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
+    /// Pass an empty string to remove previously-defined invoicing rules. Setting invoicing rules is not
+    /// supported.
+    public var invoicingRules: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
@@ -152,8 +161,12 @@ public struct InvoiceitemUpdateParams: StripeParams {
     public var priceData: InvoiceitemUpdatePriceData?
     /// The pricing information for the invoice item.
     public var pricing: InvoiceitemUpdatePricing?
-    /// Non-negative integer. The quantity of units for the invoice item.
+    /// Non-negative integer. The quantity of units for the invoice item. Use `quantity_decimal` instead to
+    /// provide decimal precision. This field will be deprecated in favor of `quantity_decimal` in a future
+    /// version.
     public var quantity: Int?
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the line item.
+    public var quantityDecimal: String?
     /// Only required if a [default tax
     /// behavior](https://docs.stripe.com/tax/products-prices-tax-categories-tax-behavior#setting-a-default-tax-behavior-(recommended))
     /// was not provided in the Stripe Tax settings. Specifies whether the price is considered inclusive of
@@ -171,17 +184,19 @@ public struct InvoiceitemUpdateParams: StripeParams {
     /// most 12 decimal places.
     public var unitAmountDecimal: String?
 
-    public init(amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceitemUpdateDiscounts]? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, period: InvoiceitemUpdatePeriod? = nil, priceData: InvoiceitemUpdatePriceData? = nil, pricing: InvoiceitemUpdatePricing? = nil, quantity: Int? = nil, taxBehavior: InvoiceitemUpdateTaxBehavior? = nil, taxCode: String? = nil, taxRates: [String]? = nil, unitAmountDecimal: String? = nil) {
+    public init(amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceitemUpdateDiscounts]? = nil, expand: [String]? = nil, invoicingRules: String? = nil, metadata: [String: String]? = nil, period: InvoiceitemUpdatePeriod? = nil, priceData: InvoiceitemUpdatePriceData? = nil, pricing: InvoiceitemUpdatePricing? = nil, quantity: Int? = nil, quantityDecimal: String? = nil, taxBehavior: InvoiceitemUpdateTaxBehavior? = nil, taxCode: String? = nil, taxRates: [String]? = nil, unitAmountDecimal: String? = nil) {
         self.amount = amount
         self.description = description
         self.discountable = discountable
         self.discounts = discounts
         self.expand = expand
+        self.invoicingRules = invoicingRules
         self.metadata = metadata
         self.period = period
         self.priceData = priceData
         self.pricing = pricing
         self.quantity = quantity
+        self.quantityDecimal = quantityDecimal
         self.taxBehavior = taxBehavior
         self.taxCode = taxCode
         self.taxRates = taxRates
@@ -194,11 +209,13 @@ public struct InvoiceitemUpdateParams: StripeParams {
         case discountable
         case discounts
         case expand
+        case invoicingRules = "invoicing_rules"
         case metadata
         case period
         case priceData = "price_data"
         case pricing
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case taxBehavior = "tax_behavior"
         case taxCode = "tax_code"
         case taxRates = "tax_rates"

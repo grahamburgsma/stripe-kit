@@ -18,7 +18,7 @@ public struct PaymentMethodDetails: Codable, Sendable {
     public var affirm: String?
     @Expandable<PaymentMethodDetailsAfterpayClearpay>
     public var afterpayClearpay: String?
-    @Expandable<PaymentFlowsPrivatePaymentMethodsAlipayDetails>
+    @Expandable<PaymentMethodDetailsAlipay>
     public var alipay: String?
     @Expandable<PaymentMethodDetailsAlma>
     public var alma: String?
@@ -32,6 +32,8 @@ public struct PaymentMethodDetails: Codable, Sendable {
     public var bancontact: String?
     @Expandable<PaymentMethodDetailsBillie>
     public var billie: String?
+    @Expandable<PaymentMethodDetailsBizum>
+    public var bizum: String?
     @Expandable<PaymentMethodDetailsBlik>
     public var blik: String?
     @Expandable<PaymentMethodDetailsBoleto>
@@ -90,6 +92,8 @@ public struct PaymentMethodDetails: Codable, Sendable {
     public var paynow: String?
     @Expandable<PaymentMethodDetailsPaypal>
     public var paypal: String?
+    @Expandable<PaymentMethodDetailsPaypay>
+    public var paypay: String?
     @Expandable<PaymentMethodDetailsPayto>
     public var payto: String?
     @Expandable<PaymentMethodDetailsPix>
@@ -102,14 +106,20 @@ public struct PaymentMethodDetails: Codable, Sendable {
     public var samsungPay: String?
     @Expandable<PaymentMethodDetailsSatispay>
     public var satispay: String?
+    @Expandable<PaymentMethodDetailsScalapay>
+    public var scalapay: String?
     @Expandable<PaymentMethodDetailsSepaCreditTransfer>
     public var sepaCreditTransfer: String?
     @Expandable<PaymentMethodDetailsSepaDebit>
     public var sepaDebit: String?
+    @Expandable<PaymentMethodDetailsSequra>
+    public var sequra: String?
     @Expandable<PaymentMethodDetailsSofort>
     public var sofort: String?
     @Expandable<PaymentMethodDetailsStripeAccount>
     public var stripeAccount: String?
+    @Expandable<PaymentMethodDetailsSunbit>
+    public var sunbit: String?
     @Expandable<PaymentMethodDetailsSwish>
     public var swish: String?
     @Expandable<PaymentMethodDetailsTwint>
@@ -119,6 +129,8 @@ public struct PaymentMethodDetails: Codable, Sendable {
     /// for the full list of possible types. An additional hash is included on `payment_method_details` with
     /// a name matching this value. It contains information specific to the payment method.
     public var type: String
+    @Expandable<PaymentMethodDetailsUpi>
+    public var upi: String?
     @Expandable<PaymentMethodDetailsUsBankAccount>
     public var usBankAccount: String?
     @Expandable<PaymentMethodDetailsWechat>
@@ -141,6 +153,7 @@ public struct PaymentMethodDetails: Codable, Sendable {
         case bacsDebit = "bacs_debit"
         case bancontact
         case billie
+        case bizum
         case blik
         case boleto
         case card
@@ -170,19 +183,24 @@ public struct PaymentMethodDetails: Codable, Sendable {
         case payco
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaCreditTransfer = "sepa_credit_transfer"
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
         case stripeAccount = "stripe_account"
+        case sunbit
         case swish
         case twint
         case type
+        case upi
         case usBankAccount = "us_bank_account"
         case wechat
         case wechatPay = "wechat_pay"

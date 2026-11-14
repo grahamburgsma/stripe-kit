@@ -13,6 +13,8 @@ public struct SubscriptionItemCreateParams: StripeParams {
     /// Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing
     /// period. Pass an empty string to remove previously-defined thresholds.
     public var billingThresholds: SubscriptionItemCreateBillingThresholds?
+    /// The trial offer to apply to this subscription item.
+    public var currentTrial: SubscriptionItemCreateCurrentTrial?
     /// The coupons to redeem into discounts for the subscription item.
     public var discounts: [SubscriptionItemCreateDiscounts]?
     /// Specifies which fields in the response should be expanded.
@@ -22,25 +24,8 @@ public struct SubscriptionItemCreateParams: StripeParams {
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
     /// empty value to `metadata`.
     public var metadata: [String: String]?
-    /// Use `allow_incomplete` to transition the subscription to `status=past_due` if a payment is required
-    /// but cannot be paid. This allows you to manage scenarios where additional user actions are needed to
-    /// pay a subscription's invoice. For example, SCA regulation may require 3DS authentication to complete
-    /// payment. See the [SCA Migration
-    /// Guide](https://docs.stripe.com/billing/migration/strong-customer-authentication) for Billing to
-    /// learn more. This is the default behavior. Use `default_incomplete` to transition the subscription to
-    /// `status=past_due` when payment is required and await explicit confirmation of the invoice's payment
-    /// intent. This allows simpler management of scenarios where additional user actions are needed to pay
-    /// a subscription’s invoice. Such as failed payments, [SCA
-    /// regulation](https://docs.stripe.com/billing/migration/strong-customer-authentication), or collecting
-    /// a mandate for a bank debit payment method. Use `pending_if_incomplete` to update the subscription
-    /// using [pending updates](https://docs.stripe.com/billing/subscriptions/pending-updates). When you use
-    /// `pending_if_incomplete` you can only pass the parameters [supported by pending
-    /// updates](https://docs.stripe.com/billing/pending-updates-reference#supported-attributes). Use
-    /// `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription's
-    /// invoice cannot be paid. For example, if a payment method requires 3DS authentication due to SCA
-    /// regulation and further user action is needed, this parameter does not update the subscription and
-    /// returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See
-    /// the [changelog](https://docs.stripe.com/changelog/2019-03-14) to learn more.
+    /// Controls how Stripe handles payment when a subscription update requires payment and
+    /// `collection_method=charge_automatically`.
     public var paymentBehavior: SubscriptionItemCreatePaymentBehavior?
     /// The identifier of the plan to add to the subscription.
     public var plan: String?
@@ -54,7 +39,7 @@ public struct SubscriptionItemCreateParams: StripeParams {
     public var prorationBehavior: SubscriptionItemCreateProrationBehavior?
     /// If set, the proration will be calculated as though the subscription was updated at the given time.
     /// This can be used to apply the same proration that was previewed with the [upcoming
-    /// invoice](https://api.stripe.com#retrieve_customer_invoice) endpoint.
+    /// invoice](/api/invoices/create_preview) endpoint.
     public var prorationDate: Int?
     /// The quantity you'd like to apply to the subscription item you're creating.
     public var quantity: Int?
@@ -63,9 +48,10 @@ public struct SubscriptionItemCreateParams: StripeParams {
     /// on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(subscription: String, billingThresholds: SubscriptionItemCreateBillingThresholds? = nil, discounts: [SubscriptionItemCreateDiscounts]? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, paymentBehavior: SubscriptionItemCreatePaymentBehavior? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionItemCreatePriceData? = nil, prorationBehavior: SubscriptionItemCreateProrationBehavior? = nil, prorationDate: Int? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(subscription: String, billingThresholds: SubscriptionItemCreateBillingThresholds? = nil, currentTrial: SubscriptionItemCreateCurrentTrial? = nil, discounts: [SubscriptionItemCreateDiscounts]? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, paymentBehavior: SubscriptionItemCreatePaymentBehavior? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionItemCreatePriceData? = nil, prorationBehavior: SubscriptionItemCreateProrationBehavior? = nil, prorationDate: Int? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
         self.subscription = subscription
         self.billingThresholds = billingThresholds
+        self.currentTrial = currentTrial
         self.discounts = discounts
         self.expand = expand
         self.metadata = metadata
@@ -81,6 +67,7 @@ public struct SubscriptionItemCreateParams: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case billingThresholds = "billing_thresholds"
+        case currentTrial = "current_trial"
         case discounts
         case expand
         case metadata
@@ -100,6 +87,8 @@ public struct SubscriptionItemUpdateParams: StripeParams {
     /// Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing
     /// period. Pass an empty string to remove previously-defined thresholds.
     public var billingThresholds: SubscriptionItemUpdateBillingThresholds?
+    /// The trial offer to apply to this subscription item.
+    public var currentTrial: SubscriptionItemUpdateCurrentTrial?
     /// The coupons to redeem into discounts for the subscription item.
     public var discounts: [SubscriptionItemUpdateDiscounts]?
     /// Specifies which fields in the response should be expanded.
@@ -112,33 +101,19 @@ public struct SubscriptionItemUpdateParams: StripeParams {
     /// Indicates if a customer is on or off-session while an invoice payment is attempted. Defaults to
     /// `false` (on-session).
     public var offSession: Bool?
-    /// Use `allow_incomplete` to transition the subscription to `status=past_due` if a payment is required
-    /// but cannot be paid. This allows you to manage scenarios where additional user actions are needed to
-    /// pay a subscription's invoice. For example, SCA regulation may require 3DS authentication to complete
-    /// payment. See the [SCA Migration
-    /// Guide](https://docs.stripe.com/billing/migration/strong-customer-authentication) for Billing to
-    /// learn more. This is the default behavior. Use `default_incomplete` to transition the subscription to
-    /// `status=past_due` when payment is required and await explicit confirmation of the invoice's payment
-    /// intent. This allows simpler management of scenarios where additional user actions are needed to pay
-    /// a subscription’s invoice. Such as failed payments, [SCA
-    /// regulation](https://docs.stripe.com/billing/migration/strong-customer-authentication), or collecting
-    /// a mandate for a bank debit payment method. Use `pending_if_incomplete` to update the subscription
-    /// using [pending updates](https://docs.stripe.com/billing/subscriptions/pending-updates). When you use
-    /// `pending_if_incomplete` you can only pass the parameters [supported by pending
-    /// updates](https://docs.stripe.com/billing/pending-updates-reference#supported-attributes). Use
-    /// `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription's
-    /// invoice cannot be paid. For example, if a payment method requires 3DS authentication due to SCA
-    /// regulation and further user action is needed, this parameter does not update the subscription and
-    /// returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See
-    /// the [changelog](https://docs.stripe.com/changelog/2019-03-14) to learn more.
+    /// Controls how Stripe handles payment when a subscription update requires payment and
+    /// `collection_method=charge_automatically`.
     public var paymentBehavior: SubscriptionItemUpdatePaymentBehavior?
     /// The identifier of the new plan for this subscription item.
     public var plan: String?
-    /// The ID of the price object. One of `price` or `price_data` is required. When changing a subscription
-    /// item's price, `quantity` is set to 1 unless a `quantity` parameter is provided.
+    /// The ID of the price object. You can use either `price` or `price_data`, but not both, to set or
+    /// change this item's price. If you're updating an existing item without changing its price, omit both.
+    /// When changing a subscription item's price, `quantity` is set to 1 unless a `quantity` parameter is
+    /// provided.
     public var price: String?
-    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-    /// `price` or `price_data` is required.
+    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. You can use
+    /// either `price` or `price_data`, but not both, to set or change this item's price. If you're updating
+    /// an existing item without changing its price, omit both.
     public var priceData: SubscriptionItemUpdatePriceData?
     /// Determines how to handle [prorations](https://docs.stripe.com/billing/subscriptions/prorations) when
     /// the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or
@@ -146,7 +121,7 @@ public struct SubscriptionItemUpdateParams: StripeParams {
     public var prorationBehavior: SubscriptionItemUpdateProrationBehavior?
     /// If set, the proration will be calculated as though the subscription was updated at the given time.
     /// This can be used to apply the same proration that was previewed with the [upcoming
-    /// invoice](https://api.stripe.com#retrieve_customer_invoice) endpoint.
+    /// invoice](/api/invoices/create_preview) endpoint.
     public var prorationDate: Int?
     /// The quantity you'd like to apply to the subscription item you're creating.
     public var quantity: Int?
@@ -155,8 +130,9 @@ public struct SubscriptionItemUpdateParams: StripeParams {
     /// on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(billingThresholds: SubscriptionItemUpdateBillingThresholds? = nil, discounts: [SubscriptionItemUpdateDiscounts]? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, offSession: Bool? = nil, paymentBehavior: SubscriptionItemUpdatePaymentBehavior? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionItemUpdatePriceData? = nil, prorationBehavior: SubscriptionItemUpdateProrationBehavior? = nil, prorationDate: Int? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(billingThresholds: SubscriptionItemUpdateBillingThresholds? = nil, currentTrial: SubscriptionItemUpdateCurrentTrial? = nil, discounts: [SubscriptionItemUpdateDiscounts]? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, offSession: Bool? = nil, paymentBehavior: SubscriptionItemUpdatePaymentBehavior? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionItemUpdatePriceData? = nil, prorationBehavior: SubscriptionItemUpdateProrationBehavior? = nil, prorationDate: Int? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
         self.billingThresholds = billingThresholds
+        self.currentTrial = currentTrial
         self.discounts = discounts
         self.expand = expand
         self.metadata = metadata
@@ -173,6 +149,7 @@ public struct SubscriptionItemUpdateParams: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case billingThresholds = "billing_thresholds"
+        case currentTrial = "current_trial"
         case discounts
         case expand
         case metadata
@@ -200,6 +177,20 @@ public struct SubscriptionItemCreateBillingThresholds: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case usageGte = "usage_gte"
+    }
+}
+
+/// The trial offer to apply to this subscription item.
+public struct SubscriptionItemCreateCurrentTrial: StripeParams {
+    /// The ID of the trial offer to apply to the subscription item.
+    public var trialOffer: String
+
+    public init(trialOffer: String) {
+        self.trialOffer = trialOffer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case trialOffer = "trial_offer"
     }
 }
 
@@ -301,6 +292,20 @@ public struct SubscriptionItemUpdateBillingThresholds: StripeParams {
     }
 }
 
+/// The trial offer to apply to this subscription item.
+public struct SubscriptionItemUpdateCurrentTrial: StripeParams {
+    /// The ID of the trial offer to apply to the subscription item.
+    public var trialOffer: String
+
+    public init(trialOffer: String) {
+        self.trialOffer = trialOffer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case trialOffer = "trial_offer"
+    }
+}
+
 public struct SubscriptionItemUpdateDiscounts: StripeParams {
     /// ID of the coupon to create a new discount for.
     public var coupon: String?
@@ -322,8 +327,9 @@ public struct SubscriptionItemUpdateDiscounts: StripeParams {
     }
 }
 
-/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-/// `price` or `price_data` is required.
+/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. You can use
+/// either `price` or `price_data`, but not both, to set or change this item's price. If you're updating
+/// an existing item without changing its price, omit both.
 public struct SubscriptionItemUpdatePriceData: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).

@@ -18,7 +18,7 @@ public struct MeterEventCreateParams: StripeParams {
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
     /// A unique identifier for the event. If not provided, one is generated. We recommend using UUID-like
-    /// identifiers. We will enforce uniqueness within a rolling period of at least 24 hours. The
+    /// identifiers. Stripe enforces uniqueness within a rolling period of at least 24 hours. The
     /// enforcement of uniqueness primarily addresses issues arising from accidental retries or other
     /// problems occurring within extremely brief time intervals. This approach helps prevent duplicate
     /// entries and ensures data integrity in high-frequency operations.

@@ -10,6 +10,8 @@ import Foundation
 public struct PaymentIntentNextAction: Codable, Sendable {
     @Expandable<PaymentIntentNextActionAlipayHandleRedirect>
     public var alipayHandleRedirect: String?
+    @Expandable<PaymentIntentNextActionBlikAuthorize>
+    public var blikAuthorize: String?
     @Expandable<PaymentIntentNextActionBoleto>
     public var boletoDisplayDetails: String?
     @Expandable<PaymentIntentNextActionCardAwaitNotification>
@@ -18,6 +20,8 @@ public struct PaymentIntentNextAction: Codable, Sendable {
     public var cashappHandleRedirectOrDisplayQrCode: String?
     @Expandable<PaymentIntentNextActionDisplayBankTransferInstructions>
     public var displayBankTransferInstructions: String?
+    @Expandable<PaymentIntentNextActionKlarnaDisplayQrCode>
+    public var klarnaDisplayQrCode: String?
     @Expandable<PaymentIntentNextActionKonbini>
     public var konbiniDisplayDetails: String?
     @Expandable<PaymentIntentNextActionDisplayMultibancoDetails>
@@ -38,6 +42,8 @@ public struct PaymentIntentNextAction: Codable, Sendable {
     /// available values. Examples include: `redirect_to_url`, `use_stripe_sdk`, `alipay_handle_redirect`,
     /// `oxxo_display_details`, or `verify_with_microdeposits`.
     public var type: String
+    @Expandable<PaymentIntentNextActionUpiHandleRedirectOrDisplayQrCode>
+    public var upiHandleRedirectOrDisplayQrCode: String?
     /// When confirming a PaymentIntent with Stripe.js, Stripe.js depends on the contents of this dictionary
     /// to invoke authentication flows. The shape of the contents is subject to change and is only intended
     /// to be used by Stripe.js.
@@ -53,10 +59,12 @@ public struct PaymentIntentNextAction: Codable, Sendable {
 
     public enum CodingKeys: String, CodingKey {
         case alipayHandleRedirect = "alipay_handle_redirect"
+        case blikAuthorize = "blik_authorize"
         case boletoDisplayDetails = "boleto_display_details"
         case cardAwaitNotification = "card_await_notification"
         case cashappHandleRedirectOrDisplayQrCode = "cashapp_handle_redirect_or_display_qr_code"
         case displayBankTransferInstructions = "display_bank_transfer_instructions"
+        case klarnaDisplayQrCode = "klarna_display_qr_code"
         case konbiniDisplayDetails = "konbini_display_details"
         case multibancoDisplayDetails = "multibanco_display_details"
         case oxxoDisplayDetails = "oxxo_display_details"
@@ -66,6 +74,7 @@ public struct PaymentIntentNextAction: Codable, Sendable {
         case redirectToUrl = "redirect_to_url"
         case swishHandleRedirectOrDisplayQrCode = "swish_handle_redirect_or_display_qr_code"
         case type
+        case upiHandleRedirectOrDisplayQrCode = "upi_handle_redirect_or_display_qr_code"
         case useStripeSdk = "use_stripe_sdk"
         case verifyWithMicrodeposits = "verify_with_microdeposits"
         case wechatPayDisplayQrCode = "wechat_pay_display_qr_code"

@@ -34,6 +34,7 @@ public enum InsightsResourcesPaymentEvaluationOutcomeType: String, Codable, Send
     case failed
     case merchantBlocked = "merchant_blocked"
     case rejected
+    case rerouted
     case succeeded
 }
 

@@ -7,14 +7,17 @@
 
 import Foundation
 
-/// Use
+/// Legacy OutboundPayments are part of the v1 version of Treasury for platforms and do not support many
+/// of the features introduced in [Treasury for platforms v2](https://docs.stripe.com/treasury/connect).
+/// Use [Outbound Payments](https://docs.stripe.com/api/v2/money-management/outbound-payments) instead
+/// of building a new v1 integration. Use
 /// [OutboundPayments](https://docs.stripe.com/docs/treasury/moving-money/financial-accounts/out-of/outbound-payments)
 /// to send funds to another party's external bank account or
-/// [FinancialAccount](https://api.stripe.com#financial_accounts). To send money to an account belonging
-/// to the same user, use an [OutboundTransfer](https://api.stripe.com#outbound_transfers). Simulate
-/// OutboundPayment state changes with the `/v1/test_helpers/treasury/outbound_payments` endpoints.
-/// These methods can only be called on test mode objects. Related guide: [Moving money with Treasury
-/// using OutboundPayment
+/// [FinancialAccount](https://docs.stripe.com/api#financial_accounts). To send money to an account
+/// belonging to the same user, use an
+/// [OutboundTransfer](https://docs.stripe.com/api#outbound_transfers). Simulate OutboundPayment state
+/// changes with the `/v1/test_helpers/treasury/outbound_payments` endpoints. These methods can only be
+/// called on test mode objects. Related guide: [Moving money with Treasury using OutboundPayment
 /// objects](https://docs.stripe.com/docs/treasury/moving-money/financial-accounts/out-of/outbound-payments)
 public struct OutboundPayment: Codable, Sendable {
     /// Amount (in cents) transferred.
@@ -49,8 +52,8 @@ public struct OutboundPayment: Codable, Sendable {
     public var hostedRegulatoryReceiptUrl: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

@@ -8,8 +8,13 @@
 import Foundation
 
 public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecks: Codable, Sendable {
+    /// If you provide a value for `address.line1`, the check result is one of `pass`, `fail`,
+    /// `unavailable`, or `unchecked`.
     public var addressLine1Check: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecksAddressLine1Check?
+    /// If you provide a address postal code, the check result is one of `pass`, `fail`, `unavailable`, or
+    /// `unchecked`.
     public var addressPostalCodeCheck: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecksAddressPostalCodeCheck?
+    /// If you provide a CVC, the check results is one of `pass`, `fail`, `unavailable`, or `unchecked`.
     public var cvcCheck: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecksCvcCheck?
 
     public enum CodingKeys: String, CodingKey {
@@ -19,6 +24,8 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsRe
     }
 }
 
+/// If you provide a value for `address.line1`, the check result is one of `pass`, `fail`,
+/// `unavailable`, or `unchecked`.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecksAddressLine1Check: String, Codable, Sendable {
     case fail
     case pass
@@ -26,6 +33,8 @@ public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsReso
     case unchecked
 }
 
+/// If you provide a address postal code, the check result is one of `pass`, `fail`, `unavailable`, or
+/// `unchecked`.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecksAddressPostalCodeCheck: String, Codable, Sendable {
     case fail
     case pass
@@ -33,6 +42,7 @@ public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsReso
     case unchecked
 }
 
+/// If you provide a CVC, the check results is one of `pass`, `fail`, `unavailable`, or `unchecked`.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceChecksCvcCheck: String, Codable, Sendable {
     case fail
     case pass

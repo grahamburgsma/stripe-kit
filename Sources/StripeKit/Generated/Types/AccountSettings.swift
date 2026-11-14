@@ -24,6 +24,8 @@ public struct AccountSettings: Codable, Sendable {
     public var payments: String?
     @Expandable<AccountPayoutSettings>
     public var payouts: String?
+    @Expandable<AccountPaypayPaymentsSettings>
+    public var paypayPayments: String?
     @Expandable<AccountSepaDebitPaymentsSettings>
     public var sepaDebitPayments: String?
     @Expandable<AccountTreasurySettings>
@@ -38,6 +40,7 @@ public struct AccountSettings: Codable, Sendable {
         case invoices
         case payments
         case payouts
+        case paypayPayments = "paypay_payments"
         case sepaDebitPayments = "sepa_debit_payments"
         case treasury
     }

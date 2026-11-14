@@ -29,8 +29,8 @@ public struct CustomerSession: Codable, Sendable {
     public var customerAccount: String?
     /// The timestamp at which this Customer Session will expire.
     public var expiresAt: Int
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: CustomerSessionObject

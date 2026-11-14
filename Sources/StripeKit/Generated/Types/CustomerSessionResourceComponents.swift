@@ -9,8 +9,12 @@ import Foundation
 
 /// Configuration for the components supported by this Customer Session.
 public struct CustomerSessionResourceComponents: Codable, Sendable {
+    @Expandable<CustomerSessionResourceComponentsResourceActiveEntitlements>
+    public var activeEntitlements: String?
     @Expandable<CustomerSessionResourceComponentsResourceBuyButton>
     public var buyButton: String?
+    @Expandable<CustomerSessionResourceComponentsResourceCustomerPortal>
+    public var customerPortal: String?
     @Expandable<CustomerSessionResourceComponentsResourceCustomerSheet>
     public var customerSheet: String?
     @Expandable<CustomerSessionResourceComponentsResourceMobilePaymentElement>
@@ -21,7 +25,9 @@ public struct CustomerSessionResourceComponents: Codable, Sendable {
     public var pricingTable: String?
 
     public enum CodingKeys: String, CodingKey {
+        case activeEntitlements = "active_entitlements"
         case buyButton = "buy_button"
+        case customerPortal = "customer_portal"
         case customerSheet = "customer_sheet"
         case mobilePaymentElement = "mobile_payment_element"
         case paymentElement = "payment_element"

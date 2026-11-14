@@ -8,8 +8,8 @@
 import Foundation
 
 public struct PaymentMethodDetailsPassthroughCard: Codable, Sendable {
-    /// Card brand. Can be `amex`, `cartes_bancaires`, `diners`, `discover`, `eftpos_au`, `jcb`, `link`,
-    /// `mastercard`, `unionpay`, `visa` or `unknown`.
+    /// Card brand. Can be `American Express`, `Cartes Bancaires`, `Diners Club`, `Discover`, `Eftpos
+    /// Australia`, `Girocard`, `JCB`, `MasterCard`, `UnionPay`, `Visa`, or `Unknown`.
     public var brand: String?
     /// Two-letter ISO code representing the country of the card. You could use this attribute to get a
     /// sense of the international breakdown of cards you've collected.

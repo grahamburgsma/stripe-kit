@@ -13,7 +13,7 @@ import NIOHTTP1
 
 public struct AccountSessionRoutes: Sendable {
 
-    /// Creates a AccountSession object that includes a single-use token that the platform can use on their
+    /// Creates an AccountSession object that includes a single-use token that the platform can use on their
     /// front-end to grant client-side API access.
     public var create: @Sendable (_ params: AccountSessionCreateParams) async throws -> AccountSession
 }

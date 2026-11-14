@@ -14,6 +14,7 @@ struct FixtureDecodingTests {
     static let knownUnmapped: Set<String> = [
         "issuing.settlement",     // fixture only; no schema in this spec version
         "sigma.sigma_api_query",  // fixture only; no schema in this spec version
+        "terminal.refund",        // fixture only; no schema in this spec version
     ]
 
     @Test("Resource fixture decodes", arguments: Fixtures.keys(in: resourceTypes))

@@ -16,6 +16,8 @@ public struct PortalFeatures: Codable, Sendable {
     public var paymentMethodUpdate: String?
     @Expandable<PortalSubscriptionCancel>
     public var subscriptionCancel: String?
+    @Expandable<PortalSubscriptionPause>
+    public var subscriptionPause: String?
     @Expandable<PortalSubscriptionUpdate>
     public var subscriptionUpdate: String?
 
@@ -24,6 +26,7 @@ public struct PortalFeatures: Codable, Sendable {
         case invoiceHistory = "invoice_history"
         case paymentMethodUpdate = "payment_method_update"
         case subscriptionCancel = "subscription_cancel"
+        case subscriptionPause = "subscription_pause"
         case subscriptionUpdate = "subscription_update"
     }
 }

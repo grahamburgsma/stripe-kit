@@ -294,8 +294,9 @@ struct ParamGenerator {
             return parser.schemaNameToSwiftType(typeName)
         }
         
-        // Handle enum
-        if let enumCases = prop.enum, !enumCases.isEmpty {
+        // Handle enum. A "clear-only" enum whose sole value is "" gets no generated
+        // type (generateEnum drops ""), so fall through to the base type instead.
+        if let enumCases = prop.enum, enumCases.contains(where: { !$0.isEmpty }) {
             return "\(parentStem)\(capitalize(snakeToCamel(propName)))"
         }
         

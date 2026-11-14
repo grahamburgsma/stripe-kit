@@ -52,6 +52,7 @@ public enum ThreeDSecureDetailsElectronicCommerceIndicator: String, Codable, Sen
 public enum ThreeDSecureDetailsResult: String, Codable, Sendable {
     case attemptAcknowledged = "attempt_acknowledged"
     case authenticated
+    case dataShareOnly = "data_share_only"
     case exempted
     case failed
     case notSupported = "not_supported"

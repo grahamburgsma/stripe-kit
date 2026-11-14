@@ -40,6 +40,8 @@ public struct PaymentMethod: Codable, Sendable {
     public var billie: String?
     @Expandable<BillingDetails>
     public var billingDetails: String?
+    @Expandable<PaymentMethodBizum>
+    public var bizum: String?
     @Expandable<PaymentMethodBlik>
     public var blik: String?
     @Expandable<PaymentMethodBoleto>
@@ -87,8 +89,8 @@ public struct PaymentMethod: Codable, Sendable {
     public var krCard: String?
     @Expandable<PaymentMethodLink>
     public var link: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     @Expandable<PaymentMethodMbWay>
     public var mbWay: String?
@@ -117,6 +119,8 @@ public struct PaymentMethod: Codable, Sendable {
     public var paynow: String?
     @Expandable<PaymentMethodPaypal>
     public var paypal: String?
+    @Expandable<PaymentMethodPaypay>
+    public var paypay: String?
     @Expandable<PaymentMethodPayto>
     public var payto: String?
     @Expandable<PaymentMethodPix>
@@ -131,10 +135,16 @@ public struct PaymentMethod: Codable, Sendable {
     public var samsungPay: String?
     @Expandable<PaymentMethodSatispay>
     public var satispay: String?
+    @Expandable<PaymentMethodScalapay>
+    public var scalapay: String?
     @Expandable<PaymentMethodSepaDebit>
     public var sepaDebit: String?
+    @Expandable<PaymentMethodSequra>
+    public var sequra: String?
     @Expandable<PaymentMethodSofort>
     public var sofort: String?
+    @Expandable<PaymentMethodSunbit>
+    public var sunbit: String?
     @Expandable<PaymentMethodSwish>
     public var swish: String?
     @Expandable<PaymentMethodTwint>
@@ -142,6 +152,8 @@ public struct PaymentMethod: Codable, Sendable {
     /// The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name
     /// matching this value. It contains additional information specific to the PaymentMethod type.
     public var type: PaymentMethodType
+    @Expandable<PaymentMethodUpi>
+    public var upi: String?
     @Expandable<PaymentMethodUsBankAccount>
     public var usBankAccount: String?
     @Expandable<PaymentMethodWechatPay>
@@ -162,6 +174,7 @@ public struct PaymentMethod: Codable, Sendable {
         case bancontact
         case billie
         case billingDetails = "billing_details"
+        case bizum
         case blik
         case boleto
         case card
@@ -199,6 +212,7 @@ public struct PaymentMethod: Codable, Sendable {
         case payco
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
@@ -206,11 +220,15 @@ public struct PaymentMethod: Codable, Sendable {
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
         case type
+        case upi
         case usBankAccount = "us_bank_account"
         case wechatPay = "wechat_pay"
         case zip
@@ -245,6 +263,7 @@ public enum PaymentMethodType: String, Codable, Sendable {
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case card
@@ -275,16 +294,21 @@ public enum PaymentMethodType: String, Codable, Sendable {
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip

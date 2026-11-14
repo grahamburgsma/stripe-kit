@@ -8,6 +8,9 @@
 import Foundation
 
 public struct BalanceSettingsResourcePayouts: Codable, Sendable {
+    /// Configures per-currency rules for automatically transferring funds from the payments balance to a
+    /// FinancialAccount.
+    public var automaticTransferRulesByCurrency: [String: [BalanceSettingsResourceAutomaticTransferRule]]?
     /// The minimum balance amount to retain per currency after automatic payouts. Only funds that exceed
     /// these amounts are paid out. Learn more about the [minimum balances for automatic
     /// payouts](/payouts/minimum-balances-for-automatic-payouts).
@@ -25,6 +28,7 @@ public struct BalanceSettingsResourcePayouts: Codable, Sendable {
     public var status: BalanceSettingsResourcePayoutsStatus
 
     public enum CodingKeys: String, CodingKey {
+        case automaticTransferRulesByCurrency = "automatic_transfer_rules_by_currency"
         case minimumBalanceByCurrency = "minimum_balance_by_currency"
         case schedule
         case statementDescriptor = "statement_descriptor"

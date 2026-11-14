@@ -28,7 +28,9 @@ public struct PaymentIntentPaymentMethodOptionsUsBankAccount: Codable, Sendable 
     /// string in YYYY-MM-DD format. The date must be in the future and between 3 and 15 calendar days from
     /// now.
     public var targetDate: String?
-    /// Bank account verification method.
+    /// The purpose of the transaction.
+    public var transactionPurpose: PaymentIntentPaymentMethodOptionsUsBankAccountTransactionPurpose?
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: PaymentIntentPaymentMethodOptionsUsBankAccountVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -36,6 +38,7 @@ public struct PaymentIntentPaymentMethodOptionsUsBankAccount: Codable, Sendable 
         case mandateOptions = "mandate_options"
         case setupFutureUsage = "setup_future_usage"
         case targetDate = "target_date"
+        case transactionPurpose = "transaction_purpose"
         case verificationMethod = "verification_method"
     }
 }
@@ -57,7 +60,15 @@ public enum PaymentIntentPaymentMethodOptionsUsBankAccountSetupFutureUsage: Stri
     case onSession = "on_session"
 }
 
-/// Bank account verification method.
+/// The purpose of the transaction.
+public enum PaymentIntentPaymentMethodOptionsUsBankAccountTransactionPurpose: String, Codable, Sendable {
+    case goods
+    case other
+    case services
+    case unspecified
+}
+
+/// Bank account verification method. The default value is `automatic`.
 public enum PaymentIntentPaymentMethodOptionsUsBankAccountVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

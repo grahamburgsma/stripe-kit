@@ -8,7 +8,7 @@
 import Foundation
 
 public struct PaymentLinksResourceCustomFieldsText: Codable, Sendable {
-    /// The value that will pre-fill the field on the payment page.
+    /// The value that pre-fills the field on the payment page.
     public var defaultValue: String?
     /// The maximum character length constraint for the customer's input.
     public var maximumLength: Int?

@@ -137,7 +137,7 @@ public struct ExternalAccountUpdateDocuments: StripeParams {
 /// Must be a document associated with the bank account that displays the last 4 digits of the account
 /// number, either a statement or a check.
 public struct ExternalAccountUpdateDocumentsBankAccountOwnershipVerification: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 

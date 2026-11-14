@@ -15,7 +15,7 @@ public struct SubscriptionScheduleConfigurationItem: Codable, Sendable {
     public var billingThresholds: String?
     /// The discounts applied to the subscription item. Subscription item discounts are applied before
     /// subscription discounts. Use `expand[]=discounts` to expand each discount.
-    @ExpandableCollection<DiscountsResourceStackableDiscount>
+    @ExpandableCollection<StackableDiscountWithDiscountSettings>
     public var discounts: [String]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an item.
     /// Metadata on this item will update the underlying subscription item's `metadata` when the phase is

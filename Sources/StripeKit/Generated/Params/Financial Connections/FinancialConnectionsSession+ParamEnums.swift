@@ -20,6 +20,17 @@ public enum FinancialConnectionsSessionCreateFiltersAccountSubcategories: String
     case savings
 }
 
+public enum FinancialConnectionsSessionCreateFiltersRequirePaymentMethodSupport: String, Codable, Sendable {
+    case all
+    case atLeastOne = "at_least_one"
+    case none
+}
+
+public enum FinancialConnectionsSessionCreateManualEntryMode: String, Codable, Sendable {
+    case automatic
+    case disabled
+}
+
 public enum FinancialConnectionsSessionCreatePermissions: String, Codable, Sendable {
     case balances
     case ownership

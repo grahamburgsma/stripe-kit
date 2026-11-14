@@ -15,12 +15,14 @@ public struct TerminalConfiguration: Codable, Sendable {
     public var bbposWisepad3: String?
     @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
     public var bbposWiseposE: String?
+    @Expandable<TerminalConfigurationConfigurationResourceCellularConfig>
+    public var cellular: String?
     /// Unique identifier for the object.
     public var id: String
     /// Whether this Configuration is the default for your account
     public var isAccountDefault: Bool?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String indicating the name of the Configuration object, set by the user
     public var name: String?
@@ -28,30 +30,52 @@ public struct TerminalConfiguration: Codable, Sendable {
     public var object: TerminalConfigurationObject
     @Expandable<TerminalConfigurationConfigurationResourceOfflineConfig>
     public var offline: String?
+    @Expandable<TerminalConfigurationConfigurationResourceReaderSecurityConfig>
+    public var readerSecurity: String?
     @Expandable<TerminalConfigurationConfigurationResourceRebootWindow>
     public var rebootWindow: String?
     @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
     public var stripeS700: String?
+    @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
+    public var stripeS710: String?
+    @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
+    public var stripeT600: String?
     @Expandable<TerminalConfigurationConfigurationResourceTipping>
     public var tipping: String?
     @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
+    public var verifoneM425: String?
+    @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
     public var verifoneP400: String?
+    @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
+    public var verifoneP630: String?
+    @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
+    public var verifoneUx700: String?
+    @Expandable<TerminalConfigurationConfigurationResourceDeviceTypeSpecificConfig>
+    public var verifoneV660P: String?
     @Expandable<TerminalConfigurationConfigurationResourceWifiConfig>
     public var wifi: String?
 
     public enum CodingKeys: String, CodingKey {
         case bbposWisepad3 = "bbpos_wisepad3"
         case bbposWiseposE = "bbpos_wisepos_e"
+        case cellular
         case id
         case isAccountDefault = "is_account_default"
         case livemode
         case name
         case object
         case offline
+        case readerSecurity = "reader_security"
         case rebootWindow = "reboot_window"
         case stripeS700 = "stripe_s700"
+        case stripeS710 = "stripe_s710"
+        case stripeT600 = "stripe_t600"
         case tipping
+        case verifoneM425 = "verifone_m425"
         case verifoneP400 = "verifone_p400"
+        case verifoneP630 = "verifone_p630"
+        case verifoneUx700 = "verifone_ux700"
+        case verifoneV660P = "verifone_v660p"
         case wifi
     }
 }

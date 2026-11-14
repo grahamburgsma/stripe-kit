@@ -29,13 +29,13 @@ public struct VerificationSessionCreateParams: StripeParams {
     public var metadata: [String: String]?
     /// A set of options for the session’s verification checks.
     public var options: VerificationSessionCreateOptions?
-    /// Details provided about the user being verified. These details may be shown to the user.
+    /// Details provided about the user being verified. These details might be shown to the user.
     public var providedDetails: VerificationSessionCreateProvidedDetails?
     /// Customer ID
     public var relatedCustomer: String?
     /// The ID of the Account representing a customer.
     public var relatedCustomerAccount: String?
-    /// Tokens referencing a Person resource and it's associated account.
+    /// Tokens referencing a Person resource and its associated account.
     public var relatedPerson: VerificationSessionCreateRelatedPerson?
     /// The URL that the user will be redirected to upon completing the verification flow.
     public var returnUrl: String?
@@ -158,7 +158,7 @@ public struct VerificationSessionCreateOptionsDocument: StripeParams {
     }
 }
 
-/// Details provided about the user being verified. These details may be shown to the user.
+/// Details provided about the user being verified. These details might be shown to the user.
 public struct VerificationSessionCreateProvidedDetails: StripeParams {
     /// Email of user being verified
     public var email: String?
@@ -171,7 +171,7 @@ public struct VerificationSessionCreateProvidedDetails: StripeParams {
     }
 }
 
-/// Tokens referencing a Person resource and it's associated account.
+/// Tokens referencing a Person resource and its associated account.
 public struct VerificationSessionCreateRelatedPerson: StripeParams {
     /// A token representing a connected account. If provided, the person parameter is also required and
     /// must be associated with the account.

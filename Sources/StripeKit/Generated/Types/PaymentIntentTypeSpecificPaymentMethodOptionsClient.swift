@@ -36,7 +36,7 @@ public struct PaymentIntentTypeSpecificPaymentMethodOptionsClient: Codable, Send
     /// uses `setup_future_usage` to help you comply with regional legislation and network rules, such as
     /// [SCA](/strong-customer-authentication).
     public var setupFutureUsage: PaymentIntentTypeSpecificPaymentMethodOptionsClientSetupFutureUsage?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: PaymentIntentTypeSpecificPaymentMethodOptionsClientVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -53,6 +53,7 @@ public struct PaymentIntentTypeSpecificPaymentMethodOptionsClient: Codable, Send
 
 /// Controls when the funds will be captured from the customer's account.
 public enum PaymentIntentTypeSpecificPaymentMethodOptionsClientCaptureMethod: String, Codable, Sendable {
+    case automaticDelayed = "automatic_delayed"
     case manual
     case manualPreferred = "manual_preferred"
 }
@@ -74,7 +75,7 @@ public enum PaymentIntentTypeSpecificPaymentMethodOptionsClientSetupFutureUsage:
     case onSession = "on_session"
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum PaymentIntentTypeSpecificPaymentMethodOptionsClientVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

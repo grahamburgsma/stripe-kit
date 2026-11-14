@@ -16,6 +16,14 @@ public struct InvoicesPaymentMethodOptions: Codable, Sendable {
     /// options to pass to the invoice’s PaymentIntent.
     @Expandable<InvoicePaymentMethodOptionsBancontact>
     public var bancontact: String?
+    /// If paying by `billie`, this sub-hash contains details about the Billie payment method options to
+    /// pass to the invoice’s PaymentIntent.
+    @Expandable<InvoicePaymentMethodOptionsBillie>
+    public var billie: String?
+    /// If paying by `blik`, this sub-hash contains details about the Blik payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    @Expandable<InvoicePaymentMethodOptionsBlik>
+    public var blik: String?
     /// If paying by `card`, this sub-hash contains details about the Card payment method options to pass to
     /// the invoice’s PaymentIntent.
     @Expandable<InvoicePaymentMethodOptionsCard>
@@ -32,10 +40,18 @@ public struct InvoicesPaymentMethodOptions: Codable, Sendable {
     /// to the invoice’s PaymentIntent.
     @Expandable<InvoicePaymentMethodOptionsPayto>
     public var payto: String?
+    /// If paying by `pix`, this sub-hash contains details about the Pix payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    @Expandable<InvoicePaymentMethodOptionsPix>
+    public var pix: String?
     /// If paying by `sepa_debit`, this sub-hash contains details about the SEPA Direct Debit payment method
     /// options to pass to the invoice’s PaymentIntent.
     @Expandable<InvoicePaymentMethodOptionsSepaDebit>
     public var sepaDebit: String?
+    /// If paying by `upi`, this sub-hash contains details about the UPI payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    @Expandable<InvoicePaymentMethodOptionsUpi>
+    public var upi: String?
     /// If paying by `us_bank_account`, this sub-hash contains details about the ACH direct debit payment
     /// method options to pass to the invoice’s PaymentIntent.
     @Expandable<InvoicePaymentMethodOptionsUsBankAccount>
@@ -44,11 +60,15 @@ public struct InvoicesPaymentMethodOptions: Codable, Sendable {
     public enum CodingKeys: String, CodingKey {
         case acssDebit = "acss_debit"
         case bancontact
+        case billie
+        case blik
         case card
         case customerBalance = "customer_balance"
         case konbini
         case payto
+        case pix
         case sepaDebit = "sepa_debit"
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }

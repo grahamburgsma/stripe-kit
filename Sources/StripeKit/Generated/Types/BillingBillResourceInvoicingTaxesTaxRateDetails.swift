@@ -9,7 +9,8 @@ import Foundation
 
 public struct BillingBillResourceInvoicingTaxesTaxRateDetails: Codable, Sendable {
     /// ID of the tax rate
-    public var taxRate: String
+    @Expandable<TaxRate>
+    public var taxRate: String?
 
     public enum CodingKeys: String, CodingKey {
         case taxRate = "tax_rate"

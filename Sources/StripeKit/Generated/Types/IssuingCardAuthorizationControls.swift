@@ -8,6 +8,10 @@
 import Foundation
 
 public struct IssuingCardAuthorizationControls: Codable, Sendable {
+    /// Array of card presence statuses from which authorizations will be allowed. Possible options are
+    /// `present`, `not_present`. All other statuses will be blocked. Cannot be set with
+    /// `blocked_card_presences`. Provide an empty value to unset this control.
+    public var allowedCardPresences: [String]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to allow. All other categories will be blocked. Cannot be set with
@@ -18,6 +22,10 @@ public struct IssuingCardAuthorizationControls: Codable, Sendable {
     /// 3166 alpha-2 country codes (e.g. `US`). Cannot be set with `blocked_merchant_countries`. Provide an
     /// empty value to unset this control.
     public var allowedMerchantCountries: [String]?
+    /// Array of card presence statuses from which authorizations will be declined. Possible options are
+    /// `present`, `not_present`. Cannot be set with `allowed_card_presences`. Provide an empty value to
+    /// unset this control.
+    public var blockedCardPresences: [String]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to decline. All other categories will be allowed. Cannot be set with
@@ -35,8 +43,10 @@ public struct IssuingCardAuthorizationControls: Codable, Sendable {
     public var spendingLimitsCurrency: String?
 
     public enum CodingKeys: String, CodingKey {
+        case allowedCardPresences = "allowed_card_presences"
         case allowedCategories = "allowed_categories"
         case allowedMerchantCountries = "allowed_merchant_countries"
+        case blockedCardPresences = "blocked_card_presences"
         case blockedCategories = "blocked_categories"
         case blockedMerchantCountries = "blocked_merchant_countries"
         case spendingLimits = "spending_limits"

@@ -149,7 +149,7 @@ public struct CreditGrantCreateApplicabilityConfigScope: StripeParams {
     /// Cannot be used in combination with `prices`.
     public var priceType: CreditGrantCreateApplicabilityConfigScopePriceType?
     /// A list of prices that the credit grant can apply to. We currently only support the `metered` prices.
-    /// Cannot be used in combination with `price_type`.
+    /// Cannot be used in combination with `price_type`. Limit 20 prices.
     public var prices: [CreditGrantCreateApplicabilityConfigScopePrices]?
 
     public init(priceType: CreditGrantCreateApplicabilityConfigScopePriceType? = nil, prices: [CreditGrantCreateApplicabilityConfigScopePrices]? = nil) {

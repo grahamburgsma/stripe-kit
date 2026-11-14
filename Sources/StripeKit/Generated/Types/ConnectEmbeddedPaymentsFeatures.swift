@@ -18,12 +18,16 @@ public struct ConnectEmbeddedPaymentsFeatures: Codable, Sendable {
     public var disputeManagement: Bool
     /// Whether sending refunds is enabled. This is `true` by default.
     public var refundManagement: Bool
+    /// Whether to allow connected accounts to submit disputes using Smart Disputes. Defaults to the value
+    /// of `dispute_management`.
+    public var smartDisputesManagement: Bool
 
     public enum CodingKeys: String, CodingKey {
         case capturePayments = "capture_payments"
         case destinationOnBehalfOfChargeManagement = "destination_on_behalf_of_charge_management"
         case disputeManagement = "dispute_management"
         case refundManagement = "refund_management"
+        case smartDisputesManagement = "smart_disputes_management"
     }
 }
 

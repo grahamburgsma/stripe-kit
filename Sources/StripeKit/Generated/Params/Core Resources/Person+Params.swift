@@ -37,11 +37,15 @@ public struct PersonCreateParams: StripeParams {
     /// The person's ID number, as appropriate for their country. For example, a social security number in
     /// the U.S., social insurance number in Canada, etc. Instead of the number itself, you can also provide
     /// a [PII token provided by Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii).
+    /// Changing this value for the account's representative requires that the account re-accept the [terms
+    /// of service](/api/accounts/object#account_object-tos_acceptance).
     public var idNumber: String?
     /// The person's secondary ID number, as appropriate for their country, will be used for enhanced
     /// verification checks. In Thailand, this would be the laser code found on the back of an ID card.
     /// Instead of the number itself, you can also provide a [PII token provided by
-    /// Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii).
+    /// Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii). Changing this value for the
+    /// account's representative requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var idNumberSecondary: String?
     /// The person's last name.
     public var lastName: String?
@@ -72,7 +76,9 @@ public struct PersonCreateParams: StripeParams {
     public var registeredAddress: PersonCreateRegisteredAddress?
     /// The relationship that this person has with the account's legal entity.
     public var relationship: PersonCreateRelationship?
-    /// The last four digits of the person's Social Security number (U.S. only).
+    /// The last four digits of the person's Social Security number (U.S. only). Changing this value for the
+    /// account's representative requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var ssnLast4: String?
     /// Demographic data related to the person.
     public var usCfpbData: PersonCreateUsCfpbData?
@@ -174,11 +180,15 @@ public struct PersonUpdateParams: StripeParams {
     /// The person's ID number, as appropriate for their country. For example, a social security number in
     /// the U.S., social insurance number in Canada, etc. Instead of the number itself, you can also provide
     /// a [PII token provided by Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii).
+    /// Changing this value for the account's representative requires that the account re-accept the [terms
+    /// of service](/api/accounts/object#account_object-tos_acceptance).
     public var idNumber: String?
     /// The person's secondary ID number, as appropriate for their country, will be used for enhanced
     /// verification checks. In Thailand, this would be the laser code found on the back of an ID card.
     /// Instead of the number itself, you can also provide a [PII token provided by
-    /// Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii).
+    /// Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii). Changing this value for the
+    /// account's representative requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var idNumberSecondary: String?
     /// The person's last name.
     public var lastName: String?
@@ -209,7 +219,9 @@ public struct PersonUpdateParams: StripeParams {
     public var registeredAddress: PersonUpdateRegisteredAddress?
     /// The relationship that this person has with the account's legal entity.
     public var relationship: PersonUpdateRelationship?
-    /// The last four digits of the person's Social Security number (U.S. only).
+    /// The last four digits of the person's Social Security number (U.S. only). Changing this value for the
+    /// account's representative requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var ssnLast4: String?
     /// Demographic data related to the person.
     public var usCfpbData: PersonUpdateUsCfpbData?
@@ -465,7 +477,7 @@ public struct PersonCreateDocuments: StripeParams {
 /// One or more documents that demonstrate proof that this person is authorized to represent the
 /// company.
 public struct PersonCreateDocumentsCompanyAuthorization: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -476,7 +488,7 @@ public struct PersonCreateDocumentsCompanyAuthorization: StripeParams {
 
 /// One or more documents showing the person's passport page with photo and personal data.
 public struct PersonCreateDocumentsPassport: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -488,7 +500,7 @@ public struct PersonCreateDocumentsPassport: StripeParams {
 /// One or more documents showing the person's visa required for living in the country where they are
 /// residing.
 public struct PersonCreateDocumentsVisa: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -658,13 +670,13 @@ public struct PersonCreateVerification: StripeParams {
 /// A document showing address, either a passport, local ID card, or utility bill from a well-known
 /// utility company.
 public struct PersonCreateVerificationAdditionalDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -675,13 +687,13 @@ public struct PersonCreateVerificationAdditionalDocument: StripeParams {
 
 /// An identifying document, either a passport or local ID card.
 public struct PersonCreateVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -874,7 +886,7 @@ public struct PersonUpdateDocuments: StripeParams {
 /// One or more documents that demonstrate proof that this person is authorized to represent the
 /// company.
 public struct PersonUpdateDocumentsCompanyAuthorization: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -885,7 +897,7 @@ public struct PersonUpdateDocumentsCompanyAuthorization: StripeParams {
 
 /// One or more documents showing the person's passport page with photo and personal data.
 public struct PersonUpdateDocumentsPassport: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -897,7 +909,7 @@ public struct PersonUpdateDocumentsPassport: StripeParams {
 /// One or more documents showing the person's visa required for living in the country where they are
 /// residing.
 public struct PersonUpdateDocumentsVisa: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1067,13 +1079,13 @@ public struct PersonUpdateVerification: StripeParams {
 /// A document showing address, either a passport, local ID card, or utility bill from a well-known
 /// utility company.
 public struct PersonUpdateVerificationAdditionalDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -1084,13 +1096,13 @@ public struct PersonUpdateVerificationAdditionalDocument: StripeParams {
 
 /// An identifying document, either a passport or local ID card.
 public struct PersonUpdateVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {

@@ -8,6 +8,9 @@
 import Foundation
 
 public struct PaymentMethodDetailsKlarna: Codable, Sendable {
+    /// ID of the [location](https://docs.stripe.com/api/terminal/locations) that this transaction's reader
+    /// is assigned to.
+    public var location: String?
     /// The payer details for this transaction.
     @Expandable<KlarnaPayerDetails>
     public var payerDetails: String?
@@ -21,11 +24,15 @@ public struct PaymentMethodDetailsKlarna: Codable, Sendable {
     /// `el-GR`, `en-GR`, `en-AU`, `en-NZ`, `en-CA`, `fr-CA`, `pl-PL`, `en-PL`, `pt-PT`, `en-PT`, `de-CH`,
     /// `fr-CH`, `it-CH`, or `en-CH`
     public var preferredLocale: String?
+    /// ID of the [reader](https://docs.stripe.com/api/terminal/readers) this transaction was made on.
+    public var reader: String?
 
     public enum CodingKeys: String, CodingKey {
+        case location
         case payerDetails = "payer_details"
         case paymentMethodCategory = "payment_method_category"
         case preferredLocale = "preferred_locale"
+        case reader
     }
 }
 

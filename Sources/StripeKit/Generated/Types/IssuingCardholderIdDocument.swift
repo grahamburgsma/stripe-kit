@@ -8,11 +8,11 @@
 import Foundation
 
 public struct IssuingCardholderIdDocument: Codable, Sendable {
-    /// The back of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The back of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `identity_document`.
     @Expandable<File>
     public var back: String?
-    /// The front of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The front of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `identity_document`.
     @Expandable<File>
     public var front: String?

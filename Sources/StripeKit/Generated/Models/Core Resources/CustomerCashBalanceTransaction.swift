@@ -34,8 +34,8 @@ public struct CustomerCashBalanceTransaction: Codable, Sendable {
     public var funded: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// The amount by which the cash balance changed, represented in the [smallest currency
     /// unit](https://docs.stripe.com/currencies#zero-decimal). A positive value represents funds being

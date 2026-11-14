@@ -27,11 +27,11 @@ public struct Reader: Codable, Sendable {
     /// the Unix epoch. Unlike most other Stripe timestamp fields which use seconds, this field uses
     /// milliseconds.
     public var lastSeenAt: Int?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// The location identifier of the reader.
-    @Expandable<Location>
+    @Expandable<TerminalLocation>
     public var location: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -40,8 +40,8 @@ public struct Reader: Codable, Sendable {
     public var object: ReaderObject
     /// Serial number of the reader.
     public var serialNumber: String
-    /// The networking status of the reader. We do not recommend using this field in flows that may block
-    /// taking payments.
+    /// The networking status of the reader. This value is `null` for mobile readers. We do not recommend
+    /// using this field in flows that may block taking payments.
     public var status: ReaderStatus?
 
     public enum CodingKeys: String, CodingKey {
@@ -68,10 +68,22 @@ public enum ReaderDeviceType: String, Codable, Sendable {
     case bbposWiseposE = "bbpos_wisepos_e"
     case mobilePhoneReader = "mobile_phone_reader"
     case simulatedStripeS700 = "simulated_stripe_s700"
+    case simulatedStripeS710 = "simulated_stripe_s710"
+    case simulatedStripeT600 = "simulated_stripe_t600"
+    case simulatedVerifoneM425 = "simulated_verifone_m425"
+    case simulatedVerifoneP630 = "simulated_verifone_p630"
+    case simulatedVerifoneUx700 = "simulated_verifone_ux700"
+    case simulatedVerifoneV660P = "simulated_verifone_v660p"
     case simulatedWiseposE = "simulated_wisepos_e"
     case stripeM2 = "stripe_m2"
     case stripeS700 = "stripe_s700"
+    case stripeS710 = "stripe_s710"
+    case stripeT600 = "stripe_t600"
     case verifoneP400 = "verifone_P400"
+    case verifoneM425 = "verifone_m425"
+    case verifoneP630 = "verifone_p630"
+    case verifoneUx700 = "verifone_ux700"
+    case verifoneV660P = "verifone_v660p"
 }
 
 /// String representing the object's type. Objects of the same type share the same value.
@@ -79,8 +91,8 @@ public enum ReaderObject: String, Codable, Sendable {
     case terminalReader = "terminal.reader"
 }
 
-/// The networking status of the reader. We do not recommend using this field in flows that may block
-/// taking payments.
+/// The networking status of the reader. This value is `null` for mobile readers. We do not recommend
+/// using this field in flows that may block taking payments.
 public enum ReaderStatus: String, Codable, Sendable {
     case offline
     case online

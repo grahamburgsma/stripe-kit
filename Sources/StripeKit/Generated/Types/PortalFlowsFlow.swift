@@ -10,9 +10,15 @@ import Foundation
 public struct PortalFlowsFlow: Codable, Sendable {
     @Expandable<PortalFlowsFlowAfterCompletion>
     public var afterCompletion: String?
+    /// Configuration when `flow.type=customer_update`.
+    @Expandable<PortalFlowsFlowCustomerUpdate>
+    public var customerUpdate: String?
     /// Configuration when `flow.type=subscription_cancel`.
     @Expandable<PortalFlowsFlowSubscriptionCancel>
     public var subscriptionCancel: String?
+    /// Configuration when `flow.type=subscription_pause`.
+    @Expandable<PortalFlowsFlowSubscriptionPause>
+    public var subscriptionPause: String?
     /// Configuration when `flow.type=subscription_update`.
     @Expandable<PortalFlowsFlowSubscriptionUpdate>
     public var subscriptionUpdate: String?
@@ -24,7 +30,9 @@ public struct PortalFlowsFlow: Codable, Sendable {
 
     public enum CodingKeys: String, CodingKey {
         case afterCompletion = "after_completion"
+        case customerUpdate = "customer_update"
         case subscriptionCancel = "subscription_cancel"
+        case subscriptionPause = "subscription_pause"
         case subscriptionUpdate = "subscription_update"
         case subscriptionUpdateConfirm = "subscription_update_confirm"
         case type
@@ -33,8 +41,10 @@ public struct PortalFlowsFlow: Codable, Sendable {
 
 /// Type of flow that the customer will go through.
 public enum PortalFlowsFlowType: String, Codable, Sendable {
+    case customerUpdate = "customer_update"
     case paymentMethodUpdate = "payment_method_update"
     case subscriptionCancel = "subscription_cancel"
+    case subscriptionPause = "subscription_pause"
     case subscriptionUpdate = "subscription_update"
     case subscriptionUpdateConfirm = "subscription_update_confirm"
 }

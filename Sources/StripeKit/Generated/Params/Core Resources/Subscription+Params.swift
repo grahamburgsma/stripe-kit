@@ -34,6 +34,10 @@ public struct SubscriptionCreateParams: StripeParams {
     public var billingCycleAnchorConfig: SubscriptionCreateBillingCycleAnchorConfig?
     /// Controls how prorations and invoices for subscriptions are calculated and orchestrated.
     public var billingMode: SubscriptionCreateBillingMode?
+    /// An array of billing schedules, which allow you to bill customers in advance for multiple service
+    /// periods. Requires flexible billing mode and API version 2026-05-27.dahlia or later. Learn more about
+    /// [prebilling](https://docs.stripe.com/billing/subscriptions/prebilling).
+    public var billingSchedules: [SubscriptionCreateBillingSchedules]?
     /// Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing
     /// period. When updating, pass an empty string to remove previously-defined thresholds.
     public var billingThresholds: SubscriptionCreateBillingThresholds?
@@ -97,33 +101,15 @@ public struct SubscriptionCreateParams: StripeParams {
     public var offSession: Bool?
     /// The account on behalf of which to charge, for each of the subscription's invoices.
     public var onBehalfOf: String?
-    /// Only applies to subscriptions with `collection_method=charge_automatically`. Use `allow_incomplete`
-    /// to create Subscriptions with `status=incomplete` if the first invoice can't be paid. Creating
-    /// Subscriptions with this status allows you to manage scenarios where additional customer actions are
-    /// needed to pay a subscription's invoice. For example, SCA regulation may require 3DS authentication
-    /// to complete payment. See the [SCA Migration
-    /// Guide](https://docs.stripe.com/billing/migration/strong-customer-authentication) for Billing to
-    /// learn more. This is the default behavior. Use `default_incomplete` to create Subscriptions with
-    /// `status=incomplete` when the first invoice requires payment, otherwise start as active.
-    /// Subscriptions transition to `status=active` when successfully confirming the PaymentIntent on the
-    /// first invoice. This allows simpler management of scenarios where additional customer actions are
-    /// needed to pay a subscription’s invoice, such as failed payments, [SCA
-    /// regulation](https://docs.stripe.com/billing/migration/strong-customer-authentication), or collecting
-    /// a mandate for a bank debit payment method. If the PaymentIntent is not confirmed within 23 hours
-    /// Subscriptions transition to `status=incomplete_expired`, which is a terminal state. Use
-    /// `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription's first
-    /// invoice can't be paid. For example, if a payment method requires 3DS authentication due to SCA
-    /// regulation and further customer action is needed, this parameter doesn't create a Subscription and
-    /// returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See
-    /// the [changelog](https://docs.stripe.com/upgrades#2019-03-14) to learn more. `pending_if_incomplete`
-    /// is only used with updates and cannot be passed when creating a Subscription. Subscriptions with
-    /// `collection_method=send_invoice` are automatically activated regardless of the first Invoice status.
+    /// Controls how Stripe handles the first invoice when payment is required and
+    /// `collection_method=charge_automatically`. Subscriptions with `collection_method=send_invoice` are
+    /// automatically activated regardless of the first Invoice status.
     public var paymentBehavior: SubscriptionCreatePaymentBehavior?
     /// Payment settings to pass to invoices created by the subscription.
     public var paymentSettings: SubscriptionCreatePaymentSettings?
     /// Specifies an interval for how often to bill for any pending invoice items. It is analogous to
-    /// calling [Create an invoice](https://docs.stripe.com/api#create_invoice) for the given subscription
-    /// at the specified interval.
+    /// calling [Create an invoice](/api/invoices/create) for the given subscription at the specified
+    /// interval.
     public var pendingInvoiceItemInterval: SubscriptionCreatePendingInvoiceItemInterval?
     /// Determines how to handle [prorations](https://docs.stripe.com/billing/subscriptions/prorations)
     /// resulting from the `billing_cycle_anchor`. If no value is passed, the default is
@@ -136,21 +122,22 @@ public struct SubscriptionCreateParams: StripeParams {
     /// for the first time. If set, trial_end will override the default trial period of the plan the
     /// customer is being subscribed to. The special value `now` can be provided to end the customer's trial
     /// immediately. Can be at most two years from `billing_cycle_anchor`. See [Using trial periods on
-    /// subscriptions](https://docs.stripe.com/billing/subscriptions/trials) to learn more.
+    /// subscriptions](https://docs.stripe.com/billing/subscriptions/trials/free-trials) to learn more.
     public var trialEnd: String?
     /// Indicates if a plan's `trial_period_days` should be applied to the subscription. Setting `trial_end`
     /// per subscription is preferred, and this defaults to `false`. Setting this flag to `true` together
     /// with `trial_end` is not allowed. See [Using trial periods on
-    /// subscriptions](https://docs.stripe.com/billing/subscriptions/trials) to learn more.
+    /// subscriptions](https://docs.stripe.com/billing/subscriptions/trials/free-trials) to learn more.
     public var trialFromPlan: Bool?
     /// Integer representing the number of trial period days before the customer is charged for the first
     /// time. This will always overwrite any trials that might apply via a subscribed plan. See [Using trial
-    /// periods on subscriptions](https://docs.stripe.com/billing/subscriptions/trials) to learn more.
+    /// periods on subscriptions](https://docs.stripe.com/billing/subscriptions/trials/free-trials) to learn
+    /// more.
     public var trialPeriodDays: Int?
     /// Settings related to subscription trials.
     public var trialSettings: SubscriptionCreateTrialSettings?
 
-    public init(addInvoiceItems: [SubscriptionCreateAddInvoiceItems]? = nil, applicationFeePercent: Double? = nil, automaticTax: SubscriptionCreateAutomaticTax? = nil, backdateStartDate: Int? = nil, billingCycleAnchor: Int? = nil, billingCycleAnchorConfig: SubscriptionCreateBillingCycleAnchorConfig? = nil, billingMode: SubscriptionCreateBillingMode? = nil, billingThresholds: SubscriptionCreateBillingThresholds? = nil, cancelAt: String? = nil, cancelAtPeriodEnd: Bool? = nil, collectionMethod: SubscriptionCreateCollectionMethod? = nil, currency: String? = nil, customer: String? = nil, customerAccount: String? = nil, daysUntilDue: Int? = nil, defaultPaymentMethod: String? = nil, defaultSource: String? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, discounts: [SubscriptionCreateDiscounts]? = nil, expand: [String]? = nil, invoiceSettings: SubscriptionCreateInvoiceSettings? = nil, items: [SubscriptionCreateItems]? = nil, metadata: [String: String]? = nil, offSession: Bool? = nil, onBehalfOf: String? = nil, paymentBehavior: SubscriptionCreatePaymentBehavior? = nil, paymentSettings: SubscriptionCreatePaymentSettings? = nil, pendingInvoiceItemInterval: SubscriptionCreatePendingInvoiceItemInterval? = nil, prorationBehavior: SubscriptionCreateProrationBehavior? = nil, transferData: SubscriptionCreateTransferData? = nil, trialEnd: String? = nil, trialFromPlan: Bool? = nil, trialPeriodDays: Int? = nil, trialSettings: SubscriptionCreateTrialSettings? = nil) {
+    public init(addInvoiceItems: [SubscriptionCreateAddInvoiceItems]? = nil, applicationFeePercent: Double? = nil, automaticTax: SubscriptionCreateAutomaticTax? = nil, backdateStartDate: Int? = nil, billingCycleAnchor: Int? = nil, billingCycleAnchorConfig: SubscriptionCreateBillingCycleAnchorConfig? = nil, billingMode: SubscriptionCreateBillingMode? = nil, billingSchedules: [SubscriptionCreateBillingSchedules]? = nil, billingThresholds: SubscriptionCreateBillingThresholds? = nil, cancelAt: String? = nil, cancelAtPeriodEnd: Bool? = nil, collectionMethod: SubscriptionCreateCollectionMethod? = nil, currency: String? = nil, customer: String? = nil, customerAccount: String? = nil, daysUntilDue: Int? = nil, defaultPaymentMethod: String? = nil, defaultSource: String? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, discounts: [SubscriptionCreateDiscounts]? = nil, expand: [String]? = nil, invoiceSettings: SubscriptionCreateInvoiceSettings? = nil, items: [SubscriptionCreateItems]? = nil, metadata: [String: String]? = nil, offSession: Bool? = nil, onBehalfOf: String? = nil, paymentBehavior: SubscriptionCreatePaymentBehavior? = nil, paymentSettings: SubscriptionCreatePaymentSettings? = nil, pendingInvoiceItemInterval: SubscriptionCreatePendingInvoiceItemInterval? = nil, prorationBehavior: SubscriptionCreateProrationBehavior? = nil, transferData: SubscriptionCreateTransferData? = nil, trialEnd: String? = nil, trialFromPlan: Bool? = nil, trialPeriodDays: Int? = nil, trialSettings: SubscriptionCreateTrialSettings? = nil) {
         self.addInvoiceItems = addInvoiceItems
         self.applicationFeePercent = applicationFeePercent
         self.automaticTax = automaticTax
@@ -158,6 +145,7 @@ public struct SubscriptionCreateParams: StripeParams {
         self.billingCycleAnchor = billingCycleAnchor
         self.billingCycleAnchorConfig = billingCycleAnchorConfig
         self.billingMode = billingMode
+        self.billingSchedules = billingSchedules
         self.billingThresholds = billingThresholds
         self.cancelAt = cancelAt
         self.cancelAtPeriodEnd = cancelAtPeriodEnd
@@ -196,6 +184,7 @@ public struct SubscriptionCreateParams: StripeParams {
         case billingCycleAnchor = "billing_cycle_anchor"
         case billingCycleAnchorConfig = "billing_cycle_anchor_config"
         case billingMode = "billing_mode"
+        case billingSchedules = "billing_schedules"
         case billingThresholds = "billing_thresholds"
         case cancelAt = "cancel_at"
         case cancelAtPeriodEnd = "cancel_at_period_end"
@@ -244,6 +233,31 @@ public struct SubscriptionMigrateParams: StripeParams {
     }
 }
 
+public struct SubscriptionPauseParams: StripeParams {
+    /// Controls what to bill for when pausing the subscription.
+    public var billFor: SubscriptionPauseBillFor?
+    /// Specifies which fields in the response should be expanded.
+    public var expand: [String]?
+    /// Determines how to handle debits and credits when pausing. Defaults to `pending_invoice_item`.
+    public var invoicingBehavior: SubscriptionPauseInvoicingBehavior?
+    /// The type of pause to apply. Defaults to `subscription`.
+    public var type: SubscriptionPauseType?
+
+    public init(billFor: SubscriptionPauseBillFor? = nil, expand: [String]? = nil, invoicingBehavior: SubscriptionPauseInvoicingBehavior? = nil, type: SubscriptionPauseType? = nil) {
+        self.billFor = billFor
+        self.expand = expand
+        self.invoicingBehavior = invoicingBehavior
+        self.type = type
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billFor = "bill_for"
+        case expand
+        case invoicingBehavior = "invoicing_behavior"
+        case type
+    }
+}
+
 public struct SubscriptionResumeParams: StripeParams {
     /// The billing cycle anchor that applies when the subscription is resumed. Either `now` or `unchanged`.
     /// The default is `now`. For more information, see the billing cycle
@@ -251,6 +265,10 @@ public struct SubscriptionResumeParams: StripeParams {
     public var billingCycleAnchor: SubscriptionResumeBillingCycleAnchor?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
+    /// Controls whether Stripe attempts payment on the resumption invoice in the resume request, and how
+    /// payment on that invoice affects the subscription's status. The default is
+    /// `resume_on_payment_attempt`.
+    public var paymentBehavior: SubscriptionResumePaymentBehavior?
     /// Determines how to handle [prorations](https://docs.stripe.com/billing/subscriptions/prorations)
     /// resulting from the `billing_cycle_anchor` being `unchanged`. When the `billing_cycle_anchor` is set
     /// to `now` (default value), no prorations are generated. If no value is passed, the default is
@@ -261,9 +279,10 @@ public struct SubscriptionResumeParams: StripeParams {
     /// preview](https://stripe.com/docs/api/invoices/create_preview) endpoint.
     public var prorationDate: Int?
 
-    public init(billingCycleAnchor: SubscriptionResumeBillingCycleAnchor? = nil, expand: [String]? = nil, prorationBehavior: SubscriptionResumeProrationBehavior? = nil, prorationDate: Int? = nil) {
+    public init(billingCycleAnchor: SubscriptionResumeBillingCycleAnchor? = nil, expand: [String]? = nil, paymentBehavior: SubscriptionResumePaymentBehavior? = nil, prorationBehavior: SubscriptionResumeProrationBehavior? = nil, prorationDate: Int? = nil) {
         self.billingCycleAnchor = billingCycleAnchor
         self.expand = expand
+        self.paymentBehavior = paymentBehavior
         self.prorationBehavior = prorationBehavior
         self.prorationDate = prorationDate
     }
@@ -271,6 +290,7 @@ public struct SubscriptionResumeParams: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case billingCycleAnchor = "billing_cycle_anchor"
         case expand
+        case paymentBehavior = "payment_behavior"
         case prorationBehavior = "proration_behavior"
         case prorationDate = "proration_date"
     }
@@ -289,10 +309,15 @@ public struct SubscriptionUpdateParams: StripeParams {
     /// Automatic tax settings for this subscription. We recommend you only include this parameter when the
     /// existing value is being changed.
     public var automaticTax: SubscriptionUpdateAutomaticTax?
-    /// Either `now` or `unchanged`. Setting the value to `now` resets the subscription's billing cycle
-    /// anchor to the current time (in UTC). For more information, see the billing cycle
+    /// Controls how the subscription's billing cycle anchor changes. Set `type` to `now` to reset the
+    /// billing cycle anchor to the current time (in UTC), or `unchanged` to preserve it. For more
+    /// information, see the billing cycle
     /// [documentation](https://docs.stripe.com/billing/subscriptions/billing-cycle).
     public var billingCycleAnchor: SubscriptionUpdateBillingCycleAnchor?
+    /// An array of billing schedules, which allow you to bill customers in advance for multiple service
+    /// periods. Requires flexible billing mode and API version 2026-05-27.dahlia or later. Learn more about
+    /// [prebilling](https://docs.stripe.com/billing/subscriptions/prebilling).
+    public var billingSchedules: [SubscriptionUpdateBillingSchedules]?
     /// Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing
     /// period. When updating, pass an empty string to remove previously-defined thresholds.
     public var billingThresholds: SubscriptionUpdateBillingThresholds?
@@ -301,7 +326,7 @@ public struct SubscriptionUpdateParams: StripeParams {
     /// during a future period, this will always cause a proration for that period.
     public var cancelAt: String?
     /// Indicate whether this subscription should cancel at the end of the current period
-    /// (`current_period_end`). Defaults to `false`.
+    /// (`current_period_end`).
     public var cancelAtPeriodEnd: Bool?
     /// Details about why this subscription was cancelled
     public var cancellationDetails: SubscriptionUpdateCancellationDetails?
@@ -318,6 +343,8 @@ public struct SubscriptionUpdateParams: StripeParams {
     /// will use the customer's
     /// [invoice_settings.default_payment_method](https://docs.stripe.com/api/customers/object#customer_object-invoice_settings-default_payment_method)
     /// or [default_source](https://docs.stripe.com/api/customers/object#customer_object-default_source).
+    /// For subscriptions created by Checkout Sessions with Managed Payments enabled, you can't update this
+    /// field directly through the API. Customers can update it through the Customer Portal.
     public var defaultPaymentMethod: String?
     /// ID of the default payment source for the subscription. It must belong to the customer associated
     /// with the subscription and be in a chargeable state. If `default_payment_method` is also set,
@@ -333,8 +360,9 @@ public struct SubscriptionUpdateParams: StripeParams {
     /// optionally store an explanation of the subscription for rendering in Stripe surfaces and certain
     /// local payment methods UIs.
     public var description: String?
-    /// The coupons to redeem into discounts for the subscription. If not specified or empty, inherits the
-    /// discount from the subscription's customer.
+    /// The coupons to redeem into discounts for the subscription. A populated array overwrites the existing
+    /// discounts on the subscription. If not specified or empty array, it leaves the subscription's
+    /// discounts unchanged. If empty string, it clears the subscription's discounts.
     public var discounts: [SubscriptionUpdateDiscounts]?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
@@ -356,31 +384,14 @@ public struct SubscriptionUpdateParams: StripeParams {
     /// status will be unchanged and will not be updated to `paused`. Learn more about [pausing
     /// collection](https://docs.stripe.com/billing/subscriptions/pause-payment).
     public var pauseCollection: SubscriptionUpdatePauseCollection?
-    /// Use `allow_incomplete` to transition the subscription to `status=past_due` if a payment is required
-    /// but cannot be paid. This allows you to manage scenarios where additional user actions are needed to
-    /// pay a subscription's invoice. For example, SCA regulation may require 3DS authentication to complete
-    /// payment. See the [SCA Migration
-    /// Guide](https://docs.stripe.com/billing/migration/strong-customer-authentication) for Billing to
-    /// learn more. This is the default behavior. Use `default_incomplete` to transition the subscription to
-    /// `status=past_due` when payment is required and await explicit confirmation of the invoice's payment
-    /// intent. This allows simpler management of scenarios where additional user actions are needed to pay
-    /// a subscription’s invoice. Such as failed payments, [SCA
-    /// regulation](https://docs.stripe.com/billing/migration/strong-customer-authentication), or collecting
-    /// a mandate for a bank debit payment method. Use `pending_if_incomplete` to update the subscription
-    /// using [pending updates](https://docs.stripe.com/billing/subscriptions/pending-updates). When you use
-    /// `pending_if_incomplete` you can only pass the parameters [supported by pending
-    /// updates](https://docs.stripe.com/billing/pending-updates-reference#supported-attributes). Use
-    /// `error_if_incomplete` if you want Stripe to return an HTTP 402 status code if a subscription's
-    /// invoice cannot be paid. For example, if a payment method requires 3DS authentication due to SCA
-    /// regulation and further user action is needed, this parameter does not update the subscription and
-    /// returns an error instead. This was the default behavior for API versions prior to 2019-03-14. See
-    /// the [changelog](https://docs.stripe.com/changelog/2019-03-14) to learn more.
+    /// Controls how Stripe handles payment when a subscription update requires payment and
+    /// `collection_method=charge_automatically`.
     public var paymentBehavior: SubscriptionUpdatePaymentBehavior?
     /// Payment settings to pass to invoices created by the subscription.
     public var paymentSettings: SubscriptionUpdatePaymentSettings?
     /// Specifies an interval for how often to bill for any pending invoice items. It is analogous to
-    /// calling [Create an invoice](https://docs.stripe.com/api#create_invoice) for the given subscription
-    /// at the specified interval.
+    /// calling [Create an invoice](/api/invoices/create) for the given subscription at the specified
+    /// interval.
     public var pendingInvoiceItemInterval: SubscriptionUpdatePendingInvoiceItemInterval?
     /// Determines how to handle [prorations](https://docs.stripe.com/billing/subscriptions/prorations) when
     /// the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or
@@ -406,16 +417,17 @@ public struct SubscriptionUpdateParams: StripeParams {
     /// Indicates if a plan's `trial_period_days` should be applied to the subscription. Setting `trial_end`
     /// per subscription is preferred, and this defaults to `false`. Setting this flag to `true` together
     /// with `trial_end` is not allowed. See [Using trial periods on
-    /// subscriptions](https://docs.stripe.com/billing/subscriptions/trials) to learn more.
+    /// subscriptions](https://docs.stripe.com/billing/subscriptions/trials/free-trials) to learn more.
     public var trialFromPlan: Bool?
     /// Settings related to subscription trials.
     public var trialSettings: SubscriptionUpdateTrialSettings?
 
-    public init(addInvoiceItems: [SubscriptionUpdateAddInvoiceItems]? = nil, applicationFeePercent: Double? = nil, automaticTax: SubscriptionUpdateAutomaticTax? = nil, billingCycleAnchor: SubscriptionUpdateBillingCycleAnchor? = nil, billingThresholds: SubscriptionUpdateBillingThresholds? = nil, cancelAt: String? = nil, cancelAtPeriodEnd: Bool? = nil, cancellationDetails: SubscriptionUpdateCancellationDetails? = nil, collectionMethod: SubscriptionUpdateCollectionMethod? = nil, daysUntilDue: Int? = nil, defaultPaymentMethod: String? = nil, defaultSource: String? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, discounts: [SubscriptionUpdateDiscounts]? = nil, expand: [String]? = nil, invoiceSettings: SubscriptionUpdateInvoiceSettings? = nil, items: [SubscriptionUpdateItems]? = nil, metadata: [String: String]? = nil, offSession: Bool? = nil, onBehalfOf: String? = nil, pauseCollection: SubscriptionUpdatePauseCollection? = nil, paymentBehavior: SubscriptionUpdatePaymentBehavior? = nil, paymentSettings: SubscriptionUpdatePaymentSettings? = nil, pendingInvoiceItemInterval: SubscriptionUpdatePendingInvoiceItemInterval? = nil, prorationBehavior: SubscriptionUpdateProrationBehavior? = nil, prorationDate: Int? = nil, transferData: SubscriptionUpdateTransferData? = nil, trialEnd: String? = nil, trialFromPlan: Bool? = nil, trialSettings: SubscriptionUpdateTrialSettings? = nil) {
+    public init(addInvoiceItems: [SubscriptionUpdateAddInvoiceItems]? = nil, applicationFeePercent: Double? = nil, automaticTax: SubscriptionUpdateAutomaticTax? = nil, billingCycleAnchor: SubscriptionUpdateBillingCycleAnchor? = nil, billingSchedules: [SubscriptionUpdateBillingSchedules]? = nil, billingThresholds: SubscriptionUpdateBillingThresholds? = nil, cancelAt: String? = nil, cancelAtPeriodEnd: Bool? = nil, cancellationDetails: SubscriptionUpdateCancellationDetails? = nil, collectionMethod: SubscriptionUpdateCollectionMethod? = nil, daysUntilDue: Int? = nil, defaultPaymentMethod: String? = nil, defaultSource: String? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, discounts: [SubscriptionUpdateDiscounts]? = nil, expand: [String]? = nil, invoiceSettings: SubscriptionUpdateInvoiceSettings? = nil, items: [SubscriptionUpdateItems]? = nil, metadata: [String: String]? = nil, offSession: Bool? = nil, onBehalfOf: String? = nil, pauseCollection: SubscriptionUpdatePauseCollection? = nil, paymentBehavior: SubscriptionUpdatePaymentBehavior? = nil, paymentSettings: SubscriptionUpdatePaymentSettings? = nil, pendingInvoiceItemInterval: SubscriptionUpdatePendingInvoiceItemInterval? = nil, prorationBehavior: SubscriptionUpdateProrationBehavior? = nil, prorationDate: Int? = nil, transferData: SubscriptionUpdateTransferData? = nil, trialEnd: String? = nil, trialFromPlan: Bool? = nil, trialSettings: SubscriptionUpdateTrialSettings? = nil) {
         self.addInvoiceItems = addInvoiceItems
         self.applicationFeePercent = applicationFeePercent
         self.automaticTax = automaticTax
         self.billingCycleAnchor = billingCycleAnchor
+        self.billingSchedules = billingSchedules
         self.billingThresholds = billingThresholds
         self.cancelAt = cancelAt
         self.cancelAtPeriodEnd = cancelAtPeriodEnd
@@ -450,6 +462,7 @@ public struct SubscriptionUpdateParams: StripeParams {
         case applicationFeePercent = "application_fee_percent"
         case automaticTax = "automatic_tax"
         case billingCycleAnchor = "billing_cycle_anchor"
+        case billingSchedules = "billing_schedules"
         case billingThresholds = "billing_thresholds"
         case cancelAt = "cancel_at"
         case cancelAtPeriodEnd = "cancel_at_period_end"
@@ -481,6 +494,8 @@ public struct SubscriptionUpdateParams: StripeParams {
 }
 
 public struct SubscriptionCreateAddInvoiceItems: StripeParams {
+    /// Controls whether discounts apply to this invoice item. Defaults to true if no value is provided.
+    public var discountable: Bool?
     /// The coupons to redeem into discounts for the item.
     public var discounts: [SubscriptionCreateAddInvoiceItemsDiscounts]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
@@ -501,7 +516,8 @@ public struct SubscriptionCreateAddInvoiceItems: StripeParams {
     /// The tax rates which apply to the item. When set, the `default_tax_rates` do not apply to this item.
     public var taxRates: [String]?
 
-    public init(discounts: [SubscriptionCreateAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionCreateAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionCreateAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(discountable: Bool? = nil, discounts: [SubscriptionCreateAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionCreateAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionCreateAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+        self.discountable = discountable
         self.discounts = discounts
         self.metadata = metadata
         self.period = period
@@ -512,6 +528,7 @@ public struct SubscriptionCreateAddInvoiceItems: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case discountable
         case discounts
         case metadata
         case period
@@ -715,6 +732,76 @@ public struct SubscriptionCreateBillingModeFlexible: StripeParams {
     }
 }
 
+public struct SubscriptionCreateBillingSchedules: StripeParams {
+    /// The end date for the billing schedule. You must not set this earlier than current period end for
+    /// every applicable subscription item.
+    public var billUntil: SubscriptionCreateBillingSchedulesBillUntil
+    /// Configure billing schedule differently for individual subscription items.
+    public var appliesTo: [SubscriptionCreateBillingSchedulesAppliesTo]?
+    /// Specify a key for the billing schedule. Must be unique to this field, alphanumeric, and up to 200
+    /// characters. If not provided, a unique key will be generated.
+    public var key: String?
+
+    public init(billUntil: SubscriptionCreateBillingSchedulesBillUntil, appliesTo: [SubscriptionCreateBillingSchedulesAppliesTo]? = nil, key: String? = nil) {
+        self.billUntil = billUntil
+        self.appliesTo = appliesTo
+        self.key = key
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case appliesTo = "applies_to"
+        case billUntil = "bill_until"
+        case key
+    }
+}
+
+/// The end date for the billing schedule. You must not set this earlier than current period end for
+/// every applicable subscription item.
+public struct SubscriptionCreateBillingSchedulesBillUntil: StripeParams {
+    /// Describes how the billing schedule will determine the end date. Either `duration` or `timestamp`.
+    public var type: SubscriptionCreateBillingSchedulesBillUntilType
+    /// Specifies the billing period.
+    public var duration: SubscriptionCreateBillingSchedulesBillUntilDuration?
+    /// The end date of the billing schedule.
+    public var timestamp: Int?
+
+    public init(type: SubscriptionCreateBillingSchedulesBillUntilType, duration: SubscriptionCreateBillingSchedulesBillUntilDuration? = nil, timestamp: Int? = nil) {
+        self.type = type
+        self.duration = duration
+        self.timestamp = timestamp
+    }
+}
+
+/// Specifies the billing period.
+public struct SubscriptionCreateBillingSchedulesBillUntilDuration: StripeParams {
+    /// Specifies billing duration. Either `day`, `week`, `month` or `year`.
+    public var interval: SubscriptionCreateBillingSchedulesBillUntilDurationInterval
+    /// The multiplier applied to the interval.
+    public var intervalCount: Int?
+
+    public init(interval: SubscriptionCreateBillingSchedulesBillUntilDurationInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+}
+
+public struct SubscriptionCreateBillingSchedulesAppliesTo: StripeParams {
+    /// Controls which subscription items the billing schedule applies to.
+    public var type: SubscriptionCreateBillingSchedulesAppliesToType
+    /// The ID of the price object.
+    public var price: String?
+
+    public init(type: SubscriptionCreateBillingSchedulesAppliesToType, price: String? = nil) {
+        self.type = type
+        self.price = price
+    }
+}
+
 public struct SubscriptionCreateBillingThresholds: StripeParams {
     /// Monetary threshold that triggers the subscription to advance to a new billing period
     public var amountGte: Int?
@@ -760,18 +847,42 @@ public struct SubscriptionCreateInvoiceSettings: StripeParams {
     /// The account tax IDs associated with the subscription. Will be set on invoices generated by the
     /// subscription.
     public var accountTaxIds: [String]?
+    /// A list of up to 4 custom fields to be displayed on the invoice.
+    public var customFields: [SubscriptionCreateInvoiceSettingsCustomFields]?
+    /// An arbitrary string attached to the object. Often useful for displaying to users.
+    public var description: String?
+    /// Footer to be displayed on the invoice.
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: SubscriptionCreateInvoiceSettingsIssuer?
 
-    public init(accountTaxIds: [String]? = nil, issuer: SubscriptionCreateInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [SubscriptionCreateInvoiceSettingsCustomFields]? = nil, description: String? = nil, footer: String? = nil, issuer: SubscriptionCreateInvoiceSettingsIssuer? = nil) {
         self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
+        case description
+        case footer
         case issuer
+    }
+}
+
+public struct SubscriptionCreateInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -793,6 +904,8 @@ public struct SubscriptionCreateItems: StripeParams {
     /// Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing
     /// period. Pass an empty string to remove previously-defined thresholds.
     public var billingThresholds: SubscriptionCreateItemsBillingThresholds?
+    /// The trial offer to apply to this subscription item.
+    public var currentTrial: SubscriptionCreateItemsCurrentTrial?
     /// The coupons to redeem into discounts for the subscription item.
     public var discounts: [SubscriptionCreateItemsDiscounts]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
@@ -813,8 +926,9 @@ public struct SubscriptionCreateItems: StripeParams {
     /// on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(billingThresholds: SubscriptionCreateItemsBillingThresholds? = nil, discounts: [SubscriptionCreateItemsDiscounts]? = nil, metadata: [String: String]? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionCreateItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(billingThresholds: SubscriptionCreateItemsBillingThresholds? = nil, currentTrial: SubscriptionCreateItemsCurrentTrial? = nil, discounts: [SubscriptionCreateItemsDiscounts]? = nil, metadata: [String: String]? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionCreateItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
         self.billingThresholds = billingThresholds
+        self.currentTrial = currentTrial
         self.discounts = discounts
         self.metadata = metadata
         self.plan = plan
@@ -826,6 +940,7 @@ public struct SubscriptionCreateItems: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case billingThresholds = "billing_thresholds"
+        case currentTrial = "current_trial"
         case discounts
         case metadata
         case plan
@@ -848,6 +963,20 @@ public struct SubscriptionCreateItemsBillingThresholds: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case usageGte = "usage_gte"
+    }
+}
+
+/// The trial offer to apply to this subscription item.
+public struct SubscriptionCreateItemsCurrentTrial: StripeParams {
+    /// The ID of the trial offer to apply to the subscription item.
+    public var trialOffer: String
+
+    public init(trialOffer: String) {
+        self.trialOffer = trialOffer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case trialOffer = "trial_offer"
     }
 }
 
@@ -969,6 +1098,12 @@ public struct SubscriptionCreatePaymentSettingsPaymentMethodOptions: StripeParam
     /// This sub-hash contains details about the Bancontact payment method options to pass to the invoice’s
     /// PaymentIntent.
     public var bancontact: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBancontact?
+    /// This sub-hash contains details about the Billie payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var billie: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillie?
+    /// This sub-hash contains details about the Blik payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var blik: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBlik?
     /// This sub-hash contains details about the Card payment method options to pass to the invoice’s
     /// PaymentIntent.
     public var card: SubscriptionCreatePaymentSettingsPaymentMethodOptionsCard?
@@ -981,32 +1116,46 @@ public struct SubscriptionCreatePaymentSettingsPaymentMethodOptions: StripeParam
     /// This sub-hash contains details about the PayTo payment method options to pass to the invoice’s
     /// PaymentIntent.
     public var payto: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPayto?
+    /// This sub-hash contains details about the Pix payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var pix: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPix?
     /// This sub-hash contains details about the SEPA Direct Debit payment method options to pass to the
     /// invoice’s PaymentIntent.
     public var sepaDebit: [String: String]?
+    /// This sub-hash contains details about the UPI payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var upi: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpi?
     /// This sub-hash contains details about the ACH direct debit payment method options to pass to the
     /// invoice’s PaymentIntent.
     public var usBankAccount: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUsBankAccount?
 
-    public init(acssDebit: SubscriptionCreatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBancontact? = nil, card: SubscriptionCreatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: SubscriptionCreatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPayto? = nil, sepaDebit: [String: String]? = nil, usBankAccount: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
+    public init(acssDebit: SubscriptionCreatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBancontact? = nil, billie: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillie? = nil, blik: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBlik? = nil, card: SubscriptionCreatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: SubscriptionCreatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPayto? = nil, pix: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPix? = nil, sepaDebit: [String: String]? = nil, upi: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpi? = nil, usBankAccount: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
         self.acssDebit = acssDebit
         self.bancontact = bancontact
+        self.billie = billie
+        self.blik = blik
         self.card = card
         self.customerBalance = customerBalance
         self.konbini = konbini
         self.payto = payto
+        self.pix = pix
         self.sepaDebit = sepaDebit
+        self.upi = upi
         self.usBankAccount = usBankAccount
     }
 
     public enum CodingKeys: String, CodingKey {
         case acssDebit = "acss_debit"
         case bancontact
+        case billie
+        case blik
         case card
         case customerBalance = "customer_balance"
         case konbini
         case payto
+        case pix
         case sepaDebit = "sepa_debit"
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }
@@ -1055,6 +1204,109 @@ public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsBancontact: S
     }
 }
 
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillie: StripeParams {
+    /// Registration details about the buyer's organization.
+    public var companyDetails: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails?
+
+    public init(companyDetails: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails? = nil) {
+        self.companyDetails = companyDetails
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case companyDetails = "company_details"
+    }
+}
+
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails: StripeParams {
+    /// The address the company or entity is registered with.
+    public var registeredAddress: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress?
+    /// Company or entity name.
+    public var registeredName: String?
+    /// The official registration number for the given registration type.
+    public var registrationNumber: String?
+    /// Type of registration the company or entity holds in their registered country.
+    public var registrationType: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType?
+    /// VAT ID number.
+    public var vat: String?
+
+    public init(registeredAddress: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress? = nil, registeredName: String? = nil, registrationNumber: String? = nil, registrationType: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType? = nil, vat: String? = nil) {
+        self.registeredAddress = registeredAddress
+        self.registeredName = registeredName
+        self.registrationNumber = registrationNumber
+        self.registrationType = registrationType
+        self.vat = vat
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case registeredAddress = "registered_address"
+        case registeredName = "registered_name"
+        case registrationNumber = "registration_number"
+        case registrationType = "registration_type"
+        case vat
+    }
+}
+
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code.
+    public var country: String?
+    /// Address line 1 (for example, street, PO Box, or company name).
+    public var line1: String?
+    /// Address line 2 (for example, apartment, suite, unit, or building).
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region.
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsBlik: StripeParams {
+    /// Configuration options for setting up a mandate
+    public var mandateOptions: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBlikMandateOptions?
+
+    public init(mandateOptions: SubscriptionCreatePaymentSettingsPaymentMethodOptionsBlikMandateOptions? = nil) {
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up a mandate
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsBlikMandateOptions: StripeParams {
+    /// Date when the mandate expires and no further payments will be charged. If not provided, the mandate
+    /// will be set to be indefinite.
+    public var expiresAt: Int?
+
+    public init(expiresAt: Int? = nil) {
+        self.expiresAt = expiresAt
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case expiresAt = "expires_at"
+    }
+}
+
 public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsCard: StripeParams {
     /// Configuration options for setting up an eMandate for cards issued in India.
     public var mandateOptions: SubscriptionCreatePaymentSettingsPaymentMethodOptionsCardMandateOptions?
@@ -1085,7 +1337,7 @@ public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsCard: StripeP
 
 /// Configuration options for setting up an eMandate for cards issued in India.
 public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsCardMandateOptions: StripeParams {
-    /// Amount to be charged for future payments.
+    /// Amount to be charged for future payments, specified in the presentment currency.
     public var amount: Int?
     /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
     /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
@@ -1146,8 +1398,8 @@ public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsCustomerBalan
 
 /// Configuration for eu_bank_transfer funding type.
 public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer: StripeParams {
-    /// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-    /// `ES`, `FR`, `IE`, or `NL`.
+    /// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+    /// `IE`, or `NL`.
     public var country: String
 
     public init(country: String) {
@@ -1179,6 +1431,93 @@ public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsPaytoMandateO
     public init(amount: Int? = nil, purpose: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil) {
         self.amount = amount
         self.purpose = purpose
+    }
+}
+
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsPix: StripeParams {
+    /// The number of seconds after PaymentIntent confirmation when the Pix expires (between 60 and 1209600,
+    /// inclusive). If unspecified, defaults to 14400 seconds (4 hours).
+    public var expiresAfterSeconds: Int?
+    /// Configuration options for setting up a mandate
+    public var mandateOptions: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptions?
+
+    public init(expiresAfterSeconds: Int? = nil, mandateOptions: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptions? = nil) {
+        self.expiresAfterSeconds = expiresAfterSeconds
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case expiresAfterSeconds = "expires_after_seconds"
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up a mandate
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptions: StripeParams {
+    /// Amount to be charged for future payments. If not provided, defaults to 40000.
+    public var amount: Int?
+    /// Determines if the amount includes the IOF tax. Defaults to `never`.
+    public var amountIncludesIof: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptionsAmountIncludesIof?
+    /// Date when the mandate expires and no further payments will be charged, in `YYYY-MM-DD`. If not
+    /// provided, the mandate will be active until canceled.
+    public var endDate: String?
+    /// Schedule at which the future payments will be charged. Defaults to the subscription servicing
+    /// interval.
+    public var paymentSchedule: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptionsPaymentSchedule?
+
+    public init(amount: Int? = nil, amountIncludesIof: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptionsAmountIncludesIof? = nil, endDate: String? = nil, paymentSchedule: SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptionsPaymentSchedule? = nil) {
+        self.amount = amount
+        self.amountIncludesIof = amountIncludesIof
+        self.endDate = endDate
+        self.paymentSchedule = paymentSchedule
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountIncludesIof = "amount_includes_iof"
+        case endDate = "end_date"
+        case paymentSchedule = "payment_schedule"
+    }
+}
+
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpi: StripeParams {
+    /// Configuration options for setting up an eMandate
+    public var mandateOptions: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptions?
+
+    public init(mandateOptions: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptions? = nil) {
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up an eMandate
+public struct SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptions: StripeParams {
+    /// Amount to be charged for future payments.
+    public var amount: Int?
+    /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
+    /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
+    /// param.
+    public var amountType: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType?
+    /// A description of the mandate or subscription that is meant to be displayed to the customer.
+    public var description: String?
+    /// End date of the mandate or subscription.
+    public var endDate: Int?
+
+    public init(amount: Int? = nil, amountType: SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType? = nil, description: String? = nil, endDate: Int? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.description = description
+        self.endDate = endDate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case description
+        case endDate = "end_date"
     }
 }
 
@@ -1287,15 +1626,19 @@ public struct SubscriptionCreateTrialSettings: StripeParams {
 
 /// Defines how the subscription should behave when the user's free trial ends.
 public struct SubscriptionCreateTrialSettingsEndBehavior: StripeParams {
+    /// Indicates how the subscription's billing cycle anchor is reset when a trial ends. Defaults to `now`.
+    public var billingCycleAnchor: SubscriptionCreateTrialSettingsEndBehaviorBillingCycleAnchor?
     /// Indicates how the subscription should change when the trial ends if the user did not provide a
     /// payment method.
-    public var missingPaymentMethod: SubscriptionCreateTrialSettingsEndBehaviorMissingPaymentMethod
+    public var missingPaymentMethod: SubscriptionCreateTrialSettingsEndBehaviorMissingPaymentMethod?
 
-    public init(missingPaymentMethod: SubscriptionCreateTrialSettingsEndBehaviorMissingPaymentMethod) {
+    public init(billingCycleAnchor: SubscriptionCreateTrialSettingsEndBehaviorBillingCycleAnchor? = nil, missingPaymentMethod: SubscriptionCreateTrialSettingsEndBehaviorMissingPaymentMethod? = nil) {
+        self.billingCycleAnchor = billingCycleAnchor
         self.missingPaymentMethod = missingPaymentMethod
     }
 
     public enum CodingKeys: String, CodingKey {
+        case billingCycleAnchor = "billing_cycle_anchor"
         case missingPaymentMethod = "missing_payment_method"
     }
 }
@@ -1327,7 +1670,59 @@ public struct SubscriptionMigrateBillingModeFlexible: StripeParams {
     }
 }
 
+/// Controls what to bill for when pausing the subscription.
+public struct SubscriptionPauseBillFor: StripeParams {
+    /// Controls when to bill for metered usage in the current period. Defaults to `{ type: "now" }`.
+    public var outstandingUsageThrough: SubscriptionPauseBillForOutstandingUsageThrough?
+    /// Controls when to credit for unused time on licensed items. Defaults to `{ type: "now" }`.
+    public var unusedTimeFrom: SubscriptionPauseBillForUnusedTimeFrom?
+
+    public init(outstandingUsageThrough: SubscriptionPauseBillForOutstandingUsageThrough? = nil, unusedTimeFrom: SubscriptionPauseBillForUnusedTimeFrom? = nil) {
+        self.outstandingUsageThrough = outstandingUsageThrough
+        self.unusedTimeFrom = unusedTimeFrom
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case outstandingUsageThrough = "outstanding_usage_through"
+        case unusedTimeFrom = "unused_time_from"
+    }
+}
+
+/// Controls when to bill for metered usage in the current period. Defaults to `{ type: "now" }`.
+public struct SubscriptionPauseBillForOutstandingUsageThrough: StripeParams {
+    /// When to bill metered usage in the current period.
+    public var type: SubscriptionPauseBillForOutstandingUsageThroughType
+
+    public init(type: SubscriptionPauseBillForOutstandingUsageThroughType) {
+        self.type = type
+    }
+}
+
+/// Controls when to credit for unused time on licensed items. Defaults to `{ type: "now" }`.
+public struct SubscriptionPauseBillForUnusedTimeFrom: StripeParams {
+    /// When to credit for unused time.
+    public var type: SubscriptionPauseBillForUnusedTimeFromType
+
+    public init(type: SubscriptionPauseBillForUnusedTimeFromType) {
+        self.type = type
+    }
+}
+
+/// The billing cycle anchor that applies when the subscription is resumed. Either `now` or `unchanged`.
+/// The default is `now`. For more information, see the billing cycle
+/// [documentation](https://docs.stripe.com/billing/subscriptions/billing-cycle).
+public struct SubscriptionResumeBillingCycleAnchor: StripeParams {
+    /// Determines how the billing cycle anchor changes when the subscription resumes.
+    public var type: SubscriptionResumeBillingCycleAnchorType
+
+    public init(type: SubscriptionResumeBillingCycleAnchorType) {
+        self.type = type
+    }
+}
+
 public struct SubscriptionUpdateAddInvoiceItems: StripeParams {
+    /// Controls whether discounts apply to this invoice item. Defaults to true if no value is provided.
+    public var discountable: Bool?
     /// The coupons to redeem into discounts for the item.
     public var discounts: [SubscriptionUpdateAddInvoiceItemsDiscounts]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
@@ -1348,7 +1743,8 @@ public struct SubscriptionUpdateAddInvoiceItems: StripeParams {
     /// The tax rates which apply to the item. When set, the `default_tax_rates` do not apply to this item.
     public var taxRates: [String]?
 
-    public init(discounts: [SubscriptionUpdateAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionUpdateAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionUpdateAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(discountable: Bool? = nil, discounts: [SubscriptionUpdateAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionUpdateAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionUpdateAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+        self.discountable = discountable
         self.discounts = discounts
         self.metadata = metadata
         self.period = period
@@ -1359,6 +1755,7 @@ public struct SubscriptionUpdateAddInvoiceItems: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case discountable
         case discounts
         case metadata
         case period
@@ -1503,6 +1900,89 @@ public struct SubscriptionUpdateAutomaticTaxLiability: StripeParams {
     }
 }
 
+/// Controls how the subscription's billing cycle anchor changes. Set `type` to `now` to reset the
+/// billing cycle anchor to the current time (in UTC), or `unchanged` to preserve it. For more
+/// information, see the billing cycle
+/// [documentation](https://docs.stripe.com/billing/subscriptions/billing-cycle).
+public struct SubscriptionUpdateBillingCycleAnchor: StripeParams {
+    /// Determines how the billing cycle anchor changes when the subscription is updated.
+    public var type: SubscriptionUpdateBillingCycleAnchorType
+
+    public init(type: SubscriptionUpdateBillingCycleAnchorType) {
+        self.type = type
+    }
+}
+
+public struct SubscriptionUpdateBillingSchedules: StripeParams {
+    /// Configure billing schedule differently for individual subscription items.
+    public var appliesTo: [SubscriptionUpdateBillingSchedulesAppliesTo]?
+    /// The end date for the billing schedule. You must not set this earlier than current period end for
+    /// every applicable subscription item.
+    public var billUntil: SubscriptionUpdateBillingSchedulesBillUntil?
+    /// Specify a key for the billing schedule. Must be unique to this field, alphanumeric, and up to 200
+    /// characters. If not provided, a unique key will be generated.
+    public var key: String?
+
+    public init(appliesTo: [SubscriptionUpdateBillingSchedulesAppliesTo]? = nil, billUntil: SubscriptionUpdateBillingSchedulesBillUntil? = nil, key: String? = nil) {
+        self.appliesTo = appliesTo
+        self.billUntil = billUntil
+        self.key = key
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case appliesTo = "applies_to"
+        case billUntil = "bill_until"
+        case key
+    }
+}
+
+public struct SubscriptionUpdateBillingSchedulesAppliesTo: StripeParams {
+    /// Controls which subscription items the billing schedule applies to.
+    public var type: SubscriptionUpdateBillingSchedulesAppliesToType
+    /// The ID of the price object.
+    public var price: String?
+
+    public init(type: SubscriptionUpdateBillingSchedulesAppliesToType, price: String? = nil) {
+        self.type = type
+        self.price = price
+    }
+}
+
+/// The end date for the billing schedule. You must not set this earlier than current period end for
+/// every applicable subscription item.
+public struct SubscriptionUpdateBillingSchedulesBillUntil: StripeParams {
+    /// Describes how the billing schedule will determine the end date. Either `duration` or `timestamp`.
+    public var type: SubscriptionUpdateBillingSchedulesBillUntilType
+    /// Specifies the billing period.
+    public var duration: SubscriptionUpdateBillingSchedulesBillUntilDuration?
+    /// The end date of the billing schedule.
+    public var timestamp: Int?
+
+    public init(type: SubscriptionUpdateBillingSchedulesBillUntilType, duration: SubscriptionUpdateBillingSchedulesBillUntilDuration? = nil, timestamp: Int? = nil) {
+        self.type = type
+        self.duration = duration
+        self.timestamp = timestamp
+    }
+}
+
+/// Specifies the billing period.
+public struct SubscriptionUpdateBillingSchedulesBillUntilDuration: StripeParams {
+    /// Specifies billing duration. Either `day`, `week`, `month` or `year`.
+    public var interval: SubscriptionUpdateBillingSchedulesBillUntilDurationInterval
+    /// The multiplier applied to the interval.
+    public var intervalCount: Int?
+
+    public init(interval: SubscriptionUpdateBillingSchedulesBillUntilDurationInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+}
+
 public struct SubscriptionUpdateBillingThresholds: StripeParams {
     /// Monetary threshold that triggers the subscription to advance to a new billing period
     public var amountGte: Int?
@@ -1530,10 +2010,20 @@ public struct SubscriptionUpdateCancellationDetails: StripeParams {
     /// The customer submitted reason for why they canceled, if the subscription was canceled explicitly by
     /// the user.
     public var feedback: SubscriptionUpdateCancellationDetailsFeedback?
+    /// Customized feedback options that provide deeper insight into why the subscription was canceled, if
+    /// the subscription was canceled explicitly by the user.
+    public var feedbackOption: String?
 
-    public init(comment: String? = nil, feedback: SubscriptionUpdateCancellationDetailsFeedback? = nil) {
+    public init(comment: String? = nil, feedback: SubscriptionUpdateCancellationDetailsFeedback? = nil, feedbackOption: String? = nil) {
         self.comment = comment
         self.feedback = feedback
+        self.feedbackOption = feedbackOption
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case comment
+        case feedback
+        case feedbackOption = "feedback_option"
     }
 }
 
@@ -1563,18 +2053,42 @@ public struct SubscriptionUpdateInvoiceSettings: StripeParams {
     /// The account tax IDs associated with the subscription. Will be set on invoices generated by the
     /// subscription.
     public var accountTaxIds: [String]?
+    /// A list of up to 4 custom fields to be displayed on the invoice.
+    public var customFields: [SubscriptionUpdateInvoiceSettingsCustomFields]?
+    /// An arbitrary string attached to the object. Often useful for displaying to users.
+    public var description: String?
+    /// Footer to be displayed on the invoice.
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: SubscriptionUpdateInvoiceSettingsIssuer?
 
-    public init(accountTaxIds: [String]? = nil, issuer: SubscriptionUpdateInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [SubscriptionUpdateInvoiceSettingsCustomFields]? = nil, description: String? = nil, footer: String? = nil, issuer: SubscriptionUpdateInvoiceSettingsIssuer? = nil) {
         self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
+        case description
+        case footer
         case issuer
+    }
+}
+
+public struct SubscriptionUpdateInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -1599,11 +2113,15 @@ public struct SubscriptionUpdateItems: StripeParams {
     /// Delete all usage for a given subscription item. You must pass this when deleting a usage records
     /// subscription item. `clear_usage` has no effect if the plan has a billing meter attached.
     public var clearUsage: Bool?
+    /// The trial offer to apply to this subscription item.
+    public var currentTrial: SubscriptionUpdateItemsCurrentTrial?
     /// A flag that, if set to `true`, will delete the specified item.
     public var deleted: Bool?
     /// The coupons to redeem into discounts for the subscription item.
     public var discounts: [SubscriptionUpdateItemsDiscounts]?
-    /// Subscription item to update.
+    /// Subscription item to update. If you omit `id`, the API adds a new subscription item rather than
+    /// updating the existing one. See [Changing a subscription's
+    /// price](https://docs.stripe.com/billing/subscriptions/change-price#changing).
     public var id: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -1612,11 +2130,14 @@ public struct SubscriptionUpdateItems: StripeParams {
     public var metadata: [String: String]?
     /// Plan ID for this item, as a string.
     public var plan: String?
-    /// The ID of the price object. One of `price` or `price_data` is required. When changing a subscription
-    /// item's price, `quantity` is set to 1 unless a `quantity` parameter is provided.
+    /// The ID of the price object. You can use either `price` or `price_data`, but not both, to set or
+    /// change this item's price. If you're updating an existing item without changing its price, omit both.
+    /// When changing a subscription item's price, `quantity` is set to 1 unless a `quantity` parameter is
+    /// provided.
     public var price: String?
-    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-    /// `price` or `price_data` is required.
+    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. You can use
+    /// either `price` or `price_data`, but not both, to set or change this item's price. If you're updating
+    /// an existing item without changing its price, omit both.
     public var priceData: SubscriptionUpdateItemsPriceData?
     /// Quantity for this item.
     public var quantity: Int?
@@ -1625,9 +2146,10 @@ public struct SubscriptionUpdateItems: StripeParams {
     /// on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(billingThresholds: SubscriptionUpdateItemsBillingThresholds? = nil, clearUsage: Bool? = nil, deleted: Bool? = nil, discounts: [SubscriptionUpdateItemsDiscounts]? = nil, id: String? = nil, metadata: [String: String]? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionUpdateItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(billingThresholds: SubscriptionUpdateItemsBillingThresholds? = nil, clearUsage: Bool? = nil, currentTrial: SubscriptionUpdateItemsCurrentTrial? = nil, deleted: Bool? = nil, discounts: [SubscriptionUpdateItemsDiscounts]? = nil, id: String? = nil, metadata: [String: String]? = nil, plan: String? = nil, price: String? = nil, priceData: SubscriptionUpdateItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
         self.billingThresholds = billingThresholds
         self.clearUsage = clearUsage
+        self.currentTrial = currentTrial
         self.deleted = deleted
         self.discounts = discounts
         self.id = id
@@ -1642,6 +2164,7 @@ public struct SubscriptionUpdateItems: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case billingThresholds = "billing_thresholds"
         case clearUsage = "clear_usage"
+        case currentTrial = "current_trial"
         case deleted
         case discounts
         case id
@@ -1669,6 +2192,20 @@ public struct SubscriptionUpdateItemsBillingThresholds: StripeParams {
     }
 }
 
+/// The trial offer to apply to this subscription item.
+public struct SubscriptionUpdateItemsCurrentTrial: StripeParams {
+    /// The ID of the trial offer to apply to the subscription item.
+    public var trialOffer: String
+
+    public init(trialOffer: String) {
+        self.trialOffer = trialOffer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case trialOffer = "trial_offer"
+    }
+}
+
 public struct SubscriptionUpdateItemsDiscounts: StripeParams {
     /// ID of the coupon to create a new discount for.
     public var coupon: String?
@@ -1690,8 +2227,9 @@ public struct SubscriptionUpdateItemsDiscounts: StripeParams {
     }
 }
 
-/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-/// `price` or `price_data` is required.
+/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. You can use
+/// either `price` or `price_data`, but not both, to set or change this item's price. If you're updating
+/// an existing item without changing its price, omit both.
 public struct SubscriptionUpdateItemsPriceData: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -1754,8 +2292,7 @@ public struct SubscriptionUpdateItemsPriceDataRecurring: StripeParams {
 }
 
 public struct SubscriptionUpdatePauseCollection: StripeParams {
-    /// The payment collection behavior for this subscription while paused. One of `keep_as_draft`,
-    /// `mark_uncollectible`, or `void`.
+    /// The payment collection behavior for this subscription while paused.
     public var behavior: SubscriptionUpdatePauseCollectionBehavior
     /// The time after which the subscription will resume collecting payments.
     public var resumesAt: Int?
@@ -1806,6 +2343,12 @@ public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptions: StripeParam
     /// This sub-hash contains details about the Bancontact payment method options to pass to the invoice’s
     /// PaymentIntent.
     public var bancontact: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBancontact?
+    /// This sub-hash contains details about the Billie payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var billie: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillie?
+    /// This sub-hash contains details about the Blik payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var blik: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBlik?
     /// This sub-hash contains details about the Card payment method options to pass to the invoice’s
     /// PaymentIntent.
     public var card: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCard?
@@ -1818,32 +2361,46 @@ public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptions: StripeParam
     /// This sub-hash contains details about the PayTo payment method options to pass to the invoice’s
     /// PaymentIntent.
     public var payto: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPayto?
+    /// This sub-hash contains details about the Pix payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var pix: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPix?
     /// This sub-hash contains details about the SEPA Direct Debit payment method options to pass to the
     /// invoice’s PaymentIntent.
     public var sepaDebit: [String: String]?
+    /// This sub-hash contains details about the UPI payment method options to pass to the invoice’s
+    /// PaymentIntent.
+    public var upi: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpi?
     /// This sub-hash contains details about the ACH direct debit payment method options to pass to the
     /// invoice’s PaymentIntent.
     public var usBankAccount: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUsBankAccount?
 
-    public init(acssDebit: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBancontact? = nil, card: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPayto? = nil, sepaDebit: [String: String]? = nil, usBankAccount: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
+    public init(acssDebit: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBancontact? = nil, billie: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillie? = nil, blik: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBlik? = nil, card: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPayto? = nil, pix: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPix? = nil, sepaDebit: [String: String]? = nil, upi: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpi? = nil, usBankAccount: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
         self.acssDebit = acssDebit
         self.bancontact = bancontact
+        self.billie = billie
+        self.blik = blik
         self.card = card
         self.customerBalance = customerBalance
         self.konbini = konbini
         self.payto = payto
+        self.pix = pix
         self.sepaDebit = sepaDebit
+        self.upi = upi
         self.usBankAccount = usBankAccount
     }
 
     public enum CodingKeys: String, CodingKey {
         case acssDebit = "acss_debit"
         case bancontact
+        case billie
+        case blik
         case card
         case customerBalance = "customer_balance"
         case konbini
         case payto
+        case pix
         case sepaDebit = "sepa_debit"
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }
@@ -1892,6 +2449,109 @@ public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBancontact: S
     }
 }
 
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillie: StripeParams {
+    /// Registration details about the buyer's organization.
+    public var companyDetails: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails?
+
+    public init(companyDetails: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails? = nil) {
+        self.companyDetails = companyDetails
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case companyDetails = "company_details"
+    }
+}
+
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails: StripeParams {
+    /// The address the company or entity is registered with.
+    public var registeredAddress: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress?
+    /// Company or entity name.
+    public var registeredName: String?
+    /// The official registration number for the given registration type.
+    public var registrationNumber: String?
+    /// Type of registration the company or entity holds in their registered country.
+    public var registrationType: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType?
+    /// VAT ID number.
+    public var vat: String?
+
+    public init(registeredAddress: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress? = nil, registeredName: String? = nil, registrationNumber: String? = nil, registrationType: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType? = nil, vat: String? = nil) {
+        self.registeredAddress = registeredAddress
+        self.registeredName = registeredName
+        self.registrationNumber = registrationNumber
+        self.registrationType = registrationType
+        self.vat = vat
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case registeredAddress = "registered_address"
+        case registeredName = "registered_name"
+        case registrationNumber = "registration_number"
+        case registrationType = "registration_type"
+        case vat
+    }
+}
+
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code.
+    public var country: String?
+    /// Address line 1 (for example, street, PO Box, or company name).
+    public var line1: String?
+    /// Address line 2 (for example, apartment, suite, unit, or building).
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region.
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBlik: StripeParams {
+    /// Configuration options for setting up a mandate
+    public var mandateOptions: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBlikMandateOptions?
+
+    public init(mandateOptions: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBlikMandateOptions? = nil) {
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up a mandate
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBlikMandateOptions: StripeParams {
+    /// Date when the mandate expires and no further payments will be charged. If not provided, the mandate
+    /// will be set to be indefinite.
+    public var expiresAt: Int?
+
+    public init(expiresAt: Int? = nil) {
+        self.expiresAt = expiresAt
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case expiresAt = "expires_at"
+    }
+}
+
 public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCard: StripeParams {
     /// Configuration options for setting up an eMandate for cards issued in India.
     public var mandateOptions: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCardMandateOptions?
@@ -1922,7 +2582,7 @@ public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCard: StripeP
 
 /// Configuration options for setting up an eMandate for cards issued in India.
 public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCardMandateOptions: StripeParams {
-    /// Amount to be charged for future payments.
+    /// Amount to be charged for future payments, specified in the presentment currency.
     public var amount: Int?
     /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
     /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
@@ -1983,8 +2643,8 @@ public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCustomerBalan
 
 /// Configuration for eu_bank_transfer funding type.
 public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer: StripeParams {
-    /// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-    /// `ES`, `FR`, `IE`, or `NL`.
+    /// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+    /// `IE`, or `NL`.
     public var country: String
 
     public init(country: String) {
@@ -2016,6 +2676,93 @@ public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPaytoMandateO
     public init(amount: Int? = nil, purpose: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil) {
         self.amount = amount
         self.purpose = purpose
+    }
+}
+
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPix: StripeParams {
+    /// The number of seconds after PaymentIntent confirmation when the Pix expires (between 60 and 1209600,
+    /// inclusive). If unspecified, defaults to 14400 seconds (4 hours).
+    public var expiresAfterSeconds: Int?
+    /// Configuration options for setting up a mandate
+    public var mandateOptions: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptions?
+
+    public init(expiresAfterSeconds: Int? = nil, mandateOptions: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptions? = nil) {
+        self.expiresAfterSeconds = expiresAfterSeconds
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case expiresAfterSeconds = "expires_after_seconds"
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up a mandate
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptions: StripeParams {
+    /// Amount to be charged for future payments. If not provided, defaults to 40000.
+    public var amount: Int?
+    /// Determines if the amount includes the IOF tax. Defaults to `never`.
+    public var amountIncludesIof: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptionsAmountIncludesIof?
+    /// Date when the mandate expires and no further payments will be charged, in `YYYY-MM-DD`. If not
+    /// provided, the mandate will be active until canceled.
+    public var endDate: String?
+    /// Schedule at which the future payments will be charged. Defaults to the subscription servicing
+    /// interval.
+    public var paymentSchedule: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptionsPaymentSchedule?
+
+    public init(amount: Int? = nil, amountIncludesIof: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptionsAmountIncludesIof? = nil, endDate: String? = nil, paymentSchedule: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptionsPaymentSchedule? = nil) {
+        self.amount = amount
+        self.amountIncludesIof = amountIncludesIof
+        self.endDate = endDate
+        self.paymentSchedule = paymentSchedule
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountIncludesIof = "amount_includes_iof"
+        case endDate = "end_date"
+        case paymentSchedule = "payment_schedule"
+    }
+}
+
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpi: StripeParams {
+    /// Configuration options for setting up an eMandate
+    public var mandateOptions: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptions?
+
+    public init(mandateOptions: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptions? = nil) {
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up an eMandate
+public struct SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptions: StripeParams {
+    /// Amount to be charged for future payments.
+    public var amount: Int?
+    /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
+    /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
+    /// param.
+    public var amountType: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType?
+    /// A description of the mandate or subscription that is meant to be displayed to the customer.
+    public var description: String?
+    /// End date of the mandate or subscription.
+    public var endDate: Int?
+
+    public init(amount: Int? = nil, amountType: SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType? = nil, description: String? = nil, endDate: Int? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.description = description
+        self.endDate = endDate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case description
+        case endDate = "end_date"
     }
 }
 
@@ -2122,15 +2869,19 @@ public struct SubscriptionUpdateTrialSettings: StripeParams {
 
 /// Defines how the subscription should behave when the user's free trial ends.
 public struct SubscriptionUpdateTrialSettingsEndBehavior: StripeParams {
+    /// Indicates how the subscription's billing cycle anchor is reset when a trial ends. Defaults to `now`.
+    public var billingCycleAnchor: SubscriptionUpdateTrialSettingsEndBehaviorBillingCycleAnchor?
     /// Indicates how the subscription should change when the trial ends if the user did not provide a
     /// payment method.
-    public var missingPaymentMethod: SubscriptionUpdateTrialSettingsEndBehaviorMissingPaymentMethod
+    public var missingPaymentMethod: SubscriptionUpdateTrialSettingsEndBehaviorMissingPaymentMethod?
 
-    public init(missingPaymentMethod: SubscriptionUpdateTrialSettingsEndBehaviorMissingPaymentMethod) {
+    public init(billingCycleAnchor: SubscriptionUpdateTrialSettingsEndBehaviorBillingCycleAnchor? = nil, missingPaymentMethod: SubscriptionUpdateTrialSettingsEndBehaviorMissingPaymentMethod? = nil) {
+        self.billingCycleAnchor = billingCycleAnchor
         self.missingPaymentMethod = missingPaymentMethod
     }
 
     public enum CodingKeys: String, CodingKey {
+        case billingCycleAnchor = "billing_cycle_anchor"
         case missingPaymentMethod = "missing_payment_method"
     }
 }

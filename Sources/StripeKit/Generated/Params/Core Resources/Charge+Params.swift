@@ -18,7 +18,7 @@ public struct ChargeCaptureParams: StripeParams {
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
     /// The email address to send this charge's receipt to. This will override the previously-specified
-    /// email address for this charge, if one was set. Receipts will not be sent in test mode.
+    /// email address for this charge, if one was set. Receipts are only sent for payments in live mode.
     public var receiptEmail: String?
     /// For a non-card charge, text that appears on the customer's statement as the statement descriptor.
     /// This value overrides the account's default statement descriptor. For information about requirements,
@@ -83,7 +83,7 @@ public struct ChargeCreateParams: StripeParams {
     public var applicationFeeAmount: Int?
     /// Whether to immediately capture the charge. Defaults to `true`. When `false`, the charge issues an
     /// authorization (or pre-authorization), and will need to be
-    /// [captured](https://api.stripe.com#capture_charge) later. Uncaptured charges expire after a set
+    /// [captured](https://docs.stripe.com/api#capture_charge) later. Uncaptured charges expire after a set
     /// number of days (7 by default). For more information, see the [authorizing charges and settling
     /// later](https://docs.stripe.com/charges/placing-a-hold) documentation.
     public var capture: Bool?
@@ -114,10 +114,11 @@ public struct ChargeCreateParams: StripeParams {
     /// more information.
     public var radarOptions: ChargeCreateRadarOptions?
     /// The email address to which this charge's [receipt](https://docs.stripe.com/dashboard/receipts) will
-    /// be sent. The receipt will not be sent until the charge is paid, and no receipts will be sent for
-    /// test mode charges. If this charge is for a [Customer](https://docs.stripe.com/api/customers/object),
-    /// the email address specified here will override the customer's email address. If `receipt_email` is
-    /// specified for a charge in live mode, a receipt will be sent regardless of your [email
+    /// be sent. The receipt will not be sent until the charge is paid, and receipts are only sent for
+    /// payments in live mode. If this charge is for a
+    /// [Customer](https://docs.stripe.com/api/customers/object), the email address specified here will
+    /// override the customer's email address. If `receipt_email` is specified for a charge in live mode, a
+    /// receipt will be sent regardless of your [email
     /// settings](https://dashboard.stripe.com/account/emails).
     public var receiptEmail: String?
     /// Shipping information for the charge. Helps prevent fraud on charges for physical goods.
@@ -364,10 +365,13 @@ public struct ChargeCreateTransferData: StripeParams {
     /// The amount transferred to the destination account, if specified. By default, the entire charge
     /// amount is transferred to the destination account.
     public var amount: Int?
+    /// An arbitrary string attached to the transfer. Often useful for displaying to users.
+    public var description: String?
 
-    public init(destination: String, amount: Int? = nil) {
+    public init(destination: String, amount: Int? = nil, description: String? = nil) {
         self.destination = destination
         self.amount = amount
+        self.description = description
     }
 }
 

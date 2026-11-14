@@ -31,23 +31,24 @@ public struct SubscriptionRoutes: Sendable {
     /// billed 100 immediately. If on May 15 they switch to a 200 price, then on June 1 they’ll be billed
     /// 250 (200 for a renewal of her subscription, plus a 50 prorating adjustment for half of the previous
     /// month’s 100 difference). Similarly, a downgrade generates a credit that is applied to the next
-    /// invoice. We also prorate when you make quantity changes. Switching prices does not normally change
-    /// the billing date or generate an immediate charge unless: The billing interval is changed (for
-    /// example, from monthly to yearly). The subscription moves from free to paid. A trial starts or ends.
-    /// In these cases, we apply a credit for the unused time on the previous price, immediately charge the
-    /// customer using the new price, and reset the billing date. Learn about how Stripe immediately
-    /// attempts payment for subscription changes. If you want to charge for an upgrade immediately, pass
-    /// proration_behavior as always_invoice to create prorations, automatically invoice the customer for
-    /// those proration adjustments, and attempt to collect payment. If you pass create_prorations, the
-    /// prorations are created but not automatically invoiced. If you want to bill the customer for the
-    /// prorations before the subscription’s renewal date, you need to manually invoice the customer. If you
-    /// don’t want to prorate, set the proration_behavior option to none. With this option, the customer is
-    /// billed 100 on May 1 and 200 on June 1. Similarly, if you set proration_behavior to none when
-    /// switching between different billing intervals (for example, from monthly to yearly), we don’t
-    /// generate any credits for the old subscription’s unused time. We still reset the billing date and
-    /// bill immediately for the new subscription. Updating the quantity on a subscription many times in an
-    /// hour may result in rate limiting. If you need to bill for a frequently changing quantity, consider
-    /// integrating usage-based billing instead.
+    /// invoice. We also prorate when you make quantity changes. You can also use scripts to prorate your
+    /// billing. To learn more, see Prorations. Switching prices does not normally change the billing date
+    /// or generate an immediate charge unless: The billing interval is changed (for example, from monthly
+    /// to yearly). The subscription moves from free to paid. A trial starts or ends. In these cases, we
+    /// apply a credit for the unused time on the previous price, immediately charge the customer using the
+    /// new price, and reset the billing date. Learn about how Stripe immediately attempts payment for
+    /// subscription changes. If you want to charge for an upgrade immediately, pass proration_behavior as
+    /// always_invoice to create prorations, automatically invoice the customer for those proration
+    /// adjustments, and attempt to collect payment. If you pass create_prorations, the prorations are
+    /// created but not automatically invoiced. If you want to bill the customer for the prorations before
+    /// the subscription’s renewal date, you need to manually invoice the customer. If you don’t want to
+    /// prorate, set the proration_behavior option to none. With this option, the customer is billed 100 on
+    /// May 1 and 200 on June 1. Similarly, if you set proration_behavior to none when switching between
+    /// different billing intervals (for example, from monthly to yearly), we don’t generate any credits for
+    /// the old subscription’s unused time. We still reset the billing date and bill immediately for the new
+    /// subscription. Updating the quantity on a subscription many times in an hour may result in rate
+    /// limiting. If you need to bill for a frequently changing quantity, consider integrating usage-based
+    /// billing instead.
     public var update: @Sendable (_ subscriptionExposedId: String, _ params: SubscriptionUpdateParams?) async throws -> Subscription
 
     /// By default, returns a list of subscriptions that have not been canceled. In order to list canceled
@@ -62,26 +63,34 @@ public struct SubscriptionRoutes: Sendable {
     public var search: @Sendable (_ expand: [String]?) async throws -> Subscription
 
     /// Cancels a customer’s subscription immediately. The customer won’t be charged again for the
-    /// subscription. After it’s canceled, you can no longer update the subscription or its metadata. Any
-    /// pending invoice items that you’ve created are still charged at the end of the period, unless
-    /// manually deleted. If you’ve set the subscription to cancel at the end of the period, any pending
-    /// prorations are also left in place and collected at the end of the period. But if the subscription is
-    /// set to cancel immediately, pending prorations are removed if invoice_now and prorate are both set to
-    /// true. By default, upon subscription cancellation, Stripe stops automatic collection of all finalized
-    /// invoices for the customer. This is intended to prevent unexpected payment attempts after the
-    /// customer has canceled a subscription. However, you can resume automatic collection of the invoices
-    /// manually after subscription cancellation to have us proceed. Or, you could check for unpaid invoices
-    /// before allowing the customer to cancel the subscription at all.
+    /// subscription. After it’s canceled, the subscription is largely immutable. You can still update its
+    /// metadata and cancellation_details. Pending invoice items are included on a final invoice if you
+    /// generate one. Otherwise, they remain pending and can be billed on another invoice for the customer.
+    /// To prevent billing, manually delete them. If you’ve set the subscription to cancel at the end of the
+    /// period, any pending prorations are also left in place and collected at the end of the period. But if
+    /// the subscription is set to cancel immediately, pending prorations are removed if invoice_now and
+    /// prorate are both set to false. By default, upon subscription cancellation, Stripe stops automatic
+    /// collection of all finalized invoices for the customer. This is intended to prevent unexpected
+    /// payment attempts after the customer has canceled a subscription. However, you can resume automatic
+    /// collection of the invoices manually after subscription cancellation to have us proceed. Or, you
+    /// could check for unpaid invoices before allowing the customer to cancel the subscription at all.
     public var delete: @Sendable (_ subscriptionExposedId: String, _ expand: [String]?) async throws -> Subscription
 
     /// Upgrade the billing_mode of an existing subscription.
     public var migrate: @Sendable (_ subscription: String, _ params: SubscriptionMigrateParams) async throws -> Subscription
 
+    /// Pauses a subscription by transitioning it to the paused status. A paused subscription does not
+    /// generate invoices and will not advance to new billing periods. The subscription can be resumed later
+    /// using the resume endpoint. Cannot pause subscriptions with attached schedules.
+    public var pause: @Sendable (_ subscription: String, _ params: SubscriptionPauseParams?) async throws -> Subscription
+
     /// Initiates resumption of a paused subscription, optionally resetting the billing cycle anchor and
-    /// creating prorations. If a resumption invoice is generated, it must be paid or marked uncollectible
-    /// before the subscription will be unpaused. If payment succeeds the subscription will become active,
-    /// and if payment fails the subscription will be past_due. The resumption invoice will void
-    /// automatically if not paid by the expiration date.
+    /// creating prorations. Resume is only available for subscriptions that use charge_automatically
+    /// collection. If Stripe doesn’t generate a resumption invoice, the subscription becomes active
+    /// immediately. When a resumption invoice is generated, Stripe finalizes it immediately. If the invoice
+    /// is paid or marked uncollectible, the subscription becomes active. If the invoice is manually voided,
+    /// the subscription stays paused. If there is no payment attempt within 23 hours, Stripe voids the
+    /// invoice and the subscription stays paused. Learn more about resuming subscriptions.
     public var resume: @Sendable (_ subscription: String, _ params: SubscriptionResumeParams?) async throws -> Subscription
 }
 
@@ -145,6 +154,14 @@ extension SubscriptionRoutes {
                 return try await handler.send(
                     method: .POST,
                     path: "/v1/subscriptions/\(subscription)/migrate",
+                    body: .bytes(ByteBuffer(string: body))
+                ) as Subscription
+            },
+            pause: { subscription, params in
+                let body = params?.toFormBody() ?? ""
+                return try await handler.send(
+                    method: .POST,
+                    path: "/v1/subscriptions/\(subscription)/pause",
                     body: .bytes(ByteBuffer(string: body))
                 ) as Subscription
             },

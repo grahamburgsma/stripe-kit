@@ -15,6 +15,11 @@ public enum CardholderCreatePreferredLocales: String, Codable, Sendable {
     case it
 }
 
+public enum CardholderCreateSpendingControlsAllowedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
+}
+
 public enum CardholderCreateSpendingControlsAllowedCategories: String, Codable, Sendable {
     case acRefrigerationRepair = "ac_refrigeration_repair"
     case accountingBookkeepingServices = "accounting_bookkeeping_services"
@@ -311,6 +316,11 @@ public enum CardholderCreateSpendingControlsAllowedCategories: String, Codable, 
     case womensAccessoryAndSpecialtyShops = "womens_accessory_and_specialty_shops"
     case womensReadyToWearStores = "womens_ready_to_wear_stores"
     case wreckingAndSalvageYards = "wrecking_and_salvage_yards"
+}
+
+public enum CardholderCreateSpendingControlsBlockedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
 }
 
 public enum CardholderCreateSpendingControlsBlockedCategories: String, Codable, Sendable {
@@ -936,6 +946,11 @@ public enum CardholderUpdatePreferredLocales: String, Codable, Sendable {
     case it
 }
 
+public enum CardholderUpdateSpendingControlsAllowedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
+}
+
 public enum CardholderUpdateSpendingControlsAllowedCategories: String, Codable, Sendable {
     case acRefrigerationRepair = "ac_refrigeration_repair"
     case accountingBookkeepingServices = "accounting_bookkeeping_services"
@@ -1232,6 +1247,11 @@ public enum CardholderUpdateSpendingControlsAllowedCategories: String, Codable, 
     case womensAccessoryAndSpecialtyShops = "womens_accessory_and_specialty_shops"
     case womensReadyToWearStores = "womens_ready_to_wear_stores"
     case wreckingAndSalvageYards = "wrecking_and_salvage_yards"
+}
+
+public enum CardholderUpdateSpendingControlsBlockedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
 }
 
 public enum CardholderUpdateSpendingControlsBlockedCategories: String, Codable, Sendable {

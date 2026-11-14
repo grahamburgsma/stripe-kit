@@ -9,6 +9,14 @@ import Foundation
 
 /// Represents an action performed by the reader
 public struct TerminalReaderReaderResourceReaderAction: Codable, Sendable {
+    /// The reader action failed due to an [API error](https://docs.stripe.com/api/errors). Only present
+    /// when `status` is `failed` and the underlying failure was an API error. Avoid parsing the `message`
+    /// field for programmatic logic; use `type` or `code` instead. The `message` field is for display to
+    /// humans only and may be updated at anytime. Requires [reader
+    /// version](https://docs.stripe.com/terminal/readers/stripe-reader-s700-s710#reader-software-version)
+    /// 2.42 or later. Readers on older versions always return null.
+    @Expandable<ApiErrors>
+    public var apiError: String?
     @Expandable<TerminalReaderReaderResourceCollectInputsAction>
     public var collectInputs: String?
     @Expandable<TerminalReaderReaderResourceCollectPaymentMethodAction>
@@ -19,6 +27,8 @@ public struct TerminalReaderReaderResourceReaderAction: Codable, Sendable {
     public var failureCode: String?
     /// Detailed failure message, only set if status is `failed`.
     public var failureMessage: String?
+    @Expandable<TerminalReaderReaderResourcePrintContent>
+    public var printContent: String?
     @Expandable<TerminalReaderReaderResourceProcessPaymentIntentAction>
     public var processPaymentIntent: String?
     @Expandable<TerminalReaderReaderResourceProcessSetupIntentAction>
@@ -33,11 +43,13 @@ public struct TerminalReaderReaderResourceReaderAction: Codable, Sendable {
     public var type: TerminalReaderReaderResourceReaderActionType
 
     public enum CodingKeys: String, CodingKey {
+        case apiError = "api_error"
         case collectInputs = "collect_inputs"
         case collectPaymentMethod = "collect_payment_method"
         case confirmPaymentIntent = "confirm_payment_intent"
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
+        case printContent = "print_content"
         case processPaymentIntent = "process_payment_intent"
         case processSetupIntent = "process_setup_intent"
         case refundPayment = "refund_payment"
@@ -59,6 +71,7 @@ public enum TerminalReaderReaderResourceReaderActionType: String, Codable, Senda
     case collectInputs = "collect_inputs"
     case collectPaymentMethod = "collect_payment_method"
     case confirmPaymentIntent = "confirm_payment_intent"
+    case printContent = "print_content"
     case processPaymentIntent = "process_payment_intent"
     case processSetupIntent = "process_setup_intent"
     case refundPayment = "refund_payment"

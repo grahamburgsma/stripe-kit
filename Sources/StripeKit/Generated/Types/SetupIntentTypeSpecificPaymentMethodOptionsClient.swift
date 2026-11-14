@@ -10,7 +10,7 @@ import Foundation
 public struct SetupIntentTypeSpecificPaymentMethodOptionsClient: Codable, Sendable {
     @Expandable<SetupIntentPaymentMethodOptionsMandateOptionsPayto>
     public var mandateOptions: String?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: SetupIntentTypeSpecificPaymentMethodOptionsClientVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -19,7 +19,7 @@ public struct SetupIntentTypeSpecificPaymentMethodOptionsClient: Codable, Sendab
     }
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum SetupIntentTypeSpecificPaymentMethodOptionsClientVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

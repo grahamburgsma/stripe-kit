@@ -14,7 +14,7 @@ public struct TreasuryTransactionsResourceFlowDetails: Codable, Sendable {
     public var debitReversal: String?
     @Expandable<InboundTransfer>
     public var inboundTransfer: String?
-    @Expandable<Authorization>
+    @Expandable<IssuingAuthorization>
     public var issuingAuthorization: String?
     @Expandable<OutboundPayment>
     public var outboundPayment: String?

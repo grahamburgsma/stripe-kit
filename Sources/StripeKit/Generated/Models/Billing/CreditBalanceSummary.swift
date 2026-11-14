@@ -18,8 +18,8 @@ public struct CreditBalanceSummary: Codable, Sendable {
     public var customer: String?
     /// The account the balance is for.
     public var customerAccount: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: CreditBalanceSummaryObject

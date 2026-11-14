@@ -212,17 +212,21 @@ public struct PriceCreateProductData: StripeParams {
     public var statementDescriptor: String?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: PriceCreateProductDataTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal.
     public var unitLabel: String?
 
-    public init(name: String, active: Bool? = nil, id: String? = nil, metadata: [String: String]? = nil, statementDescriptor: String? = nil, taxCode: String? = nil, unitLabel: String? = nil) {
+    public init(name: String, active: Bool? = nil, id: String? = nil, metadata: [String: String]? = nil, statementDescriptor: String? = nil, taxCode: String? = nil, taxDetails: PriceCreateProductDataTaxDetails? = nil, unitLabel: String? = nil) {
         self.name = name
         self.active = active
         self.id = id
         self.metadata = metadata
         self.statementDescriptor = statementDescriptor
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
     }
 
@@ -233,7 +237,29 @@ public struct PriceCreateProductData: StripeParams {
         case name
         case statementDescriptor = "statement_descriptor"
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
+    }
+}
+
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct PriceCreateProductDataTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }
 

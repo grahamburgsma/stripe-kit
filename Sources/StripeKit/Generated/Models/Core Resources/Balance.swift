@@ -13,9 +13,9 @@ import Foundation
 /// [Understanding Connect account balances](https://docs.stripe.com/connect/account-balances)
 public struct Balance: Codable, Sendable {
     /// Available funds that you can transfer or pay out automatically by Stripe or explicitly through the
-    /// [Transfers API](https://api.stripe.com#transfers) or [Payouts API](https://api.stripe.com#payouts).
-    /// You can find the available balance for each currency and payment type in the `source_types`
-    /// property.
+    /// [Transfers API](https://docs.stripe.com/api#transfers) or [Payouts
+    /// API](https://docs.stripe.com/api#payouts). You can find the available balance for each currency and
+    /// payment type in the `source_types` property.
     @ExpandableCollection<BalanceAmount>
     public var available: [String]?
     /// Funds held due to negative balances on connected accounts where
@@ -29,8 +29,8 @@ public struct Balance: Codable, Sendable {
     public var instantAvailable: [String]?
     @Expandable<BalanceDetail>
     public var issuing: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: BalanceObject

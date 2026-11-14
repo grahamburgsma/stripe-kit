@@ -21,12 +21,15 @@ public struct ConfirmationToken: Codable, Sendable {
     public var expiresAt: Int?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Data used for generating a Mandate.
     @Expandable<ConfirmationTokensResourceMandateData>
     public var mandateData: String?
+    /// Set of key-value pairs that you can attach to an object. This can be useful for storing additional
+    /// information about the object in a structured format.
+    public var metadata: [String: String]?
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: ConfirmationTokenObject
     /// ID of the PaymentIntent that this ConfirmationToken was used to confirm, or null if this
@@ -62,6 +65,7 @@ public struct ConfirmationToken: Codable, Sendable {
         case id
         case livemode
         case mandateData = "mandate_data"
+        case metadata
         case object
         case paymentIntent = "payment_intent"
         case paymentMethodOptions = "payment_method_options"

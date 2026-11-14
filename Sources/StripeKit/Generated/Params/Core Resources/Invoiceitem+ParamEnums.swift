@@ -19,6 +19,7 @@ public enum InvoiceitemCreateTaxBehavior: String, Codable, Sendable {
     case unspecified
 }
 
+
 public enum InvoiceitemUpdatePriceDataTaxBehavior: String, Codable, Sendable {
     case exclusive
     case inclusive

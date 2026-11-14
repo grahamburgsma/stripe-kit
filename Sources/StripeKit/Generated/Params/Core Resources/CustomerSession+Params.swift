@@ -34,8 +34,12 @@ public struct CustomerSessionCreateParams: StripeParams {
 
 /// Configuration for each component. At least 1 component must be enabled.
 public struct CustomerSessionCreateComponents: StripeParams {
+    /// Configuration for active entitlements.
+    public var activeEntitlements: CustomerSessionCreateComponentsActiveEntitlements?
     /// Configuration for buy button.
     public var buyButton: CustomerSessionCreateComponentsBuyButton?
+    /// Configuration for customer portal.
+    public var customerPortal: CustomerSessionCreateComponentsCustomerPortal?
     /// Configuration for the customer sheet.
     public var customerSheet: CustomerSessionCreateComponentsCustomerSheet?
     /// Configuration for the mobile payment element.
@@ -45,8 +49,10 @@ public struct CustomerSessionCreateComponents: StripeParams {
     /// Configuration for the pricing table.
     public var pricingTable: CustomerSessionCreateComponentsPricingTable?
 
-    public init(buyButton: CustomerSessionCreateComponentsBuyButton? = nil, customerSheet: CustomerSessionCreateComponentsCustomerSheet? = nil, mobilePaymentElement: CustomerSessionCreateComponentsMobilePaymentElement? = nil, paymentElement: CustomerSessionCreateComponentsPaymentElement? = nil, pricingTable: CustomerSessionCreateComponentsPricingTable? = nil) {
+    public init(activeEntitlements: CustomerSessionCreateComponentsActiveEntitlements? = nil, buyButton: CustomerSessionCreateComponentsBuyButton? = nil, customerPortal: CustomerSessionCreateComponentsCustomerPortal? = nil, customerSheet: CustomerSessionCreateComponentsCustomerSheet? = nil, mobilePaymentElement: CustomerSessionCreateComponentsMobilePaymentElement? = nil, paymentElement: CustomerSessionCreateComponentsPaymentElement? = nil, pricingTable: CustomerSessionCreateComponentsPricingTable? = nil) {
+        self.activeEntitlements = activeEntitlements
         self.buyButton = buyButton
+        self.customerPortal = customerPortal
         self.customerSheet = customerSheet
         self.mobilePaymentElement = mobilePaymentElement
         self.paymentElement = paymentElement
@@ -54,7 +60,9 @@ public struct CustomerSessionCreateComponents: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case activeEntitlements = "active_entitlements"
         case buyButton = "buy_button"
+        case customerPortal = "customer_portal"
         case customerSheet = "customer_sheet"
         case mobilePaymentElement = "mobile_payment_element"
         case paymentElement = "payment_element"
@@ -62,9 +70,29 @@ public struct CustomerSessionCreateComponents: StripeParams {
     }
 }
 
+/// Configuration for active entitlements.
+public struct CustomerSessionCreateComponentsActiveEntitlements: StripeParams {
+    /// Whether the active entitlements is enabled.
+    public var enabled: Bool
+
+    public init(enabled: Bool) {
+        self.enabled = enabled
+    }
+}
+
 /// Configuration for buy button.
 public struct CustomerSessionCreateComponentsBuyButton: StripeParams {
     /// Whether the buy button is enabled.
+    public var enabled: Bool
+
+    public init(enabled: Bool) {
+        self.enabled = enabled
+    }
+}
+
+/// Configuration for customer portal.
+public struct CustomerSessionCreateComponentsCustomerPortal: StripeParams {
+    /// Whether the customer portal is enabled.
     public var enabled: Bool
 
     public init(enabled: Bool) {

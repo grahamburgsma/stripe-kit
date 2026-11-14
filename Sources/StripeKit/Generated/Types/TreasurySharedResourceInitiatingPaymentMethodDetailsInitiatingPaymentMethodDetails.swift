@@ -14,8 +14,8 @@ public struct TreasurySharedResourceInitiatingPaymentMethodDetailsInitiatingPaym
     public var billingDetails: String?
     @Expandable<ReceivedPaymentMethodDetailsFinancialAccount>
     public var financialAccount: String?
-    /// Set when `type` is `issuing_card`. This is an [Issuing Card](https://api.stripe.com#issuing_cards)
-    /// ID.
+    /// Set when `type` is `issuing_card`. This is an [Issuing
+    /// Card](https://docs.stripe.com/api#issuing_cards) ID.
     public var issuingCard: String?
     /// Polymorphic type matching the originating money movement's source. This can be an external account,
     /// a Stripe balance, or a FinancialAccount.

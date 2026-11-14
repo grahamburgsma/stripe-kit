@@ -7,8 +7,11 @@
 
 import Foundation
 
-/// Transactions represent changes to a [FinancialAccount's](https://api.stripe.com#financial_accounts)
-/// balance.
+/// Legacy Transactions are part of the v1 version of Treasury for platforms and do not support many of
+/// the features introduced in [Treasury for platforms v2](https://docs.stripe.com/treasury/connect).
+/// Use [Transactions](https://docs.stripe.com/api/v2/money-management/transactions) instead of building
+/// a new v1 integration. Transactions represent changes to a
+/// [FinancialAccount's](https://docs.stripe.com/api#financial_accounts) balance.
 public struct TreasuryTransaction: Codable, Sendable {
     /// Amount (in cents) transferred.
     public var amount: Int
@@ -35,8 +38,8 @@ public struct TreasuryTransaction: Codable, Sendable {
     public var flowType: TreasuryTransactionFlowType
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: TreasuryTransactionObject

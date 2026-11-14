@@ -22,11 +22,14 @@ public struct SetupIntentPaymentMethodOptionsCard: Codable, Sendable {
     /// Secure](https://docs.stripe.com/payments/3d-secure/authentication-flow#manual-three-ds) for more
     /// information on how this configuration interacts with Radar and our SCA Engine.
     public var requestThreeDSecure: SetupIntentPaymentMethodOptionsCardRequestThreeDSecure?
+    /// Set to indicate the future transaction type usage for the card being set up.
+    public var setupCredentialUsage: SetupIntentPaymentMethodOptionsCardSetupCredentialUsage?
 
     public enum CodingKeys: String, CodingKey {
         case mandateOptions = "mandate_options"
         case network
         case requestThreeDSecure = "request_three_d_secure"
+        case setupCredentialUsage = "setup_credential_usage"
     }
 }
 
@@ -59,6 +62,13 @@ public enum SetupIntentPaymentMethodOptionsCardRequestThreeDSecure: String, Coda
     case any
     case automatic
     case challenge
+}
+
+/// Set to indicate the future transaction type usage for the card being set up.
+public enum SetupIntentPaymentMethodOptionsCardSetupCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
 }
 
 public struct SetupIntentPaymentMethodOptionsCardList: Codable, Sendable {

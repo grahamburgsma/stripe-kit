@@ -12,10 +12,10 @@ public struct PaymentFlowsAmountDetailsResourceShipping: Codable, Sendable {
     /// unit](https://docs.stripe.com/currencies#zero-decimal). An integer greater than or equal to 0.
     public var amount: Int?
     /// If a physical good is being shipped, the postal code of where it is being shipped from. At most 10
-    /// alphanumeric characters long, hyphens are allowed.
+    /// alphanumeric characters long, hyphens and spaces are allowed.
     public var fromPostalCode: String?
     /// If a physical good is being shipped, the postal code of where it is being shipped to. At most 10
-    /// alphanumeric characters long, hyphens are allowed.
+    /// alphanumeric characters long, hyphens and spaces are allowed.
     public var toPostalCode: String?
 
     public enum CodingKeys: String, CodingKey {

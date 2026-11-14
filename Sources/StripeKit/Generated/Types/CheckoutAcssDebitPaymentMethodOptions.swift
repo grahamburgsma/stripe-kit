@@ -28,7 +28,7 @@ public struct CheckoutAcssDebitPaymentMethodOptions: Codable, Sendable {
     /// string in YYYY-MM-DD format. The date must be in the future and between 3 and 15 calendar days from
     /// now.
     public var targetDate: String?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: CheckoutAcssDebitPaymentMethodOptionsVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -63,7 +63,7 @@ public enum CheckoutAcssDebitPaymentMethodOptionsSetupFutureUsage: String, Codab
     case onSession = "on_session"
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum CheckoutAcssDebitPaymentMethodOptionsVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

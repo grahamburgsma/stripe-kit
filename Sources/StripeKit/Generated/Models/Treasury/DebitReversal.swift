@@ -7,9 +7,11 @@
 
 import Foundation
 
-/// You can reverse some [ReceivedDebits](https://api.stripe.com#received_debits) depending on their
-/// network and source flow. Reversing a ReceivedDebit leads to the creation of a new object known as a
-/// DebitReversal.
+/// Legacy DebitReversals are part of the v1 version of Treasury for platforms and do not support many
+/// of the features introduced in [Treasury for platforms v2](https://docs.stripe.com/treasury/connect).
+/// You can reverse some [ReceivedDebits](https://docs.stripe.com/api#received_debits) depending on
+/// their network and source flow. Reversing a ReceivedDebit leads to the creation of a new object known
+/// as a DebitReversal.
 public struct DebitReversal: Codable, Sendable {
     /// Amount (in cents) transferred.
     public var amount: Int
@@ -29,8 +31,8 @@ public struct DebitReversal: Codable, Sendable {
     /// Other flows linked to a DebitReversal.
     @Expandable<TreasuryReceivedDebitsResourceDebitReversalLinkedFlows>
     public var linkedFlows: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

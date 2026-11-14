@@ -39,6 +39,7 @@ public struct CheckoutBancontactPaymentMethodOptions: Codable, Sendable {
 /// [SCA](/strong-customer-authentication).
 public enum CheckoutBancontactPaymentMethodOptionsSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
 }
 
 public struct CheckoutBancontactPaymentMethodOptionsList: Codable, Sendable {

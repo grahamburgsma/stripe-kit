@@ -8,33 +8,70 @@
 import Foundation
 
 public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecure: Codable, Sendable {
+    /// For authenticated transactions: Indicates how the issuing bank authenticated the customer.
     public var authenticationFlow: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow?
+    /// The Electronic Commerce Indicator (ECI). A protocol-level field indicating what degree of
+    /// authentication was performed.
+    public var electronicCommerceIndicator: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureElectronicCommerceIndicator?
+    /// The exemption requested via 3DS and accepted by the issuer at authentication time.
+    public var exemptionIndicator: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureExemptionIndicator?
+    /// Whether Stripe requested the value of `exemption_indicator` in the transaction. This will depend on
+    /// the outcome of Stripe's internal risk assessment.
+    public var exemptionIndicatorApplied: Bool?
+    /// Indicates the outcome of 3D Secure authentication.
     public var result: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult?
+    /// Additional information about why 3D Secure succeeded or failed, based on the `result`.
     public var resultReason: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason?
+    /// The version of 3D Secure that was used.
     public var version: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion?
 
     public enum CodingKeys: String, CodingKey {
         case authenticationFlow = "authentication_flow"
+        case electronicCommerceIndicator = "electronic_commerce_indicator"
+        case exemptionIndicator = "exemption_indicator"
+        case exemptionIndicatorApplied = "exemption_indicator_applied"
         case result
         case resultReason = "result_reason"
         case version
     }
 }
 
+/// For authenticated transactions: Indicates how the issuing bank authenticated the customer.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureAuthenticationFlow: String, Codable, Sendable {
     case challenge
     case frictionless
 }
 
+/// The Electronic Commerce Indicator (ECI). A protocol-level field indicating what degree of
+/// authentication was performed.
+public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureElectronicCommerceIndicator: String, Codable, Sendable {
+    case v01 = "01"
+    case v02 = "02"
+    case v03 = "03"
+    case v04 = "04"
+    case v05 = "05"
+    case v06 = "06"
+    case v07 = "07"
+}
+
+/// The exemption requested via 3DS and accepted by the issuer at authentication time.
+public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureExemptionIndicator: String, Codable, Sendable {
+    case lowRisk = "low_risk"
+    case none
+}
+
+/// Indicates the outcome of 3D Secure authentication.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResult: String, Codable, Sendable {
     case attemptAcknowledged = "attempt_acknowledged"
     case authenticated
+    case dataShareOnly = "data_share_only"
     case exempted
     case failed
     case notSupported = "not_supported"
     case processingError = "processing_error"
 }
 
+/// Additional information about why 3D Secure succeeded or failed, based on the `result`.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureResultReason: String, Codable, Sendable {
     case abandoned
     case bypassed
@@ -45,10 +82,13 @@ public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsReso
     case rejected
 }
 
+/// The version of 3D Secure that was used.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureVersion: String, Codable, Sendable {
     case v102 = "1.0.2"
     case v210 = "2.1.0"
     case v220 = "2.2.0"
+    case v230 = "2.3.0"
+    case v231 = "2.3.1"
 }
 
 public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceThreeDSecureList: Codable, Sendable {

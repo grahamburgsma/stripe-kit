@@ -89,6 +89,8 @@ public struct TokenCreateAccountCompany: StripeParams {
     public var addressKana: TokenCreateAccountCompanyAddressKana?
     /// The Kanji variation of the company's primary address (Japan only).
     public var addressKanji: TokenCreateAccountCompanyAddressKanji?
+    /// The location where the business is administered.
+    public var administrativeAddress: TokenCreateAccountCompanyAdministrativeAddress?
     /// Whether the company's directors have been provided. Set this Boolean to `true` after creating all
     /// the company's directors with [the Persons API](/api/persons) for accounts with a
     /// `relationship.director` requirement. This value is not automatically set to `true` after creating
@@ -129,6 +131,10 @@ public struct TokenCreateAccountCompany: StripeParams {
     public var ownershipExemptionReason: TokenCreateAccountCompanyOwnershipExemptionReason?
     /// The company's phone number (used for verification).
     public var phone: String?
+    /// A location where the business has a meaningful physical operating presence.
+    public var physicalAddress: TokenCreateAccountCompanyPhysicalAddress?
+    /// The primary location where the business conducts operations.
+    public var principalPlaceOfBusiness: TokenCreateAccountCompanyPrincipalPlaceOfBusiness?
     /// When the business was incorporated or registered.
     public var registrationDate: TokenCreateAccountCompanyRegistrationDate?
     /// The identification number given to a company when it is registered or incorporated, if distinct from
@@ -144,6 +150,8 @@ public struct TokenCreateAccountCompany: StripeParams {
     public var structure: TokenCreateAccountCompanyStructure?
     /// The business ID number of the company, as appropriate for the company’s country. (Examples are an
     /// Employer ID Number in the U.S., a Business Number in Canada, or a Company Number in the UK.)
+    /// Changing this value requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var taxId: String?
     /// The jurisdiction in which the `tax_id` is registered (Germany-based companies only).
     public var taxIdRegistrar: String?
@@ -152,10 +160,11 @@ public struct TokenCreateAccountCompany: StripeParams {
     /// Information on the verification state of the company.
     public var verification: TokenCreateAccountCompanyVerification?
 
-    public init(address: TokenCreateAccountCompanyAddress? = nil, addressKana: TokenCreateAccountCompanyAddressKana? = nil, addressKanji: TokenCreateAccountCompanyAddressKanji? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: TokenCreateAccountCompanyDirectorshipDeclaration? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: String? = nil, nameKana: String? = nil, nameKanji: String? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: TokenCreateAccountCompanyOwnershipDeclaration? = nil, ownershipDeclarationShownAndSigned: Bool? = nil, ownershipExemptionReason: TokenCreateAccountCompanyOwnershipExemptionReason? = nil, phone: String? = nil, registrationDate: TokenCreateAccountCompanyRegistrationDate? = nil, registrationNumber: String? = nil, representativeDeclaration: TokenCreateAccountCompanyRepresentativeDeclaration? = nil, structure: TokenCreateAccountCompanyStructure? = nil, taxId: String? = nil, taxIdRegistrar: String? = nil, vatId: String? = nil, verification: TokenCreateAccountCompanyVerification? = nil) {
+    public init(address: TokenCreateAccountCompanyAddress? = nil, addressKana: TokenCreateAccountCompanyAddressKana? = nil, addressKanji: TokenCreateAccountCompanyAddressKanji? = nil, administrativeAddress: TokenCreateAccountCompanyAdministrativeAddress? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: TokenCreateAccountCompanyDirectorshipDeclaration? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: String? = nil, nameKana: String? = nil, nameKanji: String? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: TokenCreateAccountCompanyOwnershipDeclaration? = nil, ownershipDeclarationShownAndSigned: Bool? = nil, ownershipExemptionReason: TokenCreateAccountCompanyOwnershipExemptionReason? = nil, phone: String? = nil, physicalAddress: TokenCreateAccountCompanyPhysicalAddress? = nil, principalPlaceOfBusiness: TokenCreateAccountCompanyPrincipalPlaceOfBusiness? = nil, registrationDate: TokenCreateAccountCompanyRegistrationDate? = nil, registrationNumber: String? = nil, representativeDeclaration: TokenCreateAccountCompanyRepresentativeDeclaration? = nil, structure: TokenCreateAccountCompanyStructure? = nil, taxId: String? = nil, taxIdRegistrar: String? = nil, vatId: String? = nil, verification: TokenCreateAccountCompanyVerification? = nil) {
         self.address = address
         self.addressKana = addressKana
         self.addressKanji = addressKanji
+        self.administrativeAddress = administrativeAddress
         self.directorsProvided = directorsProvided
         self.directorshipDeclaration = directorshipDeclaration
         self.executivesProvided = executivesProvided
@@ -169,6 +178,8 @@ public struct TokenCreateAccountCompany: StripeParams {
         self.ownershipDeclarationShownAndSigned = ownershipDeclarationShownAndSigned
         self.ownershipExemptionReason = ownershipExemptionReason
         self.phone = phone
+        self.physicalAddress = physicalAddress
+        self.principalPlaceOfBusiness = principalPlaceOfBusiness
         self.registrationDate = registrationDate
         self.registrationNumber = registrationNumber
         self.representativeDeclaration = representativeDeclaration
@@ -183,6 +194,7 @@ public struct TokenCreateAccountCompany: StripeParams {
         case address
         case addressKana = "address_kana"
         case addressKanji = "address_kanji"
+        case administrativeAddress = "administrative_address"
         case directorsProvided = "directors_provided"
         case directorshipDeclaration = "directorship_declaration"
         case executivesProvided = "executives_provided"
@@ -196,6 +208,8 @@ public struct TokenCreateAccountCompany: StripeParams {
         case ownershipDeclarationShownAndSigned = "ownership_declaration_shown_and_signed"
         case ownershipExemptionReason = "ownership_exemption_reason"
         case phone
+        case physicalAddress = "physical_address"
+        case principalPlaceOfBusiness = "principal_place_of_business"
         case registrationDate = "registration_date"
         case registrationNumber = "registration_number"
         case representativeDeclaration = "representative_declaration"
@@ -317,6 +331,40 @@ public struct TokenCreateAccountCompanyAddressKanji: StripeParams {
     }
 }
 
+/// The location where the business is administered.
+public struct TokenCreateAccountCompanyAdministrativeAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
 /// This hash is used to attest that the directors information provided to Stripe is both current and
 /// correct.
 public struct TokenCreateAccountCompanyDirectorshipDeclaration: StripeParams {
@@ -360,6 +408,74 @@ public struct TokenCreateAccountCompanyOwnershipDeclaration: StripeParams {
         case date
         case ip
         case userAgent = "user_agent"
+    }
+}
+
+/// A location where the business has a meaningful physical operating presence.
+public struct TokenCreateAccountCompanyPhysicalAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
+/// The primary location where the business conducts operations.
+public struct TokenCreateAccountCompanyPrincipalPlaceOfBusiness: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
     }
 }
 
@@ -413,11 +529,11 @@ public struct TokenCreateAccountCompanyVerification: StripeParams {
 
 /// A document verifying the business.
 public struct TokenCreateAccountCompanyVerificationDocument: StripeParams {
-    /// The back of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The back of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. The uploaded file needs to be a color image (smaller
     /// than 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The front of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. The uploaded file needs to be a color image (smaller
     /// than 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
@@ -754,13 +870,13 @@ public struct TokenCreateAccountIndividualVerification: StripeParams {
 /// A document showing address, either a passport, local ID card, or utility bill from a well-known
 /// utility company.
 public struct TokenCreateAccountIndividualVerificationAdditionalDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -771,13 +887,13 @@ public struct TokenCreateAccountIndividualVerificationAdditionalDocument: Stripe
 
 /// An identifying document, either a passport or local ID card.
 public struct TokenCreateAccountIndividualVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -878,11 +994,15 @@ public struct TokenCreatePerson: StripeParams {
     /// The person's ID number, as appropriate for their country. For example, a social security number in
     /// the U.S., social insurance number in Canada, etc. Instead of the number itself, you can also provide
     /// a [PII token provided by Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii).
+    /// Changing this value for the account's representative requires that the account re-accept the [terms
+    /// of service](/api/accounts/object#account_object-tos_acceptance).
     public var idNumber: String?
     /// The person's secondary ID number, as appropriate for their country, will be used for enhanced
     /// verification checks. In Thailand, this would be the laser code found on the back of an ID card.
     /// Instead of the number itself, you can also provide a [PII token provided by
-    /// Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii).
+    /// Stripe.js](https://docs.stripe.com/js/tokens/create_token?type=pii). Changing this value for the
+    /// account's representative requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var idNumberSecondary: String?
     /// The person's last name.
     public var lastName: String?
@@ -910,7 +1030,9 @@ public struct TokenCreatePerson: StripeParams {
     public var registeredAddress: TokenCreatePersonRegisteredAddress?
     /// The relationship that this person has with the account's legal entity.
     public var relationship: TokenCreatePersonRelationship?
-    /// The last four digits of the person's Social Security number (U.S. only).
+    /// The last four digits of the person's Social Security number (U.S. only). Changing this value for the
+    /// account's representative requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var ssnLast4: String?
     /// Demographic data related to the person.
     public var usCfpbData: TokenCreatePersonUsCfpbData?
@@ -1162,7 +1284,7 @@ public struct TokenCreatePersonDocuments: StripeParams {
 /// One or more documents that demonstrate proof that this person is authorized to represent the
 /// company.
 public struct TokenCreatePersonDocumentsCompanyAuthorization: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1173,7 +1295,7 @@ public struct TokenCreatePersonDocumentsCompanyAuthorization: StripeParams {
 
 /// One or more documents showing the person's passport page with photo and personal data.
 public struct TokenCreatePersonDocumentsPassport: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1185,7 +1307,7 @@ public struct TokenCreatePersonDocumentsPassport: StripeParams {
 /// One or more documents showing the person's visa required for living in the country where they are
 /// residing.
 public struct TokenCreatePersonDocumentsVisa: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1355,13 +1477,13 @@ public struct TokenCreatePersonVerification: StripeParams {
 /// A document showing address, either a passport, local ID card, or utility bill from a well-known
 /// utility company.
 public struct TokenCreatePersonVerificationAdditionalDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -1372,13 +1494,13 @@ public struct TokenCreatePersonVerificationAdditionalDocument: StripeParams {
 
 /// An identifying document, either a passport or local ID card.
 public struct TokenCreatePersonVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {

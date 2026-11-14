@@ -24,7 +24,7 @@ public struct PaymentIntentAmountDetailsLineItem: Codable, Sendable {
     public var productCode: String?
     /// The product name of the line item. Required for L3 rates. At most 1024 characters long. For Cards,
     /// this field is truncated to 26 alphanumeric characters before being sent to the card networks. For
-    /// Paypal, this field is truncated to 127 characters.
+    /// PayPal, this field is truncated to 127 characters.
     public var productName: String
     /// The quantity of items. Required for L3 rates. An integer greater than 0.
     public var quantity: Int

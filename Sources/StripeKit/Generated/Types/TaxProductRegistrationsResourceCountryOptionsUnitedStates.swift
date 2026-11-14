@@ -8,33 +8,78 @@
 import Foundation
 
 public struct TaxProductRegistrationsResourceCountryOptionsUnitedStates: Codable, Sendable {
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsAdmissionsTax>
+    public var admissionsTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsAttendanceTax>
+    public var attendanceTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsEntertainmentTax>
+    public var entertainmentTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsGrossReceiptsTax>
+    public var grossReceiptsTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsHospitalityTax>
+    public var hospitalityTax: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsUsLocalAmusementTax>
     public var localAmusementTax: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsUsLocalLeaseTax>
     public var localLeaseTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsLuxuryTax>
+    public var luxuryTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsMassTransitParkingTax>
+    public var massTransitParkingTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsParkingTax>
+    public var parkingTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsResortTax>
+    public var resortTax: String?
     /// Two-letter US state code ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
     public var state: String
     @Expandable<TaxProductRegistrationsResourceCountryOptionsUsStateSalesTax>
     public var stateSalesTax: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsTourismTax>
+    public var tourismTax: String?
     /// Type of registration in the US.
     public var type: TaxProductRegistrationsResourceCountryOptionsUnitedStatesType
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsUsUtilityUsersTax>
+    public var utilityUsersTax: String?
 
     public enum CodingKeys: String, CodingKey {
+        case admissionsTax = "admissions_tax"
+        case attendanceTax = "attendance_tax"
+        case entertainmentTax = "entertainment_tax"
+        case grossReceiptsTax = "gross_receipts_tax"
+        case hospitalityTax = "hospitality_tax"
         case localAmusementTax = "local_amusement_tax"
         case localLeaseTax = "local_lease_tax"
+        case luxuryTax = "luxury_tax"
+        case massTransitParkingTax = "mass_transit_parking_tax"
+        case parkingTax = "parking_tax"
+        case resortTax = "resort_tax"
         case state
         case stateSalesTax = "state_sales_tax"
+        case tourismTax = "tourism_tax"
         case type
+        case utilityUsersTax = "utility_users_tax"
     }
 }
 
 /// Type of registration in the US.
 public enum TaxProductRegistrationsResourceCountryOptionsUnitedStatesType: String, Codable, Sendable {
+    case admissionsTax = "admissions_tax"
+    case attendanceTax = "attendance_tax"
+    case digitalExciseTax = "digital_excise_tax"
+    case entertainmentTax = "entertainment_tax"
+    case grossReceiptsTax = "gross_receipts_tax"
+    case hospitalityTax = "hospitality_tax"
     case localAmusementTax = "local_amusement_tax"
     case localLeaseTax = "local_lease_tax"
+    case luxuryTax = "luxury_tax"
+    case massTransitParkingTax = "mass_transit_parking_tax"
+    case parkingTax = "parking_tax"
+    case resortTax = "resort_tax"
     case stateCommunicationsTax = "state_communications_tax"
     case stateRetailDeliveryFee = "state_retail_delivery_fee"
     case stateSalesTax = "state_sales_tax"
+    case tourismTax = "tourism_tax"
+    case utilityUsersTax = "utility_users_tax"
 }
 
 public struct TaxProductRegistrationsResourceCountryOptionsUnitedStatesList: Codable, Sendable {

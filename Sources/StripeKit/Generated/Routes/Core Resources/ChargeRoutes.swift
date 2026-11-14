@@ -13,8 +13,8 @@ import NIOHTTP1
 
 public struct ChargeRoutes: Sendable {
 
-    /// This method is no longer recommended—use the Payment Intents API to initiate a new payment instead.
-    /// Confirmation of the PaymentIntent creates the Charge object used to request payment.
+    /// This method is deprecated and will be removed soon. If your integration uses it, you need to update
+    /// it to use a different payment flow, such as the Payment Intents API.
     public var create: @Sendable (_ params: ChargeCreateParams?) async throws -> Charge
 
     /// Retrieves the details of a charge that has previously been created. Supply the unique charge ID that
@@ -36,10 +36,8 @@ public struct ChargeRoutes: Sendable {
     /// to an hour behind during outages. Search functionality is not available to merchants in India.
     public var search: @Sendable (_ expand: [String]?) async throws -> Charge
 
-    /// Capture the payment of an existing, uncaptured charge that was created with the capture option set
-    /// to false. Uncaptured payments expire a set number of days after they are created (7 by default),
-    /// after which they are marked as refunded and capture attempts will fail. Don’t use this method to
-    /// capture a PaymentIntent-initiated charge. Use Capture a PaymentIntent.
+    /// This method is deprecated and will be removed soon. If your integration uses it, you need to update
+    /// it to use a different payment flow, such as the Payment Intents API.
     public var capture: @Sendable (_ charge: String, _ params: ChargeCaptureParams?) async throws -> Charge
 }
 

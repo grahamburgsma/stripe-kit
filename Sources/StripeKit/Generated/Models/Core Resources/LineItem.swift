@@ -32,8 +32,8 @@ public struct LineItem: Codable, Sendable {
     public var id: String
     /// The ID of the invoice that contains this line item.
     public var invoice: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format. Note
@@ -54,8 +54,13 @@ public struct LineItem: Codable, Sendable {
     /// The pricing information of the line item.
     @Expandable<BillingBillResourceInvoicingPricingPricing>
     public var pricing: String?
-    /// The quantity of the subscription, if the line item is a subscription or a proration.
+    /// Quantity of units for the invoice line item in integer format, with any decimal precision truncated.
+    /// For the line item's full-precision decimal quantity, use `quantity_decimal`. This field will be
+    /// deprecated in favor of `quantity_decimal` in a future version. If the line item is a proration or
+    /// subscription, the quantity of the subscription that the proration was computed for.
     public var quantity: Int?
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the line item.
+    public var quantityDecimal: String?
     @Expandable<Subscription>
     public var subscription: String?
     /// The subtotal of the line item, in cents (or local equivalent), before any discounts or taxes.
@@ -81,6 +86,7 @@ public struct LineItem: Codable, Sendable {
         case pretaxCreditAmounts = "pretax_credit_amounts"
         case pricing
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case subscription
         case subtotal
         case taxes

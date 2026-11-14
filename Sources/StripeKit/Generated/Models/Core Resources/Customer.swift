@@ -12,7 +12,7 @@ import Foundation
 /// payment](https://docs.stripe.com/payments/save-during-payment) and contact information, and track
 /// payments that belong to the same customer.
 public struct Customer: Codable, Sendable {
-    /// The customer's address.
+    /// The customer's billing address.
     @Expandable<Address>
     public var address: String?
     /// The current balance, if any, that's stored on the customer in their default currency. If negative,
@@ -73,8 +73,8 @@ public struct Customer: Codable, Sendable {
     public var invoicePrefix: String?
     @Expandable<InvoiceSettingCustomerSetting>
     public var invoiceSettings: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

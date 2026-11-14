@@ -13,14 +13,14 @@ public struct TreasuryReceivedDebitsResourceLinkedFlows: Codable, Sendable {
     /// Set if the ReceivedDebit is associated with an InboundTransfer's return of funds.
     public var inboundTransfer: String?
     /// Set if the ReceivedDebit was created due to an [Issuing
-    /// Authorization](https://api.stripe.com#issuing_authorizations) object.
+    /// Authorization](https://docs.stripe.com/api#issuing_authorizations) object.
     public var issuingAuthorization: String?
     /// Set if the ReceivedDebit is also viewable as an [Issuing
-    /// Dispute](https://api.stripe.com#issuing_disputes) object.
+    /// Dispute](https://docs.stripe.com/api#issuing_disputes) object.
     public var issuingTransaction: String?
-    /// Set if the ReceivedDebit was created due to a [Payout](https://api.stripe.com#payouts) object.
+    /// Set if the ReceivedDebit was created due to a [Payout](https://docs.stripe.com/api#payouts) object.
     public var payout: String?
-    /// Set if the ReceivedDebit was created due to a [Topup](https://api.stripe.com#topups) object.
+    /// Set if the ReceivedDebit was created due to a [Topup](https://docs.stripe.com/api#topups) object.
     public var topup: String?
 
     public enum CodingKeys: String, CodingKey {

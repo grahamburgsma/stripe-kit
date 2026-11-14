@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Billing details attached to this payment evaluation.
+/// Billing details attached to the payment method.
 public struct InsightsResourcesPaymentEvaluationBillingDetails: Codable, Sendable {
     @Expandable<InsightsResourcesPaymentEvaluationAddress>
     public var address: String?

@@ -11,3 +11,10 @@ public enum DisputeUpdateEvidenceEnhancedEvidenceVisaCompellingEvidence3Disputed
     case merchandise
     case services
 }
+
+public enum DisputeUpdateIntendedSubmissionMethod: String, Codable, Sendable {
+    case manual
+    case preferManual = "prefer_manual"
+    case preferSmartDisputes = "prefer_smart_disputes"
+    case smartDisputes = "smart_disputes"
+}

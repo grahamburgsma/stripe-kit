@@ -13,11 +13,17 @@ public struct IssuingCardShipping: Codable, Sendable {
     /// Address validation details for the shipment.
     @Expandable<IssuingCardShippingAddressValidation>
     public var addressValidation: String?
+    /// The name of the business at the shipping address, used on the shipping label to ensure delivery when
+    /// the card is shipped to a cardholder's workplace.
+    public var businessName: String?
     /// The delivery company that shipped a card.
     public var carrier: IssuingCardShippingCarrier?
     /// Additional information that may be required for clearing customs.
     @Expandable<IssuingCardShippingCustoms>
     public var customs: String?
+    /// The time the card was reported as delivered. Null for undelivered or untracked shipments, or if
+    /// Stripe has not recorded a delivery time.
+    public var deliveredAt: Int?
     /// A unix timestamp representing a best estimate of when the card will be delivered.
     public var eta: Int?
     /// Recipient name.
@@ -33,6 +39,8 @@ public struct IssuingCardShipping: Codable, Sendable {
     public var requireSignature: Bool?
     /// Shipment service, such as `standard` or `express`.
     public var service: IssuingCardShippingService
+    /// The time the card was reported as shipped. Null if Stripe has not recorded a shipment time.
+    public var shippedAt: Int?
     /// The delivery status of the card.
     public var status: IssuingCardShippingStatus?
     /// A tracking number for a card shipment.
@@ -45,13 +53,16 @@ public struct IssuingCardShipping: Codable, Sendable {
     public enum CodingKeys: String, CodingKey {
         case address
         case addressValidation = "address_validation"
+        case businessName = "business_name"
         case carrier
         case customs
+        case deliveredAt = "delivered_at"
         case eta
         case name
         case phoneNumber = "phone_number"
         case requireSignature = "require_signature"
         case service
+        case shippedAt = "shipped_at"
         case status
         case trackingNumber = "tracking_number"
         case trackingUrl = "tracking_url"
@@ -61,6 +72,7 @@ public struct IssuingCardShipping: Codable, Sendable {
 
 /// The delivery company that shipped a card.
 public enum IssuingCardShippingCarrier: String, Codable, Sendable {
+    case correos
     case dhl
     case fedex
     case royalMail = "royal_mail"

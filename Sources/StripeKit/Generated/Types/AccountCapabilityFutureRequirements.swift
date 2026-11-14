@@ -27,7 +27,8 @@ public struct AccountCapabilityFutureRequirements: Codable, Sendable {
     /// `future_requirements.disabled_reason` is null because fields in `future_requirements` will never
     /// disable the account.
     public var disabledReason: AccountCapabilityFutureRequirementsDisabledReason?
-    /// Details about validation and verification failures for `due` requirements that must be resolved.
+    /// Fields that are `currently_due` and need to be collected again because validation or verification
+    /// failed.
     @ExpandableCollection<AccountRequirementsError>
     public var errors: [String]?
     /// Fields you must collect when all thresholds are reached. As they become required, they appear in

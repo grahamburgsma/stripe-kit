@@ -32,6 +32,9 @@ public struct AccountSessionCreateComponents: StripeParams {
     /// Configuration for the [account
     /// onboarding](/connect/supported-embedded-components/account-onboarding/) embedded component.
     public var accountOnboarding: AccountSessionCreateComponentsAccountOnboarding?
+    /// Configuration for the [balance
+    /// report](/connect/supported-embedded-components/financial-reports#balance-report) embedded component.
+    public var balanceReport: AccountSessionCreateComponentsBalanceReport?
     /// Configuration for the [balances](/connect/supported-embedded-components/balances/) embedded
     /// component.
     public var balances: AccountSessionCreateComponentsBalances?
@@ -66,27 +69,44 @@ public struct AccountSessionCreateComponents: StripeParams {
     /// Configuration for the [payment disputes](/connect/supported-embedded-components/payment-disputes/)
     /// embedded component.
     public var paymentDisputes: AccountSessionCreateComponentsPaymentDisputes?
+    /// Configuration for the [payment method
+    /// settings](/connect/supported-embedded-components/payment-method-settings/) embedded component.
+    public var paymentMethodSettings: AccountSessionCreateComponentsPaymentMethodSettings?
     /// Configuration for the [payments](/connect/supported-embedded-components/payments/) embedded
     /// component.
     public var payments: AccountSessionCreateComponentsPayments?
     /// Configuration for the [payout details](/connect/supported-embedded-components/payout-details/)
     /// embedded component.
     public var payoutDetails: AccountSessionCreateComponentsPayoutDetails?
+    /// Configuration for the [payout reconciliation
+    /// report](/connect/supported-embedded-components/financial-reports#payout-reconciliation-report)
+    /// embedded component.
+    public var payoutReconciliationReport: AccountSessionCreateComponentsPayoutReconciliationReport?
     /// Configuration for the [payouts](/connect/supported-embedded-components/payouts/) embedded component.
     public var payouts: AccountSessionCreateComponentsPayouts?
     /// Configuration for the [payouts list](/connect/supported-embedded-components/payouts-list/) embedded
     /// component.
     public var payoutsList: AccountSessionCreateComponentsPayoutsList?
+    /// Configuration for the [reporting chart](/connect/supported-embedded-components/reporting-chart/)
+    /// embedded component.
+    public var reportingChart: AccountSessionCreateComponentsReportingChart?
     /// Configuration for the [tax registrations](/connect/supported-embedded-components/tax-registrations/)
     /// embedded component.
     public var taxRegistrations: AccountSessionCreateComponentsTaxRegistrations?
     /// Configuration for the [tax settings](/connect/supported-embedded-components/tax-settings/) embedded
     /// component.
     public var taxSettings: AccountSessionCreateComponentsTaxSettings?
+    /// Configuration for the [Terminal hardware
+    /// orders](/connect/supported-embedded-components/terminal-hardware-orders/) embedded component.
+    public var terminalHardwareOrders: AccountSessionCreateComponentsTerminalHardwareOrders?
+    /// Configuration for the [Terminal hardware
+    /// shop](/connect/supported-embedded-components/terminal-hardware-shop/) embedded component.
+    public var terminalHardwareShop: AccountSessionCreateComponentsTerminalHardwareShop?
 
-    public init(accountManagement: AccountSessionCreateComponentsAccountManagement? = nil, accountOnboarding: AccountSessionCreateComponentsAccountOnboarding? = nil, balances: AccountSessionCreateComponentsBalances? = nil, disputesList: AccountSessionCreateComponentsDisputesList? = nil, documents: AccountSessionCreateComponentsDocuments? = nil, financialAccount: AccountSessionCreateComponentsFinancialAccount? = nil, financialAccountTransactions: AccountSessionCreateComponentsFinancialAccountTransactions? = nil, instantPayoutsPromotion: AccountSessionCreateComponentsInstantPayoutsPromotion? = nil, issuingCard: AccountSessionCreateComponentsIssuingCard? = nil, issuingCardsList: AccountSessionCreateComponentsIssuingCardsList? = nil, notificationBanner: AccountSessionCreateComponentsNotificationBanner? = nil, paymentDetails: AccountSessionCreateComponentsPaymentDetails? = nil, paymentDisputes: AccountSessionCreateComponentsPaymentDisputes? = nil, payments: AccountSessionCreateComponentsPayments? = nil, payoutDetails: AccountSessionCreateComponentsPayoutDetails? = nil, payouts: AccountSessionCreateComponentsPayouts? = nil, payoutsList: AccountSessionCreateComponentsPayoutsList? = nil, taxRegistrations: AccountSessionCreateComponentsTaxRegistrations? = nil, taxSettings: AccountSessionCreateComponentsTaxSettings? = nil) {
+    public init(accountManagement: AccountSessionCreateComponentsAccountManagement? = nil, accountOnboarding: AccountSessionCreateComponentsAccountOnboarding? = nil, balanceReport: AccountSessionCreateComponentsBalanceReport? = nil, balances: AccountSessionCreateComponentsBalances? = nil, disputesList: AccountSessionCreateComponentsDisputesList? = nil, documents: AccountSessionCreateComponentsDocuments? = nil, financialAccount: AccountSessionCreateComponentsFinancialAccount? = nil, financialAccountTransactions: AccountSessionCreateComponentsFinancialAccountTransactions? = nil, instantPayoutsPromotion: AccountSessionCreateComponentsInstantPayoutsPromotion? = nil, issuingCard: AccountSessionCreateComponentsIssuingCard? = nil, issuingCardsList: AccountSessionCreateComponentsIssuingCardsList? = nil, notificationBanner: AccountSessionCreateComponentsNotificationBanner? = nil, paymentDetails: AccountSessionCreateComponentsPaymentDetails? = nil, paymentDisputes: AccountSessionCreateComponentsPaymentDisputes? = nil, paymentMethodSettings: AccountSessionCreateComponentsPaymentMethodSettings? = nil, payments: AccountSessionCreateComponentsPayments? = nil, payoutDetails: AccountSessionCreateComponentsPayoutDetails? = nil, payoutReconciliationReport: AccountSessionCreateComponentsPayoutReconciliationReport? = nil, payouts: AccountSessionCreateComponentsPayouts? = nil, payoutsList: AccountSessionCreateComponentsPayoutsList? = nil, reportingChart: AccountSessionCreateComponentsReportingChart? = nil, taxRegistrations: AccountSessionCreateComponentsTaxRegistrations? = nil, taxSettings: AccountSessionCreateComponentsTaxSettings? = nil, terminalHardwareOrders: AccountSessionCreateComponentsTerminalHardwareOrders? = nil, terminalHardwareShop: AccountSessionCreateComponentsTerminalHardwareShop? = nil) {
         self.accountManagement = accountManagement
         self.accountOnboarding = accountOnboarding
+        self.balanceReport = balanceReport
         self.balances = balances
         self.disputesList = disputesList
         self.documents = documents
@@ -98,17 +118,23 @@ public struct AccountSessionCreateComponents: StripeParams {
         self.notificationBanner = notificationBanner
         self.paymentDetails = paymentDetails
         self.paymentDisputes = paymentDisputes
+        self.paymentMethodSettings = paymentMethodSettings
         self.payments = payments
         self.payoutDetails = payoutDetails
+        self.payoutReconciliationReport = payoutReconciliationReport
         self.payouts = payouts
         self.payoutsList = payoutsList
+        self.reportingChart = reportingChart
         self.taxRegistrations = taxRegistrations
         self.taxSettings = taxSettings
+        self.terminalHardwareOrders = terminalHardwareOrders
+        self.terminalHardwareShop = terminalHardwareShop
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountManagement = "account_management"
         case accountOnboarding = "account_onboarding"
+        case balanceReport = "balance_report"
         case balances
         case disputesList = "disputes_list"
         case documents
@@ -120,12 +146,17 @@ public struct AccountSessionCreateComponents: StripeParams {
         case notificationBanner = "notification_banner"
         case paymentDetails = "payment_details"
         case paymentDisputes = "payment_disputes"
+        case paymentMethodSettings = "payment_method_settings"
         case payments
         case payoutDetails = "payout_details"
+        case payoutReconciliationReport = "payout_reconciliation_report"
         case payouts
         case payoutsList = "payouts_list"
+        case reportingChart = "reporting_chart"
         case taxRegistrations = "tax_registrations"
         case taxSettings = "tax_settings"
+        case terminalHardwareOrders = "terminal_hardware_orders"
+        case terminalHardwareShop = "terminal_hardware_shop"
     }
 }
 
@@ -202,6 +233,20 @@ public struct AccountSessionCreateComponentsAccountOnboardingFeatures: StripePar
     public enum CodingKeys: String, CodingKey {
         case disableStripeUserAuthentication = "disable_stripe_user_authentication"
         case externalAccountCollection = "external_account_collection"
+    }
+}
+
+/// Configuration for the [balance
+/// report](/connect/supported-embedded-components/financial-reports#balance-report) embedded component.
+public struct AccountSessionCreateComponentsBalanceReport: StripeParams {
+    /// Whether the embedded component is enabled.
+    public var enabled: Bool
+    /// An empty list, because this embedded component has no features.
+    public var features: [String: String]?
+
+    public init(enabled: Bool, features: [String: String]? = nil) {
+        self.enabled = enabled
+        self.features = features
     }
 }
 
@@ -283,12 +328,16 @@ public struct AccountSessionCreateComponentsDisputesListFeatures: StripeParams {
     public var disputeManagement: Bool?
     /// Whether sending refunds is enabled. This is `true` by default.
     public var refundManagement: Bool?
+    /// Whether to allow connected accounts to submit disputes using Smart Disputes. Defaults to the value
+    /// of `dispute_management`.
+    public var smartDisputesManagement: Bool?
 
-    public init(capturePayments: Bool? = nil, destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil) {
+    public init(capturePayments: Bool? = nil, destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil, smartDisputesManagement: Bool? = nil) {
         self.capturePayments = capturePayments
         self.destinationOnBehalfOfChargeManagement = destinationOnBehalfOfChargeManagement
         self.disputeManagement = disputeManagement
         self.refundManagement = refundManagement
+        self.smartDisputesManagement = smartDisputesManagement
     }
 
     public enum CodingKeys: String, CodingKey {
@@ -296,6 +345,7 @@ public struct AccountSessionCreateComponentsDisputesListFeatures: StripeParams {
         case destinationOnBehalfOfChargeManagement = "destination_on_behalf_of_charge_management"
         case disputeManagement = "dispute_management"
         case refundManagement = "refund_management"
+        case smartDisputesManagement = "smart_disputes_management"
     }
 }
 
@@ -582,12 +632,16 @@ public struct AccountSessionCreateComponentsPaymentDetailsFeatures: StripeParams
     public var disputeManagement: Bool?
     /// Whether sending refunds is enabled. This is `true` by default.
     public var refundManagement: Bool?
+    /// Whether to allow connected accounts to submit disputes using Smart Disputes. Defaults to the value
+    /// of `dispute_management`.
+    public var smartDisputesManagement: Bool?
 
-    public init(capturePayments: Bool? = nil, destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil) {
+    public init(capturePayments: Bool? = nil, destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil, smartDisputesManagement: Bool? = nil) {
         self.capturePayments = capturePayments
         self.destinationOnBehalfOfChargeManagement = destinationOnBehalfOfChargeManagement
         self.disputeManagement = disputeManagement
         self.refundManagement = refundManagement
+        self.smartDisputesManagement = smartDisputesManagement
     }
 
     public enum CodingKeys: String, CodingKey {
@@ -595,6 +649,7 @@ public struct AccountSessionCreateComponentsPaymentDetailsFeatures: StripeParams
         case destinationOnBehalfOfChargeManagement = "destination_on_behalf_of_charge_management"
         case disputeManagement = "dispute_management"
         case refundManagement = "refund_management"
+        case smartDisputesManagement = "smart_disputes_management"
     }
 }
 
@@ -622,17 +677,51 @@ public struct AccountSessionCreateComponentsPaymentDisputesFeatures: StripeParam
     public var disputeManagement: Bool?
     /// Whether sending refunds is enabled. This is `true` by default.
     public var refundManagement: Bool?
+    /// Whether to allow connected accounts to submit disputes using Smart Disputes. Defaults to the value
+    /// of `dispute_management`.
+    public var smartDisputesManagement: Bool?
 
-    public init(destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil) {
+    public init(destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil, smartDisputesManagement: Bool? = nil) {
         self.destinationOnBehalfOfChargeManagement = destinationOnBehalfOfChargeManagement
         self.disputeManagement = disputeManagement
         self.refundManagement = refundManagement
+        self.smartDisputesManagement = smartDisputesManagement
     }
 
     public enum CodingKeys: String, CodingKey {
         case destinationOnBehalfOfChargeManagement = "destination_on_behalf_of_charge_management"
         case disputeManagement = "dispute_management"
         case refundManagement = "refund_management"
+        case smartDisputesManagement = "smart_disputes_management"
+    }
+}
+
+/// Configuration for the [payment method
+/// settings](/connect/supported-embedded-components/payment-method-settings/) embedded component.
+public struct AccountSessionCreateComponentsPaymentMethodSettings: StripeParams {
+    /// Whether the embedded component is enabled.
+    public var enabled: Bool
+    /// The list of features enabled in the embedded component.
+    public var features: AccountSessionCreateComponentsPaymentMethodSettingsFeatures?
+
+    public init(enabled: Bool, features: AccountSessionCreateComponentsPaymentMethodSettingsFeatures? = nil) {
+        self.enabled = enabled
+        self.features = features
+    }
+}
+
+/// The list of features enabled in the embedded component.
+public struct AccountSessionCreateComponentsPaymentMethodSettingsFeatures: StripeParams {
+    /// Whether Stripe user authentication is disabled. This value can only be `true` for accounts where
+    /// `controller.requirement_collection` is `application` for the account. This is `false` by default.
+    public var disableStripeUserAuthentication: Bool?
+
+    public init(disableStripeUserAuthentication: Bool? = nil) {
+        self.disableStripeUserAuthentication = disableStripeUserAuthentication
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case disableStripeUserAuthentication = "disable_stripe_user_authentication"
     }
 }
 
@@ -662,12 +751,16 @@ public struct AccountSessionCreateComponentsPaymentsFeatures: StripeParams {
     public var disputeManagement: Bool?
     /// Whether sending refunds is enabled. This is `true` by default.
     public var refundManagement: Bool?
+    /// Whether to allow connected accounts to submit disputes using Smart Disputes. Defaults to the value
+    /// of `dispute_management`.
+    public var smartDisputesManagement: Bool?
 
-    public init(capturePayments: Bool? = nil, destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil) {
+    public init(capturePayments: Bool? = nil, destinationOnBehalfOfChargeManagement: Bool? = nil, disputeManagement: Bool? = nil, refundManagement: Bool? = nil, smartDisputesManagement: Bool? = nil) {
         self.capturePayments = capturePayments
         self.destinationOnBehalfOfChargeManagement = destinationOnBehalfOfChargeManagement
         self.disputeManagement = disputeManagement
         self.refundManagement = refundManagement
+        self.smartDisputesManagement = smartDisputesManagement
     }
 
     public enum CodingKeys: String, CodingKey {
@@ -675,12 +768,28 @@ public struct AccountSessionCreateComponentsPaymentsFeatures: StripeParams {
         case destinationOnBehalfOfChargeManagement = "destination_on_behalf_of_charge_management"
         case disputeManagement = "dispute_management"
         case refundManagement = "refund_management"
+        case smartDisputesManagement = "smart_disputes_management"
     }
 }
 
 /// Configuration for the [payout details](/connect/supported-embedded-components/payout-details/)
 /// embedded component.
 public struct AccountSessionCreateComponentsPayoutDetails: StripeParams {
+    /// Whether the embedded component is enabled.
+    public var enabled: Bool
+    /// An empty list, because this embedded component has no features.
+    public var features: [String: String]?
+
+    public init(enabled: Bool, features: [String: String]? = nil) {
+        self.enabled = enabled
+        self.features = features
+    }
+}
+
+/// Configuration for the [payout reconciliation
+/// report](/connect/supported-embedded-components/financial-reports#payout-reconciliation-report)
+/// embedded component.
+public struct AccountSessionCreateComponentsPayoutReconciliationReport: StripeParams {
     /// Whether the embedded component is enabled.
     public var enabled: Bool
     /// An empty list, because this embedded component has no features.
@@ -757,6 +866,20 @@ public struct AccountSessionCreateComponentsPayoutsList: StripeParams {
     }
 }
 
+/// Configuration for the [reporting chart](/connect/supported-embedded-components/reporting-chart/)
+/// embedded component.
+public struct AccountSessionCreateComponentsReportingChart: StripeParams {
+    /// Whether the embedded component is enabled.
+    public var enabled: Bool
+    /// An empty list, because this embedded component has no features.
+    public var features: [String: String]?
+
+    public init(enabled: Bool, features: [String: String]? = nil) {
+        self.enabled = enabled
+        self.features = features
+    }
+}
+
 /// Configuration for the [tax registrations](/connect/supported-embedded-components/tax-registrations/)
 /// embedded component.
 public struct AccountSessionCreateComponentsTaxRegistrations: StripeParams {
@@ -774,6 +897,34 @@ public struct AccountSessionCreateComponentsTaxRegistrations: StripeParams {
 /// Configuration for the [tax settings](/connect/supported-embedded-components/tax-settings/) embedded
 /// component.
 public struct AccountSessionCreateComponentsTaxSettings: StripeParams {
+    /// Whether the embedded component is enabled.
+    public var enabled: Bool
+    /// An empty list, because this embedded component has no features.
+    public var features: [String: String]?
+
+    public init(enabled: Bool, features: [String: String]? = nil) {
+        self.enabled = enabled
+        self.features = features
+    }
+}
+
+/// Configuration for the [Terminal hardware
+/// orders](/connect/supported-embedded-components/terminal-hardware-orders/) embedded component.
+public struct AccountSessionCreateComponentsTerminalHardwareOrders: StripeParams {
+    /// Whether the embedded component is enabled.
+    public var enabled: Bool
+    /// An empty list, because this embedded component has no features.
+    public var features: [String: String]?
+
+    public init(enabled: Bool, features: [String: String]? = nil) {
+        self.enabled = enabled
+        self.features = features
+    }
+}
+
+/// Configuration for the [Terminal hardware
+/// shop](/connect/supported-embedded-components/terminal-hardware-shop/) embedded component.
+public struct AccountSessionCreateComponentsTerminalHardwareShop: StripeParams {
     /// Whether the embedded component is enabled.
     public var enabled: Bool
     /// An empty list, because this embedded component has no features.

@@ -26,6 +26,9 @@ public struct AccountBusinessProfile: Codable, Sendable {
     /// Internal-only description of the product sold or service provided by the business. It's used by
     /// Stripe for risk and underwriting purposes.
     public var productDescription: String?
+    /// A link to the business's publicly available terms related to the Specified Commercial Transaction
+    /// Act. Only used for accounts in Japan.
+    public var specifiedCommercialTransactionsActUrl: String?
     /// A publicly available mailing address for sending support issues to.
     @Expandable<Address>
     public var supportAddress: String?
@@ -46,6 +49,7 @@ public struct AccountBusinessProfile: Codable, Sendable {
         case monthlyEstimatedRevenue = "monthly_estimated_revenue"
         case name
         case productDescription = "product_description"
+        case specifiedCommercialTransactionsActUrl = "specified_commercial_transactions_act_url"
         case supportAddress = "support_address"
         case supportEmail = "support_email"
         case supportPhone = "support_phone"

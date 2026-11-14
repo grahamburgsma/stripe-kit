@@ -44,6 +44,9 @@ public struct BalanceSettingsCreatePayments: StripeParams {
 
 /// Settings specific to the account's payouts.
 public struct BalanceSettingsCreatePaymentsPayouts: StripeParams {
+    /// Configures per-currency rules for automatically transferring funds from the payments balance to a
+    /// FinancialAccount.
+    public var automaticTransferRulesByCurrency: [String: String]?
     /// The minimum balance amount to retain per currency after automatic payouts. Only funds that exceed
     /// these amounts are paid out. Learn more about the [minimum balances for automatic
     /// payouts](/payouts/minimum-balances-for-automatic-payouts).
@@ -56,13 +59,15 @@ public struct BalanceSettingsCreatePaymentsPayouts: StripeParams {
     /// platform's bank descriptor as set in the Dashboard.
     public var statementDescriptor: String?
 
-    public init(minimumBalanceByCurrency: [String: String]? = nil, schedule: BalanceSettingsCreatePaymentsPayoutsSchedule? = nil, statementDescriptor: String? = nil) {
+    public init(automaticTransferRulesByCurrency: [String: String]? = nil, minimumBalanceByCurrency: [String: String]? = nil, schedule: BalanceSettingsCreatePaymentsPayoutsSchedule? = nil, statementDescriptor: String? = nil) {
+        self.automaticTransferRulesByCurrency = automaticTransferRulesByCurrency
         self.minimumBalanceByCurrency = minimumBalanceByCurrency
         self.schedule = schedule
         self.statementDescriptor = statementDescriptor
     }
 
     public enum CodingKeys: String, CodingKey {
+        case automaticTransferRulesByCurrency = "automatic_transfer_rules_by_currency"
         case minimumBalanceByCurrency = "minimum_balance_by_currency"
         case schedule
         case statementDescriptor = "statement_descriptor"
@@ -104,12 +109,37 @@ public struct BalanceSettingsCreatePaymentsSettlementTiming: StripeParams {
     /// will return `delay_days` to the default, which is the lowest available value for the account. [Learn
     /// more about controlling delay days](/connect/manage-payout-schedule).
     public var delayDaysOverride: Int?
+    /// Customized start of day configuration for automatic payouts to group and send payments in local
+    /// timezones with a customized day starting time. For details, see our [Customized start of
+    /// day](/connect/customized-start-of-day) documentation.
+    public var startOfDay: BalanceSettingsCreatePaymentsSettlementTimingStartOfDay?
 
-    public init(delayDaysOverride: Int? = nil) {
+    public init(delayDaysOverride: Int? = nil, startOfDay: BalanceSettingsCreatePaymentsSettlementTimingStartOfDay? = nil) {
         self.delayDaysOverride = delayDaysOverride
+        self.startOfDay = startOfDay
     }
 
     public enum CodingKeys: String, CodingKey {
         case delayDaysOverride = "delay_days_override"
+        case startOfDay = "start_of_day"
+    }
+}
+
+public struct BalanceSettingsCreatePaymentsSettlementTimingStartOfDay: StripeParams {
+    /// Hour at which the customized start of day begins according to the given timezone. Must be a
+    /// [supported customized start of day
+    /// hour](/connect/customized-start-of-day#available-timezones-and-cutoffs).
+    public var hour: Int?
+    /// Minutes at which the customized start of day begins according to the given timezone. Must be either
+    /// 0 or 30.
+    public var minutes: Int?
+    /// Timezone for the customized start of day. Must be a [supported customized start of day
+    /// timezone](/connect/customized-start-of-day#available-timezones-and-cutoffs).
+    public var timezone: String?
+
+    public init(hour: Int? = nil, minutes: Int? = nil, timezone: String? = nil) {
+        self.hour = hour
+        self.minutes = minutes
+        self.timezone = timezone
     }
 }

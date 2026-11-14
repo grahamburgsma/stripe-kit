@@ -23,7 +23,11 @@ public struct CreditNoteRoutes: Sendable {
     /// out_of_band_amount). The sum of refunds, customer balance credits, and outside of Stripe credits
     /// must equal the post_payment_amount. You may issue multiple credit notes for an invoice. Each credit
     /// note may increment the invoice’s pre_payment_credit_notes_amount, post_payment_credit_notes_amount,
-    /// or both, depending on the invoice’s amount_remaining at the time of credit note creation.
+    /// or both, depending on the invoice’s amount_remaining at the time of credit note creation. For
+    /// invoices that also have refunds created through the Refund API, the credit note API subtracts those
+    /// refund amounts from the maximum creditable amount. This prevents the combined credit notes and
+    /// refunds from exceeding the invoice amount. If you use both, ensure the combined total does not
+    /// exceed the invoice’s paid amount.
     public var create: @Sendable (_ params: CreditNoteCreateParams) async throws -> CreditNote
 
     /// Retrieves the credit note object with the given identifier.

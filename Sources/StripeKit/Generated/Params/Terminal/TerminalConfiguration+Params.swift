@@ -12,46 +12,78 @@ public struct TerminalConfigurationCreateParams: StripeParams {
     public var bbposWisepad3: TerminalConfigurationCreateBbposWisepad3?
     /// An object containing device type specific settings for BBPOS WisePOS E readers.
     public var bbposWiseposE: TerminalConfigurationCreateBbposWiseposE?
+    /// Configuration for cellular connectivity.
+    public var cellular: TerminalConfigurationCreateCellular?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
     /// Name of the configuration
     public var name: String?
     /// Configurations for collecting transactions offline.
     public var offline: TerminalConfigurationCreateOffline?
+    /// Configurations for reader security settings.
+    public var readerSecurity: TerminalConfigurationCreateReaderSecurity?
     /// Reboot time settings for readers. that support customized reboot time configuration.
     public var rebootWindow: TerminalConfigurationCreateRebootWindow?
     /// An object containing device type specific settings for Stripe S700 readers.
     public var stripeS700: TerminalConfigurationCreateStripeS700?
+    /// An object containing device type specific settings for Stripe S710 readers.
+    public var stripeS710: TerminalConfigurationCreateStripeS710?
+    /// An object containing device type specific settings for Stripe T600 readers.
+    public var stripeT600: TerminalConfigurationCreateStripeT600?
     /// Tipping configurations for readers that support on-reader tips.
     public var tipping: TerminalConfigurationCreateTipping?
+    /// An object containing device type specific settings for Verifone M425 readers.
+    public var verifoneM425: TerminalConfigurationCreateVerifoneM425?
     /// An object containing device type specific settings for Verifone P400 readers.
     public var verifoneP400: TerminalConfigurationCreateVerifoneP400?
+    /// An object containing device type specific settings for Verifone P630 readers.
+    public var verifoneP630: TerminalConfigurationCreateVerifoneP630?
+    /// An object containing device type specific settings for Verifone UX700 readers.
+    public var verifoneUx700: TerminalConfigurationCreateVerifoneUx700?
+    /// An object containing device type specific settings for Verifone V660p readers.
+    public var verifoneV660P: TerminalConfigurationCreateVerifoneV660P?
     /// Configurations for connecting to a WiFi network.
     public var wifi: TerminalConfigurationCreateWifi?
 
-    public init(bbposWisepad3: TerminalConfigurationCreateBbposWisepad3? = nil, bbposWiseposE: TerminalConfigurationCreateBbposWiseposE? = nil, expand: [String]? = nil, name: String? = nil, offline: TerminalConfigurationCreateOffline? = nil, rebootWindow: TerminalConfigurationCreateRebootWindow? = nil, stripeS700: TerminalConfigurationCreateStripeS700? = nil, tipping: TerminalConfigurationCreateTipping? = nil, verifoneP400: TerminalConfigurationCreateVerifoneP400? = nil, wifi: TerminalConfigurationCreateWifi? = nil) {
+    public init(bbposWisepad3: TerminalConfigurationCreateBbposWisepad3? = nil, bbposWiseposE: TerminalConfigurationCreateBbposWiseposE? = nil, cellular: TerminalConfigurationCreateCellular? = nil, expand: [String]? = nil, name: String? = nil, offline: TerminalConfigurationCreateOffline? = nil, readerSecurity: TerminalConfigurationCreateReaderSecurity? = nil, rebootWindow: TerminalConfigurationCreateRebootWindow? = nil, stripeS700: TerminalConfigurationCreateStripeS700? = nil, stripeS710: TerminalConfigurationCreateStripeS710? = nil, stripeT600: TerminalConfigurationCreateStripeT600? = nil, tipping: TerminalConfigurationCreateTipping? = nil, verifoneM425: TerminalConfigurationCreateVerifoneM425? = nil, verifoneP400: TerminalConfigurationCreateVerifoneP400? = nil, verifoneP630: TerminalConfigurationCreateVerifoneP630? = nil, verifoneUx700: TerminalConfigurationCreateVerifoneUx700? = nil, verifoneV660P: TerminalConfigurationCreateVerifoneV660P? = nil, wifi: TerminalConfigurationCreateWifi? = nil) {
         self.bbposWisepad3 = bbposWisepad3
         self.bbposWiseposE = bbposWiseposE
+        self.cellular = cellular
         self.expand = expand
         self.name = name
         self.offline = offline
+        self.readerSecurity = readerSecurity
         self.rebootWindow = rebootWindow
         self.stripeS700 = stripeS700
+        self.stripeS710 = stripeS710
+        self.stripeT600 = stripeT600
         self.tipping = tipping
+        self.verifoneM425 = verifoneM425
         self.verifoneP400 = verifoneP400
+        self.verifoneP630 = verifoneP630
+        self.verifoneUx700 = verifoneUx700
+        self.verifoneV660P = verifoneV660P
         self.wifi = wifi
     }
 
     public enum CodingKeys: String, CodingKey {
         case bbposWisepad3 = "bbpos_wisepad3"
         case bbposWiseposE = "bbpos_wisepos_e"
+        case cellular
         case expand
         case name
         case offline
+        case readerSecurity = "reader_security"
         case rebootWindow = "reboot_window"
         case stripeS700 = "stripe_s700"
+        case stripeS710 = "stripe_s710"
+        case stripeT600 = "stripe_t600"
         case tipping
+        case verifoneM425 = "verifone_m425"
         case verifoneP400 = "verifone_p400"
+        case verifoneP630 = "verifone_p630"
+        case verifoneUx700 = "verifone_ux700"
+        case verifoneV660P = "verifone_v660p"
         case wifi
     }
 }
@@ -61,46 +93,78 @@ public struct TerminalConfigurationUpdateParams: StripeParams {
     public var bbposWisepad3: TerminalConfigurationUpdateBbposWisepad3?
     /// An object containing device type specific settings for BBPOS WisePOS E readers.
     public var bbposWiseposE: TerminalConfigurationUpdateBbposWiseposE?
+    /// Configuration for cellular connectivity.
+    public var cellular: TerminalConfigurationUpdateCellular?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
     /// Name of the configuration
     public var name: String?
     /// Configurations for collecting transactions offline.
     public var offline: TerminalConfigurationUpdateOffline?
+    /// Configurations for reader security settings.
+    public var readerSecurity: TerminalConfigurationUpdateReaderSecurity?
     /// Reboot time settings for readers. that support customized reboot time configuration.
     public var rebootWindow: TerminalConfigurationUpdateRebootWindow?
     /// An object containing device type specific settings for Stripe S700 readers.
     public var stripeS700: TerminalConfigurationUpdateStripeS700?
-    /// Tipping configurations for readers. supporting on-reader tips
+    /// An object containing device type specific settings for Stripe S710 readers.
+    public var stripeS710: TerminalConfigurationUpdateStripeS710?
+    /// An object containing device type specific settings for Stripe T600 readers.
+    public var stripeT600: TerminalConfigurationUpdateStripeT600?
+    /// Tipping configurations for readers that support on-reader tips.
     public var tipping: TerminalConfigurationUpdateTipping?
+    /// An object containing device type specific settings for Verifone M425 readers.
+    public var verifoneM425: TerminalConfigurationUpdateVerifoneM425?
     /// An object containing device type specific settings for Verifone P400 readers.
     public var verifoneP400: TerminalConfigurationUpdateVerifoneP400?
+    /// An object containing device type specific settings for Verifone P630 readers.
+    public var verifoneP630: TerminalConfigurationUpdateVerifoneP630?
+    /// An object containing device type specific settings for Verifone UX700 readers.
+    public var verifoneUx700: TerminalConfigurationUpdateVerifoneUx700?
+    /// An object containing device type specific settings for Verifone V660p readers.
+    public var verifoneV660P: TerminalConfigurationUpdateVerifoneV660P?
     /// Configurations for connecting to a WiFi network.
     public var wifi: TerminalConfigurationUpdateWifi?
 
-    public init(bbposWisepad3: TerminalConfigurationUpdateBbposWisepad3? = nil, bbposWiseposE: TerminalConfigurationUpdateBbposWiseposE? = nil, expand: [String]? = nil, name: String? = nil, offline: TerminalConfigurationUpdateOffline? = nil, rebootWindow: TerminalConfigurationUpdateRebootWindow? = nil, stripeS700: TerminalConfigurationUpdateStripeS700? = nil, tipping: TerminalConfigurationUpdateTipping? = nil, verifoneP400: TerminalConfigurationUpdateVerifoneP400? = nil, wifi: TerminalConfigurationUpdateWifi? = nil) {
+    public init(bbposWisepad3: TerminalConfigurationUpdateBbposWisepad3? = nil, bbposWiseposE: TerminalConfigurationUpdateBbposWiseposE? = nil, cellular: TerminalConfigurationUpdateCellular? = nil, expand: [String]? = nil, name: String? = nil, offline: TerminalConfigurationUpdateOffline? = nil, readerSecurity: TerminalConfigurationUpdateReaderSecurity? = nil, rebootWindow: TerminalConfigurationUpdateRebootWindow? = nil, stripeS700: TerminalConfigurationUpdateStripeS700? = nil, stripeS710: TerminalConfigurationUpdateStripeS710? = nil, stripeT600: TerminalConfigurationUpdateStripeT600? = nil, tipping: TerminalConfigurationUpdateTipping? = nil, verifoneM425: TerminalConfigurationUpdateVerifoneM425? = nil, verifoneP400: TerminalConfigurationUpdateVerifoneP400? = nil, verifoneP630: TerminalConfigurationUpdateVerifoneP630? = nil, verifoneUx700: TerminalConfigurationUpdateVerifoneUx700? = nil, verifoneV660P: TerminalConfigurationUpdateVerifoneV660P? = nil, wifi: TerminalConfigurationUpdateWifi? = nil) {
         self.bbposWisepad3 = bbposWisepad3
         self.bbposWiseposE = bbposWiseposE
+        self.cellular = cellular
         self.expand = expand
         self.name = name
         self.offline = offline
+        self.readerSecurity = readerSecurity
         self.rebootWindow = rebootWindow
         self.stripeS700 = stripeS700
+        self.stripeS710 = stripeS710
+        self.stripeT600 = stripeT600
         self.tipping = tipping
+        self.verifoneM425 = verifoneM425
         self.verifoneP400 = verifoneP400
+        self.verifoneP630 = verifoneP630
+        self.verifoneUx700 = verifoneUx700
+        self.verifoneV660P = verifoneV660P
         self.wifi = wifi
     }
 
     public enum CodingKeys: String, CodingKey {
         case bbposWisepad3 = "bbpos_wisepad3"
         case bbposWiseposE = "bbpos_wisepos_e"
+        case cellular
         case expand
         case name
         case offline
+        case readerSecurity = "reader_security"
         case rebootWindow = "reboot_window"
         case stripeS700 = "stripe_s700"
+        case stripeS710 = "stripe_s710"
+        case stripeT600 = "stripe_t600"
         case tipping
+        case verifoneM425 = "verifone_m425"
         case verifoneP400 = "verifone_p400"
+        case verifoneP630 = "verifone_p630"
+        case verifoneUx700 = "verifone_ux700"
+        case verifoneV660P = "verifone_v660p"
         case wifi
     }
 }
@@ -125,12 +189,34 @@ public struct TerminalConfigurationCreateBbposWiseposE: StripeParams {
     }
 }
 
-public struct TerminalConfigurationCreateOffline: StripeParams {
-    /// Determines whether to allow transactions to be collected while reader is offline. Defaults to false.
+public struct TerminalConfigurationCreateCellular: StripeParams {
+    /// Determines whether to allow the reader to connect to a cellular network.
     public var enabled: Bool
 
     public init(enabled: Bool) {
         self.enabled = enabled
+    }
+}
+
+public struct TerminalConfigurationCreateOffline: StripeParams {
+    /// Determines whether to allow transactions to be collected while reader is offline.
+    public var enabled: Bool
+
+    public init(enabled: Bool) {
+        self.enabled = enabled
+    }
+}
+
+public struct TerminalConfigurationCreateReaderSecurity: StripeParams {
+    /// Passcode used to access a reader's admin menu.
+    public var adminMenuPasscode: String?
+
+    public init(adminMenuPasscode: String? = nil) {
+        self.adminMenuPasscode = adminMenuPasscode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case adminMenuPasscode = "admin_menu_passcode"
     }
 }
 
@@ -155,6 +241,26 @@ public struct TerminalConfigurationCreateRebootWindow: StripeParams {
 
 /// An object containing device type specific settings for Stripe S700 readers.
 public struct TerminalConfigurationCreateStripeS700: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+/// An object containing device type specific settings for Stripe S710 readers.
+public struct TerminalConfigurationCreateStripeS710: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+/// An object containing device type specific settings for Stripe T600 readers.
+public struct TerminalConfigurationCreateStripeT600: StripeParams {
     /// A File ID representing an image you want to display on the reader.
     public var splashscreen: String?
 
@@ -694,8 +800,48 @@ public struct TerminalConfigurationCreateTippingUsd: StripeParams {
     }
 }
 
+/// An object containing device type specific settings for Verifone M425 readers.
+public struct TerminalConfigurationCreateVerifoneM425: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
 /// An object containing device type specific settings for Verifone P400 readers.
 public struct TerminalConfigurationCreateVerifoneP400: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+/// An object containing device type specific settings for Verifone P630 readers.
+public struct TerminalConfigurationCreateVerifoneP630: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+/// An object containing device type specific settings for Verifone UX700 readers.
+public struct TerminalConfigurationCreateVerifoneUx700: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+/// An object containing device type specific settings for Verifone V660p readers.
+public struct TerminalConfigurationCreateVerifoneV660P: StripeParams {
     /// A File ID representing an image you want to display on the reader.
     public var splashscreen: String?
 
@@ -817,12 +963,34 @@ public struct TerminalConfigurationUpdateBbposWiseposE: StripeParams {
     }
 }
 
-public struct TerminalConfigurationUpdateOffline: StripeParams {
-    /// Determines whether to allow transactions to be collected while reader is offline. Defaults to false.
+public struct TerminalConfigurationUpdateCellular: StripeParams {
+    /// Determines whether to allow the reader to connect to a cellular network.
     public var enabled: Bool
 
     public init(enabled: Bool) {
         self.enabled = enabled
+    }
+}
+
+public struct TerminalConfigurationUpdateOffline: StripeParams {
+    /// Determines whether to allow transactions to be collected while reader is offline.
+    public var enabled: Bool
+
+    public init(enabled: Bool) {
+        self.enabled = enabled
+    }
+}
+
+public struct TerminalConfigurationUpdateReaderSecurity: StripeParams {
+    /// Passcode used to access a reader's admin menu.
+    public var adminMenuPasscode: String?
+
+    public init(adminMenuPasscode: String? = nil) {
+        self.adminMenuPasscode = adminMenuPasscode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case adminMenuPasscode = "admin_menu_passcode"
     }
 }
 
@@ -845,6 +1013,24 @@ public struct TerminalConfigurationUpdateRebootWindow: StripeParams {
 }
 
 public struct TerminalConfigurationUpdateStripeS700: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateStripeS710: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateStripeT600: StripeParams {
     /// A File ID representing an image you want to display on the reader.
     public var splashscreen: String?
 
@@ -1384,7 +1570,43 @@ public struct TerminalConfigurationUpdateTippingUsd: StripeParams {
     }
 }
 
+public struct TerminalConfigurationUpdateVerifoneM425: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
 public struct TerminalConfigurationUpdateVerifoneP400: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateVerifoneP630: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateVerifoneUx700: StripeParams {
+    /// A File ID representing an image you want to display on the reader.
+    public var splashscreen: String?
+
+    public init(splashscreen: String? = nil) {
+        self.splashscreen = splashscreen
+    }
+}
+
+public struct TerminalConfigurationUpdateVerifoneV660P: StripeParams {
     /// A File ID representing an image you want to display on the reader.
     public var splashscreen: String?
 

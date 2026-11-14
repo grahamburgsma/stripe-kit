@@ -23,6 +23,8 @@ public struct CustomerBalanceResourceCashBalanceTransactionResourceFundedTransac
 public enum CustomerBalanceResourceCashBalanceTransactionResourceFundedTransactionResourceBankTransferResourceUsBankTransferNetwork: String, Codable, Sendable {
     case ach
     case domesticWireUs = "domestic_wire_us"
+    case fednow
+    case rtp
     case swift
 }
 

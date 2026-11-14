@@ -25,8 +25,8 @@ public struct Secret: Codable, Sendable {
     public var expiresAt: Int?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// A name for the secret that's unique within the scope.
     public var name: String

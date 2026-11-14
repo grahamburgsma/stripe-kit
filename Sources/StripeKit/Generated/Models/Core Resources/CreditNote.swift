@@ -44,8 +44,8 @@ public struct CreditNote: Codable, Sendable {
     public var invoice: String?
     /// Line items that make up the credit note
     public var lines: CreditNoteLineItemList
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Customer-facing text that appears on the credit note PDF.
     public var memo: String?

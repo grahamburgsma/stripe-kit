@@ -91,6 +91,13 @@ public enum PaymentLinkCreatePaymentMethodCollection: String, Codable, Sendable 
     case ifRequired = "if_required"
 }
 
+public enum PaymentLinkCreatePaymentMethodOptionsCardRestrictionsBrandsBlocked: String, Codable, Sendable {
+    case americanExpress = "american_express"
+    case discoverGlobalNetwork = "discover_global_network"
+    case mastercard
+    case visa
+}
+
 public enum PaymentLinkCreatePaymentMethodTypes: String, Codable, Sendable {
     case affirm
     case afterpayClearpay = "afterpay_clearpay"
@@ -100,6 +107,7 @@ public enum PaymentLinkCreatePaymentMethodTypes: String, Codable, Sendable {
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case card
@@ -120,14 +128,19 @@ public enum PaymentLinkCreatePaymentMethodTypes: String, Codable, Sendable {
     case payByBank = "pay_by_bank"
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
@@ -413,6 +426,21 @@ public enum PaymentLinkUpdateBillingAddressCollection: String, Codable, Sendable
     case required
 }
 
+public enum PaymentLinkUpdateConsentCollectionPaymentMethodReuseAgreementPosition: String, Codable, Sendable {
+    case auto
+    case hidden
+}
+
+public enum PaymentLinkUpdateConsentCollectionPromotions: String, Codable, Sendable {
+    case auto
+    case none
+}
+
+public enum PaymentLinkUpdateConsentCollectionTermsOfService: String, Codable, Sendable {
+    case none
+    case required
+}
+
 public enum PaymentLinkUpdateCustomFieldsLabelType: String, Codable, Sendable {
     case custom
 }
@@ -438,9 +466,21 @@ public enum PaymentLinkUpdateInvoiceCreationInvoiceDataRenderingOptionsAmountTax
     case includeInclusiveTax = "include_inclusive_tax"
 }
 
+public enum PaymentLinkUpdatePaymentIntentDataSetupFutureUsage: String, Codable, Sendable {
+    case offSession = "off_session"
+    case onSession = "on_session"
+}
+
 public enum PaymentLinkUpdatePaymentMethodCollection: String, Codable, Sendable {
     case always
     case ifRequired = "if_required"
+}
+
+public enum PaymentLinkUpdatePaymentMethodOptionsCardRestrictionsBrandsBlocked: String, Codable, Sendable {
+    case americanExpress = "american_express"
+    case discoverGlobalNetwork = "discover_global_network"
+    case mastercard
+    case visa
 }
 
 public enum PaymentLinkUpdatePaymentMethodTypes: String, Codable, Sendable {
@@ -452,6 +492,7 @@ public enum PaymentLinkUpdatePaymentMethodTypes: String, Codable, Sendable {
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case card
@@ -472,14 +513,19 @@ public enum PaymentLinkUpdatePaymentMethodTypes: String, Codable, Sendable {
     case payByBank = "pay_by_bank"
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip

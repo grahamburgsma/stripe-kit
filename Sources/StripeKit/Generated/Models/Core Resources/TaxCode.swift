@@ -18,6 +18,12 @@ public struct TaxCode: Codable, Sendable {
     public var name: String
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: TaxCodeObject
+    /// An object that describes more information about the tax location required for this tax code. Some
+    /// tax codes require a [performance
+    /// location](/tax/location-sales#required-versus-optional-performance-locations) to calculate tax
+    /// correctly.
+    @Expandable<TaxCodeRequirements>
+    public var requirements: String?
 }
 
 /// String representing the object's type. Objects of the same type share the same value.

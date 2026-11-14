@@ -23,19 +23,33 @@ public enum InvoiceAddLinesLinesTaxAmountsTaxRateDataJurisdictionLevel: String, 
 }
 
 public enum InvoiceAddLinesLinesTaxAmountsTaxRateDataTaxType: String, Codable, Sendable {
+    case admissionsTax = "admissions_tax"
     case amusementTax = "amusement_tax"
+    case attendanceTax = "attendance_tax"
     case communicationsTax = "communications_tax"
+    case digitalExciseTax = "digital_excise_tax"
+    case entertainmentTax = "entertainment_tax"
+    case getFund = "get_fund"
+    case grossReceiptsTax = "gross_receipts_tax"
     case gst
+    case hospitalityTax = "hospitality_tax"
     case hst
     case igst
     case jct
     case leaseTax = "lease_tax"
+    case luxuryTax = "luxury_tax"
+    case massTransitParkingTax = "mass_transit_parking_tax"
+    case nhil
+    case parkingTax = "parking_tax"
     case pst
     case qst
+    case resortTax = "resort_tax"
     case retailDeliveryFee = "retail_delivery_fee"
     case rst
     case salesTax = "sales_tax"
     case serviceTax = "service_tax"
+    case tourismTax = "tourism_tax"
+    case utilityUsersTax = "utility_users_tax"
     case vat
 }
 
@@ -94,6 +108,23 @@ public enum InvoiceCreatePaymentSettingsPaymentMethodOptionsBancontactPreferredL
     case nl
 }
 
+public enum InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType: String, Codable, Sendable {
+    case chEin = "ch_ein"
+    case deHrb = "de_hrb"
+    case dkCvr = "dk_cvr"
+    case esCif = "es_cif"
+    case fiTunnus = "fi_tunnus"
+    case frSiren = "fr_siren"
+    case frSiret = "fr_siret"
+    case itRea = "it_rea"
+    case nlKvk = "nl_kvk"
+    case noOrgNumber = "no_org_number"
+    case noPno = "no_pno"
+    case seOrgNumber = "se_org_number"
+    case sePno = "se_pno"
+    case ukCrn = "uk_crn"
+}
+
 public enum InvoiceCreatePaymentSettingsPaymentMethodOptionsCardInstallmentsPlanInterval: String, Codable, Sendable {
     case month
 }
@@ -122,6 +153,16 @@ public enum InvoiceCreatePaymentSettingsPaymentMethodOptionsPaytoMandateOptionsP
     case salary
     case tax
     case utility
+}
+
+public enum InvoiceCreatePaymentSettingsPaymentMethodOptionsPixAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum InvoiceCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
 }
 
 public enum InvoiceCreatePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnectionsFiltersAccountSubcategories: String, Codable, Sendable {
@@ -153,10 +194,13 @@ public enum InvoiceCreatePaymentSettingsPaymentMethodTypes: String, Codable, Sen
     case achDebit = "ach_debit"
     case acssDebit = "acss_debit"
     case affirm
+    case alipay
     case amazonPay = "amazon_pay"
     case auBecsDebit = "au_becs_debit"
     case bacsDebit = "bacs_debit"
     case bancontact
+    case billie
+    case blik
     case boleto
     case card
     case cashapp
@@ -174,20 +218,27 @@ public enum InvoiceCreatePaymentSettingsPaymentMethodTypes: String, Codable, Sen
     case konbini
     case krCard = "kr_card"
     case link
+    case mbWay = "mb_way"
     case multibanco
     case naverPay = "naver_pay"
     case nzBankAccount = "nz_bank_account"
     case p24
+    case payByBank = "pay_by_bank"
     case payco
     case paynow
     case paypal
     case payto
+    case pix
     case promptpay
     case revolutPay = "revolut_pay"
+    case satispay
     case sepaCreditTransfer = "sepa_credit_transfer"
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
     case swish
+    case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
 }
@@ -253,7 +304,9 @@ public enum InvoiceCreatePreviewCustomerDetailsTaxIdsType: String, Codable, Send
     case aoTin = "ao_tin"
     case arCuit = "ar_cuit"
     case auAbn = "au_abn"
+    case auAcn = "au_acn"
     case auArn = "au_arn"
+    case auWpn = "au_wpn"
     case awTin = "aw_tin"
     case azTin = "az_tin"
     case baTin = "ba_tin"
@@ -267,6 +320,7 @@ public enum InvoiceCreatePreviewCustomerDetailsTaxIdsType: String, Codable, Send
     case brCnpj = "br_cnpj"
     case brCpf = "br_cpf"
     case bsTin = "bs_tin"
+    case bwVat = "bw_vat"
     case byTin = "by_tin"
     case caBn = "ca_bn"
     case caGstHst = "ca_gst_hst"
@@ -277,12 +331,14 @@ public enum InvoiceCreatePreviewCustomerDetailsTaxIdsType: String, Codable, Send
     case cdNif = "cd_nif"
     case chUid = "ch_uid"
     case chVat = "ch_vat"
+    case ciVat = "ci_vat"
     case clTin = "cl_tin"
     case cmNiu = "cm_niu"
     case cnTin = "cn_tin"
     case coNit = "co_nit"
     case crTin = "cr_tin"
     case cvNif = "cv_nif"
+    case czDic = "cz_dic"
     case deStn = "de_stn"
     case doRcn = "do_rcn"
     case ecRuc = "ec_ruc"
@@ -291,16 +347,25 @@ public enum InvoiceCreatePreviewCustomerDetailsTaxIdsType: String, Codable, Send
     case etTin = "et_tin"
     case euOssVat = "eu_oss_vat"
     case euVat = "eu_vat"
+    case foVat = "fo_vat"
+    case frSiren = "fr_siren"
+    case frSiret = "fr_siret"
+    case frSpi = "fr_spi"
     case gbVat = "gb_vat"
     case geVat = "ge_vat"
+    case ghTin = "gh_tin"
+    case giTin = "gi_tin"
     case gnNif = "gn_nif"
     case hkBr = "hk_br"
     case hrOib = "hr_oib"
     case huTin = "hu_tin"
+    case icNif = "ic_nif"
     case idNpwp = "id_npwp"
     case ilVat = "il_vat"
     case inGst = "in_gst"
+    case isKt = "is_kt"
     case isVat = "is_vat"
+    case itCf = "it_cf"
     case jpCn = "jp_cn"
     case jpRn = "jp_rn"
     case jpTrn = "jp_trn"
@@ -312,24 +377,31 @@ public enum InvoiceCreatePreviewCustomerDetailsTaxIdsType: String, Codable, Send
     case laTin = "la_tin"
     case liUid = "li_uid"
     case liVat = "li_vat"
+    case lkVat = "lk_vat"
     case maVat = "ma_vat"
+    case mdCf = "md_cf"
     case mdVat = "md_vat"
     case mePib = "me_pib"
     case mkVat = "mk_vat"
     case mrNif = "mr_nif"
+    case muVat = "mu_vat"
     case mxRfc = "mx_rfc"
     case myFrp = "my_frp"
     case myItn = "my_itn"
     case mySst = "my_sst"
+    case mzNuit = "mz_nuit"
     case ngTin = "ng_tin"
     case noVat = "no_vat"
     case noVoec = "no_voec"
     case npPan = "np_pan"
+    case nzBn = "nz_bn"
     case nzGst = "nz_gst"
     case omVat = "om_vat"
     case peRuc = "pe_ruc"
     case phTin = "ph_tin"
     case plNip = "pl_nip"
+    case ptNif = "pt_nif"
+    case pyRuc = "py_ruc"
     case roTin = "ro_tin"
     case rsPib = "rs_pib"
     case ruInn = "ru_inn"
@@ -338,12 +410,15 @@ public enum InvoiceCreatePreviewCustomerDetailsTaxIdsType: String, Codable, Send
     case sgGst = "sg_gst"
     case sgUen = "sg_uen"
     case siTin = "si_tin"
+    case smCoe = "sm_coe"
     case snNinea = "sn_ninea"
     case srFin = "sr_fin"
     case svNit = "sv_nit"
     case thVat = "th_vat"
     case tjTin = "tj_tin"
     case trTin = "tr_tin"
+    case ttBir = "tt_bir"
+    case ttVat = "tt_vat"
     case twVat = "tw_vat"
     case tzVat = "tz_vat"
     case uaVat = "ua_vat"
@@ -394,6 +469,60 @@ public enum InvoiceCreatePreviewScheduleDetailsBillingModeType: String, Codable,
 public enum InvoiceCreatePreviewScheduleDetailsEndBehavior: String, Codable, Sendable {
     case cancel
     case release
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesPausePauseAtType: String, Codable, Sendable {
+    case now
+    case timestamp
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForOutstandingUsageThroughType: String, Codable, Sendable {
+    case none
+    case pauseAt = "pause_at"
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForUnusedTimeFromType: String, Codable, Sendable {
+    case itemCurrentPeriodStart = "item_current_period_start"
+    case none
+    case pauseAt = "pause_at"
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsInvoicingBehavior: String, Codable, Sendable {
+    case invoice
+    case pendingInvoiceItem = "pending_invoice_item"
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsType: String, Codable, Sendable {
+    case subscription
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtDurationInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtType: String, Codable, Sendable {
+    case duration
+    case now
+    case timestamp
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsBillingCycleAnchor: String, Codable, Sendable {
+    case resumeAt = "resume_at"
+    case unchanged
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsPaymentBehavior: String, Codable, Sendable {
+    case resumeOnPaymentAttempt = "resume_on_payment_attempt"
+    case resumeOnPaymentSuccess = "resume_on_payment_success"
+}
+
+public enum InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsProrationBehavior: String, Codable, Sendable {
+    case alwaysInvoice = "always_invoice"
+    case createProrations = "create_prorations"
+    case none
 }
 
 public enum InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsPeriodEndType: String, Codable, Sendable {
@@ -466,6 +595,12 @@ public enum InvoiceCreatePreviewScheduleDetailsProrationBehavior: String, Codabl
     case none
 }
 
+public enum InvoiceCreatePreviewSubscriptionDetailsBillingCycleAnchorType: String, Codable, Sendable {
+    case now
+    case timestamp
+    case unchanged
+}
+
 public enum InvoiceCreatePreviewSubscriptionDetailsBillingModeFlexibleProrationDiscounts: String, Codable, Sendable {
     case included
     case itemized
@@ -474,6 +609,22 @@ public enum InvoiceCreatePreviewSubscriptionDetailsBillingModeFlexibleProrationD
 public enum InvoiceCreatePreviewSubscriptionDetailsBillingModeType: String, Codable, Sendable {
     case classic
     case flexible
+}
+
+public enum InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesAppliesToType: String, Codable, Sendable {
+    case price
+}
+
+public enum InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilDurationInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilType: String, Codable, Sendable {
+    case duration
+    case timestamp
 }
 
 public enum InvoiceCreatePreviewSubscriptionDetailsItemsPriceDataRecurringInterval: String, Codable, Sendable {
@@ -487,6 +638,26 @@ public enum InvoiceCreatePreviewSubscriptionDetailsItemsPriceDataTaxBehavior: St
     case exclusive
     case inclusive
     case unspecified
+}
+
+public enum InvoiceCreatePreviewSubscriptionDetailsPauseBillForOutstandingUsageThroughType: String, Codable, Sendable {
+    case none
+    case now
+}
+
+public enum InvoiceCreatePreviewSubscriptionDetailsPauseBillForUnusedTimeFromType: String, Codable, Sendable {
+    case itemCurrentPeriodStart = "item_current_period_start"
+    case none
+    case now
+}
+
+public enum InvoiceCreatePreviewSubscriptionDetailsPauseInvoicingBehavior: String, Codable, Sendable {
+    case invoice
+    case pendingInvoiceItem = "pending_invoice_item"
+}
+
+public enum InvoiceCreatePreviewSubscriptionDetailsPauseType: String, Codable, Sendable {
+    case subscription
 }
 
 public enum InvoiceCreatePreviewSubscriptionDetailsProrationBehavior: String, Codable, Sendable {
@@ -537,6 +708,23 @@ public enum InvoiceUpdatePaymentSettingsPaymentMethodOptionsBancontactPreferredL
     case nl
 }
 
+public enum InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType: String, Codable, Sendable {
+    case chEin = "ch_ein"
+    case deHrb = "de_hrb"
+    case dkCvr = "dk_cvr"
+    case esCif = "es_cif"
+    case fiTunnus = "fi_tunnus"
+    case frSiren = "fr_siren"
+    case frSiret = "fr_siret"
+    case itRea = "it_rea"
+    case nlKvk = "nl_kvk"
+    case noOrgNumber = "no_org_number"
+    case noPno = "no_pno"
+    case seOrgNumber = "se_org_number"
+    case sePno = "se_pno"
+    case ukCrn = "uk_crn"
+}
+
 public enum InvoiceUpdatePaymentSettingsPaymentMethodOptionsCardInstallmentsPlanInterval: String, Codable, Sendable {
     case month
 }
@@ -565,6 +753,16 @@ public enum InvoiceUpdatePaymentSettingsPaymentMethodOptionsPaytoMandateOptionsP
     case salary
     case tax
     case utility
+}
+
+public enum InvoiceUpdatePaymentSettingsPaymentMethodOptionsPixAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
 }
 
 public enum InvoiceUpdatePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnectionsFiltersAccountSubcategories: String, Codable, Sendable {
@@ -596,10 +794,13 @@ public enum InvoiceUpdatePaymentSettingsPaymentMethodTypes: String, Codable, Sen
     case achDebit = "ach_debit"
     case acssDebit = "acss_debit"
     case affirm
+    case alipay
     case amazonPay = "amazon_pay"
     case auBecsDebit = "au_becs_debit"
     case bacsDebit = "bacs_debit"
     case bancontact
+    case billie
+    case blik
     case boleto
     case card
     case cashapp
@@ -617,20 +818,27 @@ public enum InvoiceUpdatePaymentSettingsPaymentMethodTypes: String, Codable, Sen
     case konbini
     case krCard = "kr_card"
     case link
+    case mbWay = "mb_way"
     case multibanco
     case naverPay = "naver_pay"
     case nzBankAccount = "nz_bank_account"
     case p24
+    case payByBank = "pay_by_bank"
     case payco
     case paynow
     case paypal
     case payto
+    case pix
     case promptpay
     case revolutPay = "revolut_pay"
+    case satispay
     case sepaCreditTransfer = "sepa_credit_transfer"
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
     case swish
+    case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
 }
@@ -688,19 +896,33 @@ public enum InvoiceUpdateLinesLinesTaxAmountsTaxRateDataJurisdictionLevel: Strin
 }
 
 public enum InvoiceUpdateLinesLinesTaxAmountsTaxRateDataTaxType: String, Codable, Sendable {
+    case admissionsTax = "admissions_tax"
     case amusementTax = "amusement_tax"
+    case attendanceTax = "attendance_tax"
     case communicationsTax = "communications_tax"
+    case digitalExciseTax = "digital_excise_tax"
+    case entertainmentTax = "entertainment_tax"
+    case getFund = "get_fund"
+    case grossReceiptsTax = "gross_receipts_tax"
     case gst
+    case hospitalityTax = "hospitality_tax"
     case hst
     case igst
     case jct
     case leaseTax = "lease_tax"
+    case luxuryTax = "luxury_tax"
+    case massTransitParkingTax = "mass_transit_parking_tax"
+    case nhil
+    case parkingTax = "parking_tax"
     case pst
     case qst
+    case resortTax = "resort_tax"
     case retailDeliveryFee = "retail_delivery_fee"
     case rst
     case salesTax = "sales_tax"
     case serviceTax = "service_tax"
+    case tourismTax = "tourism_tax"
+    case utilityUsersTax = "utility_users_tax"
     case vat
 }
 

@@ -14,7 +14,7 @@ import NIOHTTP1
 public struct SettingsRoutes: Sendable {
 
     /// Updates Tax Settings parameters used in tax calculations. All parameters are editable but none can
-    /// be removed once set.
+    /// be removed once set. Check the returned Tax Settings object and validate that its status is active.
     public var create: @Sendable (_ params: SettingsCreateParams?) async throws -> Settings
 
     /// Retrieves Tax Settings for a merchant.

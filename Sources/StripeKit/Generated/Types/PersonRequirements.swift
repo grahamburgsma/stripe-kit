@@ -18,7 +18,8 @@ public struct PersonRequirements: Codable, Sendable {
     /// account's `current_deadline`, these fields will appear in `past_due` as well, and the account is
     /// disabled.
     public var currentlyDue: [String]
-    /// Details about validation and verification failures for `due` requirements that must be resolved.
+    /// Fields that are `currently_due` and need to be collected again because validation or verification
+    /// failed.
     @ExpandableCollection<AccountRequirementsError>
     public var errors: [String]?
     /// Fields you must collect when all thresholds are reached. As they become required, they appear in

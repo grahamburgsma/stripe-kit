@@ -10,10 +10,17 @@ import Foundation
 public struct PaymentMethodOptionsPix: Codable, Sendable {
     /// Determines if the amount includes the IOF tax.
     public var amountIncludesIof: PaymentMethodOptionsPixAmountIncludesIof?
-    /// The number of seconds (between 10 and 1209600) after which Pix payment will expire.
+    /// The number of seconds after PaymentIntent confirmation when the Pix expires (between 60 and 1209600,
+    /// inclusive). If neither expiration option is supplied, defaults to 14400 seconds (4 hours). Mutually
+    /// exclusive with `expires_at`.
     public var expiresAfterSeconds: Int?
-    /// The timestamp at which the Pix expires.
+    /// The absolute Unix timestamp at which the Pix expires. When supplied as an input, it must be between
+    /// 60 and 1209600 seconds from the current time at validation, inclusive. If neither expiration option
+    /// is supplied, the Pix expires 14400 seconds (4 hours) after PaymentIntent confirmation. Mutually
+    /// exclusive with `expires_after_seconds`.
     public var expiresAt: Int?
+    @Expandable<PaymentMethodOptionsMandateOptionsPix>
+    public var mandateOptions: String?
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
     /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
     /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
@@ -31,6 +38,7 @@ public struct PaymentMethodOptionsPix: Codable, Sendable {
         case amountIncludesIof = "amount_includes_iof"
         case expiresAfterSeconds = "expires_after_seconds"
         case expiresAt = "expires_at"
+        case mandateOptions = "mandate_options"
         case setupFutureUsage = "setup_future_usage"
     }
 }
@@ -54,6 +62,7 @@ public enum PaymentMethodOptionsPixAmountIncludesIof: String, Codable, Sendable 
 /// [SCA](/strong-customer-authentication).
 public enum PaymentMethodOptionsPixSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
 }
 
 public struct PaymentMethodOptionsPixList: Codable, Sendable {

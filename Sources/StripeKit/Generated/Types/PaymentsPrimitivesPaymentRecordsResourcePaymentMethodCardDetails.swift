@@ -13,7 +13,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails: 
     public var authorizationCode: String?
     /// Card brand. Can be `amex`, `cartes_bancaires`, `diners`, `discover`, `eftpos_au`, `jcb`, `link`,
     /// `mastercard`, `unionpay`, `visa` or `unknown`.
-    public var brand: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand
+    public var brand: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsBrand?
     /// When using manual capture, a future timestamp at which the charge will be automatically refunded if
     /// uncaptured.
     public var captureBefore: Int?
@@ -26,9 +26,9 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails: 
     /// A high-level description of the type of cards issued in this range.
     public var description: String?
     /// Two-digit number representing the card's expiration month.
-    public var expMonth: Int
+    public var expMonth: Int?
     /// Four-digit number representing the card's expiration year.
-    public var expYear: Int
+    public var expYear: Int?
     /// Uniquely identifies this particular card number. You can use this attribute to check whether two
     /// customers who’ve signed up with you are using the same card number, for example. For payment methods
     /// that tokenize card information (Apple Pay, Google Pay), the tokenized number might be provided
@@ -37,7 +37,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails: 
     /// world.*
     public var fingerprint: String?
     /// Card funding type. Can be `credit`, `debit`, `prepaid`, or `unknown`.
-    public var funding: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding
+    public var funding: PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsFunding?
     /// Issuer identification number of the card.
     public var iin: String?
     /// Installment details for this payment.
@@ -46,7 +46,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails: 
     /// The name of the card's issuing bank.
     public var issuer: String?
     /// The last four digits of the card.
-    public var last4: String
+    public var last4: String?
     /// True if this payment was marked as MOTO and out of scope for SCA.
     public var moto: Bool?
     /// Identifies which network this charge was processed on. Can be `amex`, `cartes_bancaires`, `diners`,
@@ -147,6 +147,7 @@ public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsNetw
 /// The transaction type that was passed for an off-session, Merchant-Initiated transaction, one of
 /// `recurring` or `unscheduled`.
 public enum PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsStoredCredentialUsage: String, Codable, Sendable {
+    case installment
     case recurring
     case unscheduled
 }

@@ -13,7 +13,8 @@ public struct PaymentPagesCheckoutSessionConsentCollection: Codable, Sendable {
     public var paymentMethodReuseAgreement: String?
     /// If set to `auto`, enables the collection of customer consent for promotional communications. The
     /// Checkout Session will determine whether to display an option to opt into promotional communication
-    /// from the merchant depending on the customer's locale. Only available to US merchants.
+    /// from the merchant depending on the customer's locale. Only available to US merchants and US
+    /// customers.
     public var promotions: PaymentPagesCheckoutSessionConsentCollectionPromotions?
     /// If set to `required`, it requires customers to accept the terms of service before being able to pay.
     public var termsOfService: PaymentPagesCheckoutSessionConsentCollectionTermsOfService?
@@ -27,7 +28,8 @@ public struct PaymentPagesCheckoutSessionConsentCollection: Codable, Sendable {
 
 /// If set to `auto`, enables the collection of customer consent for promotional communications. The
 /// Checkout Session will determine whether to display an option to opt into promotional communication
-/// from the merchant depending on the customer's locale. Only available to US merchants.
+/// from the merchant depending on the customer's locale. Only available to US merchants and US
+/// customers.
 public enum PaymentPagesCheckoutSessionConsentCollectionPromotions: String, Codable, Sendable {
     case auto
     case none

@@ -10,7 +10,7 @@ import Foundation
 public struct InvoicePaymentMethodOptionsAcssDebit: Codable, Sendable {
     @Expandable<InvoicePaymentMethodOptionsAcssDebitMandateOptions>
     public var mandateOptions: String?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: InvoicePaymentMethodOptionsAcssDebitVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -19,7 +19,7 @@ public struct InvoicePaymentMethodOptionsAcssDebit: Codable, Sendable {
     }
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum InvoicePaymentMethodOptionsAcssDebitVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

@@ -10,6 +10,8 @@ import Foundation
 /// Subscription items allow you to create customer subscriptions with more than one plan, making it
 /// easy to represent complex billing relationships.
 public struct SubscriptionItem: Codable, Sendable {
+    /// The time period the subscription item has been billed for.
+    public var billedUntil: Int?
     /// Define thresholds at which an invoice will be sent, and the related subscription advanced to a new
     /// billing period
     @Expandable<SubscriptionItemBillingThresholds>
@@ -20,6 +22,9 @@ public struct SubscriptionItem: Codable, Sendable {
     public var currentPeriodEnd: Int
     /// The start time of this subscription item's current billing period.
     public var currentPeriodStart: Int
+    /// The current trial that is applied to this subscription item.
+    @Expandable<SubscriptionsTrialsResourceCurrentTrial>
+    public var currentTrial: String?
     /// The discounts applied to the subscription item. Subscription item discounts are applied before
     /// subscription discounts. Use `expand[]=discounts` to expand each discount.
     @ExpandableCollection<Discount>
@@ -46,10 +51,12 @@ public struct SubscriptionItem: Codable, Sendable {
     public var taxRates: [String]?
 
     public enum CodingKeys: String, CodingKey {
+        case billedUntil = "billed_until"
         case billingThresholds = "billing_thresholds"
         case created
         case currentPeriodEnd = "current_period_end"
         case currentPeriodStart = "current_period_start"
+        case currentTrial = "current_trial"
         case discounts
         case id
         case metadata

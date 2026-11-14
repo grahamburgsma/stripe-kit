@@ -8,7 +8,7 @@
 import Foundation
 
 public struct CheckoutUsBankAccountPaymentMethodOptions: Codable, Sendable {
-    @Expandable<LinkedAccountOptionsCommon>
+    @Expandable<CheckoutFinancialConnectionsPaymentMethodOptions>
     public var financialConnections: String?
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
     /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
@@ -26,7 +26,7 @@ public struct CheckoutUsBankAccountPaymentMethodOptions: Codable, Sendable {
     /// string in YYYY-MM-DD format. The date must be in the future and between 3 and 15 calendar days from
     /// now.
     public var targetDate: String?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: CheckoutUsBankAccountPaymentMethodOptionsVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -54,7 +54,7 @@ public enum CheckoutUsBankAccountPaymentMethodOptionsSetupFutureUsage: String, C
     case onSession = "on_session"
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum CheckoutUsBankAccountPaymentMethodOptionsVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

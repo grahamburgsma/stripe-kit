@@ -44,6 +44,60 @@ public enum SubscriptionScheduleCreateEndBehavior: String, Codable, Sendable {
     case renew
 }
 
+public enum SubscriptionScheduleCreatePauseSchedulesPausePauseAtType: String, Codable, Sendable {
+    case now
+    case timestamp
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForOutstandingUsageThroughType: String, Codable, Sendable {
+    case none
+    case pauseAt = "pause_at"
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForUnusedTimeFromType: String, Codable, Sendable {
+    case itemCurrentPeriodStart = "item_current_period_start"
+    case none
+    case pauseAt = "pause_at"
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesPauseSettingsInvoicingBehavior: String, Codable, Sendable {
+    case invoice
+    case pendingInvoiceItem = "pending_invoice_item"
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesPauseSettingsType: String, Codable, Sendable {
+    case subscription
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesResumeResumeAtDurationInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesResumeResumeAtType: String, Codable, Sendable {
+    case duration
+    case now
+    case timestamp
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesResumeSettingsBillingCycleAnchor: String, Codable, Sendable {
+    case resumeAt = "resume_at"
+    case unchanged
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesResumeSettingsPaymentBehavior: String, Codable, Sendable {
+    case resumeOnPaymentAttempt = "resume_on_payment_attempt"
+    case resumeOnPaymentSuccess = "resume_on_payment_success"
+}
+
+public enum SubscriptionScheduleCreatePauseSchedulesResumeSettingsProrationBehavior: String, Codable, Sendable {
+    case alwaysInvoice = "always_invoice"
+    case createProrations = "create_prorations"
+    case none
+}
+
 public enum SubscriptionScheduleCreatePhasesAddInvoiceItemsPeriodEndType: String, Codable, Sendable {
     case minItemPeriodEnd = "min_item_period_end"
     case phaseEnd = "phase_end"
@@ -133,6 +187,60 @@ public enum SubscriptionScheduleUpdateEndBehavior: String, Codable, Sendable {
     case none
     case release
     case renew
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesPausePauseAtType: String, Codable, Sendable {
+    case now
+    case timestamp
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForOutstandingUsageThroughType: String, Codable, Sendable {
+    case none
+    case pauseAt = "pause_at"
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForUnusedTimeFromType: String, Codable, Sendable {
+    case itemCurrentPeriodStart = "item_current_period_start"
+    case none
+    case pauseAt = "pause_at"
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesPauseSettingsInvoicingBehavior: String, Codable, Sendable {
+    case invoice
+    case pendingInvoiceItem = "pending_invoice_item"
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesPauseSettingsType: String, Codable, Sendable {
+    case subscription
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtDurationInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtType: String, Codable, Sendable {
+    case duration
+    case now
+    case timestamp
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesResumeSettingsBillingCycleAnchor: String, Codable, Sendable {
+    case resumeAt = "resume_at"
+    case unchanged
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesResumeSettingsPaymentBehavior: String, Codable, Sendable {
+    case resumeOnPaymentAttempt = "resume_on_payment_attempt"
+    case resumeOnPaymentSuccess = "resume_on_payment_success"
+}
+
+public enum SubscriptionScheduleUpdatePauseSchedulesResumeSettingsProrationBehavior: String, Codable, Sendable {
+    case alwaysInvoice = "always_invoice"
+    case createProrations = "create_prorations"
+    case none
 }
 
 public enum SubscriptionScheduleUpdatePhasesAddInvoiceItemsPeriodEndType: String, Codable, Sendable {

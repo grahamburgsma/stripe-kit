@@ -14,7 +14,7 @@ public struct PromotionCodeCreateParams: StripeParams {
     public var active: Bool?
     /// The customer-facing code. Regardless of case, this code must be unique across all active promotion
     /// codes for a specific customer. Valid characters are lower case letters (a-z), upper case letters
-    /// (A-Z), and digits (0-9). If left blank, we will generate one automatically.
+    /// (A-Z), digits (0-9), and dashes (-). If left blank, we will generate one automatically.
     public var code: String?
     /// The customer who can use this promotion code. If not set, all customers can use the promotion code.
     public var customer: String?
@@ -104,7 +104,8 @@ public struct PromotionCodeCreatePromotion: StripeParams {
 public struct PromotionCodeCreateRestrictions: StripeParams {
     /// Promotion codes defined in each available currency option. Each key must be a three-letter [ISO
     /// currency code](https://www.iso.org/iso-4217-currency-codes.html) and a [supported
-    /// currency](https://stripe.com/docs/currencies).
+    /// currency](https://stripe.com/docs/currencies). Each currency must be different from the
+    /// `minimum_amount_currency` set on the promotion code.
     public var currencyOptions: [String: String]?
     /// A Boolean indicating if the Promotion Code should only be redeemed for Customers without any
     /// successful payments or invoices
@@ -134,7 +135,8 @@ public struct PromotionCodeCreateRestrictions: StripeParams {
 public struct PromotionCodeUpdateRestrictions: StripeParams {
     /// Promotion codes defined in each available currency option. Each key must be a three-letter [ISO
     /// currency code](https://www.iso.org/iso-4217-currency-codes.html) and a [supported
-    /// currency](https://stripe.com/docs/currencies).
+    /// currency](https://stripe.com/docs/currencies). Each currency must be different from the
+    /// `minimum_amount_currency` set on the promotion code.
     public var currencyOptions: [String: String]?
 
     public init(currencyOptions: [String: String]? = nil) {

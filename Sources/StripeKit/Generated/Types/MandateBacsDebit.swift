@@ -8,6 +8,8 @@
 import Foundation
 
 public struct MandateBacsDebit: Codable, Sendable {
+    /// The display name for the account on this mandate.
+    public var displayName: String?
     /// The status of the mandate on the Bacs network. Can be one of `pending`, `revoked`, `refused`, or
     /// `accepted`.
     public var networkStatus: MandateBacsDebitNetworkStatus
@@ -15,13 +17,17 @@ public struct MandateBacsDebit: Codable, Sendable {
     public var reference: String
     /// When the mandate is revoked on the Bacs network this field displays the reason for the revocation.
     public var revocationReason: MandateBacsDebitRevocationReason?
+    /// The service user number for the account on this mandate.
+    public var serviceUserNumber: String?
     /// The URL that will contain the mandate that the customer has signed.
     public var url: String
 
     public enum CodingKeys: String, CodingKey {
+        case displayName = "display_name"
         case networkStatus = "network_status"
         case reference
         case revocationReason = "revocation_reason"
+        case serviceUserNumber = "service_user_number"
         case url
     }
 }

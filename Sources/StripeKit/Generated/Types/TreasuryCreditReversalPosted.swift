@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Occurs whenever an CreditReversal post is posted.
+/// Occurs whenever a CreditReversal post is posted.
 public struct TreasuryCreditReversalPosted: Codable, Sendable {
     public var object: CreditReversal
 }

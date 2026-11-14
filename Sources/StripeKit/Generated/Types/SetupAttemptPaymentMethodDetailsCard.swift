@@ -41,6 +41,8 @@ public struct SetupAttemptPaymentMethodDetailsCard: Codable, Sendable {
     public var issuer: String?
     /// The last four digits of the card.
     public var last4: String?
+    /// True if this payment was marked as MOTO and out of scope for SCA.
+    public var moto: Bool?
     /// Identifies which network this charge was processed on. Can be `amex`, `cartes_bancaires`, `diners`,
     /// `discover`, `eftpos_au`, `interac`, `jcb`, `link`, `mastercard`, `unionpay`, `visa`, or `unknown`.
     public var network: String?
@@ -63,6 +65,7 @@ public struct SetupAttemptPaymentMethodDetailsCard: Codable, Sendable {
         case iin
         case issuer
         case last4
+        case moto
         case network
         case threeDSecure = "three_d_secure"
         case wallet

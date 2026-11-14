@@ -59,8 +59,8 @@ public struct FundingInstructionsCreateBankTransfer: StripeParams {
 
 /// Configuration for eu_bank_transfer funding type.
 public struct FundingInstructionsCreateBankTransferEuBankTransfer: StripeParams {
-    /// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-    /// `ES`, `FR`, `IE`, or `NL`.
+    /// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+    /// `IE`, or `NL`.
     public var country: String
 
     public init(country: String) {

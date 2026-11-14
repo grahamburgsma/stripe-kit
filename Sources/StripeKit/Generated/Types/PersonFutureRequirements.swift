@@ -19,7 +19,8 @@ public struct PersonFutureRequirements: Codable, Sendable {
     /// `requirements` hash, and may immediately become `past_due`, but the account may also be given a
     /// grace period depending on the account's enablement state prior to transition.
     public var currentlyDue: [String]
-    /// Details about validation and verification failures for `due` requirements that must be resolved.
+    /// Fields that are `currently_due` and need to be collected again because validation or verification
+    /// failed.
     @ExpandableCollection<AccountRequirementsError>
     public var errors: [String]?
     /// Fields you must collect when all thresholds are reached. As they become required, they appear in

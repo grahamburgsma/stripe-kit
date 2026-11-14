@@ -25,7 +25,8 @@ public struct AccountCapabilityRequirements: Codable, Sendable {
     /// Description of why the capability is disabled. [Learn more about handling verification
     /// issues](https://docs.stripe.com/connect/handling-api-verification).
     public var disabledReason: AccountCapabilityRequirementsDisabledReason?
-    /// Details about validation and verification failures for `due` requirements that must be resolved.
+    /// Fields that are `currently_due` and need to be collected again because validation or verification
+    /// failed.
     @ExpandableCollection<AccountRequirementsError>
     public var errors: [String]?
     /// Fields you must collect when all thresholds are reached. As they become required, they appear in

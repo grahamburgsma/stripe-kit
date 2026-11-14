@@ -16,6 +16,14 @@ public struct SubscriptionsResourcePaymentMethodOptions: Codable, Sendable {
     /// created by the subscription.
     @Expandable<InvoicePaymentMethodOptionsBancontact>
     public var bancontact: String?
+    /// This sub-hash contains details about the Billie payment method options to pass to invoices created
+    /// by the subscription.
+    @Expandable<SubscriptionPaymentMethodOptionsBillie>
+    public var billie: String?
+    /// This sub-hash contains details about the Blik payment method options to pass to invoices created by
+    /// the subscription.
+    @Expandable<SubscriptionPaymentMethodOptionsBlik>
+    public var blik: String?
     /// This sub-hash contains details about the Card payment method options to pass to invoices created by
     /// the subscription.
     @Expandable<SubscriptionPaymentMethodOptionsCard>
@@ -32,10 +40,18 @@ public struct SubscriptionsResourcePaymentMethodOptions: Codable, Sendable {
     /// the subscription.
     @Expandable<InvoicePaymentMethodOptionsPayto>
     public var payto: String?
+    /// This sub-hash contains details about the Pix payment method options to pass to invoices created by
+    /// the subscription.
+    @Expandable<SubscriptionPaymentMethodOptionsPix>
+    public var pix: String?
     /// This sub-hash contains details about the SEPA Direct Debit payment method options to pass to
     /// invoices created by the subscription.
-    @Expandable<InvoicePaymentMethodOptionsSepaDebit>
+    @Expandable<SubscriptionPaymentMethodOptionsSepaDebit>
     public var sepaDebit: String?
+    /// This sub-hash contains details about the UPI payment method options to pass to invoices created by
+    /// the subscription.
+    @Expandable<InvoicePaymentMethodOptionsUpi>
+    public var upi: String?
     /// This sub-hash contains details about the ACH direct debit payment method options to pass to invoices
     /// created by the subscription.
     @Expandable<InvoicePaymentMethodOptionsUsBankAccount>
@@ -44,11 +60,15 @@ public struct SubscriptionsResourcePaymentMethodOptions: Codable, Sendable {
     public enum CodingKeys: String, CodingKey {
         case acssDebit = "acss_debit"
         case bancontact
+        case billie
+        case blik
         case card
         case customerBalance = "customer_balance"
         case konbini
         case payto
+        case pix
         case sepaDebit = "sepa_debit"
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }

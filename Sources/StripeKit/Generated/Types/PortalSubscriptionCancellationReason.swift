@@ -10,8 +10,17 @@ import Foundation
 public struct PortalSubscriptionCancellationReason: Codable, Sendable {
     /// Whether the feature is enabled.
     public var enabled: Bool
+    /// The IDs of custom feedback options configured for this cancellation reason.
+    @ExpandableCollection<FeedbackOption>
+    public var feedbackOptions: [String]?
     /// Which cancellation reasons will be given as options to the customer.
     public var options: [String]
+
+    public enum CodingKeys: String, CodingKey {
+        case enabled
+        case feedbackOptions = "feedback_options"
+        case options
+    }
 }
 
 public struct PortalSubscriptionCancellationReasonList: Codable, Sendable {

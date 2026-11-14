@@ -23,7 +23,8 @@
         "support_phone": null,
         "support_url": null,
         "url": null,
-        "minority_owned_business_designation": null
+        "minority_owned_business_designation": null,
+        "specified_commercial_transactions_act_url": null
       },
       "business_type": null,
       "capabilities": {
@@ -192,7 +193,8 @@
             "capture_payments": true,
             "destination_on_behalf_of_charge_management": false,
             "dispute_management": true,
-            "refund_management": true
+            "refund_management": true,
+            "smart_disputes_management": true
           }
         },
         "payments": {
@@ -201,7 +203,8 @@
             "capture_payments": true,
             "destination_on_behalf_of_charge_management": false,
             "dispute_management": true,
-            "refund_management": true
+            "refund_management": true,
+            "smart_disputes_management": true
           }
         },
         "payouts": {
@@ -266,7 +269,8 @@
             "capture_payments": true,
             "destination_on_behalf_of_charge_management": true,
             "dispute_management": true,
-            "refund_management": true
+            "refund_management": true,
+            "smart_disputes_management": true
           }
         },
         "payment_disputes": {
@@ -274,7 +278,8 @@
           "features": {
             "destination_on_behalf_of_charge_management": true,
             "dispute_management": true,
-            "refund_management": true
+            "refund_management": true,
+            "smart_disputes_management": true
           }
         },
         "instant_payouts_promotion": {
@@ -286,6 +291,32 @@
           }
         },
         "payout_details": {
+          "enabled": true,
+          "features": {}
+        },
+        "balance_report": {
+          "enabled": true,
+          "features": {}
+        },
+        "payout_reconciliation_report": {
+          "enabled": true,
+          "features": {}
+        },
+        "payment_method_settings": {
+          "enabled": true,
+          "features": {
+            "disable_stripe_user_authentication": true
+          }
+        },
+        "terminal_hardware_orders": {
+          "enabled": true,
+          "features": {}
+        },
+        "terminal_hardware_shop": {
+          "enabled": true,
+          "features": {}
+        },
+        "reporting_chart": {
           "enabled": true,
           "features": {}
         }
@@ -482,7 +513,8 @@
         "subscription_cancel": {
           "cancellation_reason": {
             "enabled": false,
-            "options": []
+            "options": [],
+            "feedback_options": null
           },
           "enabled": false,
           "mode": "at_period_end",
@@ -501,6 +533,18 @@
           },
           "trial_update_behavior": "end_trial",
           "billing_cycle_anchor": null
+        },
+        "subscription_pause": {
+          "duration": {
+            "interval_options": [
+              {
+                "interval": "month",
+                "interval_count": 797691627
+              }
+            ],
+            "type": "indefinite"
+          },
+          "enabled": true
         }
       },
       "id": "bpc_1Pgc70B7WZ01zgkWSnFO04Vt",
@@ -551,7 +595,11 @@
           ],
           "subscription": "subscription"
         },
-        "type": "subscription_update"
+        "type": "subscription_update",
+        "customer_update": {},
+        "subscription_pause": {
+          "subscription": "subscription"
+        }
       },
       "id": "bps_1Pgc7HB7WZ01zgkWNs8s9Auh",
       "livemode": true,
@@ -734,7 +782,9 @@
           },
           "authorization_code": null,
           "regulated_status": null,
-          "network_transaction_id": null
+          "network_transaction_id": null,
+          "transaction_link_id": null,
+          "electronic_commerce_indicator": null
         },
         "type": "card"
       },
@@ -943,7 +993,7 @@
         "amount_shipping": null,
         "amount_tax": 1424534716
       },
-      "ui_mode": "hosted",
+      "ui_mode": null,
       "url": "https://checkout.stripe.com/pay/c/cs_test_a1YS1URlnyQCN5fUUduORoQ7Pw41PJqDWkIVQCpJPqkfIhd6tVY8XB1OLY",
       "adaptive_pricing": {
         "enabled": true
@@ -975,7 +1025,12 @@
         "fx_rate": "291452898",
         "source_currency": "usd"
       },
-      "customer_account": null
+      "customer_account": null,
+      "integration_identifier": null,
+      "managed_payments": {
+        "enabled": true
+      },
+      "allowed_payment_method_types": null
     },
     "climate.order": {
       "amount_fees": 300,
@@ -1195,7 +1250,8 @@
         "name": "Jenny Rosen",
         "phone": null
       },
-      "use_stripe_sdk": true
+      "use_stripe_sdk": true,
+      "metadata": null
     },
     "country_spec": {
       "default_currency": "usd",
@@ -1493,7 +1549,8 @@
                 "type": "credit_balance_transaction"
               }
             ],
-            "taxes": null
+            "taxes": null,
+            "metadata": null
           },
           {
             "amount": 500,
@@ -1514,7 +1571,8 @@
                 "type": "credit_balance_transaction"
               }
             ],
-            "taxes": null
+            "taxes": null,
+            "metadata": null
           }
         ],
         "has_more": false,
@@ -1551,22 +1609,7 @@
       "refunds": [
         {
           "amount_refunded": 1387154914,
-          "refund": {
-            "amount": 1413853096,
-            "balance_transaction": null,
-            "charge": null,
-            "created": 1028554472,
-            "currency": "currency",
-            "id": "obj_123",
-            "metadata": null,
-            "object": "refund",
-            "payment_intent": null,
-            "reason": null,
-            "receipt_number": null,
-            "source_transfer_reversal": null,
-            "status": null,
-            "transfer_reversal": null
-          },
+          "refund": "refund",
           "payment_record_refund": {
             "payment_record": "payment_record",
             "refund_group": "refund_group"
@@ -1599,7 +1642,8 @@
           "type": "credit_balance_transaction"
         }
       ],
-      "taxes": null
+      "taxes": null,
+      "metadata": null
     },
     "customer": {
       "address": {
@@ -1735,6 +1779,12 @@
             "payment_method_save": null,
             "payment_method_save_allow_redisplay_override": null
           }
+        },
+        "customer_portal": {
+          "enabled": true
+        },
+        "active_entitlements": {
+          "enabled": true
         }
       },
       "created": 1234567890,
@@ -1855,7 +1905,9 @@
     "deleted_terminal.reader": {
       "deleted": true,
       "id": "tmr_iGOgDOlmFAot3zIp2JzEqXYs",
-      "object": "terminal.reader"
+      "object": "terminal.reader",
+      "device_type": "verifone_P400",
+      "serial_number": "serial_number"
     },
     "deleted_test_helpers.test_clock": {
       "deleted": true,
@@ -1926,7 +1978,8 @@
         "has_evidence": false,
         "past_due": false,
         "submission_count": 0,
-        "enhanced_eligibility": {}
+        "enhanced_eligibility": {},
+        "submission_method": "not_submitted"
       },
       "id": "dp_1Pgc71B7WZ01zgkWMevJiAUx",
       "is_charge_refundable": true,
@@ -1938,7 +1991,8 @@
         "card": {
           "brand": "visa",
           "case_type": "inquiry",
-          "network_reason_code": "10.4"
+          "network_reason_code": "10.4",
+          "network": "visa"
         },
         "type": "card"
       },
@@ -1946,7 +2000,8 @@
       "status": "warning_needs_response",
       "enhanced_eligibility_types": [
         "visa_compelling_evidence_3"
-      ]
+      ],
+      "intended_submission_method": null
     },
     "entitlements.active_entitlement": {
       "feature": "feat_test_61QGU1MWyFMSP9YBZ41ClCIKljWvsTgu",
@@ -2328,8 +2383,8 @@
         "document": {},
         "id_number": {}
       },
-      "type": "document",
-      "verification_session": "vs_1Pgc76B7WZ01zgkW1uXbT3Y9"
+      "verification_session": "vs_1Pgc76B7WZ01zgkW1uXbT3Y9",
+      "type": "document"
     },
     "identity.verification_session": {
       "client_reference_id": null,
@@ -2353,10 +2408,10 @@
         "status": "processing"
       },
       "status": "verified",
-      "type": "document",
       "url": null,
       "related_customer": null,
-      "related_customer_account": null
+      "related_customer_account": null,
+      "type": "document"
     },
     "invoice": {
       "account_country": "US",
@@ -2364,6 +2419,7 @@
       "account_tax_ids": null,
       "amount_due": 1000,
       "amount_paid": 0,
+      "amount_paid_off_stripe": 0,
       "amount_remaining": 1000,
       "amount_shipping": 0,
       "application": null,
@@ -2478,7 +2534,8 @@
               "type": "price_details",
               "unit_amount_decimal": null
             },
-            "subtotal": 2060319484
+            "subtotal": 2060319484,
+            "quantity_decimal": null
           }
         ],
         "has_more": false,
@@ -2507,7 +2564,12 @@
           "konbini": {},
           "sepa_debit": {},
           "us_bank_account": {},
-          "payto": {}
+          "payto": {},
+          "pix": {
+            "amount_includes_iof": null
+          },
+          "upi": {},
+          "billie": {}
         },
         "payment_method_types": null
       },
@@ -2596,7 +2658,8 @@
         "unit_amount_decimal": null
       },
       "net_amount": 708769478,
-      "customer_account": null
+      "customer_account": null,
+      "quantity_decimal": "174352450"
     },
     "issuing.authorization": {
       "amount": 0,
@@ -2660,7 +2723,9 @@
             "blocked_categories": [],
             "blocked_merchant_countries": [],
             "spending_limits": [],
-            "spending_limits_currency": null
+            "spending_limits_currency": null,
+            "allowed_card_presences": null,
+            "blocked_card_presences": null
           },
           "status": "active",
           "type": "individual"
@@ -2711,7 +2776,8 @@
           "status": null,
           "tracking_number": null,
           "tracking_url": null,
-          "type": "bulk"
+          "type": "bulk",
+          "business_name": null
         },
         "spending_controls": {
           "allowed_categories": null,
@@ -2719,7 +2785,9 @@
           "blocked_categories": null,
           "blocked_merchant_countries": null,
           "spending_limits": [],
-          "spending_limits_currency": null
+          "spending_limits_currency": null,
+          "allowed_card_presences": null,
+          "blocked_card_presences": null
         },
         "status": "active",
         "type": "physical",
@@ -2738,6 +2806,11 @@
         "latest_fraud_warning": {
           "started_at": null,
           "type": null
+        },
+        "lifecycle_controls": {
+          "cancel_after": {
+            "payment_count": 1758972310
+          }
         }
       },
       "cardholder": null,
@@ -2829,7 +2902,8 @@
         }
       },
       "wallet": null,
-      "verified_by_fraud_challenge": null
+      "verified_by_fraud_challenge": null,
+      "card_presence": null
     },
     "issuing.card": {
       "brand": "Visa",
@@ -2884,7 +2958,9 @@
           "blocked_categories": [],
           "blocked_merchant_countries": [],
           "spending_limits": [],
-          "spending_limits_currency": null
+          "spending_limits_currency": null,
+          "allowed_card_presences": null,
+          "blocked_card_presences": null
         },
         "status": "active",
         "type": "individual"
@@ -2935,7 +3011,8 @@
         "status": null,
         "tracking_number": null,
         "tracking_url": null,
-        "type": "bulk"
+        "type": "bulk",
+        "business_name": null
       },
       "spending_controls": {
         "allowed_categories": null,
@@ -2943,7 +3020,9 @@
         "blocked_categories": null,
         "blocked_merchant_countries": null,
         "spending_limits": [],
-        "spending_limits_currency": null
+        "spending_limits_currency": null,
+        "allowed_card_presences": null,
+        "blocked_card_presences": null
       },
       "status": "active",
       "type": "physical",
@@ -2962,6 +3041,11 @@
       "latest_fraud_warning": {
         "started_at": null,
         "type": null
+      },
+      "lifecycle_controls": {
+        "cancel_after": {
+          "payment_count": 1758972310
+        }
       }
     },
     "issuing.cardholder": {
@@ -3014,7 +3098,9 @@
         "blocked_categories": [],
         "blocked_merchant_countries": [],
         "spending_limits": [],
-        "spending_limits_currency": null
+        "spending_limits_currency": null,
+        "allowed_card_presences": null,
+        "blocked_card_presences": null
       },
       "status": "active",
       "type": "individual"
@@ -3254,7 +3340,8 @@
         "type": "price_details",
         "unit_amount_decimal": null
       },
-      "subtotal": 2060319484
+      "subtotal": 2060319484,
+      "quantity_decimal": null
     },
     "login_link": {
       "created": 1234567890,
@@ -3346,7 +3433,12 @@
       "transfer_group": null,
       "source": null,
       "excluded_payment_method_types": null,
-      "customer_account": null
+      "customer_account": null,
+      "managed_payments": {
+        "enabled": true
+      },
+      "allowed_payment_method_types": null,
+      "payment_record": null
     },
     "payment_link": {
       "active": true,
@@ -3448,7 +3540,11 @@
         "invoice_settings": {
           "issuer": {
             "type": "account"
-          }
+          },
+          "account_tax_ids": null,
+          "custom_fields": null,
+          "description": null,
+          "footer": null
         },
         "metadata": {
           "undefined": "metadata"
@@ -3471,7 +3567,19 @@
           "object": "account"
         }
       },
-      "url": "https://sangeekp-15t6ai--payment_links_ingress-mydev.dev.stripe.me/test_eVa16Q1Vd7yU1Ne8ww"
+      "url": "https://sangeekp-15t6ai--payment_links_ingress-mydev.dev.stripe.me/test_eVa16Q1Vd7yU1Ne8ww",
+      "managed_payments": {
+        "enabled": true
+      },
+      "payment_method_options": {
+        "card": {
+          "restrictions": {
+            "brands_blocked": [
+              "discover_global_network"
+            ]
+          }
+        }
+      }
     },
     "payment_method": {
       "allow_redisplay": "unspecified",
@@ -3803,7 +3911,8 @@
         "support_phone": null,
         "support_url": null,
         "url": null,
-        "minority_owned_business_designation": null
+        "minority_owned_business_designation": null,
+        "specified_commercial_transactions_act_url": null
       },
       "business_type": null,
       "capabilities": {
@@ -4101,7 +4210,11 @@
       "unit_label": null,
       "updated": 1234567890,
       "url": null,
-      "type": "good"
+      "type": "good",
+      "tax_details": {
+        "performance_location": null,
+        "tax_code": null
+      }
     },
     "product_feature": {
       "entitlement_feature": {
@@ -4196,7 +4309,10 @@
         "days_until_due": null,
         "issuer": {
           "type": "self"
-        }
+        },
+        "custom_fields": null,
+        "description": null,
+        "footer": null
       },
       "livemode": false,
       "metadata": {},
@@ -4291,7 +4407,10 @@
       "receipt_number": null,
       "source_transfer_reversal": null,
       "status": "succeeded",
-      "transfer_reversal": null
+      "transfer_reversal": null,
+      "customer": null,
+      "customer_account": null,
+      "payment_method": null
     },
     "reporting.report_run": {
       "created": 1234567890,
@@ -4473,7 +4592,8 @@
       "single_use_mandate": null,
       "status": "requires_payment_method",
       "usage": "off_session",
-      "excluded_payment_method_types": null
+      "excluded_payment_method_types": null,
+      "allowed_payment_method_types": null
     },
     "shipping_rate": {
       "active": true,
@@ -4661,7 +4781,8 @@
       "cancellation_details": {
         "comment": null,
         "feedback": null,
-        "reason": null
+        "reason": null,
+        "feedback_option": null
       },
       "collection_method": "charge_automatically",
       "created": 1234567890,
@@ -4679,7 +4800,10 @@
         "account_tax_ids": null,
         "issuer": {
           "type": "self"
-        }
+        },
+        "custom_fields": null,
+        "description": null,
+        "footer": null
       },
       "items": {
         "data": [
@@ -4754,6 +4878,11 @@
             "current_period_start": 1896570518,
             "billing_thresholds": {
               "usage_gte": null
+            },
+            "current_trial": {
+              "end_date": 1725067410,
+              "start_date": 1573629589,
+              "trial_offer": "trial_offer"
             }
           }
         ],
@@ -4787,7 +4916,10 @@
           "konbini": {},
           "sepa_debit": {},
           "us_bank_account": {},
-          "payto": {}
+          "payto": {},
+          "pix": {},
+          "upi": {},
+          "billie": {}
         },
         "payment_method_types": null,
         "save_default_payment_method": null
@@ -4799,10 +4931,31 @@
       "pending_setup_intent": null,
       "pending_update": {
         "billing_cycle_anchor": null,
+        "discount": {
+          "checkout_session": null,
+          "customer": null,
+          "end": null,
+          "id": "obj_123",
+          "invoice": null,
+          "invoice_item": null,
+          "object": "discount",
+          "promotion_code": null,
+          "start": 109757538,
+          "subscription": null,
+          "subscription_item": null,
+          "source": {
+            "coupon": null,
+            "type": "coupon"
+          },
+          "customer_account": null
+        },
+        "discounts": [],
         "expires_at": 833811170,
         "subscription_items": null,
         "trial_end": null,
-        "trial_from_plan": null
+        "trial_from_plan": null,
+        "metadata": null,
+        "cancel_at_period_end": null
       },
       "schedule": null,
       "start_date": 1234567890,
@@ -4818,7 +4971,8 @@
       "trial_end": 1234567890,
       "trial_settings": {
         "end_behavior": {
-          "missing_payment_method": "create_invoice"
+          "missing_payment_method": "create_invoice",
+          "billing_cycle_anchor": null
         }
       },
       "trial_start": 1234567890,
@@ -4831,7 +4985,25 @@
         "type": "classic",
         "flexible": {}
       },
-      "customer_account": null
+      "customer_account": null,
+      "managed_payments": {
+        "enabled": true
+      },
+      "billing_schedules": [
+        {
+          "applies_to": null,
+          "bill_until": {
+            "computed_timestamp": 2082605468,
+            "duration": {
+              "interval": "month",
+              "interval_count": null
+            },
+            "timestamp": null,
+            "type": "duration"
+          },
+          "key": "key"
+        }
+      ]
     },
     "subscription_item": {
       "created": 1721954060,
@@ -4904,6 +5076,11 @@
       "current_period_start": 1896570518,
       "billing_thresholds": {
         "usage_gte": null
+      },
+      "current_trial": {
+        "end_date": 1725067410,
+        "start_date": 1573629589,
+        "trial_offer": "trial_offer"
       }
     },
     "subscription_schedule": {
@@ -4934,7 +5111,10 @@
           "days_until_due": null,
           "issuer": {
             "type": "self"
-          }
+          },
+          "custom_fields": null,
+          "description": null,
+          "footer": null
         },
         "on_behalf_of": null,
         "transfer_data": {
@@ -4971,7 +5151,10 @@
             "days_until_due": null,
             "issuer": {
               "type": "account"
-            }
+            },
+            "custom_fields": null,
+            "description": null,
+            "footer": null
           },
           "items": [
             {
@@ -5036,7 +5219,41 @@
         "type": "classic",
         "flexible": {}
       },
-      "customer_account": null
+      "customer_account": null,
+      "pause_schedules": [
+        {
+          "key": "key",
+          "pause": {
+            "pause_at": 1273691932,
+            "settings": {
+              "bill_for": {
+                "outstanding_usage_through": {
+                  "type": "none"
+                },
+                "unused_time_from": {
+                  "type": "item_current_period_start"
+                }
+              },
+              "invoicing_behavior": "pending_invoice_item",
+              "type": "subscription"
+            },
+            "status": {
+              "type": "error"
+            }
+          },
+          "resume": {
+            "resume_at": 1819075195,
+            "settings": {
+              "billing_cycle_anchor": "resume_at",
+              "payment_behavior": "resume_on_payment_success",
+              "proration_behavior": "create_prorations"
+            },
+            "status": {
+              "type": "error"
+            }
+          }
+        }
+      ]
     },
     "tax.calculation": {
       "amount_total": 1947,
@@ -5127,7 +5344,8 @@
       "reference": "Pepperoni Pizza",
       "tax_behavior": "exclusive",
       "tax_code": "txcd_40060003",
-      "metadata": null
+      "metadata": null,
+      "performance_location": null
     },
     "tax.registration": {
       "active_from": 1234567890,
@@ -5259,7 +5477,10 @@
       "description": "A physical good that can be moved or touched. Also known as tangible personal property.",
       "id": "txcd_99999999",
       "name": "General - Tangible Goods",
-      "object": "tax_code"
+      "object": "tax_code",
+      "requirements": {
+        "performance_location": "optional"
+      }
     },
     "tax_id": {
       "country": "DE",
@@ -5339,7 +5560,10 @@
         "failure_code": null,
         "failure_message": null,
         "status": "failed",
-        "type": "refund_payment"
+        "type": "refund_payment",
+        "api_error": {
+          "type": "idempotency_error"
+        }
       },
       "device_sw_version": null,
       "device_type": "bbpos_wisepos_e",
@@ -5467,7 +5691,8 @@
       },
       "statement_descriptor": null,
       "status": "pending",
-      "transfer_group": null
+      "transfer_group": null,
+      "initiated_by": null
     },
     "transfer": {
       "amount": 1100,
@@ -6277,7 +6502,8 @@
       "test_clock": null,
       "updated": 234430277,
       "voided_at": null,
-      "customer_account": null
+      "customer_account": null,
+      "priority": 50
     },
     "invoice_payment": {
       "amount_paid": null,
@@ -6320,10 +6546,16 @@
             "interval": null
           },
           "statement_descriptor": null,
-          "status": "disabled"
+          "status": "disabled",
+          "automatic_transfer_rules_by_currency": null
         },
         "settlement_timing": {
-          "delay_days": 1647351405
+          "delay_days": 1647351405,
+          "start_of_day": {
+            "hour": 3208676,
+            "minutes": 1064901855,
+            "timezone": "timezone"
+          }
         }
       }
     },
@@ -6522,21 +6754,207 @@
     },
     "radar.payment_evaluation": {
       "created_at": 1369680106,
+      "events": [],
       "id": "obj_123",
-      "insights": {
-        "card_issuer_decline": {
-          "model_score": 831183356,
-          "recommended_action": "block"
-        },
-        "evaluated_at": 403283463,
-        "fraudulent_dispute": {
-          "recommended_action": "block",
-          "risk_score": 130512162
-        }
-      },
       "livemode": true,
       "metadata": null,
-      "object": "radar.payment_evaluation"
+      "object": "radar.payment_evaluation",
+      "recommended_action": "block",
+      "signals": {
+        "fraudulent_payment": {
+          "evaluated_at": 403283463,
+          "risk_level": "normal",
+          "score": 109264530
+        },
+        "early_fraud_warning": {
+          "evaluated_at": 403283463,
+          "risk_level": "low",
+          "score": 109264530
+        },
+        "fraudulent_dispute": {
+          "evaluated_at": 403283463,
+          "risk_level": "low",
+          "score": 109264530
+        }
+      }
+    },
+    "reserve.hold": {
+      "amount": 1413853096,
+      "created": 1028554472,
+      "created_by": "application",
+      "currency": "usd",
+      "id": "obj_123",
+      "livemode": true,
+      "object": "reserve.hold",
+      "reason": "charge",
+      "release_schedule": {
+        "release_after": null,
+        "scheduled_release": null
+      },
+      "reserve_plan": null,
+      "source_charge": null,
+      "source_type": "card",
+      "destination": "risk_reserved"
+    },
+    "reserve.plan": {
+      "created": 1028554472,
+      "created_by": "application",
+      "currency": null,
+      "disabled_at": null,
+      "id": "obj_123",
+      "livemode": true,
+      "object": "reserve.plan",
+      "percent": 678927291,
+      "status": "active",
+      "type": "fixed_release",
+      "destination": "risk_reserved"
+    },
+    "reserve.release": {
+      "amount": 1413853096,
+      "created": 1028554472,
+      "created_by": "application",
+      "currency": "usd",
+      "id": "obj_123",
+      "livemode": true,
+      "object": "reserve.release",
+      "reason": "hold_expired",
+      "released_at": 213824117,
+      "reserve_hold": null,
+      "reserve_plan": null,
+      "destination": "other"
+    },
+    "financial_connections.authorization": {
+      "object": "financial_connections.authorization",
+      "id": "obj_123",
+      "institution_name": "institution_name",
+      "livemode": true,
+      "status": "active",
+      "status_details": {}
+    },
+    "billing.feedback_option": {
+      "object": "billing.feedback_option",
+      "description": "description",
+      "id": "obj_123",
+      "livemode": true,
+      "status": "active",
+      "status_transitions": {
+        "deactivated_at": null
+      }
+    },
+    "product_catalog.trial_offer": {
+      "object": "product_catalog.trial_offer",
+      "active": true,
+      "duration": {
+        "type": "relative"
+      },
+      "end_behavior": {
+        "type": "transition",
+        "transition": {
+          "price": "price"
+        }
+      },
+      "id": "obj_123",
+      "livemode": true,
+      "nickname": null,
+      "price": "price"
+    },
+    "apps.install": {
+      "object": "apps.install",
+      "account": "account",
+      "app": "app",
+      "approval_required": true,
+      "auth_code": null,
+      "channel": "review",
+      "content_security_policy_granted": {
+        "connect_src": [
+          "connect_src"
+        ],
+        "image_src": [
+          "image_src"
+        ]
+      },
+      "content_security_policy_pending": {
+        "connect_src": [
+          "connect_src"
+        ],
+        "image_src": [
+          "image_src"
+        ]
+      },
+      "created": 1028554472,
+      "created_by": null,
+      "endpoints_granted": [
+        "endpoints_granted"
+      ],
+      "endpoints_pending": [
+        "endpoints_pending"
+      ],
+      "id": "obj_123",
+      "livemode": true,
+      "permissions_granted": [
+        "permissions_granted"
+      ],
+      "permissions_pending": [
+        "permissions_pending"
+      ],
+      "status": "install_failed"
+    },
+    "three_d_secure.authentication": {
+      "object": "three_d_secure.authentication",
+      "channel": {
+        "type": "browser"
+      },
+      "created": 1028554472,
+      "directory_server": "american_express",
+      "id": "obj_123",
+      "livemode": true,
+      "message_category": "non_payment_authentication",
+      "metadata": null,
+      "payment_method": {
+        "object": "payment_method",
+        "billing_details": {
+          "address": {
+            "city": null,
+            "country": null,
+            "line1": null,
+            "line2": null,
+            "postal_code": null,
+            "state": null
+          },
+          "email": null,
+          "name": null,
+          "phone": null,
+          "tax_id": null
+        },
+        "created": 1028554472,
+        "customer": null,
+        "customer_account": null,
+        "id": "obj_123",
+        "livemode": true,
+        "metadata": null,
+        "type": "klarna"
+      },
+      "status": "canceled",
+      "acquirer_details": {},
+      "shipping_address": {}
+    },
+    "tax.location": {
+      "object": "tax.location",
+      "address": {
+        "city": null,
+        "country": null,
+        "line1": null,
+        "line2": null,
+        "postal_code": null,
+        "state": null
+      },
+      "description": null,
+      "id": "obj_123",
+      "livemode": true,
+      "type": "performance"
+    },
+    "terminal.refund": {
+      "object": "terminal.refund"
     }
   }
 }

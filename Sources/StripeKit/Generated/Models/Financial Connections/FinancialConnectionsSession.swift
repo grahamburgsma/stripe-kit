@@ -15,15 +15,21 @@ public struct FinancialConnectionsSession: Codable, Sendable {
     public var accountHolder: String?
     /// The accounts that were collected as part of this Session.
     public var accounts: FinancialConnectionsAccountList
+    @Expandable<Token>
+    public var bankAccountToken: String?
     /// A value that will be passed to the client to launch the authentication flow.
     public var clientSecret: String?
     @Expandable<BankConnectionsResourceLinkAccountSessionFilters>
     public var filters: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    @Expandable<BankConnectionsResourceLinkAccountSessionLimits>
+    public var limits: String?
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
+    @Expandable<BankConnectionsResourceLinkAccountSessionManualEntry>
+    public var manualEntry: String?
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: FinancialConnectionsSessionObject
     /// Permissions requested for accounts collected during this session.
@@ -37,10 +43,13 @@ public struct FinancialConnectionsSession: Codable, Sendable {
     public enum CodingKeys: String, CodingKey {
         case accountHolder = "account_holder"
         case accounts
+        case bankAccountToken = "bank_account_token"
         case clientSecret = "client_secret"
         case filters
         case id
+        case limits
         case livemode
+        case manualEntry = "manual_entry"
         case object
         case permissions
         case prefetch

@@ -10,8 +10,7 @@ import Foundation
 /// The Pause Collection settings determine how we will pause collection for this subscription and for
 /// how long the subscription should be paused.
 public struct SubscriptionsResourcePauseCollection: Codable, Sendable {
-    /// The payment collection behavior for this subscription while paused. One of `keep_as_draft`,
-    /// `mark_uncollectible`, or `void`.
+    /// The payment collection behavior for this subscription while paused.
     public var behavior: SubscriptionsResourcePauseCollectionBehavior
     /// The time after which the subscription will resume collecting payments.
     public var resumesAt: Int?
@@ -22,8 +21,7 @@ public struct SubscriptionsResourcePauseCollection: Codable, Sendable {
     }
 }
 
-/// The payment collection behavior for this subscription while paused. One of `keep_as_draft`,
-/// `mark_uncollectible`, or `void`.
+/// The payment collection behavior for this subscription while paused.
 public enum SubscriptionsResourcePauseCollectionBehavior: String, Codable, Sendable {
     case keepAsDraft = "keep_as_draft"
     case markUncollectible = "mark_uncollectible"

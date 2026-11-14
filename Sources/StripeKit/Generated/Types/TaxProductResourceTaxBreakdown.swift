@@ -8,7 +8,7 @@
 import Foundation
 
 public struct TaxProductResourceTaxBreakdown: Codable, Sendable {
-    /// The amount of tax, in the [smallest currency unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// The amount of tax, in the [smallest currency unit](https://docs.stripe.com/currencies#minor-units).
     public var amount: Int
     /// Specifies whether the tax amount is included in the line item amount.
     public var inclusive: Bool
@@ -18,7 +18,7 @@ public struct TaxProductResourceTaxBreakdown: Codable, Sendable {
     /// possible values for this field to support new tax rules.
     public var taxabilityReason: TaxProductResourceTaxBreakdownTaxabilityReason
     /// The amount on which tax is calculated, in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// unit](https://docs.stripe.com/currencies#minor-units).
     public var taxableAmount: Int
 
     public enum CodingKeys: String, CodingKey {

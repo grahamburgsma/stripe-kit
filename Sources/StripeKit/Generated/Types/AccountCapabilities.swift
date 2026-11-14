@@ -23,6 +23,9 @@ public struct AccountCapabilities: Codable, Sendable {
     /// The status of the AmazonPay capability of the account, or whether the account can directly process
     /// AmazonPay payments.
     public var amazonPayPayments: AccountCapabilitiesAmazonPayPayments?
+    /// The status of the `app_distribution` capability of the account, or whether the platform can
+    /// distribute apps to other accounts.
+    public var appDistribution: AccountCapabilitiesAppDistribution?
     /// The status of the BECS Direct Debit (AU) payments capability of the account, or whether the account
     /// can directly process BECS Direct Debit (AU) charges.
     public var auBecsDebitPayments: AccountCapabilitiesAuBecsDebitPayments?
@@ -38,9 +41,15 @@ public struct AccountCapabilities: Codable, Sendable {
     /// The status of the Billie capability of the account, or whether the account can directly process
     /// Billie payments.
     public var billiePayments: AccountCapabilitiesBilliePayments?
+    /// The status of the Bizum capability of the account, or whether the account can directly process Bizum
+    /// payments.
+    public var bizumPayments: AccountCapabilitiesBizumPayments?
     /// The status of the blik payments capability of the account, or whether the account can directly
     /// process blik charges.
     public var blikPayments: AccountCapabilitiesBlikPayments?
+    /// The status of the BLIK recurring payments capability of the account, or whether the account can
+    /// accept recurring and subscription BLIK payments.
+    public var blikRecurringPayments: AccountCapabilitiesBlikRecurringPayments?
     /// The status of the boleto payments capability of the account, or whether the account can directly
     /// process boleto charges.
     public var boletoPayments: AccountCapabilitiesBoletoPayments?
@@ -136,6 +145,9 @@ public struct AccountCapabilities: Codable, Sendable {
     /// The status of the paynow payments capability of the account, or whether the account can directly
     /// process paynow charges.
     public var paynowPayments: AccountCapabilitiesPaynowPayments?
+    /// The status of the Paypay capability of the account, or whether the account can directly process
+    /// Paypay payments.
+    public var paypayPayments: AccountCapabilitiesPaypayPayments?
     /// The status of the PayTo capability of the account, or whether the account can directly process PayTo
     /// charges.
     public var paytoPayments: AccountCapabilitiesPaytoPayments?
@@ -154,15 +166,24 @@ public struct AccountCapabilities: Codable, Sendable {
     /// The status of the Satispay capability of the account, or whether the account can directly process
     /// Satispay payments.
     public var satispayPayments: AccountCapabilitiesSatispayPayments?
+    /// The status of the Scalapay capability of the account, or whether the account can directly process
+    /// Scalapay payments.
+    public var scalapayPayments: AccountCapabilitiesScalapayPayments?
     /// The status of the SEPA customer_balance payments (EUR currency) capability of the account, or
     /// whether the account can directly process SEPA customer_balance charges.
     public var sepaBankTransferPayments: AccountCapabilitiesSepaBankTransferPayments?
     /// The status of the SEPA Direct Debits payments capability of the account, or whether the account can
     /// directly process SEPA Direct Debits charges.
     public var sepaDebitPayments: AccountCapabilitiesSepaDebitPayments?
+    /// The status of the SeQura capability of the account, or whether the account can directly process
+    /// SeQura payments.
+    public var sequraPayments: AccountCapabilitiesSequraPayments?
     /// The status of the Sofort payments capability of the account, or whether the account can directly
     /// process Sofort charges.
     public var sofortPayments: AccountCapabilitiesSofortPayments?
+    /// The status of the Sunbit capability of the account, or whether the account can directly process
+    /// Sunbit payments.
+    public var sunbitPayments: AccountCapabilitiesSunbitPayments?
     /// The status of the Swish capability of the account, or whether the account can directly process Swish
     /// payments.
     public var swishPayments: AccountCapabilitiesSwishPayments?
@@ -178,12 +199,18 @@ public struct AccountCapabilities: Codable, Sendable {
     /// The status of the TWINT capability of the account, or whether the account can directly process TWINT
     /// charges.
     public var twintPayments: AccountCapabilitiesTwintPayments?
+    /// The status of the upi payments capability of the account, or whether the account can directly
+    /// process upi charges.
+    public var upiPayments: AccountCapabilitiesUpiPayments?
     /// The status of the US bank account ACH payments capability of the account, or whether the account can
     /// directly process US bank account charges.
     public var usBankAccountAchPayments: AccountCapabilitiesUsBankAccountAchPayments?
     /// The status of the US customer_balance payments (USD currency) capability of the account, or whether
     /// the account can directly process US customer_balance charges.
     public var usBankTransferPayments: AccountCapabilitiesUsBankTransferPayments?
+    /// The status of the Wero capability of the account, or whether the account can directly process Wero
+    /// payments.
+    public var weroPayments: AccountCapabilitiesWeroPayments?
     /// The status of the Zip capability of the account, or whether the account can directly process Zip
     /// charges.
     public var zipPayments: AccountCapabilitiesZipPayments?
@@ -194,12 +221,15 @@ public struct AccountCapabilities: Codable, Sendable {
         case afterpayClearpayPayments = "afterpay_clearpay_payments"
         case almaPayments = "alma_payments"
         case amazonPayPayments = "amazon_pay_payments"
+        case appDistribution = "app_distribution"
         case auBecsDebitPayments = "au_becs_debit_payments"
         case bacsDebitPayments = "bacs_debit_payments"
         case bancontactPayments = "bancontact_payments"
         case bankTransferPayments = "bank_transfer_payments"
         case billiePayments = "billie_payments"
+        case bizumPayments = "bizum_payments"
         case blikPayments = "blik_payments"
+        case blikRecurringPayments = "blik_recurring_payments"
         case boletoPayments = "boleto_payments"
         case cardIssuing = "card_issuing"
         case cardPayments = "card_payments"
@@ -232,23 +262,29 @@ public struct AccountCapabilities: Codable, Sendable {
         case payByBankPayments = "pay_by_bank_payments"
         case paycoPayments = "payco_payments"
         case paynowPayments = "paynow_payments"
+        case paypayPayments = "paypay_payments"
         case paytoPayments = "payto_payments"
         case pixPayments = "pix_payments"
         case promptpayPayments = "promptpay_payments"
         case revolutPayPayments = "revolut_pay_payments"
         case samsungPayPayments = "samsung_pay_payments"
         case satispayPayments = "satispay_payments"
+        case scalapayPayments = "scalapay_payments"
         case sepaBankTransferPayments = "sepa_bank_transfer_payments"
         case sepaDebitPayments = "sepa_debit_payments"
+        case sequraPayments = "sequra_payments"
         case sofortPayments = "sofort_payments"
+        case sunbitPayments = "sunbit_payments"
         case swishPayments = "swish_payments"
         case taxReportingUs1099K = "tax_reporting_us_1099_k"
         case taxReportingUs1099Misc = "tax_reporting_us_1099_misc"
         case transfers
         case treasury
         case twintPayments = "twint_payments"
+        case upiPayments = "upi_payments"
         case usBankAccountAchPayments = "us_bank_account_ach_payments"
         case usBankTransferPayments = "us_bank_transfer_payments"
+        case weroPayments = "wero_payments"
         case zipPayments = "zip_payments"
     }
 }
@@ -288,6 +324,14 @@ public enum AccountCapabilitiesAlmaPayments: String, Codable, Sendable {
 /// The status of the AmazonPay capability of the account, or whether the account can directly process
 /// AmazonPay payments.
 public enum AccountCapabilitiesAmazonPayPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
+/// The status of the `app_distribution` capability of the account, or whether the platform can
+/// distribute apps to other accounts.
+public enum AccountCapabilitiesAppDistribution: String, Codable, Sendable {
     case active
     case inactive
     case pending
@@ -333,9 +377,25 @@ public enum AccountCapabilitiesBilliePayments: String, Codable, Sendable {
     case pending
 }
 
+/// The status of the Bizum capability of the account, or whether the account can directly process Bizum
+/// payments.
+public enum AccountCapabilitiesBizumPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
 /// The status of the blik payments capability of the account, or whether the account can directly
 /// process blik charges.
 public enum AccountCapabilitiesBlikPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
+/// The status of the BLIK recurring payments capability of the account, or whether the account can
+/// accept recurring and subscription BLIK payments.
+public enum AccountCapabilitiesBlikRecurringPayments: String, Codable, Sendable {
     case active
     case inactive
     case pending
@@ -596,6 +656,14 @@ public enum AccountCapabilitiesPaynowPayments: String, Codable, Sendable {
     case pending
 }
 
+/// The status of the Paypay capability of the account, or whether the account can directly process
+/// Paypay payments.
+public enum AccountCapabilitiesPaypayPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
 /// The status of the PayTo capability of the account, or whether the account can directly process PayTo
 /// charges.
 public enum AccountCapabilitiesPaytoPayments: String, Codable, Sendable {
@@ -644,6 +712,14 @@ public enum AccountCapabilitiesSatispayPayments: String, Codable, Sendable {
     case pending
 }
 
+/// The status of the Scalapay capability of the account, or whether the account can directly process
+/// Scalapay payments.
+public enum AccountCapabilitiesScalapayPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
 /// The status of the SEPA customer_balance payments (EUR currency) capability of the account, or
 /// whether the account can directly process SEPA customer_balance charges.
 public enum AccountCapabilitiesSepaBankTransferPayments: String, Codable, Sendable {
@@ -660,9 +736,25 @@ public enum AccountCapabilitiesSepaDebitPayments: String, Codable, Sendable {
     case pending
 }
 
+/// The status of the SeQura capability of the account, or whether the account can directly process
+/// SeQura payments.
+public enum AccountCapabilitiesSequraPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
 /// The status of the Sofort payments capability of the account, or whether the account can directly
 /// process Sofort charges.
 public enum AccountCapabilitiesSofortPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
+/// The status of the Sunbit capability of the account, or whether the account can directly process
+/// Sunbit payments.
+public enum AccountCapabilitiesSunbitPayments: String, Codable, Sendable {
     case active
     case inactive
     case pending
@@ -713,6 +805,14 @@ public enum AccountCapabilitiesTwintPayments: String, Codable, Sendable {
     case pending
 }
 
+/// The status of the upi payments capability of the account, or whether the account can directly
+/// process upi charges.
+public enum AccountCapabilitiesUpiPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
 /// The status of the US bank account ACH payments capability of the account, or whether the account can
 /// directly process US bank account charges.
 public enum AccountCapabilitiesUsBankAccountAchPayments: String, Codable, Sendable {
@@ -724,6 +824,14 @@ public enum AccountCapabilitiesUsBankAccountAchPayments: String, Codable, Sendab
 /// The status of the US customer_balance payments (USD currency) capability of the account, or whether
 /// the account can directly process US customer_balance charges.
 public enum AccountCapabilitiesUsBankTransferPayments: String, Codable, Sendable {
+    case active
+    case inactive
+    case pending
+}
+
+/// The status of the Wero capability of the account, or whether the account can directly process Wero
+/// payments.
+public enum AccountCapabilitiesWeroPayments: String, Codable, Sendable {
     case active
     case inactive
     case pending

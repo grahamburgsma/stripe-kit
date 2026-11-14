@@ -12,6 +12,9 @@ public struct DisputeEvidence: Codable, Sendable {
     /// digital product. This information should include IP addresses, corresponding timestamps, and any
     /// detailed recorded activity.
     public var accessActivityLog: String?
+    /// Appeal evidence submitted during the appeal stage.
+    @Expandable<DisputeAppeal>
+    public var appeal: String?
     /// The billing address provided by the customer.
     public var billingAddress: String?
     /// (ID of a [file upload](https://stripe.com/docs/guides/file-upload)) Your subscription cancellation
@@ -100,6 +103,7 @@ public struct DisputeEvidence: Codable, Sendable {
 
     public enum CodingKeys: String, CodingKey {
         case accessActivityLog = "access_activity_log"
+        case appeal
         case billingAddress = "billing_address"
         case cancellationPolicy = "cancellation_policy"
         case cancellationPolicyDisclosure = "cancellation_policy_disclosure"

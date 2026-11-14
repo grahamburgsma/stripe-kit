@@ -14,6 +14,10 @@ public struct SetupIntentPaymentMethodOptions: Codable, Sendable {
     public var amazonPay: String?
     @Expandable<SetupIntentPaymentMethodOptionsBacsDebit>
     public var bacsDebit: String?
+    @Expandable<SetupIntentPaymentMethodOptionsBizum>
+    public var bizum: String?
+    @Expandable<SetupIntentPaymentMethodOptionsBlik>
+    public var blik: String?
     @Expandable<SetupIntentPaymentMethodOptionsCard>
     public var card: String?
     @Expandable<SetupIntentPaymentMethodOptionsCardPresent>
@@ -26,8 +30,12 @@ public struct SetupIntentPaymentMethodOptions: Codable, Sendable {
     public var paypal: String?
     @Expandable<SetupIntentPaymentMethodOptionsPayto>
     public var payto: String?
+    @Expandable<SetupIntentPaymentMethodOptionsPix>
+    public var pix: String?
     @Expandable<SetupIntentPaymentMethodOptionsSepaDebit>
     public var sepaDebit: String?
+    @Expandable<SetupIntentPaymentMethodOptionsUpi>
+    public var upi: String?
     @Expandable<SetupIntentPaymentMethodOptionsUsBankAccount>
     public var usBankAccount: String?
 
@@ -35,13 +43,17 @@ public struct SetupIntentPaymentMethodOptions: Codable, Sendable {
         case acssDebit = "acss_debit"
         case amazonPay = "amazon_pay"
         case bacsDebit = "bacs_debit"
+        case bizum
+        case blik
         case card
         case cardPresent = "card_present"
         case klarna
         case link
         case paypal
         case payto
+        case pix
         case sepaDebit = "sepa_debit"
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }

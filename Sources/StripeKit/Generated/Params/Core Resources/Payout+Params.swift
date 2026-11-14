@@ -17,7 +17,7 @@ public struct PayoutCancelParams: StripeParams {
 }
 
 public struct PayoutCreateParams: StripeParams {
-    /// A positive integer in cents representing how much to payout.
+    /// A positive integer in cents representing how much to pay out.
     public var amount: Int
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -46,7 +46,9 @@ public struct PayoutCreateParams: StripeParams {
     public var sourceType: PayoutCreateSourceType?
     /// A string that displays on the recipient's bank or card statement (up to 22 characters). A
     /// `statement_descriptor` that's longer than 22 characters return an error. Most banks truncate this
-    /// information and display it inconsistently. Some banks might not display it at all.
+    /// information and display it inconsistently. Some banks might not display it at all. For US ACH
+    /// payouts, this maps to the ACH Company Entry Description field, which the NACHA standard limits to 10
+    /// characters. Stripe truncates descriptors longer than 10 characters for US ACH payouts.
     public var statementDescriptor: String?
 
     public init(amount: Int, currency: String, description: String? = nil, destination: String? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, method: PayoutCreateMethod? = nil, payoutMethod: String? = nil, sourceType: PayoutCreateSourceType? = nil, statementDescriptor: String? = nil) {

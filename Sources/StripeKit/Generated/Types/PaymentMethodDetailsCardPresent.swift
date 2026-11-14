@@ -61,6 +61,9 @@ public struct PaymentMethodDetailsCardPresent: Codable, Sendable {
     public var issuer: String?
     /// The last four digits of the card.
     public var last4: String?
+    /// ID of the [location](https://docs.stripe.com/api/terminal/locations) that this transaction's reader
+    /// is assigned to.
+    public var location: String?
     /// Identifies which network this charge was processed on. Can be `amex`, `cartes_bancaires`, `diners`,
     /// `discover`, `eftpos_au`, `interac`, `jcb`, `link`, `mastercard`, `unionpay`, `visa`, or `unknown`.
     public var network: String?
@@ -79,6 +82,8 @@ public struct PaymentMethodDetailsCardPresent: Codable, Sendable {
     public var preferredLocales: [String]?
     /// How card details were read in this transaction.
     public var readMethod: PaymentMethodDetailsCardPresentReadMethod?
+    /// ID of the [reader](https://docs.stripe.com/api/terminal/readers) this transaction was made on.
+    public var reader: String?
     /// A collection of fields required to be displayed on receipts. Only required for EMV transactions.
     @Expandable<PaymentMethodDetailsCardPresentReceipt>
     public var receipt: String?
@@ -103,12 +108,14 @@ public struct PaymentMethodDetailsCardPresent: Codable, Sendable {
         case incrementalAuthorizationSupported = "incremental_authorization_supported"
         case issuer
         case last4
+        case location
         case network
         case networkTransactionId = "network_transaction_id"
         case offline
         case overcaptureSupported = "overcapture_supported"
         case preferredLocales = "preferred_locales"
         case readMethod = "read_method"
+        case reader
         case receipt
         case wallet
     }

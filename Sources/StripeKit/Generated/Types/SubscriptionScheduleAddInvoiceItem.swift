@@ -10,8 +10,10 @@ import Foundation
 /// An Add Invoice Item describes the prices and quantities that will be added as pending invoice items
 /// when entering a phase.
 public struct SubscriptionScheduleAddInvoiceItem: Codable, Sendable {
+    /// Controls whether discounts apply to this invoice item. Defaults to true if no value is provided.
+    public var discountable: Bool?
     /// The stackable discounts that will be applied to the item.
-    @ExpandableCollection<DiscountsResourceStackableDiscount>
+    @ExpandableCollection<DiscountsResourceStackableDiscountWithDiscountEnd>
     public var discounts: [String]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -28,6 +30,7 @@ public struct SubscriptionScheduleAddInvoiceItem: Codable, Sendable {
     public var taxRates: [String]?
 
     public enum CodingKeys: String, CodingKey {
+        case discountable
         case discounts
         case metadata
         case period

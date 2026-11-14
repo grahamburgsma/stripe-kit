@@ -1,7 +1,7 @@
 # StripeKit
 
 A fully-typed, spec-generated Swift SDK for the [Stripe API](https://docs.stripe.com/api).
-**API Version:** `2026-01-28.clover`
+**API Version:** `2026-10-28.endive`
 
 ## Overview
 
@@ -304,10 +304,10 @@ swift run stripe-kit-codegen --spec path/to/spec3.sdk.json --output Sources/Stri
 
 | Directory | Contents | Count |
 |-----------|----------|-------|
-| `Models/` | `Codable` structs per resource, organized by Stripe domain | 137 |
-| `Routes/` | `@Sendable` closure-based route structs + `.live()` implementations | 136 |
-| `Params/` | Typed `StripeParams` structs for create/update/action operations | 102 |
-| `Types/` | Inline schemas (shared sub-types referenced across resources) | 1,415 |
+| `Models/` | `Codable` structs per resource, organized by Stripe domain | 142 |
+| `Routes/` | `@Sendable` closure-based route structs + `.live()` implementations | 141 |
+| `Params/` | Typed `StripeParams` structs for create/update/action operations | 107 |
+| `Types/` | Inline schemas (shared sub-types referenced across resources) | 1,699 |
 | `StripeClient.swift` | Auto-wired client connecting all route structs | 1 |
 
 ### How It Works

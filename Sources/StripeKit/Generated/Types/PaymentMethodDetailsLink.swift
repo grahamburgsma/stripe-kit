@@ -11,6 +11,14 @@ public struct PaymentMethodDetailsLink: Codable, Sendable {
     /// Two-letter ISO code representing the funding source country beneath the Link payment. You could use
     /// this attribute to get a sense of international fees.
     public var country: String?
+    /// The [funding source group code](https://docs.stripe.com/payments/link/link-payment-methods) applied
+    /// to this Link payment at confirmation time.
+    public var fundingSourceGroup: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case country
+        case fundingSourceGroup = "funding_source_group"
+    }
 }
 
 public struct PaymentMethodDetailsLinkList: Codable, Sendable {

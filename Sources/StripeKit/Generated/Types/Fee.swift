@@ -17,7 +17,8 @@ public struct Fee: Codable, Sendable {
     public var currency: String
     /// An arbitrary string attached to the object. Often useful for displaying to users.
     public var description: String?
-    /// Type of the fee, one of: `application_fee`, `payment_method_passthrough_fee`, `stripe_fee` or `tax`.
+    /// Type of the fee, one of: `application_fee`, `payment_method_passthrough_fee`, `stripe_fee`, `tax`,
+    /// or `withheld_tax`.
     public var type: String
 }
 

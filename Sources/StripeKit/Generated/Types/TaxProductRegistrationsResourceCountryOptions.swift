@@ -43,6 +43,8 @@ public struct TaxProductRegistrationsResourceCountryOptions: Codable, Sendable {
     @Expandable<TaxProductRegistrationsResourceCountryOptionsDefault>
     public var bs: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
+    public var bw: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
     public var by: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsCanada>
     public var ca: String?
@@ -50,6 +52,8 @@ public struct TaxProductRegistrationsResourceCountryOptions: Codable, Sendable {
     public var cd: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsDefaultInboundGoods>
     public var ch: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
+    public var ci: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
     public var cl: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
@@ -74,7 +78,7 @@ public struct TaxProductRegistrationsResourceCountryOptions: Codable, Sendable {
     public var ee: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
     public var eg: String?
-    @Expandable<TaxProductRegistrationsResourceCountryOptionsEurope>
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsSpain>
     public var es: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsDefault>
     public var et: String?
@@ -86,6 +90,8 @@ public struct TaxProductRegistrationsResourceCountryOptions: Codable, Sendable {
     public var gb: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
     public var ge: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
+    public var gh: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsDefault>
     public var gn: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsEurope>
@@ -118,6 +124,8 @@ public struct TaxProductRegistrationsResourceCountryOptions: Codable, Sendable {
     public var kz: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
     public var la: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
+    public var lk: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsEurope>
     public var lt: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsEurope>
@@ -136,6 +144,8 @@ public struct TaxProductRegistrationsResourceCountryOptions: Codable, Sendable {
     public var mr: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsEurope>
     public var mt: String?
+    @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
+    public var mu: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>
     public var mx: String?
     @Expandable<TaxProductRegistrationsResourceCountryOptionsSimplified>

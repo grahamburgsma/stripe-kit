@@ -8,6 +8,12 @@
 import Foundation
 
 public struct PaymentMethodBlik: Codable, Sendable {
+    /// A unique and immutable identifier assigned by BLIK to every buyer.
+    public var buyerId: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case buyerId = "buyer_id"
+    }
 }
 
 public struct PaymentMethodBlikList: Codable, Sendable {

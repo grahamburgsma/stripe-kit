@@ -31,6 +31,11 @@ public enum IssuingCardCreateShippingType: String, Codable, Sendable {
     case individual
 }
 
+public enum IssuingCardCreateSpendingControlsAllowedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
+}
+
 public enum IssuingCardCreateSpendingControlsAllowedCategories: String, Codable, Sendable {
     case acRefrigerationRepair = "ac_refrigeration_repair"
     case accountingBookkeepingServices = "accounting_bookkeeping_services"
@@ -327,6 +332,11 @@ public enum IssuingCardCreateSpendingControlsAllowedCategories: String, Codable,
     case womensAccessoryAndSpecialtyShops = "womens_accessory_and_specialty_shops"
     case womensReadyToWearStores = "womens_ready_to_wear_stores"
     case wreckingAndSalvageYards = "wrecking_and_salvage_yards"
+}
+
+public enum IssuingCardCreateSpendingControlsBlockedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
 }
 
 public enum IssuingCardCreateSpendingControlsBlockedCategories: String, Codable, Sendable {
@@ -966,6 +976,11 @@ public enum IssuingCardUpdateShippingType: String, Codable, Sendable {
     case individual
 }
 
+public enum IssuingCardUpdateSpendingControlsAllowedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
+}
+
 public enum IssuingCardUpdateSpendingControlsAllowedCategories: String, Codable, Sendable {
     case acRefrigerationRepair = "ac_refrigeration_repair"
     case accountingBookkeepingServices = "accounting_bookkeeping_services"
@@ -1262,6 +1277,11 @@ public enum IssuingCardUpdateSpendingControlsAllowedCategories: String, Codable,
     case womensAccessoryAndSpecialtyShops = "womens_accessory_and_specialty_shops"
     case womensReadyToWearStores = "womens_ready_to_wear_stores"
     case wreckingAndSalvageYards = "wrecking_and_salvage_yards"
+}
+
+public enum IssuingCardUpdateSpendingControlsBlockedCardPresences: String, Codable, Sendable {
+    case notPresent = "not_present"
+    case present
 }
 
 public enum IssuingCardUpdateSpendingControlsBlockedCategories: String, Codable, Sendable {

@@ -13,6 +13,9 @@ public struct DisputePaymentMethodDetailsCard: Codable, Sendable {
     public var brand: String
     /// The type of dispute opened. Different case types may have varying fees and financial impact.
     public var caseType: DisputePaymentMethodDetailsCardCaseType
+    /// Identifies which network this charge was processed on. Can be `amex`, `cartes_bancaires`, `diners`,
+    /// `discover`, `eftpos_au`, `interac`, `jcb`, `link`, `mastercard`, `unionpay`, `visa`, or `unknown`.
+    public var network: String
     /// The card network's specific dispute reason code, which maps to one of Stripe's primary dispute
     /// categories to simplify response guidance. The [Network code
     /// map](https://stripe.com/docs/disputes/categories#network-code-map) lists all available dispute
@@ -22,6 +25,7 @@ public struct DisputePaymentMethodDetailsCard: Codable, Sendable {
     public enum CodingKeys: String, CodingKey {
         case brand
         case caseType = "case_type"
+        case network
         case networkReasonCode = "network_reason_code"
     }
 }

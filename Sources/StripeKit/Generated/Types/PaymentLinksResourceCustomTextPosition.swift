@@ -8,7 +8,7 @@
 import Foundation
 
 public struct PaymentLinksResourceCustomTextPosition: Codable, Sendable {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 }
 

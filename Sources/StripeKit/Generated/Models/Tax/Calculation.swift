@@ -11,7 +11,7 @@ import Foundation
 /// [Calculate tax in your custom payment flow](https://docs.stripe.com/tax/custom)
 public struct Calculation: Codable, Sendable {
     /// Total amount after taxes in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// unit](https://docs.stripe.com/currencies#minor-units).
     public var amountTotal: Int
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -27,8 +27,8 @@ public struct Calculation: Codable, Sendable {
     public var id: String?
     /// The list of items the customer is purchasing.
     public var lineItems: CalculationLineItemList?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: CalculationObject
@@ -45,7 +45,11 @@ public struct Calculation: Codable, Sendable {
     /// Breakdown of individual tax amounts that add up to the total.
     @ExpandableCollection<TaxProductResourceTaxBreakdown>
     public var taxBreakdown: [String]?
-    /// Timestamp of date at which the tax rules and rates in effect applies for the calculation.
+    /// The calculation uses the tax rules and rates that are in effect at this timestamp. You can use a
+    /// date up to 31 days in the past or up to 31 days in the future. If you use a future date, Stripe
+    /// doesn't guarantee that the expected tax rules and rate being used match the actual rules and rate
+    /// that will be in effect on that date. We deploy tax changes before their effective date, but not
+    /// within a fixed window.
     public var taxDate: Int
 
     public enum CodingKeys: String, CodingKey {

@@ -157,6 +157,10 @@ public enum RegistrationCreateCountryOptionsBsType: String, Codable, Sendable {
     case standard
 }
 
+public enum RegistrationCreateCountryOptionsBwType: String, Codable, Sendable {
+    case simplified
+}
+
 public enum RegistrationCreateCountryOptionsByType: String, Codable, Sendable {
     case simplified
 }
@@ -183,6 +187,10 @@ public enum RegistrationCreateCountryOptionsChStandardPlaceOfSupplyScheme: Strin
 
 public enum RegistrationCreateCountryOptionsChType: String, Codable, Sendable {
     case standard
+}
+
+public enum RegistrationCreateCountryOptionsCiType: String, Codable, Sendable {
+    case simplified
 }
 
 public enum RegistrationCreateCountryOptionsClType: String, Codable, Sendable {
@@ -339,6 +347,10 @@ public enum RegistrationCreateCountryOptionsGeType: String, Codable, Sendable {
     case simplified
 }
 
+public enum RegistrationCreateCountryOptionsGhType: String, Codable, Sendable {
+    case simplified
+}
+
 public enum RegistrationCreateCountryOptionsGnStandardPlaceOfSupplyScheme: String, Codable, Sendable {
     case inboundGoods = "inbound_goods"
     case standard
@@ -463,6 +475,10 @@ public enum RegistrationCreateCountryOptionsLaType: String, Codable, Sendable {
     case simplified
 }
 
+public enum RegistrationCreateCountryOptionsLkType: String, Codable, Sendable {
+    case simplified
+}
+
 public enum RegistrationCreateCountryOptionsLtStandardPlaceOfSupplyScheme: String, Codable, Sendable {
     case inboundGoods = "inbound_goods"
     case smallSeller = "small_seller"
@@ -548,6 +564,10 @@ public enum RegistrationCreateCountryOptionsMtType: String, Codable, Sendable {
     case ossNonUnion = "oss_non_union"
     case ossUnion = "oss_union"
     case standard
+}
+
+public enum RegistrationCreateCountryOptionsMuType: String, Codable, Sendable {
+    case simplified
 }
 
 public enum RegistrationCreateCountryOptionsMxType: String, Codable, Sendable {
@@ -766,11 +786,23 @@ public enum RegistrationCreateCountryOptionsUsStateSalesTaxElectionsType: String
 }
 
 public enum RegistrationCreateCountryOptionsUsType: String, Codable, Sendable {
+    case admissionsTax = "admissions_tax"
+    case attendanceTax = "attendance_tax"
+    case digitalExciseTax = "digital_excise_tax"
+    case entertainmentTax = "entertainment_tax"
+    case grossReceiptsTax = "gross_receipts_tax"
+    case hospitalityTax = "hospitality_tax"
     case localAmusementTax = "local_amusement_tax"
     case localLeaseTax = "local_lease_tax"
+    case luxuryTax = "luxury_tax"
+    case massTransitParkingTax = "mass_transit_parking_tax"
+    case parkingTax = "parking_tax"
+    case resortTax = "resort_tax"
     case stateCommunicationsTax = "state_communications_tax"
     case stateRetailDeliveryFee = "state_retail_delivery_fee"
     case stateSalesTax = "state_sales_tax"
+    case tourismTax = "tourism_tax"
+    case utilityUsersTax = "utility_users_tax"
 }
 
 public enum RegistrationCreateCountryOptionsUyStandardPlaceOfSupplyScheme: String, Codable, Sendable {

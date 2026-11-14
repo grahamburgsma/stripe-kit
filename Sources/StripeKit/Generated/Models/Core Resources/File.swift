@@ -8,8 +8,8 @@
 import Foundation
 
 /// This object represents files hosted on Stripe's servers. You can upload files with the [create
-/// file](https://api.stripe.com#create_file) request (for example, when uploading dispute evidence).
-/// Stripe also creates files independently (for example, the results of a [Sigma scheduled
+/// file](https://docs.stripe.com/api#create_file) request (for example, when uploading dispute
+/// evidence). Stripe also creates files independently (for example, the results of a [Sigma scheduled
 /// query](#scheduled_queries)). Related guide: [File upload guide](https://docs.stripe.com/file-upload)
 public struct File: Codable, Sendable {
     /// Time at which the object was created. Measured in seconds since the Unix epoch.
@@ -20,7 +20,7 @@ public struct File: Codable, Sendable {
     public var filename: String?
     /// Unique identifier for the object.
     public var id: String
-    /// A list of [file links](https://api.stripe.com#file_links) that point at this file.
+    /// A list of [file links](https://docs.stripe.com/api#file_links) that point at this file.
     public var links: FileLinkList?
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: FileObject
@@ -76,6 +76,8 @@ public enum FilePurpose: String, Codable, Sendable {
     case taxDocumentUserUpload = "tax_document_user_upload"
     case terminalAndroidApk = "terminal_android_apk"
     case terminalReaderSplashscreen = "terminal_reader_splashscreen"
+    case terminalWifiCertificate = "terminal_wifi_certificate"
+    case terminalWifiPrivateKey = "terminal_wifi_private_key"
 }
 
 public struct FileList: Codable, Sendable {

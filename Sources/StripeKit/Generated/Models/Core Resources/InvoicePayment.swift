@@ -8,7 +8,7 @@
 import Foundation
 
 /// Invoice Payments represent payments made against invoices. Invoice Payments can be accessed in two
-/// ways: 1. By expanding the `payments` field on the [Invoice](https://api.stripe.com#invoice)
+/// ways: 1. By expanding the `payments` field on the [Invoice](https://docs.stripe.com/api#invoice)
 /// resource. 2. By using the Invoice Payment retrieve and list endpoints. Invoice Payments include the
 /// mapping between payment objects, such as Payment Intent, and Invoices. This resource and its
 /// endpoints allows you to easily track if a payment is associated with a specific invoice and monitor
@@ -35,8 +35,8 @@ public struct InvoicePayment: Codable, Sendable {
     /// synchronized with the invoice’s `amount_remaining`. The PaymentIntent associated with the default
     /// payment can’t be edited or canceled directly.
     public var isDefault: Bool
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: InvoicePaymentObject

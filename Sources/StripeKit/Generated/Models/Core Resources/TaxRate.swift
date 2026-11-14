@@ -45,8 +45,8 @@ public struct TaxRate: Codable, Sendable {
     /// The level of the jurisdiction that imposes this tax rate. Will be `null` for manually defined tax
     /// rates.
     public var jurisdictionLevel: TaxRateJurisdictionLevel?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -112,19 +112,33 @@ public enum TaxRateRateType: String, Codable, Sendable {
 
 /// The high-level tax type, such as `vat` or `sales_tax`.
 public enum TaxRateTaxType: String, Codable, Sendable {
+    case admissionsTax = "admissions_tax"
     case amusementTax = "amusement_tax"
+    case attendanceTax = "attendance_tax"
     case communicationsTax = "communications_tax"
+    case digitalExciseTax = "digital_excise_tax"
+    case entertainmentTax = "entertainment_tax"
+    case getFund = "get_fund"
+    case grossReceiptsTax = "gross_receipts_tax"
     case gst
+    case hospitalityTax = "hospitality_tax"
     case hst
     case igst
     case jct
     case leaseTax = "lease_tax"
+    case luxuryTax = "luxury_tax"
+    case massTransitParkingTax = "mass_transit_parking_tax"
+    case nhil
+    case parkingTax = "parking_tax"
     case pst
     case qst
+    case resortTax = "resort_tax"
     case retailDeliveryFee = "retail_delivery_fee"
     case rst
     case salesTax = "sales_tax"
     case serviceTax = "service_tax"
+    case tourismTax = "tourism_tax"
+    case utilityUsersTax = "utility_users_tax"
     case vat
 }
 

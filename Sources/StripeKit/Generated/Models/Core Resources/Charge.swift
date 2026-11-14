@@ -9,8 +9,10 @@ import Foundation
 
 /// The `Charge` object represents a single attempt to move money into your Stripe account.
 /// PaymentIntent confirmation is the most common way to create Charges, but [Account
-/// Debits](https://docs.stripe.com/connect/account-debits) may also create Charges. Some legacy payment
-/// flows create Charges directly, which is not recommended for new integrations.
+/// Debits](https://docs.stripe.com/connect/account-debits) may also create Charges. The create and
+/// capture methods are deprecated and will be deleted soon. If your integration uses either of them,
+/// you need to update it to use a different payment flow, such as [the Payment Intents
+/// API](https://docs.stripe.com/payments/payment-intents).
 public struct Charge: Codable, Sendable {
     /// Amount intended to be collected by this payment. A positive integer representing how much to charge
     /// in the [smallest currency unit](https://docs.stripe.com/currencies#zero-decimal) (e.g., 100 cents to
@@ -78,8 +80,8 @@ public struct Charge: Codable, Sendable {
     public var id: String
     @Expandable<Level3>
     public var level3: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

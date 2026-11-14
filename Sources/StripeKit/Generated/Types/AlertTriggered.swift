@@ -14,8 +14,8 @@ public struct AlertTriggered: Codable, Sendable {
     public var created: Int
     /// ID of customer for which the alert triggered
     public var customer: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: AlertTriggeredObject

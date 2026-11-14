@@ -34,6 +34,8 @@ public enum BankConnectionsResourceAccountNumberDetailsIdentifierType: String, C
 /// Whether the account number is currently active and usable for transactions.
 public enum BankConnectionsResourceAccountNumberDetailsStatus: String, Codable, Sendable {
     case deactivated
+    case expired
+    case pending
     case transactable
 }
 

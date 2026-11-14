@@ -12,6 +12,8 @@ public struct CheckoutPixPaymentMethodOptions: Codable, Sendable {
     public var amountIncludesIof: CheckoutPixPaymentMethodOptionsAmountIncludesIof?
     /// The number of seconds after which Pix payment will expire.
     public var expiresAfterSeconds: Int?
+    @Expandable<PaymentMethodOptionsMandateOptionsPix>
+    public var mandateOptions: String?
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
     /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
     /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
@@ -28,6 +30,7 @@ public struct CheckoutPixPaymentMethodOptions: Codable, Sendable {
     public enum CodingKeys: String, CodingKey {
         case amountIncludesIof = "amount_includes_iof"
         case expiresAfterSeconds = "expires_after_seconds"
+        case mandateOptions = "mandate_options"
         case setupFutureUsage = "setup_future_usage"
     }
 }
@@ -51,6 +54,7 @@ public enum CheckoutPixPaymentMethodOptionsAmountIncludesIof: String, Codable, S
 /// [SCA](/strong-customer-authentication).
 public enum CheckoutPixPaymentMethodOptionsSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
 }
 
 public struct CheckoutPixPaymentMethodOptionsList: Codable, Sendable {

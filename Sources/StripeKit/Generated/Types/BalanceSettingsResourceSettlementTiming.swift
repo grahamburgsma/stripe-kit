@@ -13,10 +13,16 @@ public struct BalanceSettingsResourceSettlementTiming: Codable, Sendable {
     /// The number of days charge funds are held before becoming available. If present, overrides the
     /// default, or minimum available, for the account.
     public var delayDaysOverride: Int?
+    /// Customized start of day configuration for automatic payouts to group and send payments in local
+    /// timezones with a customized day starting time. For details, see our [Customized start of
+    /// day](/connect/customized-start-of-day) documentation.
+    @Expandable<BalanceSettingsResourceStartOfDay>
+    public var startOfDay: String?
 
     public enum CodingKeys: String, CodingKey {
         case delayDays = "delay_days"
         case delayDaysOverride = "delay_days_override"
+        case startOfDay = "start_of_day"
     }
 }
 

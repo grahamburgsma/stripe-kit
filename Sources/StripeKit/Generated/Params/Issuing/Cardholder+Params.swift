@@ -229,8 +229,8 @@ public struct CardholderCreateIndividual: StripeParams {
 /// Information related to the card_issuing program for this cardholder.
 public struct CardholderCreateIndividualCardIssuing: StripeParams {
     /// Information about cardholder acceptance of Celtic [Authorized User
-    /// Terms](https://stripe.com/docs/issuing/cards#accept-authorized-user-terms). Required for cards
-    /// backed by a Celtic program.
+    /// Terms](https://docs.stripe.com/issuing/compliance-us#issuing-terms). Required for cards backed by a
+    /// Celtic program.
     public var userTermsAcceptance: CardholderCreateIndividualCardIssuingUserTermsAcceptance?
 
     public init(userTermsAcceptance: CardholderCreateIndividualCardIssuingUserTermsAcceptance? = nil) {
@@ -243,14 +243,12 @@ public struct CardholderCreateIndividualCardIssuing: StripeParams {
 }
 
 /// Information about cardholder acceptance of Celtic [Authorized User
-/// Terms](https://stripe.com/docs/issuing/cards#accept-authorized-user-terms). Required for cards
-/// backed by a Celtic program.
+/// Terms](https://docs.stripe.com/issuing/compliance-us#issuing-terms). Required for cards backed by a
+/// Celtic program.
 public struct CardholderCreateIndividualCardIssuingUserTermsAcceptance: StripeParams {
-    /// The Unix timestamp marking when the cardholder accepted the Authorized User Terms. Required for
-    /// Celtic Spend Card users.
+    /// The Unix timestamp marking when the cardholder accepted the Authorized User Terms.
     public var date: Int?
-    /// The IP address from which the cardholder accepted the Authorized User Terms. Required for Celtic
-    /// Spend Card users.
+    /// The IP address from which the cardholder accepted the Authorized User Terms.
     public var ip: String?
     /// The user agent of the browser from which the cardholder accepted the Authorized User Terms.
     public var userAgent: String?
@@ -296,11 +294,11 @@ public struct CardholderCreateIndividualVerification: StripeParams {
 
 /// An identifying document, either a passport or local ID card.
 public struct CardholderCreateIndividualVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -312,6 +310,10 @@ public struct CardholderCreateIndividualVerificationDocument: StripeParams {
 /// Rules that control spending across this cardholder's cards. Refer to our
 /// [documentation](https://docs.stripe.com/issuing/controls/spending-controls) for more details.
 public struct CardholderCreateSpendingControls: StripeParams {
+    /// Array of card presence statuses from which authorizations will be allowed. Possible options are
+    /// `present`, `not_present`. All other statuses will be blocked. Cannot be set with
+    /// `blocked_card_presences`. Provide an empty value to unset this control.
+    public var allowedCardPresences: [CardholderCreateSpendingControlsAllowedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to allow. All other categories will be blocked. Cannot be set with
@@ -322,6 +324,10 @@ public struct CardholderCreateSpendingControls: StripeParams {
     /// 3166 alpha-2 country codes (e.g. `US`). Cannot be set with `blocked_merchant_countries`. Provide an
     /// empty value to unset this control.
     public var allowedMerchantCountries: [String]?
+    /// Array of card presence statuses from which authorizations will be declined. Possible options are
+    /// `present`, `not_present`. Cannot be set with `allowed_card_presences`. Provide an empty value to
+    /// unset this control.
+    public var blockedCardPresences: [CardholderCreateSpendingControlsBlockedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to decline. All other categories will be allowed. Cannot be set with
@@ -336,9 +342,11 @@ public struct CardholderCreateSpendingControls: StripeParams {
     /// Currency of amounts within `spending_limits`. Defaults to your merchant country's currency.
     public var spendingLimitsCurrency: String?
 
-    public init(allowedCategories: [CardholderCreateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCategories: [CardholderCreateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [CardholderCreateSpendingControlsSpendingLimits]? = nil, spendingLimitsCurrency: String? = nil) {
+    public init(allowedCardPresences: [CardholderCreateSpendingControlsAllowedCardPresences]? = nil, allowedCategories: [CardholderCreateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCardPresences: [CardholderCreateSpendingControlsBlockedCardPresences]? = nil, blockedCategories: [CardholderCreateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [CardholderCreateSpendingControlsSpendingLimits]? = nil, spendingLimitsCurrency: String? = nil) {
+        self.allowedCardPresences = allowedCardPresences
         self.allowedCategories = allowedCategories
         self.allowedMerchantCountries = allowedMerchantCountries
+        self.blockedCardPresences = blockedCardPresences
         self.blockedCategories = blockedCategories
         self.blockedMerchantCountries = blockedMerchantCountries
         self.spendingLimits = spendingLimits
@@ -346,8 +354,10 @@ public struct CardholderCreateSpendingControls: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case allowedCardPresences = "allowed_card_presences"
         case allowedCategories = "allowed_categories"
         case allowedMerchantCountries = "allowed_merchant_countries"
+        case blockedCardPresences = "blocked_card_presences"
         case blockedCategories = "blocked_categories"
         case blockedMerchantCountries = "blocked_merchant_countries"
         case spendingLimits = "spending_limits"
@@ -467,8 +477,8 @@ public struct CardholderUpdateIndividual: StripeParams {
 /// Information related to the card_issuing program for this cardholder.
 public struct CardholderUpdateIndividualCardIssuing: StripeParams {
     /// Information about cardholder acceptance of Celtic [Authorized User
-    /// Terms](https://stripe.com/docs/issuing/cards#accept-authorized-user-terms). Required for cards
-    /// backed by a Celtic program.
+    /// Terms](https://docs.stripe.com/issuing/compliance-us#issuing-terms). Required for cards backed by a
+    /// Celtic program.
     public var userTermsAcceptance: CardholderUpdateIndividualCardIssuingUserTermsAcceptance?
 
     public init(userTermsAcceptance: CardholderUpdateIndividualCardIssuingUserTermsAcceptance? = nil) {
@@ -481,14 +491,12 @@ public struct CardholderUpdateIndividualCardIssuing: StripeParams {
 }
 
 /// Information about cardholder acceptance of Celtic [Authorized User
-/// Terms](https://stripe.com/docs/issuing/cards#accept-authorized-user-terms). Required for cards
-/// backed by a Celtic program.
+/// Terms](https://docs.stripe.com/issuing/compliance-us#issuing-terms). Required for cards backed by a
+/// Celtic program.
 public struct CardholderUpdateIndividualCardIssuingUserTermsAcceptance: StripeParams {
-    /// The Unix timestamp marking when the cardholder accepted the Authorized User Terms. Required for
-    /// Celtic Spend Card users.
+    /// The Unix timestamp marking when the cardholder accepted the Authorized User Terms.
     public var date: Int?
-    /// The IP address from which the cardholder accepted the Authorized User Terms. Required for Celtic
-    /// Spend Card users.
+    /// The IP address from which the cardholder accepted the Authorized User Terms.
     public var ip: String?
     /// The user agent of the browser from which the cardholder accepted the Authorized User Terms.
     public var userAgent: String?
@@ -534,11 +542,11 @@ public struct CardholderUpdateIndividualVerification: StripeParams {
 
 /// An identifying document, either a passport or local ID card.
 public struct CardholderUpdateIndividualVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -550,6 +558,10 @@ public struct CardholderUpdateIndividualVerificationDocument: StripeParams {
 /// Rules that control spending across this cardholder's cards. Refer to our
 /// [documentation](https://docs.stripe.com/issuing/controls/spending-controls) for more details.
 public struct CardholderUpdateSpendingControls: StripeParams {
+    /// Array of card presence statuses from which authorizations will be allowed. Possible options are
+    /// `present`, `not_present`. All other statuses will be blocked. Cannot be set with
+    /// `blocked_card_presences`. Provide an empty value to unset this control.
+    public var allowedCardPresences: [CardholderUpdateSpendingControlsAllowedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to allow. All other categories will be blocked. Cannot be set with
@@ -560,6 +572,10 @@ public struct CardholderUpdateSpendingControls: StripeParams {
     /// 3166 alpha-2 country codes (e.g. `US`). Cannot be set with `blocked_merchant_countries`. Provide an
     /// empty value to unset this control.
     public var allowedMerchantCountries: [String]?
+    /// Array of card presence statuses from which authorizations will be declined. Possible options are
+    /// `present`, `not_present`. Cannot be set with `allowed_card_presences`. Provide an empty value to
+    /// unset this control.
+    public var blockedCardPresences: [CardholderUpdateSpendingControlsBlockedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to decline. All other categories will be allowed. Cannot be set with
@@ -574,9 +590,11 @@ public struct CardholderUpdateSpendingControls: StripeParams {
     /// Currency of amounts within `spending_limits`. Defaults to your merchant country's currency.
     public var spendingLimitsCurrency: String?
 
-    public init(allowedCategories: [CardholderUpdateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCategories: [CardholderUpdateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [CardholderUpdateSpendingControlsSpendingLimits]? = nil, spendingLimitsCurrency: String? = nil) {
+    public init(allowedCardPresences: [CardholderUpdateSpendingControlsAllowedCardPresences]? = nil, allowedCategories: [CardholderUpdateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCardPresences: [CardholderUpdateSpendingControlsBlockedCardPresences]? = nil, blockedCategories: [CardholderUpdateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [CardholderUpdateSpendingControlsSpendingLimits]? = nil, spendingLimitsCurrency: String? = nil) {
+        self.allowedCardPresences = allowedCardPresences
         self.allowedCategories = allowedCategories
         self.allowedMerchantCountries = allowedMerchantCountries
+        self.blockedCardPresences = blockedCardPresences
         self.blockedCategories = blockedCategories
         self.blockedMerchantCountries = blockedMerchantCountries
         self.spendingLimits = spendingLimits
@@ -584,8 +602,10 @@ public struct CardholderUpdateSpendingControls: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case allowedCardPresences = "allowed_card_presences"
         case allowedCategories = "allowed_categories"
         case allowedMerchantCountries = "allowed_merchant_countries"
+        case blockedCardPresences = "blocked_card_presences"
         case blockedCategories = "blocked_categories"
         case blockedMerchantCountries = "blocked_merchant_countries"
         case spendingLimits = "spending_limits"

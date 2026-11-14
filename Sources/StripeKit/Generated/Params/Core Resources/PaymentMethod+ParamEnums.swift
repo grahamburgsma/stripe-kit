@@ -64,14 +64,17 @@ public enum PaymentMethodCreateFpxBank: String, Codable, Sendable {
     case bankMuamalat = "bank_muamalat"
     case bankOfChina = "bank_of_china"
     case bankRakyat = "bank_rakyat"
+    case bnpParibas = "bnp_paribas"
     case bsn
     case cimb
+    case citibank
     case deutscheBank = "deutsche_bank"
     case hongLeongBank = "hong_leong_bank"
     case hsbc
     case kfh
     case maybank2e
     case maybank2u
+    case mbsbBank = "mbsb_bank"
     case ocbc
     case pbEnterprise = "pb_enterprise"
     case publicBank = "public_bank"
@@ -157,6 +160,7 @@ public enum PaymentMethodCreateType: String, Codable, Sendable {
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case card
@@ -185,19 +189,29 @@ public enum PaymentMethodCreateType: String, Codable, Sendable {
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
+}
+
+public enum PaymentMethodCreateUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
 }
 
 public enum PaymentMethodCreateUsBankAccountAccountHolderType: String, Codable, Sendable {

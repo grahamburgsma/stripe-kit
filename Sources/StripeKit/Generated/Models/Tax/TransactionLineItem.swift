@@ -7,18 +7,19 @@
 
 import Foundation
 
+/// A Tax Transaction Line Item represents an individual item in a Tax Transaction.
 public struct TransactionLineItem: Codable, Sendable {
     /// The line item amount in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal). If `tax_behavior=inclusive`, then this
-    /// amount includes taxes. Otherwise, taxes were calculated on top of this amount.
+    /// unit](https://docs.stripe.com/currencies#minor-units). If `tax_behavior=inclusive`, then this amount
+    /// includes taxes. Otherwise, taxes were calculated on top of this amount.
     public var amount: Int
     /// The amount of tax calculated for this line item, in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// unit](https://docs.stripe.com/currencies#minor-units).
     public var amountTax: Int
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

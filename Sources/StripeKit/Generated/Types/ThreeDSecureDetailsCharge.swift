@@ -65,6 +65,7 @@ public enum ThreeDSecureDetailsChargeExemptionIndicator: String, Codable, Sendab
 public enum ThreeDSecureDetailsChargeResult: String, Codable, Sendable {
     case attemptAcknowledged = "attempt_acknowledged"
     case authenticated
+    case dataShareOnly = "data_share_only"
     case exempted
     case failed
     case notSupported = "not_supported"

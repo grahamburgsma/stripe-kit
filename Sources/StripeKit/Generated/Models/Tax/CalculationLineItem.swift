@@ -7,24 +7,29 @@
 
 import Foundation
 
+/// A Tax Calculation Line Item represents a single item in a tax calculation.
 public struct CalculationLineItem: Codable, Sendable {
     /// The line item amount in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal). If `tax_behavior=inclusive`, then this
-    /// amount includes taxes. Otherwise, taxes were calculated on top of this amount.
+    /// unit](https://docs.stripe.com/currencies#minor-units). If `tax_behavior=inclusive`, then this amount
+    /// includes taxes. Otherwise, taxes were calculated on top of this amount.
     public var amount: Int
     /// The amount of tax calculated for this line item, in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// unit](https://docs.stripe.com/currencies#minor-units).
     public var amountTax: Int
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     public var metadata: [String: String]?
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: CalculationLineItemObject
+    /// Indicates the line item represents a performance where the venue location might determine the tax,
+    /// not the customer address. Leave empty if the tax code doesn't require a tax location. If you provide
+    /// this value for tax codes with an `optional` location requirement, it overrides the customer address.
+    public var performanceLocation: String?
     /// The ID of an existing [Product](https://docs.stripe.com/api/products/object).
     public var product: String?
     /// The number of units of the item being purchased. For reversals, this is the quantity reversed.
@@ -47,6 +52,7 @@ public struct CalculationLineItem: Codable, Sendable {
         case livemode
         case metadata
         case object
+        case performanceLocation = "performance_location"
         case product
         case quantity
         case reference

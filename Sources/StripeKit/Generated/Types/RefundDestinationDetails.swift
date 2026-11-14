@@ -10,7 +10,7 @@ import Foundation
 public struct RefundDestinationDetails: Codable, Sendable {
     @Expandable<DestinationDetailsUnimplemented>
     public var affirm: String?
-    @Expandable<DestinationDetailsUnimplemented>
+    @Expandable<RefundDestinationDetailsAfterpayClearpay>
     public var afterpayClearpay: String?
     @Expandable<DestinationDetailsUnimplemented>
     public var alipay: String?
@@ -44,7 +44,7 @@ public struct RefundDestinationDetails: Codable, Sendable {
     public var grabpay: String?
     @Expandable<RefundDestinationDetailsJpBankTransfer>
     public var jpBankTransfer: String?
-    @Expandable<DestinationDetailsUnimplemented>
+    @Expandable<RefundDestinationDetailsKlarna>
     public var klarna: String?
     @Expandable<RefundDestinationDetailsMbWay>
     public var mbWay: String?
@@ -64,6 +64,8 @@ public struct RefundDestinationDetails: Codable, Sendable {
     public var pix: String?
     @Expandable<DestinationDetailsUnimplemented>
     public var revolut: String?
+    @Expandable<DestinationDetailsUnimplemented>
+    public var scalapay: String?
     @Expandable<DestinationDetailsUnimplemented>
     public var sofort: String?
     @Expandable<RefundDestinationDetailsSwish>
@@ -112,6 +114,7 @@ public struct RefundDestinationDetails: Codable, Sendable {
         case paypal
         case pix
         case revolut
+        case scalapay
         case sofort
         case swish
         case thBankTransfer = "th_bank_transfer"

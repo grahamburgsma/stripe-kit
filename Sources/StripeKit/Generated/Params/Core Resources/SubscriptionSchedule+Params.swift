@@ -57,16 +57,21 @@ public struct SubscriptionScheduleCreateParams: StripeParams {
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
     /// empty value to `metadata`.
     public var metadata: [String: String]?
+    /// Configures the subscription's pause behavior and, optionally, its resume behavior. Only one entry is
+    /// supported.
+    public var pauseSchedules: [SubscriptionScheduleCreatePauseSchedules]?
     /// List representing phases of the subscription schedule. Each phase can be customized to have
     /// different durations, plans, and coupons. If there are multiple phases, the `end_date` of one phase
     /// will always equal the `start_date` of the next phase.
     public var phases: [SubscriptionScheduleCreatePhases]?
     /// When the subscription schedule starts. We recommend using `now` so that it starts the subscription
-    /// immediately. You can also use a Unix timestamp to backdate the subscription so that it starts on a
-    /// past date, or set a future date for the subscription to start on.
+    /// immediately, and to avoid unexpected behavior due to request delays or clock skew resulting in a
+    /// slightly backdated or postdated start. You can also use a Unix timestamp to backdate the
+    /// subscription so that it starts on a past date, or set a future date for the subscription to start
+    /// on.
     public var startDate: String?
 
-    public init(billingMode: SubscriptionScheduleCreateBillingMode? = nil, customer: String? = nil, customerAccount: String? = nil, defaultSettings: SubscriptionScheduleCreateDefaultSettings? = nil, endBehavior: SubscriptionScheduleCreateEndBehavior? = nil, expand: [String]? = nil, fromSubscription: String? = nil, metadata: [String: String]? = nil, phases: [SubscriptionScheduleCreatePhases]? = nil, startDate: String? = nil) {
+    public init(billingMode: SubscriptionScheduleCreateBillingMode? = nil, customer: String? = nil, customerAccount: String? = nil, defaultSettings: SubscriptionScheduleCreateDefaultSettings? = nil, endBehavior: SubscriptionScheduleCreateEndBehavior? = nil, expand: [String]? = nil, fromSubscription: String? = nil, metadata: [String: String]? = nil, pauseSchedules: [SubscriptionScheduleCreatePauseSchedules]? = nil, phases: [SubscriptionScheduleCreatePhases]? = nil, startDate: String? = nil) {
         self.billingMode = billingMode
         self.customer = customer
         self.customerAccount = customerAccount
@@ -75,6 +80,7 @@ public struct SubscriptionScheduleCreateParams: StripeParams {
         self.expand = expand
         self.fromSubscription = fromSubscription
         self.metadata = metadata
+        self.pauseSchedules = pauseSchedules
         self.phases = phases
         self.startDate = startDate
     }
@@ -88,6 +94,7 @@ public struct SubscriptionScheduleCreateParams: StripeParams {
         case expand
         case fromSubscription = "from_subscription"
         case metadata
+        case pauseSchedules = "pause_schedules"
         case phases
         case startDate = "start_date"
     }
@@ -125,6 +132,10 @@ public struct SubscriptionScheduleUpdateParams: StripeParams {
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
     /// empty value to `metadata`.
     public var metadata: [String: String]?
+    /// The subscription's pause behavior and optional resume behavior. You can provide one entry. Include
+    /// its `key` to update an existing pause schedule. Omit `pause_schedules` to leave the existing
+    /// schedule unchanged, or pass an empty string (`""`) to clear it.
+    public var pauseSchedules: [SubscriptionScheduleUpdatePauseSchedules]?
     /// List representing phases of the subscription schedule. Each phase can be customized to have
     /// different durations, plans, and coupons. If there are multiple phases, the `end_date` of one phase
     /// will always equal the `start_date` of the next phase. Note that past phases can be omitted.
@@ -134,11 +145,12 @@ public struct SubscriptionScheduleUpdateParams: StripeParams {
     /// `create_prorations`.
     public var prorationBehavior: SubscriptionScheduleUpdateProrationBehavior?
 
-    public init(defaultSettings: SubscriptionScheduleUpdateDefaultSettings? = nil, endBehavior: SubscriptionScheduleUpdateEndBehavior? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, phases: [SubscriptionScheduleUpdatePhases]? = nil, prorationBehavior: SubscriptionScheduleUpdateProrationBehavior? = nil) {
+    public init(defaultSettings: SubscriptionScheduleUpdateDefaultSettings? = nil, endBehavior: SubscriptionScheduleUpdateEndBehavior? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, pauseSchedules: [SubscriptionScheduleUpdatePauseSchedules]? = nil, phases: [SubscriptionScheduleUpdatePhases]? = nil, prorationBehavior: SubscriptionScheduleUpdateProrationBehavior? = nil) {
         self.defaultSettings = defaultSettings
         self.endBehavior = endBehavior
         self.expand = expand
         self.metadata = metadata
+        self.pauseSchedules = pauseSchedules
         self.phases = phases
         self.prorationBehavior = prorationBehavior
     }
@@ -148,6 +160,7 @@ public struct SubscriptionScheduleUpdateParams: StripeParams {
         case endBehavior = "end_behavior"
         case expand
         case metadata
+        case pauseSchedules = "pause_schedules"
         case phases
         case prorationBehavior = "proration_behavior"
     }
@@ -303,23 +316,44 @@ public struct SubscriptionScheduleCreateDefaultSettingsInvoiceSettings: StripePa
     /// The account tax IDs associated with the subscription schedule. Will be set on invoices generated by
     /// the subscription schedule.
     public var accountTaxIds: [String]?
+    public var customFields: [SubscriptionScheduleCreateDefaultSettingsInvoiceSettingsCustomFields]?
     /// Number of days within which a customer must pay invoices generated by this subscription schedule.
     /// This value will be `null` for subscription schedules where `collection_method=charge_automatically`.
     public var daysUntilDue: Int?
+    public var description: String?
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: SubscriptionScheduleCreateDefaultSettingsInvoiceSettingsIssuer?
 
-    public init(accountTaxIds: [String]? = nil, daysUntilDue: Int? = nil, issuer: SubscriptionScheduleCreateDefaultSettingsInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [SubscriptionScheduleCreateDefaultSettingsInvoiceSettingsCustomFields]? = nil, daysUntilDue: Int? = nil, description: String? = nil, footer: String? = nil, issuer: SubscriptionScheduleCreateDefaultSettingsInvoiceSettingsIssuer? = nil) {
         self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
         self.daysUntilDue = daysUntilDue
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
         case daysUntilDue = "days_until_due"
+        case description
+        case footer
         case issuer
+    }
+}
+
+public struct SubscriptionScheduleCreateDefaultSettingsInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -353,6 +387,196 @@ public struct SubscriptionScheduleCreateDefaultSettingsTransferData: StripeParam
     public enum CodingKeys: String, CodingKey {
         case amountPercent = "amount_percent"
         case destination
+    }
+}
+
+public struct SubscriptionScheduleCreatePauseSchedules: StripeParams {
+    /// A unique identifier for this pause schedule entry.
+    public var key: String?
+    /// Configuration for when and how the subscription pauses.
+    public var pause: SubscriptionScheduleCreatePauseSchedulesPause?
+    /// Configuration for when and how the subscription resumes.
+    public var resume: SubscriptionScheduleCreatePauseSchedulesResume?
+
+    public init(key: String? = nil, pause: SubscriptionScheduleCreatePauseSchedulesPause? = nil, resume: SubscriptionScheduleCreatePauseSchedulesResume? = nil) {
+        self.key = key
+        self.pause = pause
+        self.resume = resume
+    }
+}
+
+/// Configuration for when and how the subscription pauses.
+public struct SubscriptionScheduleCreatePauseSchedulesPause: StripeParams {
+    /// When to pause the subscription.
+    public var pauseAt: SubscriptionScheduleCreatePauseSchedulesPausePauseAt
+    /// Settings controlling billing behavior during the pause.
+    public var settings: SubscriptionScheduleCreatePauseSchedulesPauseSettings?
+
+    public init(pauseAt: SubscriptionScheduleCreatePauseSchedulesPausePauseAt, settings: SubscriptionScheduleCreatePauseSchedulesPauseSettings? = nil) {
+        self.pauseAt = pauseAt
+        self.settings = settings
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case pauseAt = "pause_at"
+        case settings
+    }
+}
+
+/// When to pause the subscription.
+public struct SubscriptionScheduleCreatePauseSchedulesPausePauseAt: StripeParams {
+    /// When to pause the subscription. Use `now` to pause immediately or `timestamp` to pause at a specific
+    /// time.
+    public var type: SubscriptionScheduleCreatePauseSchedulesPausePauseAtType
+    /// The Unix timestamp at which to pause the subscription. Required when `type` is `timestamp`.
+    public var timestamp: Int?
+
+    public init(type: SubscriptionScheduleCreatePauseSchedulesPausePauseAtType, timestamp: Int? = nil) {
+        self.type = type
+        self.timestamp = timestamp
+    }
+}
+
+/// Settings controlling billing behavior during the pause.
+public struct SubscriptionScheduleCreatePauseSchedulesPauseSettings: StripeParams {
+    /// Controls what to bill for when pausing the subscription.
+    public var billFor: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillFor?
+    /// Determines whether to generate an invoice for outstanding amounts when pausing. When adding a pause
+    /// schedule, defaults to `pending_invoice_item`. On updates, the existing value is preserved if not
+    /// provided.
+    public var invoicingBehavior: SubscriptionScheduleCreatePauseSchedulesPauseSettingsInvoicingBehavior?
+    /// The pause type. Currently only `subscription` is supported.
+    public var type: SubscriptionScheduleCreatePauseSchedulesPauseSettingsType?
+
+    public init(billFor: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillFor? = nil, invoicingBehavior: SubscriptionScheduleCreatePauseSchedulesPauseSettingsInvoicingBehavior? = nil, type: SubscriptionScheduleCreatePauseSchedulesPauseSettingsType? = nil) {
+        self.billFor = billFor
+        self.invoicingBehavior = invoicingBehavior
+        self.type = type
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billFor = "bill_for"
+        case invoicingBehavior = "invoicing_behavior"
+        case type
+    }
+}
+
+/// Controls what to bill for when pausing the subscription.
+public struct SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillFor: StripeParams {
+    /// Controls whether to collect metered usage accrued up to the pause date.
+    public var outstandingUsageThrough: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForOutstandingUsageThrough?
+    /// Controls how unused time on subscription items is credited when pausing.
+    public var unusedTimeFrom: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForUnusedTimeFrom?
+
+    public init(outstandingUsageThrough: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForOutstandingUsageThrough? = nil, unusedTimeFrom: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForUnusedTimeFrom? = nil) {
+        self.outstandingUsageThrough = outstandingUsageThrough
+        self.unusedTimeFrom = unusedTimeFrom
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case outstandingUsageThrough = "outstanding_usage_through"
+        case unusedTimeFrom = "unused_time_from"
+    }
+}
+
+/// Controls whether to collect metered usage accrued up to the pause date.
+public struct SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForOutstandingUsageThrough: StripeParams {
+    /// Determines whether to collect metered usage accrued up to the pause date. When adding a pause
+    /// schedule, defaults to `pause_at`. On updates, the existing value is preserved if not provided.
+    public var type: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForOutstandingUsageThroughType?
+
+    public init(type: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForOutstandingUsageThroughType? = nil) {
+        self.type = type
+    }
+}
+
+/// Controls how unused time on subscription items is credited when pausing.
+public struct SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForUnusedTimeFrom: StripeParams {
+    /// Determines which point in the billing period unused time is credited from. When adding a pause
+    /// schedule, defaults to `pause_at`. On updates, the existing value is preserved if not provided.
+    public var type: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForUnusedTimeFromType?
+
+    public init(type: SubscriptionScheduleCreatePauseSchedulesPauseSettingsBillForUnusedTimeFromType? = nil) {
+        self.type = type
+    }
+}
+
+/// Configuration for when and how the subscription resumes.
+public struct SubscriptionScheduleCreatePauseSchedulesResume: StripeParams {
+    /// When to resume the subscription.
+    public var resumeAt: SubscriptionScheduleCreatePauseSchedulesResumeResumeAt
+    /// Settings controlling how the subscription resumes.
+    public var settings: SubscriptionScheduleCreatePauseSchedulesResumeSettings?
+
+    public init(resumeAt: SubscriptionScheduleCreatePauseSchedulesResumeResumeAt, settings: SubscriptionScheduleCreatePauseSchedulesResumeSettings? = nil) {
+        self.resumeAt = resumeAt
+        self.settings = settings
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case resumeAt = "resume_at"
+        case settings
+    }
+}
+
+/// When to resume the subscription.
+public struct SubscriptionScheduleCreatePauseSchedulesResumeResumeAt: StripeParams {
+    /// When to resume the subscription. Use `now` to resume immediately, `duration` to resume after a set
+    /// duration, or `timestamp` to resume at a specific time.
+    public var type: SubscriptionScheduleCreatePauseSchedulesResumeResumeAtType
+    /// The duration after which to resume the subscription. Required when `type` is `duration`.
+    public var duration: SubscriptionScheduleCreatePauseSchedulesResumeResumeAtDuration?
+    /// The Unix timestamp at which to resume the subscription. Required when `type` is `timestamp`.
+    public var timestamp: Int?
+
+    public init(type: SubscriptionScheduleCreatePauseSchedulesResumeResumeAtType, duration: SubscriptionScheduleCreatePauseSchedulesResumeResumeAtDuration? = nil, timestamp: Int? = nil) {
+        self.type = type
+        self.duration = duration
+        self.timestamp = timestamp
+    }
+}
+
+/// The duration after which to resume the subscription. Required when `type` is `duration`.
+public struct SubscriptionScheduleCreatePauseSchedulesResumeResumeAtDuration: StripeParams {
+    /// The time unit for the resume duration. One of `day`, `week`, `month`, or `year`.
+    public var interval: SubscriptionScheduleCreatePauseSchedulesResumeResumeAtDurationInterval
+    /// The number of intervals after which the subscription resumes.
+    public var intervalCount: Int?
+
+    public init(interval: SubscriptionScheduleCreatePauseSchedulesResumeResumeAtDurationInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+}
+
+/// Settings controlling how the subscription resumes.
+public struct SubscriptionScheduleCreatePauseSchedulesResumeSettings: StripeParams {
+    /// Controls the billing cycle anchor when the subscription resumes. When adding a pause schedule,
+    /// defaults to `resume_at`. On updates, the existing value is preserved if not provided.
+    public var billingCycleAnchor: SubscriptionScheduleCreatePauseSchedulesResumeSettingsBillingCycleAnchor?
+    /// Controls whether Stripe attempts payment on the resumption invoice and how payment affects the
+    /// subscription's status. When adding a pause schedule, defaults to `resume_on_payment_success`. On
+    /// updates, the existing value is preserved if not provided.
+    public var paymentBehavior: SubscriptionScheduleCreatePauseSchedulesResumeSettingsPaymentBehavior?
+    /// Determines how to handle prorations when the subscription resumes. When adding a pause schedule,
+    /// defaults to `create_prorations`. On updates, the existing value is preserved if not provided.
+    public var prorationBehavior: SubscriptionScheduleCreatePauseSchedulesResumeSettingsProrationBehavior?
+
+    public init(billingCycleAnchor: SubscriptionScheduleCreatePauseSchedulesResumeSettingsBillingCycleAnchor? = nil, paymentBehavior: SubscriptionScheduleCreatePauseSchedulesResumeSettingsPaymentBehavior? = nil, prorationBehavior: SubscriptionScheduleCreatePauseSchedulesResumeSettingsProrationBehavior? = nil) {
+        self.billingCycleAnchor = billingCycleAnchor
+        self.paymentBehavior = paymentBehavior
+        self.prorationBehavior = prorationBehavior
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billingCycleAnchor = "billing_cycle_anchor"
+        case paymentBehavior = "payment_behavior"
+        case prorationBehavior = "proration_behavior"
     }
 }
 
@@ -636,6 +860,8 @@ public struct SubscriptionScheduleCreatePhasesItemsPriceDataRecurring: StripePar
 }
 
 public struct SubscriptionScheduleCreatePhasesAddInvoiceItems: StripeParams {
+    /// Controls whether discounts apply to this invoice item. Defaults to true if no value is provided.
+    public var discountable: Bool?
     /// The coupons to redeem into discounts for the item.
     public var discounts: [SubscriptionScheduleCreatePhasesAddInvoiceItemsDiscounts]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
@@ -656,7 +882,8 @@ public struct SubscriptionScheduleCreatePhasesAddInvoiceItems: StripeParams {
     /// The tax rates which apply to the item. When set, the `default_tax_rates` do not apply to this item.
     public var taxRates: [String]?
 
-    public init(discounts: [SubscriptionScheduleCreatePhasesAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionScheduleCreatePhasesAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionScheduleCreatePhasesAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(discountable: Bool? = nil, discounts: [SubscriptionScheduleCreatePhasesAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionScheduleCreatePhasesAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionScheduleCreatePhasesAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+        self.discountable = discountable
         self.discounts = discounts
         self.metadata = metadata
         self.period = period
@@ -667,6 +894,7 @@ public struct SubscriptionScheduleCreatePhasesAddInvoiceItems: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case discountable
         case discounts
         case metadata
         case period
@@ -873,23 +1101,47 @@ public struct SubscriptionScheduleCreatePhasesInvoiceSettings: StripeParams {
     /// The account tax IDs associated with this phase of the subscription schedule. Will be set on invoices
     /// generated by this phase of the subscription schedule.
     public var accountTaxIds: [String]?
+    /// A list of up to 4 custom fields to be displayed on the invoice.
+    public var customFields: [SubscriptionScheduleCreatePhasesInvoiceSettingsCustomFields]?
     /// Number of days within which a customer must pay invoices generated by this subscription schedule.
-    /// This value will be `null` for subscription schedules where `billing=charge_automatically`.
+    /// This value will be `null` for subscription schedules where `collection_method=charge_automatically`.
     public var daysUntilDue: Int?
+    /// An arbitrary string attached to the object. Often useful for displaying to users.
+    public var description: String?
+    /// Footer to be displayed on the invoice.
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: SubscriptionScheduleCreatePhasesInvoiceSettingsIssuer?
 
-    public init(accountTaxIds: [String]? = nil, daysUntilDue: Int? = nil, issuer: SubscriptionScheduleCreatePhasesInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [SubscriptionScheduleCreatePhasesInvoiceSettingsCustomFields]? = nil, daysUntilDue: Int? = nil, description: String? = nil, footer: String? = nil, issuer: SubscriptionScheduleCreatePhasesInvoiceSettingsIssuer? = nil) {
         self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
         self.daysUntilDue = daysUntilDue
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
         case daysUntilDue = "days_until_due"
+        case description
+        case footer
         case issuer
+    }
+}
+
+public struct SubscriptionScheduleCreatePhasesInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -1050,23 +1302,44 @@ public struct SubscriptionScheduleUpdateDefaultSettingsInvoiceSettings: StripePa
     /// The account tax IDs associated with the subscription schedule. Will be set on invoices generated by
     /// the subscription schedule.
     public var accountTaxIds: [String]?
+    public var customFields: [SubscriptionScheduleUpdateDefaultSettingsInvoiceSettingsCustomFields]?
     /// Number of days within which a customer must pay invoices generated by this subscription schedule.
     /// This value will be `null` for subscription schedules where `collection_method=charge_automatically`.
     public var daysUntilDue: Int?
+    public var description: String?
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: SubscriptionScheduleUpdateDefaultSettingsInvoiceSettingsIssuer?
 
-    public init(accountTaxIds: [String]? = nil, daysUntilDue: Int? = nil, issuer: SubscriptionScheduleUpdateDefaultSettingsInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [SubscriptionScheduleUpdateDefaultSettingsInvoiceSettingsCustomFields]? = nil, daysUntilDue: Int? = nil, description: String? = nil, footer: String? = nil, issuer: SubscriptionScheduleUpdateDefaultSettingsInvoiceSettingsIssuer? = nil) {
         self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
         self.daysUntilDue = daysUntilDue
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
         case daysUntilDue = "days_until_due"
+        case description
+        case footer
         case issuer
+    }
+}
+
+public struct SubscriptionScheduleUpdateDefaultSettingsInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -1100,6 +1373,195 @@ public struct SubscriptionScheduleUpdateDefaultSettingsTransferData: StripeParam
     public enum CodingKeys: String, CodingKey {
         case amountPercent = "amount_percent"
         case destination
+    }
+}
+
+public struct SubscriptionScheduleUpdatePauseSchedules: StripeParams {
+    /// A unique identifier for this pause schedule entry.
+    public var key: String?
+    /// Configuration for when and how the subscription pauses.
+    public var pause: SubscriptionScheduleUpdatePauseSchedulesPause?
+    /// Configuration for when and how the subscription resumes.
+    public var resume: SubscriptionScheduleUpdatePauseSchedulesResume?
+
+    public init(key: String? = nil, pause: SubscriptionScheduleUpdatePauseSchedulesPause? = nil, resume: SubscriptionScheduleUpdatePauseSchedulesResume? = nil) {
+        self.key = key
+        self.pause = pause
+        self.resume = resume
+    }
+}
+
+/// Configuration for when and how the subscription pauses.
+public struct SubscriptionScheduleUpdatePauseSchedulesPause: StripeParams {
+    /// When to pause the subscription.
+    public var pauseAt: SubscriptionScheduleUpdatePauseSchedulesPausePauseAt?
+    /// Settings controlling billing behavior during the pause.
+    public var settings: SubscriptionScheduleUpdatePauseSchedulesPauseSettings?
+
+    public init(pauseAt: SubscriptionScheduleUpdatePauseSchedulesPausePauseAt? = nil, settings: SubscriptionScheduleUpdatePauseSchedulesPauseSettings? = nil) {
+        self.pauseAt = pauseAt
+        self.settings = settings
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case pauseAt = "pause_at"
+        case settings
+    }
+}
+
+/// When to pause the subscription.
+public struct SubscriptionScheduleUpdatePauseSchedulesPausePauseAt: StripeParams {
+    /// When to pause the subscription. Use `now` to pause immediately or `timestamp` to pause at a specific
+    /// time.
+    public var type: SubscriptionScheduleUpdatePauseSchedulesPausePauseAtType
+    /// The Unix timestamp at which to pause the subscription. Required when `type` is `timestamp`.
+    public var timestamp: Int?
+
+    public init(type: SubscriptionScheduleUpdatePauseSchedulesPausePauseAtType, timestamp: Int? = nil) {
+        self.type = type
+        self.timestamp = timestamp
+    }
+}
+
+/// Settings controlling billing behavior during the pause.
+public struct SubscriptionScheduleUpdatePauseSchedulesPauseSettings: StripeParams {
+    /// Controls what to bill for when pausing the subscription.
+    public var billFor: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillFor?
+    /// Determines whether to generate an invoice for outstanding amounts when pausing. When adding a pause
+    /// schedule, defaults to `pending_invoice_item`. On updates, the existing value is preserved if not
+    /// provided.
+    public var invoicingBehavior: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsInvoicingBehavior?
+    /// The pause type. Currently only `subscription` is supported.
+    public var type: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsType?
+
+    public init(billFor: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillFor? = nil, invoicingBehavior: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsInvoicingBehavior? = nil, type: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsType? = nil) {
+        self.billFor = billFor
+        self.invoicingBehavior = invoicingBehavior
+        self.type = type
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billFor = "bill_for"
+        case invoicingBehavior = "invoicing_behavior"
+        case type
+    }
+}
+
+/// Controls what to bill for when pausing the subscription.
+public struct SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillFor: StripeParams {
+    /// Controls whether to collect metered usage accrued up to the pause date.
+    public var outstandingUsageThrough: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForOutstandingUsageThrough?
+    /// Controls how unused time on subscription items is credited when pausing.
+    public var unusedTimeFrom: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForUnusedTimeFrom?
+
+    public init(outstandingUsageThrough: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForOutstandingUsageThrough? = nil, unusedTimeFrom: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForUnusedTimeFrom? = nil) {
+        self.outstandingUsageThrough = outstandingUsageThrough
+        self.unusedTimeFrom = unusedTimeFrom
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case outstandingUsageThrough = "outstanding_usage_through"
+        case unusedTimeFrom = "unused_time_from"
+    }
+}
+
+/// Controls whether to collect metered usage accrued up to the pause date.
+public struct SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForOutstandingUsageThrough: StripeParams {
+    /// Determines whether to collect metered usage accrued up to the pause date. When adding a pause
+    /// schedule, defaults to `pause_at`. On updates, the existing value is preserved if not provided.
+    public var type: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForOutstandingUsageThroughType?
+
+    public init(type: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForOutstandingUsageThroughType? = nil) {
+        self.type = type
+    }
+}
+
+/// Controls how unused time on subscription items is credited when pausing.
+public struct SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForUnusedTimeFrom: StripeParams {
+    /// Determines which point in the billing period unused time is credited from. When adding a pause
+    /// schedule, defaults to `pause_at`. On updates, the existing value is preserved if not provided.
+    public var type: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForUnusedTimeFromType?
+
+    public init(type: SubscriptionScheduleUpdatePauseSchedulesPauseSettingsBillForUnusedTimeFromType? = nil) {
+        self.type = type
+    }
+}
+
+public struct SubscriptionScheduleUpdatePauseSchedulesResume: StripeParams {
+    /// When to resume the subscription.
+    public var resumeAt: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAt?
+    /// Settings controlling how the subscription resumes.
+    public var settings: SubscriptionScheduleUpdatePauseSchedulesResumeSettings?
+
+    public init(resumeAt: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAt? = nil, settings: SubscriptionScheduleUpdatePauseSchedulesResumeSettings? = nil) {
+        self.resumeAt = resumeAt
+        self.settings = settings
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case resumeAt = "resume_at"
+        case settings
+    }
+}
+
+/// When to resume the subscription.
+public struct SubscriptionScheduleUpdatePauseSchedulesResumeResumeAt: StripeParams {
+    /// When to resume the subscription. Use `now` to resume immediately, `duration` to resume after a set
+    /// duration, or `timestamp` to resume at a specific time.
+    public var type: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtType
+    /// The duration after which to resume the subscription. Required when `type` is `duration`.
+    public var duration: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtDuration?
+    /// The Unix timestamp at which to resume the subscription. Required when `type` is `timestamp`.
+    public var timestamp: Int?
+
+    public init(type: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtType, duration: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtDuration? = nil, timestamp: Int? = nil) {
+        self.type = type
+        self.duration = duration
+        self.timestamp = timestamp
+    }
+}
+
+/// The duration after which to resume the subscription. Required when `type` is `duration`.
+public struct SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtDuration: StripeParams {
+    /// The time unit for the resume duration. One of `day`, `week`, `month`, or `year`.
+    public var interval: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtDurationInterval
+    /// The number of intervals after which the subscription resumes.
+    public var intervalCount: Int?
+
+    public init(interval: SubscriptionScheduleUpdatePauseSchedulesResumeResumeAtDurationInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+}
+
+/// Settings controlling how the subscription resumes.
+public struct SubscriptionScheduleUpdatePauseSchedulesResumeSettings: StripeParams {
+    /// Controls the billing cycle anchor when the subscription resumes. When adding a pause schedule,
+    /// defaults to `resume_at`. On updates, the existing value is preserved if not provided.
+    public var billingCycleAnchor: SubscriptionScheduleUpdatePauseSchedulesResumeSettingsBillingCycleAnchor?
+    /// Controls whether Stripe attempts payment on the resumption invoice and how payment affects the
+    /// subscription's status. When adding a pause schedule, defaults to `resume_on_payment_success`. On
+    /// updates, the existing value is preserved if not provided.
+    public var paymentBehavior: SubscriptionScheduleUpdatePauseSchedulesResumeSettingsPaymentBehavior?
+    /// Determines how to handle prorations when the subscription resumes. When adding a pause schedule,
+    /// defaults to `create_prorations`. On updates, the existing value is preserved if not provided.
+    public var prorationBehavior: SubscriptionScheduleUpdatePauseSchedulesResumeSettingsProrationBehavior?
+
+    public init(billingCycleAnchor: SubscriptionScheduleUpdatePauseSchedulesResumeSettingsBillingCycleAnchor? = nil, paymentBehavior: SubscriptionScheduleUpdatePauseSchedulesResumeSettingsPaymentBehavior? = nil, prorationBehavior: SubscriptionScheduleUpdatePauseSchedulesResumeSettingsProrationBehavior? = nil) {
+        self.billingCycleAnchor = billingCycleAnchor
+        self.paymentBehavior = paymentBehavior
+        self.prorationBehavior = prorationBehavior
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billingCycleAnchor = "billing_cycle_anchor"
+        case paymentBehavior = "payment_behavior"
+        case prorationBehavior = "proration_behavior"
     }
 }
 
@@ -1176,7 +1638,9 @@ public struct SubscriptionScheduleUpdatePhases: StripeParams {
     /// price, quantity, etc.) of the current phase.
     public var prorationBehavior: SubscriptionScheduleUpdatePhasesProrationBehavior?
     /// The date at which this phase of the subscription schedule starts or `now`. Must be set on the first
-    /// phase.
+    /// phase. Prefer to specify `now` over an explicit timestamp when appropriate to avoid unexpected
+    /// behavior due to request delays or clock skew resulting in the phase being slightly backdated or
+    /// postdated.
     public var startDate: String?
     /// The data with which to automatically create a Transfer for each of the associated subscription's
     /// invoices.
@@ -1184,8 +1648,8 @@ public struct SubscriptionScheduleUpdatePhases: StripeParams {
     /// If set to true the entire phase is counted as a trial and the customer will not be charged for any
     /// fees.
     public var trial: Bool?
-    /// Sets the phase to trialing from the start date to this date. Must be before the phase end date, can
-    /// not be combined with `trial`
+    /// Sets the phase to trialing from the start date to this date. Must be within the phase. When combined
+    /// with `trial=true`, it must match the phase end date.
     public var trialEnd: String?
 
     public init(items: [SubscriptionScheduleUpdatePhasesItems], addInvoiceItems: [SubscriptionScheduleUpdatePhasesAddInvoiceItems]? = nil, applicationFeePercent: Double? = nil, automaticTax: SubscriptionScheduleUpdatePhasesAutomaticTax? = nil, billingCycleAnchor: SubscriptionScheduleUpdatePhasesBillingCycleAnchor? = nil, billingThresholds: SubscriptionScheduleUpdatePhasesBillingThresholds? = nil, collectionMethod: SubscriptionScheduleUpdatePhasesCollectionMethod? = nil, currency: String? = nil, defaultPaymentMethod: String? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, discounts: [SubscriptionScheduleUpdatePhasesDiscounts]? = nil, duration: SubscriptionScheduleUpdatePhasesDuration? = nil, endDate: String? = nil, invoiceSettings: SubscriptionScheduleUpdatePhasesInvoiceSettings? = nil, metadata: [String: String]? = nil, onBehalfOf: String? = nil, prorationBehavior: SubscriptionScheduleUpdatePhasesProrationBehavior? = nil, startDate: String? = nil, transferData: SubscriptionScheduleUpdatePhasesTransferData? = nil, trial: Bool? = nil, trialEnd: String? = nil) {
@@ -1388,6 +1852,8 @@ public struct SubscriptionScheduleUpdatePhasesItemsPriceDataRecurring: StripePar
 }
 
 public struct SubscriptionScheduleUpdatePhasesAddInvoiceItems: StripeParams {
+    /// Controls whether discounts apply to this invoice item. Defaults to true if no value is provided.
+    public var discountable: Bool?
     /// The coupons to redeem into discounts for the item.
     public var discounts: [SubscriptionScheduleUpdatePhasesAddInvoiceItemsDiscounts]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
@@ -1408,7 +1874,8 @@ public struct SubscriptionScheduleUpdatePhasesAddInvoiceItems: StripeParams {
     /// The tax rates which apply to the item. When set, the `default_tax_rates` do not apply to this item.
     public var taxRates: [String]?
 
-    public init(discounts: [SubscriptionScheduleUpdatePhasesAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionScheduleUpdatePhasesAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionScheduleUpdatePhasesAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(discountable: Bool? = nil, discounts: [SubscriptionScheduleUpdatePhasesAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: SubscriptionScheduleUpdatePhasesAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: SubscriptionScheduleUpdatePhasesAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+        self.discountable = discountable
         self.discounts = discounts
         self.metadata = metadata
         self.period = period
@@ -1419,6 +1886,7 @@ public struct SubscriptionScheduleUpdatePhasesAddInvoiceItems: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case discountable
         case discounts
         case metadata
         case period
@@ -1625,23 +2093,47 @@ public struct SubscriptionScheduleUpdatePhasesInvoiceSettings: StripeParams {
     /// The account tax IDs associated with this phase of the subscription schedule. Will be set on invoices
     /// generated by this phase of the subscription schedule.
     public var accountTaxIds: [String]?
+    /// A list of up to 4 custom fields to be displayed on the invoice.
+    public var customFields: [SubscriptionScheduleUpdatePhasesInvoiceSettingsCustomFields]?
     /// Number of days within which a customer must pay invoices generated by this subscription schedule.
-    /// This value will be `null` for subscription schedules where `billing=charge_automatically`.
+    /// This value will be `null` for subscription schedules where `collection_method=charge_automatically`.
     public var daysUntilDue: Int?
+    /// An arbitrary string attached to the object. Often useful for displaying to users.
+    public var description: String?
+    /// Footer to be displayed on the invoice.
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: SubscriptionScheduleUpdatePhasesInvoiceSettingsIssuer?
 
-    public init(accountTaxIds: [String]? = nil, daysUntilDue: Int? = nil, issuer: SubscriptionScheduleUpdatePhasesInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [SubscriptionScheduleUpdatePhasesInvoiceSettingsCustomFields]? = nil, daysUntilDue: Int? = nil, description: String? = nil, footer: String? = nil, issuer: SubscriptionScheduleUpdatePhasesInvoiceSettingsIssuer? = nil) {
         self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
         self.daysUntilDue = daysUntilDue
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
         case daysUntilDue = "days_until_due"
+        case description
+        case footer
         case issuer
+    }
+}
+
+public struct SubscriptionScheduleUpdatePhasesInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 

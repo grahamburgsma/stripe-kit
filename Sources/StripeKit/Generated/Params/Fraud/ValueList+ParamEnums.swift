@@ -8,10 +8,12 @@
 import Foundation
 
 public enum ValueListCreateItemType: String, Codable, Sendable {
+    case account
     case cardBin = "card_bin"
     case cardFingerprint = "card_fingerprint"
     case caseSensitiveString = "case_sensitive_string"
     case country
+    case cryptoFingerprint = "crypto_fingerprint"
     case customerId = "customer_id"
     case email
     case ipAddress = "ip_address"

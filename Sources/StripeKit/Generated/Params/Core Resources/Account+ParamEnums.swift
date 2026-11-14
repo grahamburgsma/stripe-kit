@@ -110,10 +110,36 @@ public enum AccountCreateSettingsPayoutsScheduleWeeklyPayoutDays: String, Codabl
     case wednesday
 }
 
+public enum AccountCreateSettingsPaypayPaymentsGoodsType: String, Codable, Sendable {
+    case digitalContent = "digital_content"
+    case other
+}
+
+public enum AccountCreateSettingsPaypayPaymentsSiteType: String, Codable, Sendable {
+    case accessible
+    case inDevelopment = "in_development"
+    case restricted
+}
+
 public enum AccountCreateType: String, Codable, Sendable {
     case custom
     case express
     case standard
+}
+
+public enum AccountRejectPayoutsAction: String, Codable, Sendable {
+    case none
+    case pause
+}
+
+public enum AccountRejectReason: String, Codable, Sendable {
+    case credit
+    case fraudNoIntentToFulfill = "fraud_no_intent_to_fulfill"
+    case fraudOther = "fraud_other"
+    case fraudPaymentMethodCasher = "fraud_payment_method_casher"
+    case fraudPaymentMethodTester = "fraud_payment_method_tester"
+    case other
+    case termsOfService = "terms_of_service"
 }
 
 public enum AccountUpdateBusinessProfileMinorityOwnedBusinessDesignation: String, Codable, Sendable {
@@ -196,4 +222,15 @@ public enum AccountUpdateSettingsPayoutsScheduleWeeklyPayoutDays: String, Codabl
     case thursday
     case tuesday
     case wednesday
+}
+
+public enum AccountUpdateSettingsPaypayPaymentsGoodsType: String, Codable, Sendable {
+    case digitalContent = "digital_content"
+    case other
+}
+
+public enum AccountUpdateSettingsPaypayPaymentsSiteType: String, Codable, Sendable {
+    case accessible
+    case inDevelopment = "in_development"
+    case restricted
 }

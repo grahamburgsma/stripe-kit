@@ -8,6 +8,10 @@
 import Foundation
 
 public struct MandateMultiUse: Codable, Sendable {
+    /// The amount of the payment on a multi use mandate.
+    public var amount: Int?
+    /// The currency of the payment on a multi use mandate.
+    public var currency: String?
 }
 
 public struct MandateMultiUseList: Codable, Sendable {

@@ -7,41 +7,44 @@
 
 import Foundation
 
-public struct PaymentRecordCreateParams: StripeParams {
+public struct PaymentRecordReportPaymentParams: StripeParams {
     /// The amount you initially requested for this payment.
-    public var amountRequested: PaymentRecordCreateAmountRequested
+    public var amountRequested: PaymentRecordReportPaymentAmountRequested
     /// When the reported payment was initiated. Measured in seconds since the Unix epoch.
     public var initiatedAt: Int
     /// Information about the Payment Method debited for this payment.
-    public var paymentMethodDetails: PaymentRecordCreatePaymentMethodDetails
+    public var paymentMethodDetails: PaymentRecordReportPaymentPaymentMethodDetails
+    /// Information about the payment attempt cancelation.
+    public var canceled: PaymentRecordReportPaymentCanceled?
     /// Customer information for this payment.
-    public var customerDetails: PaymentRecordCreateCustomerDetails?
+    public var customerDetails: PaymentRecordReportPaymentCustomerDetails?
     /// Indicates whether the customer was present in your checkout flow during this payment.
-    public var customerPresence: PaymentRecordCreateCustomerPresence?
+    public var customerPresence: PaymentRecordReportPaymentCustomerPresence?
     /// An arbitrary string attached to the object. Often useful for displaying to users.
     public var description: String?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
     /// Information about the payment attempt failure.
-    public var failed: PaymentRecordCreateFailed?
+    public var failed: PaymentRecordReportPaymentFailed?
     /// Information about the payment attempt guarantee.
-    public var guaranteed: PaymentRecordCreateGuaranteed?
+    public var guaranteed: PaymentRecordReportPaymentGuaranteed?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
     /// empty value to `metadata`.
     public var metadata: [String: String]?
     /// The outcome of the reported payment.
-    public var outcome: PaymentRecordCreateOutcome?
+    public var outcome: PaymentRecordReportPaymentOutcome?
     /// Processor information for this payment.
-    public var processorDetails: PaymentRecordCreateProcessorDetails?
+    public var processorDetails: PaymentRecordReportPaymentProcessorDetails?
     /// Shipping information for this payment.
-    public var shippingDetails: PaymentRecordCreateShippingDetails?
+    public var shippingDetails: PaymentRecordReportPaymentShippingDetails?
 
-    public init(amountRequested: PaymentRecordCreateAmountRequested, initiatedAt: Int, paymentMethodDetails: PaymentRecordCreatePaymentMethodDetails, customerDetails: PaymentRecordCreateCustomerDetails? = nil, customerPresence: PaymentRecordCreateCustomerPresence? = nil, description: String? = nil, expand: [String]? = nil, failed: PaymentRecordCreateFailed? = nil, guaranteed: PaymentRecordCreateGuaranteed? = nil, metadata: [String: String]? = nil, outcome: PaymentRecordCreateOutcome? = nil, processorDetails: PaymentRecordCreateProcessorDetails? = nil, shippingDetails: PaymentRecordCreateShippingDetails? = nil) {
+    public init(amountRequested: PaymentRecordReportPaymentAmountRequested, initiatedAt: Int, paymentMethodDetails: PaymentRecordReportPaymentPaymentMethodDetails, canceled: PaymentRecordReportPaymentCanceled? = nil, customerDetails: PaymentRecordReportPaymentCustomerDetails? = nil, customerPresence: PaymentRecordReportPaymentCustomerPresence? = nil, description: String? = nil, expand: [String]? = nil, failed: PaymentRecordReportPaymentFailed? = nil, guaranteed: PaymentRecordReportPaymentGuaranteed? = nil, metadata: [String: String]? = nil, outcome: PaymentRecordReportPaymentOutcome? = nil, processorDetails: PaymentRecordReportPaymentProcessorDetails? = nil, shippingDetails: PaymentRecordReportPaymentShippingDetails? = nil) {
         self.amountRequested = amountRequested
         self.initiatedAt = initiatedAt
         self.paymentMethodDetails = paymentMethodDetails
+        self.canceled = canceled
         self.customerDetails = customerDetails
         self.customerPresence = customerPresence
         self.description = description
@@ -56,6 +59,7 @@ public struct PaymentRecordCreateParams: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case amountRequested = "amount_requested"
+        case canceled
         case customerDetails = "customer_details"
         case customerPresence = "customer_presence"
         case description
@@ -74,6 +78,8 @@ public struct PaymentRecordCreateParams: StripeParams {
 public struct PaymentRecordReportPaymentAttemptParams: StripeParams {
     /// When the reported payment was initiated. Measured in seconds since the Unix epoch.
     public var initiatedAt: Int
+    /// Information about the payment attempt cancelation.
+    public var canceled: PaymentRecordReportPaymentAttemptCanceled?
     /// An arbitrary string attached to the object. Often useful for displaying to users.
     public var description: String?
     /// Specifies which fields in the response should be expanded.
@@ -94,8 +100,9 @@ public struct PaymentRecordReportPaymentAttemptParams: StripeParams {
     /// Shipping information for this payment.
     public var shippingDetails: PaymentRecordReportPaymentAttemptShippingDetails?
 
-    public init(initiatedAt: Int, description: String? = nil, expand: [String]? = nil, failed: PaymentRecordReportPaymentAttemptFailed? = nil, guaranteed: PaymentRecordReportPaymentAttemptGuaranteed? = nil, metadata: [String: String]? = nil, outcome: PaymentRecordReportPaymentAttemptOutcome? = nil, paymentMethodDetails: PaymentRecordReportPaymentAttemptPaymentMethodDetails? = nil, shippingDetails: PaymentRecordReportPaymentAttemptShippingDetails? = nil) {
+    public init(initiatedAt: Int, canceled: PaymentRecordReportPaymentAttemptCanceled? = nil, description: String? = nil, expand: [String]? = nil, failed: PaymentRecordReportPaymentAttemptFailed? = nil, guaranteed: PaymentRecordReportPaymentAttemptGuaranteed? = nil, metadata: [String: String]? = nil, outcome: PaymentRecordReportPaymentAttemptOutcome? = nil, paymentMethodDetails: PaymentRecordReportPaymentAttemptPaymentMethodDetails? = nil, shippingDetails: PaymentRecordReportPaymentAttemptShippingDetails? = nil) {
         self.initiatedAt = initiatedAt
+        self.canceled = canceled
         self.description = description
         self.expand = expand
         self.failed = failed
@@ -107,6 +114,7 @@ public struct PaymentRecordReportPaymentAttemptParams: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case canceled
         case description
         case expand
         case failed
@@ -124,6 +132,10 @@ public struct PaymentRecordReportPaymentAttemptCanceledParams: StripeParams {
     public var canceledAt: Int
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
+    /// empty value to `metadata`.
     public var metadata: [String: String]?
 
     public init(canceledAt: Int, expand: [String]? = nil, metadata: [String: String]? = nil) {
@@ -144,6 +156,10 @@ public struct PaymentRecordReportPaymentAttemptFailedParams: StripeParams {
     public var failedAt: Int
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
+    /// empty value to `metadata`.
     public var metadata: [String: String]?
 
     public init(failedAt: Int, expand: [String]? = nil, metadata: [String: String]? = nil) {
@@ -164,6 +180,10 @@ public struct PaymentRecordReportPaymentAttemptGuaranteedParams: StripeParams {
     public var guaranteedAt: Int
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
+    /// empty value to `metadata`.
     public var metadata: [String: String]?
 
     public init(guaranteedAt: Int, expand: [String]? = nil, metadata: [String: String]? = nil) {
@@ -216,8 +236,6 @@ public struct PaymentRecordReportRefundParams: StripeParams {
     public var outcome: PaymentRecordReportRefundOutcome
     /// Processor information for this refund.
     public var processorDetails: PaymentRecordReportRefundProcessorDetails
-    /// Information about the payment attempt refund.
-    public var refunded: PaymentRecordReportRefundRefunded
     /// A positive integer in the [smallest currency unit](https://docs.stripe.com/currencies#zero-decimal)
     /// representing how much of this payment to refund. Can refund only up to the remaining, unrefunded
     /// amount of the payment.
@@ -231,15 +249,17 @@ public struct PaymentRecordReportRefundParams: StripeParams {
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
     /// empty value to `metadata`.
     public var metadata: [String: String]?
+    /// Information about the payment attempt refund.
+    public var refunded: PaymentRecordReportRefundRefunded?
 
-    public init(outcome: PaymentRecordReportRefundOutcome, processorDetails: PaymentRecordReportRefundProcessorDetails, refunded: PaymentRecordReportRefundRefunded, amount: PaymentRecordReportRefundAmount? = nil, expand: [String]? = nil, initiatedAt: Int? = nil, metadata: [String: String]? = nil) {
+    public init(outcome: PaymentRecordReportRefundOutcome, processorDetails: PaymentRecordReportRefundProcessorDetails, amount: PaymentRecordReportRefundAmount? = nil, expand: [String]? = nil, initiatedAt: Int? = nil, metadata: [String: String]? = nil, refunded: PaymentRecordReportRefundRefunded? = nil) {
         self.outcome = outcome
         self.processorDetails = processorDetails
-        self.refunded = refunded
         self.amount = amount
         self.expand = expand
         self.initiatedAt = initiatedAt
         self.metadata = metadata
+        self.refunded = refunded
     }
 
     public enum CodingKeys: String, CodingKey {
@@ -254,7 +274,7 @@ public struct PaymentRecordReportRefundParams: StripeParams {
 }
 
 /// The amount you initially requested for this payment.
-public struct PaymentRecordCreateAmountRequested: StripeParams {
+public struct PaymentRecordReportPaymentAmountRequested: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
     public var currency: String
@@ -270,18 +290,18 @@ public struct PaymentRecordCreateAmountRequested: StripeParams {
 }
 
 /// Information about the Payment Method debited for this payment.
-public struct PaymentRecordCreatePaymentMethodDetails: StripeParams {
+public struct PaymentRecordReportPaymentPaymentMethodDetails: StripeParams {
     /// The billing details associated with the method of payment.
-    public var billingDetails: PaymentRecordCreatePaymentMethodDetailsBillingDetails?
+    public var billingDetails: PaymentRecordReportPaymentPaymentMethodDetailsBillingDetails?
     /// Information about the custom (user-defined) payment method used to make this payment.
-    public var custom: PaymentRecordCreatePaymentMethodDetailsCustom?
+    public var custom: PaymentRecordReportPaymentPaymentMethodDetailsCustom?
     /// ID of the Stripe Payment Method used to make this payment.
     public var paymentMethod: String?
     /// The type of the payment method details. An additional hash is included on the payment_method_details
     /// with a name matching this value. It contains additional information specific to the type.
-    public var type: PaymentRecordCreatePaymentMethodDetailsType?
+    public var type: PaymentRecordReportPaymentPaymentMethodDetailsType?
 
-    public init(billingDetails: PaymentRecordCreatePaymentMethodDetailsBillingDetails? = nil, custom: PaymentRecordCreatePaymentMethodDetailsCustom? = nil, paymentMethod: String? = nil, type: PaymentRecordCreatePaymentMethodDetailsType? = nil) {
+    public init(billingDetails: PaymentRecordReportPaymentPaymentMethodDetailsBillingDetails? = nil, custom: PaymentRecordReportPaymentPaymentMethodDetailsCustom? = nil, paymentMethod: String? = nil, type: PaymentRecordReportPaymentPaymentMethodDetailsType? = nil) {
         self.billingDetails = billingDetails
         self.custom = custom
         self.paymentMethod = paymentMethod
@@ -297,9 +317,9 @@ public struct PaymentRecordCreatePaymentMethodDetails: StripeParams {
 }
 
 /// The billing details associated with the method of payment.
-public struct PaymentRecordCreatePaymentMethodDetailsBillingDetails: StripeParams {
+public struct PaymentRecordReportPaymentPaymentMethodDetailsBillingDetails: StripeParams {
     /// The billing address associated with the method of payment.
-    public var address: PaymentRecordCreatePaymentMethodDetailsBillingDetailsAddress?
+    public var address: PaymentRecordReportPaymentPaymentMethodDetailsBillingDetailsAddress?
     /// The billing email associated with the method of payment.
     public var email: String?
     /// The billing name associated with the method of payment.
@@ -307,7 +327,7 @@ public struct PaymentRecordCreatePaymentMethodDetailsBillingDetails: StripeParam
     /// The billing phone number associated with the method of payment.
     public var phone: String?
 
-    public init(address: PaymentRecordCreatePaymentMethodDetailsBillingDetailsAddress? = nil, email: String? = nil, name: String? = nil, phone: String? = nil) {
+    public init(address: PaymentRecordReportPaymentPaymentMethodDetailsBillingDetailsAddress? = nil, email: String? = nil, name: String? = nil, phone: String? = nil) {
         self.address = address
         self.email = email
         self.name = name
@@ -316,7 +336,7 @@ public struct PaymentRecordCreatePaymentMethodDetailsBillingDetails: StripeParam
 }
 
 /// The billing address associated with the method of payment.
-public struct PaymentRecordCreatePaymentMethodDetailsBillingDetailsAddress: StripeParams {
+public struct PaymentRecordReportPaymentPaymentMethodDetailsBillingDetailsAddress: StripeParams {
     /// City, district, suburb, town, or village.
     public var city: String?
     /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
@@ -350,7 +370,7 @@ public struct PaymentRecordCreatePaymentMethodDetailsBillingDetailsAddress: Stri
 }
 
 /// Information about the custom (user-defined) payment method used to make this payment.
-public struct PaymentRecordCreatePaymentMethodDetailsCustom: StripeParams {
+public struct PaymentRecordReportPaymentPaymentMethodDetailsCustom: StripeParams {
     /// Display name for the custom (user-defined) payment method type used to make this payment.
     public var displayName: String?
     /// The custom payment method type associated with this payment.
@@ -367,11 +387,25 @@ public struct PaymentRecordCreatePaymentMethodDetailsCustom: StripeParams {
     }
 }
 
+/// Information about the payment attempt cancelation.
+public struct PaymentRecordReportPaymentCanceled: StripeParams {
+    /// When the reported payment was canceled. Measured in seconds since the Unix epoch.
+    public var canceledAt: Int
+
+    public init(canceledAt: Int) {
+        self.canceledAt = canceledAt
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case canceledAt = "canceled_at"
+    }
+}
+
 /// Customer information for this payment.
-public struct PaymentRecordCreateCustomerDetails: StripeParams {
+public struct PaymentRecordReportPaymentCustomerDetails: StripeParams {
     /// The customer who made the payment.
     public var customer: String?
-    /// The customer's phone number.
+    /// The customer's email address.
     public var email: String?
     /// The customer's name.
     public var name: String?
@@ -387,7 +421,7 @@ public struct PaymentRecordCreateCustomerDetails: StripeParams {
 }
 
 /// Information about the payment attempt failure.
-public struct PaymentRecordCreateFailed: StripeParams {
+public struct PaymentRecordReportPaymentFailed: StripeParams {
     /// When the reported payment failed. Measured in seconds since the Unix epoch.
     public var failedAt: Int
 
@@ -401,7 +435,7 @@ public struct PaymentRecordCreateFailed: StripeParams {
 }
 
 /// Information about the payment attempt guarantee.
-public struct PaymentRecordCreateGuaranteed: StripeParams {
+public struct PaymentRecordReportPaymentGuaranteed: StripeParams {
     /// When the reported payment was guaranteed. Measured in seconds since the Unix epoch.
     public var guaranteedAt: Int
 
@@ -415,21 +449,21 @@ public struct PaymentRecordCreateGuaranteed: StripeParams {
 }
 
 /// Processor information for this payment.
-public struct PaymentRecordCreateProcessorDetails: StripeParams {
+public struct PaymentRecordReportPaymentProcessorDetails: StripeParams {
     /// The type of the processor details. An additional hash is included on processor_details with a name
     /// matching this value. It contains additional information specific to the processor.
-    public var type: PaymentRecordCreateProcessorDetailsType
+    public var type: PaymentRecordReportPaymentProcessorDetailsType
     /// Information about the custom processor used to make this payment.
-    public var custom: PaymentRecordCreateProcessorDetailsCustom?
+    public var custom: PaymentRecordReportPaymentProcessorDetailsCustom?
 
-    public init(type: PaymentRecordCreateProcessorDetailsType, custom: PaymentRecordCreateProcessorDetailsCustom? = nil) {
+    public init(type: PaymentRecordReportPaymentProcessorDetailsType, custom: PaymentRecordReportPaymentProcessorDetailsCustom? = nil) {
         self.type = type
         self.custom = custom
     }
 }
 
 /// Information about the custom processor used to make this payment.
-public struct PaymentRecordCreateProcessorDetailsCustom: StripeParams {
+public struct PaymentRecordReportPaymentProcessorDetailsCustom: StripeParams {
     /// An opaque string for manual reconciliation of this payment, for example a check number or a payment
     /// processor ID.
     public var paymentReference: String
@@ -444,15 +478,15 @@ public struct PaymentRecordCreateProcessorDetailsCustom: StripeParams {
 }
 
 /// Shipping information for this payment.
-public struct PaymentRecordCreateShippingDetails: StripeParams {
+public struct PaymentRecordReportPaymentShippingDetails: StripeParams {
     /// The physical shipping address.
-    public var address: PaymentRecordCreateShippingDetailsAddress?
+    public var address: PaymentRecordReportPaymentShippingDetailsAddress?
     /// The shipping recipient's name.
     public var name: String?
     /// The shipping recipient's phone number.
     public var phone: String?
 
-    public init(address: PaymentRecordCreateShippingDetailsAddress? = nil, name: String? = nil, phone: String? = nil) {
+    public init(address: PaymentRecordReportPaymentShippingDetailsAddress? = nil, name: String? = nil, phone: String? = nil) {
         self.address = address
         self.name = name
         self.phone = phone
@@ -460,7 +494,7 @@ public struct PaymentRecordCreateShippingDetails: StripeParams {
 }
 
 /// The physical shipping address.
-public struct PaymentRecordCreateShippingDetailsAddress: StripeParams {
+public struct PaymentRecordReportPaymentShippingDetailsAddress: StripeParams {
     /// City, district, suburb, town, or village.
     public var city: String?
     /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
@@ -490,6 +524,20 @@ public struct PaymentRecordCreateShippingDetailsAddress: StripeParams {
         case line2
         case postalCode = "postal_code"
         case state
+    }
+}
+
+/// Information about the payment attempt cancelation.
+public struct PaymentRecordReportPaymentAttemptCanceled: StripeParams {
+    /// When the reported payment was canceled. Measured in seconds since the Unix epoch.
+    public var canceledAt: Int
+
+    public init(canceledAt: Int) {
+        self.canceledAt = canceledAt
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case canceledAt = "canceled_at"
     }
 }
 
@@ -673,7 +721,7 @@ public struct PaymentRecordReportPaymentAttemptShippingDetailsAddress: StripePar
 public struct PaymentRecordReportPaymentAttemptInformationalCustomerDetails: StripeParams {
     /// The customer who made the payment.
     public var customer: String?
-    /// The customer's phone number.
+    /// The customer's email address.
     public var email: String?
     /// The customer's name.
     public var name: String?
@@ -765,20 +813,6 @@ public struct PaymentRecordReportRefundProcessorDetailsCustom: StripeParams {
     }
 }
 
-/// Information about the payment attempt refund.
-public struct PaymentRecordReportRefundRefunded: StripeParams {
-    /// When the reported refund completed. Measured in seconds since the Unix epoch.
-    public var refundedAt: Int
-
-    public init(refundedAt: Int) {
-        self.refundedAt = refundedAt
-    }
-
-    public enum CodingKeys: String, CodingKey {
-        case refundedAt = "refunded_at"
-    }
-}
-
 /// A positive integer in the [smallest currency unit](https://docs.stripe.com/currencies#zero-decimal)
 /// representing how much of this payment to refund. Can refund only up to the remaining, unrefunded
 /// amount of the payment.
@@ -794,5 +828,19 @@ public struct PaymentRecordReportRefundAmount: StripeParams {
     public init(currency: String, value: Int) {
         self.currency = currency
         self.value = value
+    }
+}
+
+/// Information about the payment attempt refund.
+public struct PaymentRecordReportRefundRefunded: StripeParams {
+    /// When the reported refund completed. Measured in seconds since the Unix epoch.
+    public var refundedAt: Int
+
+    public init(refundedAt: Int) {
+        self.refundedAt = refundedAt
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case refundedAt = "refunded_at"
     }
 }

@@ -67,9 +67,10 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
     /// method can be shown as a saved payment method in a checkout flow. The field defaults to
     /// `unspecified`.
     public var allowRedisplay: ConfirmationTokenCreatePaymentMethodDataAllowRedisplay?
-    /// If this is a Alma PaymentMethod, this hash contains details about the Alma payment method.
+    /// If this is an Alma PaymentMethod, this hash contains details about the Alma payment method.
     public var alma: [String: String]?
-    /// If this is a AmazonPay PaymentMethod, this hash contains details about the AmazonPay payment method.
+    /// If this is an AmazonPay PaymentMethod, this hash contains details about the AmazonPay payment
+    /// method.
     public var amazonPay: [String: String]?
     /// If this is an `au_becs_debit` PaymentMethod, this hash contains details about the bank account.
     public var auBecsDebit: ConfirmationTokenCreatePaymentMethodDataAuBecsDebit?
@@ -84,6 +85,8 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
     /// Billing information associated with the PaymentMethod that may be used or required by particular
     /// types of payment methods.
     public var billingDetails: ConfirmationTokenCreatePaymentMethodDataBillingDetails?
+    /// If this is a `bizum` PaymentMethod, this hash contains details about the Bizum payment method.
+    public var bizum: [String: String]?
     /// If this is a `blik` PaymentMethod, this hash contains details about the BLIK payment method.
     public var blik: [String: String]?
     /// If this is a `boleto` PaymentMethod, this hash contains details about the Boleto payment method.
@@ -119,7 +122,8 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
     /// If this is a `kr_card` PaymentMethod, this hash contains details about the Korean Card payment
     /// method.
     public var krCard: [String: String]?
-    /// If this is an `Link` PaymentMethod, this hash contains details about the Link payment method.
+    /// If this is an `Link` PaymentMethod, this hash contains details about the Link payment method (Link
+    /// is also known as Onelink in the UK).
     public var link: [String: String]?
     /// If this is a MB WAY PaymentMethod, this hash contains details about the MB WAY payment method.
     public var mbWay: [String: String]?
@@ -153,6 +157,8 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
     public var paynow: [String: String]?
     /// If this is a `paypal` PaymentMethod, this hash contains details about the PayPal payment method.
     public var paypal: [String: String]?
+    /// If this is a `paypay` PaymentMethod, this hash contains details about the PayPay payment method.
+    public var paypay: [String: String]?
     /// If this is a `payto` PaymentMethod, this hash contains details about the PayTo payment method.
     public var payto: ConfirmationTokenCreatePaymentMethodDataPayto?
     /// If this is a `pix` PaymentMethod, this hash contains details about the Pix payment method.
@@ -171,15 +177,23 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
     public var samsungPay: [String: String]?
     /// If this is a `satispay` PaymentMethod, this hash contains details about the Satispay payment method.
     public var satispay: [String: String]?
+    /// If this is a Scalapay PaymentMethod, this hash contains details about the Scalapay payment method.
+    public var scalapay: [String: String]?
     /// If this is a `sepa_debit` PaymentMethod, this hash contains details about the SEPA debit bank
     /// account.
     public var sepaDebit: ConfirmationTokenCreatePaymentMethodDataSepaDebit?
+    /// If this is a SeQura PaymentMethod, this hash contains details about the SeQura payment method.
+    public var sequra: [String: String]?
     /// If this is a `sofort` PaymentMethod, this hash contains details about the SOFORT payment method.
     public var sofort: ConfirmationTokenCreatePaymentMethodDataSofort?
+    /// If this is a `sunbit` PaymentMethod, this hash contains details about the Sunbit payment method.
+    public var sunbit: [String: String]?
     /// If this is a `swish` PaymentMethod, this hash contains details about the Swish payment method.
     public var swish: [String: String]?
     /// If this is a TWINT PaymentMethod, this hash contains details about the TWINT payment method.
     public var twint: [String: String]?
+    /// If this is a `upi` PaymentMethod, this hash contains details about the UPI payment method.
+    public var upi: ConfirmationTokenCreatePaymentMethodDataUpi?
     /// If this is an `us_bank_account` PaymentMethod, this hash contains details about the US bank account
     /// payment method.
     public var usBankAccount: ConfirmationTokenCreatePaymentMethodDataUsBankAccount?
@@ -189,7 +203,7 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
     /// If this is a `zip` PaymentMethod, this hash contains details about the Zip payment method.
     public var zip: [String: String]?
 
-    public init(type: ConfirmationTokenCreatePaymentMethodDataType, acssDebit: ConfirmationTokenCreatePaymentMethodDataAcssDebit? = nil, affirm: [String: String]? = nil, afterpayClearpay: [String: String]? = nil, alipay: [String: String]? = nil, allowRedisplay: ConfirmationTokenCreatePaymentMethodDataAllowRedisplay? = nil, alma: [String: String]? = nil, amazonPay: [String: String]? = nil, auBecsDebit: ConfirmationTokenCreatePaymentMethodDataAuBecsDebit? = nil, bacsDebit: ConfirmationTokenCreatePaymentMethodDataBacsDebit? = nil, bancontact: [String: String]? = nil, billie: [String: String]? = nil, billingDetails: ConfirmationTokenCreatePaymentMethodDataBillingDetails? = nil, blik: [String: String]? = nil, boleto: ConfirmationTokenCreatePaymentMethodDataBoleto? = nil, cashapp: [String: String]? = nil, crypto: [String: String]? = nil, customerBalance: [String: String]? = nil, eps: ConfirmationTokenCreatePaymentMethodDataEps? = nil, fpx: ConfirmationTokenCreatePaymentMethodDataFpx? = nil, giropay: [String: String]? = nil, grabpay: [String: String]? = nil, ideal: ConfirmationTokenCreatePaymentMethodDataIdeal? = nil, interacPresent: [String: String]? = nil, kakaoPay: [String: String]? = nil, klarna: ConfirmationTokenCreatePaymentMethodDataKlarna? = nil, konbini: [String: String]? = nil, krCard: [String: String]? = nil, link: [String: String]? = nil, mbWay: [String: String]? = nil, metadata: [String: String]? = nil, mobilepay: [String: String]? = nil, multibanco: [String: String]? = nil, naverPay: ConfirmationTokenCreatePaymentMethodDataNaverPay? = nil, nzBankAccount: ConfirmationTokenCreatePaymentMethodDataNzBankAccount? = nil, oxxo: [String: String]? = nil, p24: ConfirmationTokenCreatePaymentMethodDataP24? = nil, payByBank: [String: String]? = nil, payco: [String: String]? = nil, paynow: [String: String]? = nil, paypal: [String: String]? = nil, payto: ConfirmationTokenCreatePaymentMethodDataPayto? = nil, pix: [String: String]? = nil, promptpay: [String: String]? = nil, radarOptions: ConfirmationTokenCreatePaymentMethodDataRadarOptions? = nil, revolutPay: [String: String]? = nil, samsungPay: [String: String]? = nil, satispay: [String: String]? = nil, sepaDebit: ConfirmationTokenCreatePaymentMethodDataSepaDebit? = nil, sofort: ConfirmationTokenCreatePaymentMethodDataSofort? = nil, swish: [String: String]? = nil, twint: [String: String]? = nil, usBankAccount: ConfirmationTokenCreatePaymentMethodDataUsBankAccount? = nil, wechatPay: [String: String]? = nil, zip: [String: String]? = nil) {
+    public init(type: ConfirmationTokenCreatePaymentMethodDataType, acssDebit: ConfirmationTokenCreatePaymentMethodDataAcssDebit? = nil, affirm: [String: String]? = nil, afterpayClearpay: [String: String]? = nil, alipay: [String: String]? = nil, allowRedisplay: ConfirmationTokenCreatePaymentMethodDataAllowRedisplay? = nil, alma: [String: String]? = nil, amazonPay: [String: String]? = nil, auBecsDebit: ConfirmationTokenCreatePaymentMethodDataAuBecsDebit? = nil, bacsDebit: ConfirmationTokenCreatePaymentMethodDataBacsDebit? = nil, bancontact: [String: String]? = nil, billie: [String: String]? = nil, billingDetails: ConfirmationTokenCreatePaymentMethodDataBillingDetails? = nil, bizum: [String: String]? = nil, blik: [String: String]? = nil, boleto: ConfirmationTokenCreatePaymentMethodDataBoleto? = nil, cashapp: [String: String]? = nil, crypto: [String: String]? = nil, customerBalance: [String: String]? = nil, eps: ConfirmationTokenCreatePaymentMethodDataEps? = nil, fpx: ConfirmationTokenCreatePaymentMethodDataFpx? = nil, giropay: [String: String]? = nil, grabpay: [String: String]? = nil, ideal: ConfirmationTokenCreatePaymentMethodDataIdeal? = nil, interacPresent: [String: String]? = nil, kakaoPay: [String: String]? = nil, klarna: ConfirmationTokenCreatePaymentMethodDataKlarna? = nil, konbini: [String: String]? = nil, krCard: [String: String]? = nil, link: [String: String]? = nil, mbWay: [String: String]? = nil, metadata: [String: String]? = nil, mobilepay: [String: String]? = nil, multibanco: [String: String]? = nil, naverPay: ConfirmationTokenCreatePaymentMethodDataNaverPay? = nil, nzBankAccount: ConfirmationTokenCreatePaymentMethodDataNzBankAccount? = nil, oxxo: [String: String]? = nil, p24: ConfirmationTokenCreatePaymentMethodDataP24? = nil, payByBank: [String: String]? = nil, payco: [String: String]? = nil, paynow: [String: String]? = nil, paypal: [String: String]? = nil, paypay: [String: String]? = nil, payto: ConfirmationTokenCreatePaymentMethodDataPayto? = nil, pix: [String: String]? = nil, promptpay: [String: String]? = nil, radarOptions: ConfirmationTokenCreatePaymentMethodDataRadarOptions? = nil, revolutPay: [String: String]? = nil, samsungPay: [String: String]? = nil, satispay: [String: String]? = nil, scalapay: [String: String]? = nil, sepaDebit: ConfirmationTokenCreatePaymentMethodDataSepaDebit? = nil, sequra: [String: String]? = nil, sofort: ConfirmationTokenCreatePaymentMethodDataSofort? = nil, sunbit: [String: String]? = nil, swish: [String: String]? = nil, twint: [String: String]? = nil, upi: ConfirmationTokenCreatePaymentMethodDataUpi? = nil, usBankAccount: ConfirmationTokenCreatePaymentMethodDataUsBankAccount? = nil, wechatPay: [String: String]? = nil, zip: [String: String]? = nil) {
         self.type = type
         self.acssDebit = acssDebit
         self.affirm = affirm
@@ -203,6 +217,7 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
         self.bancontact = bancontact
         self.billie = billie
         self.billingDetails = billingDetails
+        self.bizum = bizum
         self.blik = blik
         self.boleto = boleto
         self.cashapp = cashapp
@@ -231,6 +246,7 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
         self.payco = payco
         self.paynow = paynow
         self.paypal = paypal
+        self.paypay = paypay
         self.payto = payto
         self.pix = pix
         self.promptpay = promptpay
@@ -238,10 +254,14 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
         self.revolutPay = revolutPay
         self.samsungPay = samsungPay
         self.satispay = satispay
+        self.scalapay = scalapay
         self.sepaDebit = sepaDebit
+        self.sequra = sequra
         self.sofort = sofort
+        self.sunbit = sunbit
         self.swish = swish
         self.twint = twint
+        self.upi = upi
         self.usBankAccount = usBankAccount
         self.wechatPay = wechatPay
         self.zip = zip
@@ -260,6 +280,7 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
         case bancontact
         case billie
         case billingDetails = "billing_details"
+        case bizum
         case blik
         case boleto
         case cashapp
@@ -288,6 +309,7 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
         case payco
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
@@ -295,11 +317,15 @@ public struct ConfirmationTokenCreatePaymentMethodData: StripeParams {
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
         case type
+        case upi
         case usBankAccount = "us_bank_account"
         case wechatPay = "wechat_pay"
         case zip
@@ -618,6 +644,48 @@ public struct ConfirmationTokenCreatePaymentMethodDataSofort: StripeParams {
 
     public init(country: ConfirmationTokenCreatePaymentMethodDataSofortCountry) {
         self.country = country
+    }
+}
+
+/// If this is a `upi` PaymentMethod, this hash contains details about the UPI payment method.
+public struct ConfirmationTokenCreatePaymentMethodDataUpi: StripeParams {
+    /// Configuration options for setting up an eMandate
+    public var mandateOptions: ConfirmationTokenCreatePaymentMethodDataUpiMandateOptions?
+
+    public init(mandateOptions: ConfirmationTokenCreatePaymentMethodDataUpiMandateOptions? = nil) {
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up an eMandate
+public struct ConfirmationTokenCreatePaymentMethodDataUpiMandateOptions: StripeParams {
+    /// Amount to be charged for future payments.
+    public var amount: Int?
+    /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
+    /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
+    /// param.
+    public var amountType: ConfirmationTokenCreatePaymentMethodDataUpiMandateOptionsAmountType?
+    /// A description of the mandate or subscription that is meant to be displayed to the customer.
+    public var description: String?
+    /// End date of the mandate or subscription.
+    public var endDate: Int?
+
+    public init(amount: Int? = nil, amountType: ConfirmationTokenCreatePaymentMethodDataUpiMandateOptionsAmountType? = nil, description: String? = nil, endDate: Int? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.description = description
+        self.endDate = endDate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case description
+        case endDate = "end_date"
     }
 }
 

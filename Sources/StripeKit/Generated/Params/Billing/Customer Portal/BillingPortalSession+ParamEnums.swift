@@ -7,6 +7,10 @@
 
 import Foundation
 
+public enum BillingPortalSessionCreateAfterExpirationType: String, Codable, Sendable {
+    case customerLogin = "customer_login"
+}
+
 public enum BillingPortalSessionCreateFlowDataAfterCompletionType: String, Codable, Sendable {
     case hostedConfirmation = "hosted_confirmation"
     case portalHomepage = "portal_homepage"
@@ -18,8 +22,10 @@ public enum BillingPortalSessionCreateFlowDataSubscriptionCancelRetentionType: S
 }
 
 public enum BillingPortalSessionCreateFlowDataType: String, Codable, Sendable {
+    case customerUpdate = "customer_update"
     case paymentMethodUpdate = "payment_method_update"
     case subscriptionCancel = "subscription_cancel"
+    case subscriptionPause = "subscription_pause"
     case subscriptionUpdate = "subscription_update"
     case subscriptionUpdateConfirm = "subscription_update_confirm"
 }

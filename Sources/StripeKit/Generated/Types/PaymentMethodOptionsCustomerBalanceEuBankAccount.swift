@@ -8,13 +8,13 @@
 import Foundation
 
 public struct PaymentMethodOptionsCustomerBalanceEuBankAccount: Codable, Sendable {
-    /// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-    /// `ES`, `FR`, `IE`, or `NL`.
+    /// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+    /// `IE`, or `NL`.
     public var country: PaymentMethodOptionsCustomerBalanceEuBankAccountCountry
 }
 
-/// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-/// `ES`, `FR`, `IE`, or `NL`.
+/// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+/// `IE`, or `NL`.
 public enum PaymentMethodOptionsCustomerBalanceEuBankAccountCountry: String, Codable, Sendable {
     case be = "BE"
     case de = "DE"

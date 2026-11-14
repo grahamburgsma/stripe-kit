@@ -16,6 +16,8 @@ public struct MandatePaymentMethodDetails: Codable, Sendable {
     public var auBecsDebit: String?
     @Expandable<MandateBacsDebit>
     public var bacsDebit: String?
+    @Expandable<MandateBlik>
+    public var blik: String?
     @Expandable<CardMandatePaymentMethodDetails>
     public var card: String?
     @Expandable<MandateCashapp>
@@ -36,14 +38,20 @@ public struct MandatePaymentMethodDetails: Codable, Sendable {
     public var paypal: String?
     @Expandable<MandatePayto>
     public var payto: String?
+    @Expandable<MandatePix>
+    public var pix: String?
     @Expandable<MandateRevolutPay>
     public var revolutPay: String?
     @Expandable<MandateSepaDebit>
     public var sepaDebit: String?
+    @Expandable<MandateTwint>
+    public var twint: String?
     /// This mandate corresponds with a specific payment method type. The `payment_method_details` includes
     /// an additional hash with the same name and contains mandate information that's specific to that
     /// payment method.
     public var type: String
+    @Expandable<MandateUpi>
+    public var upi: String?
     @Expandable<MandateUsBankAccount>
     public var usBankAccount: String?
 
@@ -52,6 +60,7 @@ public struct MandatePaymentMethodDetails: Codable, Sendable {
         case amazonPay = "amazon_pay"
         case auBecsDebit = "au_becs_debit"
         case bacsDebit = "bacs_debit"
+        case blik
         case card
         case cashapp
         case kakaoPay = "kakao_pay"
@@ -62,9 +71,12 @@ public struct MandatePaymentMethodDetails: Codable, Sendable {
         case nzBankAccount = "nz_bank_account"
         case paypal
         case payto
+        case pix
         case revolutPay = "revolut_pay"
         case sepaDebit = "sepa_debit"
+        case twint
         case type
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }

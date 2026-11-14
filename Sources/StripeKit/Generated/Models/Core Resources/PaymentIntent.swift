@@ -15,6 +15,10 @@ import Foundation
 /// Stripe.js to perform authentication flows and ultimately creates at most one successful charge.
 /// Related guide: [Payment Intents API](https://docs.stripe.com/payments/payment-intents)
 public struct PaymentIntent: Codable, Sendable {
+    /// The list of payment method types allowed for use with this payment. Stripe automatically returns
+    /// compatible payment methods from this list in the `payment_method_types` field of the response, based
+    /// on the other PaymentIntent parameters, such as `currency`, `amount`, and `customer`.
+    public var allowedPaymentMethodTypes: [String]?
     /// Amount intended to be collected by this PaymentIntent. A positive integer representing how much to
     /// charge in the [smallest currency unit](https://docs.stripe.com/currencies#zero-decimal) (e.g., 100
     /// cents to charge $1.00 or 100 to charge ¥100, a zero-decimal currency). The minimum amount is $0.50
@@ -66,9 +70,9 @@ public struct PaymentIntent: Codable, Sendable {
     public var currency: String
     /// ID of the Customer this PaymentIntent belongs to, if one exists. Payment methods attached to other
     /// Customers cannot be used with this PaymentIntent. If
-    /// [setup_future_usage](https://api.stripe.com#payment_intent_object-setup_future_usage) is set and
-    /// this PaymentIntent's payment method is not `card_present`, then the payment method attaches to the
-    /// Customer after the PaymentIntent has been confirmed and any required actions from the user are
+    /// [setup_future_usage](https://docs.stripe.com/api#payment_intent_object-setup_future_usage) is set
+    /// and this PaymentIntent's payment method is not `card_present`, then the payment method attaches to
+    /// the Customer after the PaymentIntent has been confirmed and any required actions from the user are
     /// complete. If the payment method is `card_present` and isn't a digital wallet, then a
     /// [generated_card](https://docs.stripe.com/api/charges/object#charge_object-payment_method_details-card_present-generated_card)
     /// payment method representing the card is created and attached to the Customer instead.
@@ -76,9 +80,9 @@ public struct PaymentIntent: Codable, Sendable {
     public var customer: String?
     /// ID of the Account representing the customer that this PaymentIntent belongs to, if one exists.
     /// Payment methods attached to other Accounts cannot be used with this PaymentIntent. If
-    /// [setup_future_usage](https://api.stripe.com#payment_intent_object-setup_future_usage) is set and
-    /// this PaymentIntent's payment method is not `card_present`, then the payment method attaches to the
-    /// Account after the PaymentIntent has been confirmed and any required actions from the user are
+    /// [setup_future_usage](https://docs.stripe.com/api#payment_intent_object-setup_future_usage) is set
+    /// and this PaymentIntent's payment method is not `card_present`, then the payment method attaches to
+    /// the Account after the PaymentIntent has been confirmed and any required actions from the user are
     /// complete. If the payment method is `card_present` and isn't a digital wallet, then a
     /// [generated_card](https://docs.stripe.com/api/charges/object#charge_object-payment_method_details-card_present-generated_card)
     /// payment method representing the card is created and attached to the Account instead.
@@ -99,9 +103,12 @@ public struct PaymentIntent: Codable, Sendable {
     /// This property is `null` until PaymentIntent confirmation is attempted.
     @Expandable<Charge>
     public var latestCharge: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
+    /// Settings for Managed Payments.
+    @Expandable<SmorResourceManagedPayments>
+    public var managedPayments: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format. Learn
     /// more about [storing information in
@@ -135,6 +142,10 @@ public struct PaymentIntent: Codable, Sendable {
     /// comprehensive list of valid payment method types can be found
     /// [here](https://docs.stripe.com/api/payment_methods/object#payment_method_object-type).
     public var paymentMethodTypes: [String]
+    /// ID of the [Payment Record object](https://docs.stripe.com/api/payment-record) created by this
+    /// PaymentIntent.
+    @Expandable<PaymentRecord>
+    public var paymentRecord: String?
     @Expandable<PaymentFlowsPaymentIntentPresentmentDetails>
     public var presentmentDetails: String?
     /// If present, this property tells you about the processing state of the payment.
@@ -191,6 +202,7 @@ public struct PaymentIntent: Codable, Sendable {
     public var transferGroup: String?
 
     public enum CodingKeys: String, CodingKey {
+        case allowedPaymentMethodTypes = "allowed_payment_method_types"
         case amount
         case amountCapturable = "amount_capturable"
         case amountDetails = "amount_details"
@@ -214,6 +226,7 @@ public struct PaymentIntent: Codable, Sendable {
         case lastPaymentError = "last_payment_error"
         case latestCharge = "latest_charge"
         case livemode
+        case managedPayments = "managed_payments"
         case metadata
         case nextAction = "next_action"
         case object
@@ -223,6 +236,7 @@ public struct PaymentIntent: Codable, Sendable {
         case paymentMethodConfigurationDetails = "payment_method_configuration_details"
         case paymentMethodOptions = "payment_method_options"
         case paymentMethodTypes = "payment_method_types"
+        case paymentRecord = "payment_record"
         case presentmentDetails = "presentment_details"
         case processing
         case receiptEmail = "receipt_email"

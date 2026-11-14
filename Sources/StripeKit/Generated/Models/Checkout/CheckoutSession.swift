@@ -26,6 +26,8 @@ public struct CheckoutSession: Codable, Sendable {
     public var afterExpiration: String?
     /// Enables user redeemable promotion codes.
     public var allowPromotionCodes: Bool?
+    /// A list of the types of payment methods (e.g., `card`) this Checkout Session can accept.
+    public var allowedPaymentMethodTypes: [String]?
     /// Total of all items before discounts or taxes are applied.
     public var amountSubtotal: Int?
     /// Total of all items after discounts and taxes are applied.
@@ -42,9 +44,9 @@ public struct CheckoutSession: Codable, Sendable {
     /// A unique string to reference the Checkout Session. This can be a customer ID, a cart ID, or similar,
     /// and can be used to reconcile the Session with your internal systems.
     public var clientReferenceId: String?
-    /// The client secret of your Checkout Session. Applies to Checkout Sessions with `ui_mode: embedded` or
-    /// `ui_mode: custom`. For `ui_mode: embedded`, the client secret is to be used when initializing
-    /// Stripe.js embedded checkout. For `ui_mode: custom`, use the client secret with
+    /// The client secret of your Checkout Session. Applies to Checkout Sessions with `ui_mode:
+    /// embedded_page` or `ui_mode: elements`. For `ui_mode: embedded_page`, the client secret is to be used
+    /// when initializing Stripe.js embedded checkout. For `ui_mode: elements`, use the client secret with
     /// [initCheckout](https://docs.stripe.com/js/custom_checkout/init) on your front end.
     public var clientSecret: String?
     /// Information about the customer collected within the Checkout Session.
@@ -67,7 +69,7 @@ public struct CheckoutSession: Codable, Sendable {
     @Expandable<PaymentPagesCheckoutSessionCurrencyConversion>
     public var currencyConversion: String?
     /// Collect additional information from your customer using custom fields. Up to 3 fields are supported.
-    /// You can't set this parameter if `ui_mode` is `custom`.
+    /// You can't set this parameter if `ui_mode` is `elements`.
     @ExpandableCollection<PaymentPagesCheckoutSessionCustomFields>
     public var customFields: [String]?
     @Expandable<PaymentPagesCheckoutSessionCustomText>
@@ -102,6 +104,9 @@ public struct CheckoutSession: Codable, Sendable {
     public var expiresAt: Int
     /// Unique identifier for the object.
     public var id: String
+    /// The integration identifier for this Checkout Session. Multiple Checkout Sessions can have the same
+    /// integration identifier.
+    public var integrationIdentifier: String?
     /// ID of the invoice created by the Checkout Session, if it exists.
     @Expandable<Invoice>
     public var invoice: String?
@@ -110,12 +115,17 @@ public struct CheckoutSession: Codable, Sendable {
     public var invoiceCreation: String?
     /// The line items purchased by the customer.
     public var lineItems: ItemList?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// The IETF language tag of the locale Checkout is displayed in. If blank or `auto`, the browser's
     /// locale is used.
     public var locale: CheckoutSessionLocale?
+    /// Settings for Managed Payments for this Checkout Session and resulting
+    /// [PaymentIntents](/api/payment_intents/object), [Invoices](/api/invoices/object), and
+    /// [Subscriptions](/api/subscriptions/object).
+    @Expandable<PaymentPagesCheckoutSessionManagedPayments>
+    public var managedPayments: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     public var metadata: [String: String]?
@@ -138,7 +148,8 @@ public struct CheckoutSession: Codable, Sendable {
     /// The ID of the Payment Link that created this Session.
     @Expandable<PaymentLink>
     public var paymentLink: String?
-    /// Configure whether a Checkout Session should collect a payment method. Defaults to `always`.
+    /// Configure whether a Checkout Session should collect a payment method. Can only be set in
+    /// `subscription` mode. Defaults to `always`.
     public var paymentMethodCollection: CheckoutSessionPaymentMethodCollection?
     /// Information about the payment method configuration used for this Checkout session if using dynamic
     /// payment methods.
@@ -163,13 +174,13 @@ public struct CheckoutSession: Codable, Sendable {
     public var presentmentDetails: String?
     /// The ID of the original expired Checkout Session that triggered the recovery flow.
     public var recoveredFrom: String?
-    /// This parameter applies to `ui_mode: embedded`. Learn more about the [redirect
+    /// This parameter applies to `ui_mode: embedded_page`. Learn more about the [redirect
     /// behavior](https://docs.stripe.com/payments/checkout/custom-success-page?payment-ui=embedded-form) of
     /// embedded sessions. Defaults to `always`.
     public var redirectOnCompletion: CheckoutSessionRedirectOnCompletion?
-    /// Applies to Checkout Sessions with `ui_mode: embedded` or `ui_mode: custom`. The URL to redirect your
-    /// customer back to after they authenticate or cancel their payment on the payment method's app or
-    /// site.
+    /// Applies to Checkout Sessions with `ui_mode: embedded_page` or `ui_mode: elements`. The URL to
+    /// redirect your customer back to after they authenticate or cancel their payment on the payment
+    /// method's app or site.
     public var returnUrl: String?
     /// Controls saved payment method settings for the session. Only available in `payment` and
     /// `subscription` mode.
@@ -206,9 +217,9 @@ public struct CheckoutSession: Codable, Sendable {
     /// Tax and discount details for the computed total amount.
     @Expandable<PaymentPagesCheckoutSessionTotalDetails>
     public var totalDetails: String?
-    /// The UI mode of the Session. Defaults to `hosted`.
+    /// The UI mode of the Session. Defaults to `hosted_page`.
     public var uiMode: CheckoutSessionUiMode?
-    /// The URL to the Checkout Session. Applies to Checkout Sessions with `ui_mode: hosted`. Redirect
+    /// The URL to the Checkout Session. Applies to Checkout Sessions with `ui_mode: hosted_page`. Redirect
     /// customers to this URL to take them to Checkout. If you’re using [Custom
     /// Domains](https://docs.stripe.com/payments/checkout/custom-domains), the URL will use your subdomain.
     /// Otherwise, it’ll use `checkout.stripe.com.` This value is only present when the session is active.
@@ -221,6 +232,7 @@ public struct CheckoutSession: Codable, Sendable {
         case adaptivePricing = "adaptive_pricing"
         case afterExpiration = "after_expiration"
         case allowPromotionCodes = "allow_promotion_codes"
+        case allowedPaymentMethodTypes = "allowed_payment_method_types"
         case amountSubtotal = "amount_subtotal"
         case amountTotal = "amount_total"
         case automaticTax = "automatic_tax"
@@ -246,11 +258,13 @@ public struct CheckoutSession: Codable, Sendable {
         case excludedPaymentMethodTypes = "excluded_payment_method_types"
         case expiresAt = "expires_at"
         case id
+        case integrationIdentifier = "integration_identifier"
         case invoice
         case invoiceCreation = "invoice_creation"
         case lineItems = "line_items"
         case livemode
         case locale
+        case managedPayments = "managed_payments"
         case metadata
         case mode
         case nameCollection = "name_collection"
@@ -317,6 +331,7 @@ public enum CheckoutSessionLocale: String, Codable, Sendable {
     case fil
     case fr
     case frCa = "fr-CA"
+    case hiIn = "hi-IN"
     case hr
     case hu
     case id
@@ -363,7 +378,8 @@ public enum CheckoutSessionOriginContext: String, Codable, Sendable {
     case web
 }
 
-/// Configure whether a Checkout Session should collect a payment method. Defaults to `always`.
+/// Configure whether a Checkout Session should collect a payment method. Can only be set in
+/// `subscription` mode. Defaults to `always`.
 public enum CheckoutSessionPaymentMethodCollection: String, Codable, Sendable {
     case always
     case ifRequired = "if_required"
@@ -377,7 +393,7 @@ public enum CheckoutSessionPaymentStatus: String, Codable, Sendable {
     case unpaid
 }
 
-/// This parameter applies to `ui_mode: embedded`. Learn more about the [redirect
+/// This parameter applies to `ui_mode: embedded_page`. Learn more about the [redirect
 /// behavior](https://docs.stripe.com/payments/checkout/custom-success-page?payment-ui=embedded-form) of
 /// embedded sessions. Defaults to `always`.
 public enum CheckoutSessionRedirectOnCompletion: String, Codable, Sendable {
@@ -404,11 +420,12 @@ public enum CheckoutSessionSubmitType: String, Codable, Sendable {
     case subscribe
 }
 
-/// The UI mode of the Session. Defaults to `hosted`.
+/// The UI mode of the Session. Defaults to `hosted_page`.
 public enum CheckoutSessionUiMode: String, Codable, Sendable {
-    case custom
-    case embedded
-    case hosted
+    case elements
+    case embeddedPage = "embedded_page"
+    case form
+    case hostedPage = "hosted_page"
 }
 
 public struct CheckoutSessionList: Codable, Sendable {

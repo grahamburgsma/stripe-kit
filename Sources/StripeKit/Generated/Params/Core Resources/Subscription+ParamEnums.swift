@@ -39,6 +39,22 @@ public enum SubscriptionCreateBillingModeType: String, Codable, Sendable {
     case flexible
 }
 
+public enum SubscriptionCreateBillingSchedulesAppliesToType: String, Codable, Sendable {
+    case price
+}
+
+public enum SubscriptionCreateBillingSchedulesBillUntilDurationInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum SubscriptionCreateBillingSchedulesBillUntilType: String, Codable, Sendable {
+    case duration
+    case timestamp
+}
+
 public enum SubscriptionCreateCollectionMethod: String, Codable, Sendable {
     case chargeAutomatically = "charge_automatically"
     case sendInvoice = "send_invoice"
@@ -87,6 +103,23 @@ public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsBancontactPrefe
     case nl
 }
 
+public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType: String, Codable, Sendable {
+    case chEin = "ch_ein"
+    case deHrb = "de_hrb"
+    case dkCvr = "dk_cvr"
+    case esCif = "es_cif"
+    case fiTunnus = "fi_tunnus"
+    case frSiren = "fr_siren"
+    case frSiret = "fr_siret"
+    case itRea = "it_rea"
+    case nlKvk = "nl_kvk"
+    case noOrgNumber = "no_org_number"
+    case noPno = "no_pno"
+    case seOrgNumber = "se_org_number"
+    case sePno = "se_pno"
+    case ukCrn = "uk_crn"
+}
+
 public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsCardMandateOptionsAmountType: String, Codable, Sendable {
     case fixed
     case maximum
@@ -128,6 +161,24 @@ public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsPaytoMandateOpt
     case utility
 }
 
+public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptionsAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsPixMandateOptionsPaymentSchedule: String, Codable, Sendable {
+    case halfyearly
+    case monthly
+    case quarterly
+    case weekly
+    case yearly
+}
+
+public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
 public enum SubscriptionCreatePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnectionsFiltersAccountSubcategories: String, Codable, Sendable {
     case checking
     case savings
@@ -157,10 +208,13 @@ public enum SubscriptionCreatePaymentSettingsPaymentMethodTypes: String, Codable
     case achDebit = "ach_debit"
     case acssDebit = "acss_debit"
     case affirm
+    case alipay
     case amazonPay = "amazon_pay"
     case auBecsDebit = "au_becs_debit"
     case bacsDebit = "bacs_debit"
     case bancontact
+    case billie
+    case blik
     case boleto
     case card
     case cashapp
@@ -178,20 +232,27 @@ public enum SubscriptionCreatePaymentSettingsPaymentMethodTypes: String, Codable
     case konbini
     case krCard = "kr_card"
     case link
+    case mbWay = "mb_way"
     case multibanco
     case naverPay = "naver_pay"
     case nzBankAccount = "nz_bank_account"
     case p24
+    case payByBank = "pay_by_bank"
     case payco
     case paynow
     case paypal
     case payto
+    case pix
     case promptpay
     case revolutPay = "revolut_pay"
+    case satispay
     case sepaCreditTransfer = "sepa_credit_transfer"
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
     case swish
+    case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
 }
@@ -214,6 +275,11 @@ public enum SubscriptionCreateProrationBehavior: String, Codable, Sendable {
     case none
 }
 
+public enum SubscriptionCreateTrialSettingsEndBehaviorBillingCycleAnchor: String, Codable, Sendable {
+    case now
+    case unchanged
+}
+
 public enum SubscriptionCreateTrialSettingsEndBehaviorMissingPaymentMethod: String, Codable, Sendable {
     case cancel
     case createInvoice = "create_invoice"
@@ -229,9 +295,34 @@ public enum SubscriptionMigrateBillingModeType: String, Codable, Sendable {
     case flexible
 }
 
-public enum SubscriptionResumeBillingCycleAnchor: String, Codable, Sendable {
+public enum SubscriptionPauseBillForOutstandingUsageThroughType: String, Codable, Sendable {
+    case none
+    case now
+}
+
+public enum SubscriptionPauseBillForUnusedTimeFromType: String, Codable, Sendable {
+    case itemCurrentPeriodStart = "item_current_period_start"
+    case none
+    case now
+}
+
+public enum SubscriptionPauseInvoicingBehavior: String, Codable, Sendable {
+    case invoice
+    case pendingInvoiceItem = "pending_invoice_item"
+}
+
+public enum SubscriptionPauseType: String, Codable, Sendable {
+    case subscription
+}
+
+public enum SubscriptionResumeBillingCycleAnchorType: String, Codable, Sendable {
     case now
     case unchanged
+}
+
+public enum SubscriptionResumePaymentBehavior: String, Codable, Sendable {
+    case resumeOnPaymentAttempt = "resume_on_payment_attempt"
+    case resumeOnPaymentSuccess = "resume_on_payment_success"
 }
 
 public enum SubscriptionResumeProrationBehavior: String, Codable, Sendable {
@@ -262,9 +353,25 @@ public enum SubscriptionUpdateAutomaticTaxLiabilityType: String, Codable, Sendab
     case `self` = "self"
 }
 
-public enum SubscriptionUpdateBillingCycleAnchor: String, Codable, Sendable {
+public enum SubscriptionUpdateBillingCycleAnchorType: String, Codable, Sendable {
     case now
     case unchanged
+}
+
+public enum SubscriptionUpdateBillingSchedulesAppliesToType: String, Codable, Sendable {
+    case price
+}
+
+public enum SubscriptionUpdateBillingSchedulesBillUntilDurationInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum SubscriptionUpdateBillingSchedulesBillUntilType: String, Codable, Sendable {
+    case duration
+    case timestamp
 }
 
 public enum SubscriptionUpdateCancellationDetailsFeedback: String, Codable, Sendable {
@@ -332,6 +439,23 @@ public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBancontactPrefe
     case nl
 }
 
+public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType: String, Codable, Sendable {
+    case chEin = "ch_ein"
+    case deHrb = "de_hrb"
+    case dkCvr = "dk_cvr"
+    case esCif = "es_cif"
+    case fiTunnus = "fi_tunnus"
+    case frSiren = "fr_siren"
+    case frSiret = "fr_siret"
+    case itRea = "it_rea"
+    case nlKvk = "nl_kvk"
+    case noOrgNumber = "no_org_number"
+    case noPno = "no_pno"
+    case seOrgNumber = "se_org_number"
+    case sePno = "se_pno"
+    case ukCrn = "uk_crn"
+}
+
 public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsCardMandateOptionsAmountType: String, Codable, Sendable {
     case fixed
     case maximum
@@ -373,6 +497,24 @@ public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPaytoMandateOpt
     case utility
 }
 
+public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptionsAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsPixMandateOptionsPaymentSchedule: String, Codable, Sendable {
+    case halfyearly
+    case monthly
+    case quarterly
+    case weekly
+    case yearly
+}
+
+public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
 public enum SubscriptionUpdatePaymentSettingsPaymentMethodOptionsUsBankAccountFinancialConnectionsFiltersAccountSubcategories: String, Codable, Sendable {
     case checking
     case savings
@@ -402,10 +544,13 @@ public enum SubscriptionUpdatePaymentSettingsPaymentMethodTypes: String, Codable
     case achDebit = "ach_debit"
     case acssDebit = "acss_debit"
     case affirm
+    case alipay
     case amazonPay = "amazon_pay"
     case auBecsDebit = "au_becs_debit"
     case bacsDebit = "bacs_debit"
     case bancontact
+    case billie
+    case blik
     case boleto
     case card
     case cashapp
@@ -423,20 +568,27 @@ public enum SubscriptionUpdatePaymentSettingsPaymentMethodTypes: String, Codable
     case konbini
     case krCard = "kr_card"
     case link
+    case mbWay = "mb_way"
     case multibanco
     case naverPay = "naver_pay"
     case nzBankAccount = "nz_bank_account"
     case p24
+    case payByBank = "pay_by_bank"
     case payco
     case paynow
     case paypal
     case payto
+    case pix
     case promptpay
     case revolutPay = "revolut_pay"
+    case satispay
     case sepaCreditTransfer = "sepa_credit_transfer"
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
     case swish
+    case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
 }
@@ -457,6 +609,11 @@ public enum SubscriptionUpdateProrationBehavior: String, Codable, Sendable {
     case alwaysInvoice = "always_invoice"
     case createProrations = "create_prorations"
     case none
+}
+
+public enum SubscriptionUpdateTrialSettingsEndBehaviorBillingCycleAnchor: String, Codable, Sendable {
+    case now
+    case unchanged
 }
 
 public enum SubscriptionUpdateTrialSettingsEndBehaviorMissingPaymentMethod: String, Codable, Sendable {

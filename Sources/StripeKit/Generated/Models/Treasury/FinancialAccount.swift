@@ -7,9 +7,13 @@
 
 import Foundation
 
-/// Stripe Treasury provides users with a container for money called a FinancialAccount that is separate
-/// from their Payments balance. FinancialAccounts serve as the source and destination of Treasury’s
-/// money movement APIs.
+/// Legacy FinancialAccounts are part of the v1 version of Treasury for platforms and do not support
+/// many of the features introduced in [Treasury for platforms
+/// v2](https://docs.stripe.com/treasury/connect). Use [Financial
+/// Accounts](https://docs.stripe.com/api/v2/money-management/financial-accounts) instead of building a
+/// new v1 integration. Stripe Treasury for Platforms provides users with a container for money called a
+/// FinancialAccount that is separate from their Payments balance. FinancialAccounts serve as the source
+/// and destination of Treasury for Platform’s money movement APIs.
 public struct FinancialAccount: Codable, Sendable {
     /// The array of paths to active Features in the Features hash.
     public var activeFeatures: [String]?
@@ -27,8 +31,8 @@ public struct FinancialAccount: Codable, Sendable {
     /// Unique identifier for the object.
     public var id: String
     public var isDefault: Bool?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

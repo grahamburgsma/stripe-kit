@@ -30,7 +30,7 @@ public struct ReaderRoutes: Sendable {
     public var delete: @Sendable (_ reader: String, _ expand: [String]?) async throws -> DeletedReader
 
     /// Cancels the current reader action. See Programmatic Cancellation for more details.
-    public var cancelAction: @Sendable (_ reader: String, _ params: ReaderCancelActionParams?) async throws -> Reader
+    public var cancelAction: @Sendable (_ reader: String, _ params: ReaderCancelActionParams?) async throws -> ObjectOrDeleted<Reader, DeletedReader>
 
     /// Initiates an input collection flow on a Reader to display input forms and collect information from
     /// your customers.
@@ -108,7 +108,7 @@ extension ReaderRoutes {
                     method: .POST,
                     path: "/v1/terminal/readers/\(reader)/cancel_action",
                     body: .bytes(ByteBuffer(string: body))
-                ) as Reader
+                ) as ObjectOrDeleted<Reader, DeletedReader>
             },
             collectInputs: { reader, params in
                 let body = params.toFormBody()

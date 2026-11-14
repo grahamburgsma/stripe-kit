@@ -23,8 +23,8 @@ public struct TaxId: Codable, Sendable {
     public var customerAccount: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: TaxIdObject
@@ -32,18 +32,20 @@ public struct TaxId: Codable, Sendable {
     @Expandable<TaxIDsOwner>
     public var owner: String?
     /// Type of the tax ID, one of `ad_nrt`, `ae_trn`, `al_tin`, `am_tin`, `ao_tin`, `ar_cuit`, `au_abn`,
-    /// `au_arn`, `aw_tin`, `az_tin`, `ba_tin`, `bb_tin`, `bd_bin`, `bf_ifu`, `bg_uic`, `bh_vat`, `bj_ifu`,
-    /// `bo_tin`, `br_cnpj`, `br_cpf`, `bs_tin`, `by_tin`, `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`,
-    /// `ca_pst_sk`, `ca_qst`, `cd_nif`, `ch_uid`, `ch_vat`, `cl_tin`, `cm_niu`, `cn_tin`, `co_nit`,
-    /// `cr_tin`, `cv_nif`, `de_stn`, `do_rcn`, `ec_ruc`, `eg_tin`, `es_cif`, `et_tin`, `eu_oss_vat`,
-    /// `eu_vat`, `gb_vat`, `ge_vat`, `gn_nif`, `hk_br`, `hr_oib`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`,
-    /// `is_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kg_tin`, `kh_tin`, `kr_brn`, `kz_bin`, `la_tin`,
-    /// `li_uid`, `li_vat`, `ma_vat`, `md_vat`, `me_pib`, `mk_vat`, `mr_nif`, `mx_rfc`, `my_frp`, `my_itn`,
-    /// `my_sst`, `ng_tin`, `no_vat`, `no_voec`, `np_pan`, `nz_gst`, `om_vat`, `pe_ruc`, `ph_tin`, `pl_nip`,
-    /// `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sn_ninea`,
-    /// `sr_fin`, `sv_nit`, `th_vat`, `tj_tin`, `tr_tin`, `tw_vat`, `tz_vat`, `ua_vat`, `ug_tin`, `us_ein`,
-    /// `uy_ruc`, `uz_tin`, `uz_vat`, `ve_rif`, `vn_tin`, `za_vat`, `zm_tin`, or `zw_tin`. Note that some
-    /// legacy tax IDs have type `unknown`
+    /// `au_acn`, `au_arn`, `au_wpn`, `aw_tin`, `az_tin`, `ba_tin`, `bb_tin`, `bd_bin`, `bf_ifu`, `bg_uic`,
+    /// `bh_vat`, `bj_ifu`, `bo_tin`, `br_cnpj`, `br_cpf`, `bs_tin`, `bw_vat`, `by_tin`, `ca_bn`,
+    /// `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `cd_nif`, `ch_uid`, `ch_vat`,
+    /// `ci_vat`, `cl_tin`, `cm_niu`, `cn_tin`, `co_nit`, `cr_tin`, `cv_nif`, `cz_dic`, `de_stn`, `do_rcn`,
+    /// `ec_ruc`, `eg_tin`, `es_cif`, `et_tin`, `eu_oss_vat`, `eu_vat`, `fo_vat`, `fr_siren`, `fr_siret`,
+    /// `fr_spi`, `gb_vat`, `ge_vat`, `gh_tin`, `gi_tin`, `gn_nif`, `hk_br`, `hr_oib`, `hu_tin`, `ic_nif`,
+    /// `id_npwp`, `il_vat`, `in_gst`, `is_kt`, `is_vat`, `it_cf`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`,
+    /// `kg_tin`, `kh_tin`, `kr_brn`, `kz_bin`, `la_tin`, `li_uid`, `li_vat`, `lk_vat`, `ma_vat`, `md_cf`,
+    /// `md_vat`, `me_pib`, `mk_vat`, `mr_nif`, `mu_vat`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `mz_nuit`,
+    /// `ng_tin`, `no_vat`, `no_voec`, `np_pan`, `nz_bn`, `nz_gst`, `om_vat`, `pe_ruc`, `ph_tin`, `pl_nip`,
+    /// `pt_nif`, `py_ruc`, `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`,
+    /// `sm_coe`, `sn_ninea`, `sr_fin`, `sv_nit`, `th_vat`, `tj_tin`, `tr_tin`, `tt_bir`, `tt_vat`,
+    /// `tw_vat`, `tz_vat`, `ua_vat`, `ug_tin`, `us_ein`, `uy_ruc`, `uz_tin`, `uz_vat`, `ve_rif`, `vn_tin`,
+    /// `za_vat`, `zm_tin`, or `zw_tin`. Note that some legacy tax IDs have type `unknown`
     public var type: TaxIdType
     /// Value of the tax ID.
     public var value: String
@@ -72,18 +74,20 @@ public enum TaxIdObject: String, Codable, Sendable {
 }
 
 /// Type of the tax ID, one of `ad_nrt`, `ae_trn`, `al_tin`, `am_tin`, `ao_tin`, `ar_cuit`, `au_abn`,
-/// `au_arn`, `aw_tin`, `az_tin`, `ba_tin`, `bb_tin`, `bd_bin`, `bf_ifu`, `bg_uic`, `bh_vat`, `bj_ifu`,
-/// `bo_tin`, `br_cnpj`, `br_cpf`, `bs_tin`, `by_tin`, `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`,
-/// `ca_pst_sk`, `ca_qst`, `cd_nif`, `ch_uid`, `ch_vat`, `cl_tin`, `cm_niu`, `cn_tin`, `co_nit`,
-/// `cr_tin`, `cv_nif`, `de_stn`, `do_rcn`, `ec_ruc`, `eg_tin`, `es_cif`, `et_tin`, `eu_oss_vat`,
-/// `eu_vat`, `gb_vat`, `ge_vat`, `gn_nif`, `hk_br`, `hr_oib`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`,
-/// `is_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kg_tin`, `kh_tin`, `kr_brn`, `kz_bin`, `la_tin`,
-/// `li_uid`, `li_vat`, `ma_vat`, `md_vat`, `me_pib`, `mk_vat`, `mr_nif`, `mx_rfc`, `my_frp`, `my_itn`,
-/// `my_sst`, `ng_tin`, `no_vat`, `no_voec`, `np_pan`, `nz_gst`, `om_vat`, `pe_ruc`, `ph_tin`, `pl_nip`,
-/// `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sn_ninea`,
-/// `sr_fin`, `sv_nit`, `th_vat`, `tj_tin`, `tr_tin`, `tw_vat`, `tz_vat`, `ua_vat`, `ug_tin`, `us_ein`,
-/// `uy_ruc`, `uz_tin`, `uz_vat`, `ve_rif`, `vn_tin`, `za_vat`, `zm_tin`, or `zw_tin`. Note that some
-/// legacy tax IDs have type `unknown`
+/// `au_acn`, `au_arn`, `au_wpn`, `aw_tin`, `az_tin`, `ba_tin`, `bb_tin`, `bd_bin`, `bf_ifu`, `bg_uic`,
+/// `bh_vat`, `bj_ifu`, `bo_tin`, `br_cnpj`, `br_cpf`, `bs_tin`, `bw_vat`, `by_tin`, `ca_bn`,
+/// `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `cd_nif`, `ch_uid`, `ch_vat`,
+/// `ci_vat`, `cl_tin`, `cm_niu`, `cn_tin`, `co_nit`, `cr_tin`, `cv_nif`, `cz_dic`, `de_stn`, `do_rcn`,
+/// `ec_ruc`, `eg_tin`, `es_cif`, `et_tin`, `eu_oss_vat`, `eu_vat`, `fo_vat`, `fr_siren`, `fr_siret`,
+/// `fr_spi`, `gb_vat`, `ge_vat`, `gh_tin`, `gi_tin`, `gn_nif`, `hk_br`, `hr_oib`, `hu_tin`, `ic_nif`,
+/// `id_npwp`, `il_vat`, `in_gst`, `is_kt`, `is_vat`, `it_cf`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`,
+/// `kg_tin`, `kh_tin`, `kr_brn`, `kz_bin`, `la_tin`, `li_uid`, `li_vat`, `lk_vat`, `ma_vat`, `md_cf`,
+/// `md_vat`, `me_pib`, `mk_vat`, `mr_nif`, `mu_vat`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `mz_nuit`,
+/// `ng_tin`, `no_vat`, `no_voec`, `np_pan`, `nz_bn`, `nz_gst`, `om_vat`, `pe_ruc`, `ph_tin`, `pl_nip`,
+/// `pt_nif`, `py_ruc`, `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`,
+/// `sm_coe`, `sn_ninea`, `sr_fin`, `sv_nit`, `th_vat`, `tj_tin`, `tr_tin`, `tt_bir`, `tt_vat`,
+/// `tw_vat`, `tz_vat`, `ua_vat`, `ug_tin`, `us_ein`, `uy_ruc`, `uz_tin`, `uz_vat`, `ve_rif`, `vn_tin`,
+/// `za_vat`, `zm_tin`, or `zw_tin`. Note that some legacy tax IDs have type `unknown`
 public enum TaxIdType: String, Codable, Sendable {
     case adNrt = "ad_nrt"
     case aeTrn = "ae_trn"
@@ -92,7 +96,9 @@ public enum TaxIdType: String, Codable, Sendable {
     case aoTin = "ao_tin"
     case arCuit = "ar_cuit"
     case auAbn = "au_abn"
+    case auAcn = "au_acn"
     case auArn = "au_arn"
+    case auWpn = "au_wpn"
     case awTin = "aw_tin"
     case azTin = "az_tin"
     case baTin = "ba_tin"
@@ -106,6 +112,7 @@ public enum TaxIdType: String, Codable, Sendable {
     case brCnpj = "br_cnpj"
     case brCpf = "br_cpf"
     case bsTin = "bs_tin"
+    case bwVat = "bw_vat"
     case byTin = "by_tin"
     case caBn = "ca_bn"
     case caGstHst = "ca_gst_hst"
@@ -116,12 +123,14 @@ public enum TaxIdType: String, Codable, Sendable {
     case cdNif = "cd_nif"
     case chUid = "ch_uid"
     case chVat = "ch_vat"
+    case ciVat = "ci_vat"
     case clTin = "cl_tin"
     case cmNiu = "cm_niu"
     case cnTin = "cn_tin"
     case coNit = "co_nit"
     case crTin = "cr_tin"
     case cvNif = "cv_nif"
+    case czDic = "cz_dic"
     case deStn = "de_stn"
     case doRcn = "do_rcn"
     case ecRuc = "ec_ruc"
@@ -130,16 +139,25 @@ public enum TaxIdType: String, Codable, Sendable {
     case etTin = "et_tin"
     case euOssVat = "eu_oss_vat"
     case euVat = "eu_vat"
+    case foVat = "fo_vat"
+    case frSiren = "fr_siren"
+    case frSiret = "fr_siret"
+    case frSpi = "fr_spi"
     case gbVat = "gb_vat"
     case geVat = "ge_vat"
+    case ghTin = "gh_tin"
+    case giTin = "gi_tin"
     case gnNif = "gn_nif"
     case hkBr = "hk_br"
     case hrOib = "hr_oib"
     case huTin = "hu_tin"
+    case icNif = "ic_nif"
     case idNpwp = "id_npwp"
     case ilVat = "il_vat"
     case inGst = "in_gst"
+    case isKt = "is_kt"
     case isVat = "is_vat"
+    case itCf = "it_cf"
     case jpCn = "jp_cn"
     case jpRn = "jp_rn"
     case jpTrn = "jp_trn"
@@ -151,24 +169,31 @@ public enum TaxIdType: String, Codable, Sendable {
     case laTin = "la_tin"
     case liUid = "li_uid"
     case liVat = "li_vat"
+    case lkVat = "lk_vat"
     case maVat = "ma_vat"
+    case mdCf = "md_cf"
     case mdVat = "md_vat"
     case mePib = "me_pib"
     case mkVat = "mk_vat"
     case mrNif = "mr_nif"
+    case muVat = "mu_vat"
     case mxRfc = "mx_rfc"
     case myFrp = "my_frp"
     case myItn = "my_itn"
     case mySst = "my_sst"
+    case mzNuit = "mz_nuit"
     case ngTin = "ng_tin"
     case noVat = "no_vat"
     case noVoec = "no_voec"
     case npPan = "np_pan"
+    case nzBn = "nz_bn"
     case nzGst = "nz_gst"
     case omVat = "om_vat"
     case peRuc = "pe_ruc"
     case phTin = "ph_tin"
     case plNip = "pl_nip"
+    case ptNif = "pt_nif"
+    case pyRuc = "py_ruc"
     case roTin = "ro_tin"
     case rsPib = "rs_pib"
     case ruInn = "ru_inn"
@@ -177,12 +202,15 @@ public enum TaxIdType: String, Codable, Sendable {
     case sgGst = "sg_gst"
     case sgUen = "sg_uen"
     case siTin = "si_tin"
+    case smCoe = "sm_coe"
     case snNinea = "sn_ninea"
     case srFin = "sr_fin"
     case svNit = "sv_nit"
     case thVat = "th_vat"
     case tjTin = "tj_tin"
     case trTin = "tr_tin"
+    case ttBir = "tt_bir"
+    case ttVat = "tt_vat"
     case twVat = "tw_vat"
     case tzVat = "tz_vat"
     case uaVat = "ua_vat"

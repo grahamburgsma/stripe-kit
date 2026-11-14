@@ -12,21 +12,26 @@ public struct CheckoutSessionCreateParams: StripeParams {
     /// Pricing](https://docs.stripe.com/payments/checkout/adaptive-pricing).
     public var adaptivePricing: CheckoutSessionCreateAdaptivePricing?
     /// Configure actions after a Checkout Session has expired. You can't set this parameter if `ui_mode` is
-    /// `custom`.
+    /// `elements`.
     public var afterExpiration: CheckoutSessionCreateAfterExpiration?
     /// Enables user redeemable promotion codes.
     public var allowPromotionCodes: Bool?
+    /// A list of the types of payment methods (e.g., `card`) this Checkout Session can accept. Unlike
+    /// `payment_method_types`, this acts as a filter on the dynamically computed set of eligible payment
+    /// methods rather than an explicit static list. Only payment methods that are both dynamically eligible
+    /// and present in this list will be offered to the customer.
+    public var allowedPaymentMethodTypes: [CheckoutSessionCreateAllowedPaymentMethodTypes]?
     /// Settings for automatic tax lookup for this session and resulting payments, invoices, and
     /// subscriptions.
     public var automaticTax: CheckoutSessionCreateAutomaticTax?
     /// Specify whether Checkout should collect the customer's billing address. Defaults to `auto`.
     public var billingAddressCollection: CheckoutSessionCreateBillingAddressCollection?
     /// The branding settings for the Checkout Session. This parameter is not allowed if ui_mode is
-    /// `custom`.
+    /// `elements`.
     public var brandingSettings: CheckoutSessionCreateBrandingSettings?
     /// If set, Checkout displays a back button and customers will be directed to this URL if they decide to
-    /// cancel payment and return to your website. This parameter is not allowed if ui_mode is `embedded` or
-    /// `custom`.
+    /// cancel payment and return to your website. This parameter is not allowed if ui_mode is
+    /// `embedded_page` or `elements`.
     public var cancelUrl: String?
     /// A unique string to reference the Checkout Session. This can be a customer ID, a cart ID, or similar,
     /// and can be used to reconcile the session with your internal systems.
@@ -35,13 +40,13 @@ public struct CheckoutSessionCreateParams: StripeParams {
     public var consentCollection: CheckoutSessionCreateConsentCollection?
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies). Required in `setup` mode when
-    /// `payment_method_types` is not set.
+    /// `allowed_payment_method_types` is not set.
     public var currency: String?
     /// Collect additional information from your customer using custom fields. Up to 3 fields are supported.
-    /// You can't set this parameter if `ui_mode` is `custom`.
+    /// You can't set this parameter if `ui_mode` is `elements`.
     public var customFields: [CheckoutSessionCreateCustomFields]?
     /// Display additional text for your customers using custom text. You can't set this parameter if
-    /// `ui_mode` is `custom`.
+    /// `ui_mode` is `elements`.
     public var customText: CheckoutSessionCreateCustomText?
     /// ID of an existing Customer, if one exists. In `payment` mode, the customer’s most recently saved
     /// card payment method will be used to prefill the email, name, card details, and billing address on
@@ -90,6 +95,9 @@ public struct CheckoutSessionCreateParams: StripeParams {
     /// minutes to 24 hours after Checkout Session creation. By default, this value is 24 hours from
     /// creation.
     public var expiresAt: Int?
+    /// The integration identifier for this Checkout Session. Multiple Checkout Sessions can have the same
+    /// integration identifier.
+    public var integrationIdentifier: String?
     /// Generate a post-purchase Invoice for one-time payments.
     public var invoiceCreation: CheckoutSessionCreateInvoiceCreation?
     /// A list of items the customer is purchasing. Use this parameter to pass one-time or recurring
@@ -102,6 +110,10 @@ public struct CheckoutSessionCreateParams: StripeParams {
     /// The IETF language tag of the locale Checkout is displayed in. If blank or `auto`, the browser's
     /// locale is used.
     public var locale: CheckoutSessionCreateLocale?
+    /// Settings for Managed Payments for this Checkout Session and resulting
+    /// [PaymentIntents](/api/payment_intents/object), [Invoices](/api/invoices/object), and
+    /// [Subscriptions](/api/subscriptions/object).
+    public var managedPayments: CheckoutSessionCreateManagedPayments?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
@@ -113,7 +125,7 @@ public struct CheckoutSessionCreateParams: StripeParams {
     /// Controls name collection settings for the session. You can configure Checkout to collect your
     /// customers' business names, individual names, or both. Each name field can be either required or
     /// optional. If a [Customer](https://docs.stripe.com/api/customers) is created or provided, the names
-    /// can be saved to the Customer object as well. You can't set this parameter if `ui_mode` is `custom`.
+    /// can be saved to the Customer object as well.
     public var nameCollection: CheckoutSessionCreateNameCollection?
     /// A list of optional items the customer can add to their order at checkout. Use this parameter to pass
     /// one-time or recurring [Prices](https://docs.stripe.com/api/prices). There is a maximum of 10
@@ -122,10 +134,11 @@ public struct CheckoutSessionCreateParams: StripeParams {
     /// `payment` mode, there is a maximum of 100 combined line items and optional items, however it is
     /// recommended to consolidate items if there are more than a few dozen. For `subscription` mode, there
     /// is a maximum of 20 line items and optional items with recurring Prices and 20 line items and
-    /// optional items with one-time Prices. You can't set this parameter if `ui_mode` is `custom`.
+    /// optional items with one-time Prices. You can't set this parameter if `ui_mode` is `elements` or
+    /// `form`.
     public var optionalItems: [CheckoutSessionCreateOptionalItems]?
     /// Where the user is coming from. This informs the optimizations that are applied to the session. You
-    /// can't set this parameter if `ui_mode` is `custom`.
+    /// can't set this parameter if `ui_mode` is `elements`.
     public var originContext: CheckoutSessionCreateOriginContext?
     /// A subset of parameters to be passed to PaymentIntent creation for Checkout Sessions in `payment`
     /// mode.
@@ -144,31 +157,22 @@ public struct CheckoutSessionCreateParams: StripeParams {
     public var paymentMethodData: CheckoutSessionCreatePaymentMethodData?
     /// Payment-method-specific configuration.
     public var paymentMethodOptions: CheckoutSessionCreatePaymentMethodOptions?
-    /// A list of the types of payment methods (e.g., `card`) this Checkout Session can accept. You can omit
-    /// this attribute to manage your payment methods from the [Stripe
-    /// Dashboard](https://dashboard.stripe.com/settings/payment_methods). See [Dynamic Payment
-    /// Methods](https://docs.stripe.com/payments/payment-methods/integration-options#using-dynamic-payment-methods)
-    /// for more details. Read more about the supported payment methods and their requirements in our
-    /// [payment method details guide](/docs/payments/checkout/payment-methods). If multiple payment methods
-    /// are passed, Checkout will dynamically reorder them to prioritize the most relevant payment methods
-    /// based on the customer's location and other characteristics.
-    public var paymentMethodTypes: [CheckoutSessionCreatePaymentMethodTypes]?
-    /// This property is used to set up permissions for various actions (e.g., update) on the
-    /// CheckoutSession object. Can only be set when creating `embedded` or `custom` sessions. For specific
-    /// permissions, please refer to their dedicated subsections, such as
+    /// This property is used to set up permissions for various actions (for example, update) on the
+    /// CheckoutSession object. Can only be set when creating `embedded_page` or `elements` sessions. For
+    /// specific permissions, please refer to their dedicated subsections, such as
     /// `permissions.update_shipping_details`.
     public var permissions: CheckoutSessionCreatePermissions?
     /// Controls phone number collection settings for the session. We recommend that you review your privacy
     /// policy and check with your legal contacts before using this feature. Learn more about [collecting
     /// phone numbers with Checkout](https://docs.stripe.com/payments/checkout/phone-numbers).
     public var phoneNumberCollection: CheckoutSessionCreatePhoneNumberCollection?
-    /// This parameter applies to `ui_mode: embedded`. Learn more about the [redirect
+    /// This parameter applies to `ui_mode: embedded_page`. Learn more about the [redirect
     /// behavior](https://docs.stripe.com/payments/checkout/custom-success-page?payment-ui=embedded-form) of
     /// embedded sessions. Defaults to `always`.
     public var redirectOnCompletion: CheckoutSessionCreateRedirectOnCompletion?
     /// The URL to redirect your customer back to after they authenticate or cancel their payment on the
-    /// payment method's app or site. This parameter is required if `ui_mode` is `embedded` or `custom` and
-    /// redirect-based payment methods are enabled on the session.
+    /// payment method's app or site. This parameter is required if `ui_mode` is `embedded_page` or
+    /// `elements` and redirect-based payment methods are enabled on the session.
     public var returnUrl: String?
     /// Controls saved payment method settings for the session. Only available in `payment` and
     /// `subscription` mode.
@@ -182,27 +186,28 @@ public struct CheckoutSessionCreateParams: StripeParams {
     /// Describes the type of transaction being performed by Checkout in order to customize relevant text on
     /// the page, such as the submit button. `submit_type` can only be specified on Checkout Sessions in
     /// `payment` or `subscription` mode. If blank or `auto`, `pay` is used. You can't set this parameter if
-    /// `ui_mode` is `custom`.
+    /// `ui_mode` is `elements`.
     public var submitType: CheckoutSessionCreateSubmitType?
     /// A subset of parameters to be passed to subscription creation for Checkout Sessions in `subscription`
     /// mode.
     public var subscriptionData: CheckoutSessionCreateSubscriptionData?
     /// The URL to which Stripe should send customers when payment or setup is complete. This parameter is
-    /// not allowed if ui_mode is `embedded` or `custom`. If you'd like to use information from the
+    /// not allowed if ui_mode is `embedded_page` or `elements`. If you'd like to use information from the
     /// successful Checkout Session on your page, read the guide on [customizing your success
     /// page](https://docs.stripe.com/payments/checkout/custom-success-page).
     public var successUrl: String?
     /// Controls tax ID collection during checkout.
     public var taxIdCollection: CheckoutSessionCreateTaxIdCollection?
-    /// The UI mode of the Session. Defaults to `hosted`.
+    /// The UI mode of the Session. Defaults to `hosted_page`.
     public var uiMode: CheckoutSessionCreateUiMode?
     /// Wallet-specific configuration.
     public var walletOptions: CheckoutSessionCreateWalletOptions?
 
-    public init(adaptivePricing: CheckoutSessionCreateAdaptivePricing? = nil, afterExpiration: CheckoutSessionCreateAfterExpiration? = nil, allowPromotionCodes: Bool? = nil, automaticTax: CheckoutSessionCreateAutomaticTax? = nil, billingAddressCollection: CheckoutSessionCreateBillingAddressCollection? = nil, brandingSettings: CheckoutSessionCreateBrandingSettings? = nil, cancelUrl: String? = nil, clientReferenceId: String? = nil, consentCollection: CheckoutSessionCreateConsentCollection? = nil, currency: String? = nil, customFields: [CheckoutSessionCreateCustomFields]? = nil, customText: CheckoutSessionCreateCustomText? = nil, customer: String? = nil, customerAccount: String? = nil, customerCreation: CheckoutSessionCreateCustomerCreation? = nil, customerEmail: String? = nil, customerUpdate: CheckoutSessionCreateCustomerUpdate? = nil, discounts: [CheckoutSessionCreateDiscounts]? = nil, excludedPaymentMethodTypes: [CheckoutSessionCreateExcludedPaymentMethodTypes]? = nil, expand: [String]? = nil, expiresAt: Int? = nil, invoiceCreation: CheckoutSessionCreateInvoiceCreation? = nil, lineItems: [CheckoutSessionCreateLineItems]? = nil, locale: CheckoutSessionCreateLocale? = nil, metadata: [String: String]? = nil, mode: CheckoutSessionCreateMode? = nil, nameCollection: CheckoutSessionCreateNameCollection? = nil, optionalItems: [CheckoutSessionCreateOptionalItems]? = nil, originContext: CheckoutSessionCreateOriginContext? = nil, paymentIntentData: CheckoutSessionCreatePaymentIntentData? = nil, paymentMethodCollection: CheckoutSessionCreatePaymentMethodCollection? = nil, paymentMethodConfiguration: String? = nil, paymentMethodData: CheckoutSessionCreatePaymentMethodData? = nil, paymentMethodOptions: CheckoutSessionCreatePaymentMethodOptions? = nil, paymentMethodTypes: [CheckoutSessionCreatePaymentMethodTypes]? = nil, permissions: CheckoutSessionCreatePermissions? = nil, phoneNumberCollection: CheckoutSessionCreatePhoneNumberCollection? = nil, redirectOnCompletion: CheckoutSessionCreateRedirectOnCompletion? = nil, returnUrl: String? = nil, savedPaymentMethodOptions: CheckoutSessionCreateSavedPaymentMethodOptions? = nil, setupIntentData: CheckoutSessionCreateSetupIntentData? = nil, shippingAddressCollection: CheckoutSessionCreateShippingAddressCollection? = nil, shippingOptions: [CheckoutSessionCreateShippingOptions]? = nil, submitType: CheckoutSessionCreateSubmitType? = nil, subscriptionData: CheckoutSessionCreateSubscriptionData? = nil, successUrl: String? = nil, taxIdCollection: CheckoutSessionCreateTaxIdCollection? = nil, uiMode: CheckoutSessionCreateUiMode? = nil, walletOptions: CheckoutSessionCreateWalletOptions? = nil) {
+    public init(adaptivePricing: CheckoutSessionCreateAdaptivePricing? = nil, afterExpiration: CheckoutSessionCreateAfterExpiration? = nil, allowPromotionCodes: Bool? = nil, allowedPaymentMethodTypes: [CheckoutSessionCreateAllowedPaymentMethodTypes]? = nil, automaticTax: CheckoutSessionCreateAutomaticTax? = nil, billingAddressCollection: CheckoutSessionCreateBillingAddressCollection? = nil, brandingSettings: CheckoutSessionCreateBrandingSettings? = nil, cancelUrl: String? = nil, clientReferenceId: String? = nil, consentCollection: CheckoutSessionCreateConsentCollection? = nil, currency: String? = nil, customFields: [CheckoutSessionCreateCustomFields]? = nil, customText: CheckoutSessionCreateCustomText? = nil, customer: String? = nil, customerAccount: String? = nil, customerCreation: CheckoutSessionCreateCustomerCreation? = nil, customerEmail: String? = nil, customerUpdate: CheckoutSessionCreateCustomerUpdate? = nil, discounts: [CheckoutSessionCreateDiscounts]? = nil, excludedPaymentMethodTypes: [CheckoutSessionCreateExcludedPaymentMethodTypes]? = nil, expand: [String]? = nil, expiresAt: Int? = nil, integrationIdentifier: String? = nil, invoiceCreation: CheckoutSessionCreateInvoiceCreation? = nil, lineItems: [CheckoutSessionCreateLineItems]? = nil, locale: CheckoutSessionCreateLocale? = nil, managedPayments: CheckoutSessionCreateManagedPayments? = nil, metadata: [String: String]? = nil, mode: CheckoutSessionCreateMode? = nil, nameCollection: CheckoutSessionCreateNameCollection? = nil, optionalItems: [CheckoutSessionCreateOptionalItems]? = nil, originContext: CheckoutSessionCreateOriginContext? = nil, paymentIntentData: CheckoutSessionCreatePaymentIntentData? = nil, paymentMethodCollection: CheckoutSessionCreatePaymentMethodCollection? = nil, paymentMethodConfiguration: String? = nil, paymentMethodData: CheckoutSessionCreatePaymentMethodData? = nil, paymentMethodOptions: CheckoutSessionCreatePaymentMethodOptions? = nil, permissions: CheckoutSessionCreatePermissions? = nil, phoneNumberCollection: CheckoutSessionCreatePhoneNumberCollection? = nil, redirectOnCompletion: CheckoutSessionCreateRedirectOnCompletion? = nil, returnUrl: String? = nil, savedPaymentMethodOptions: CheckoutSessionCreateSavedPaymentMethodOptions? = nil, setupIntentData: CheckoutSessionCreateSetupIntentData? = nil, shippingAddressCollection: CheckoutSessionCreateShippingAddressCollection? = nil, shippingOptions: [CheckoutSessionCreateShippingOptions]? = nil, submitType: CheckoutSessionCreateSubmitType? = nil, subscriptionData: CheckoutSessionCreateSubscriptionData? = nil, successUrl: String? = nil, taxIdCollection: CheckoutSessionCreateTaxIdCollection? = nil, uiMode: CheckoutSessionCreateUiMode? = nil, walletOptions: CheckoutSessionCreateWalletOptions? = nil) {
         self.adaptivePricing = adaptivePricing
         self.afterExpiration = afterExpiration
         self.allowPromotionCodes = allowPromotionCodes
+        self.allowedPaymentMethodTypes = allowedPaymentMethodTypes
         self.automaticTax = automaticTax
         self.billingAddressCollection = billingAddressCollection
         self.brandingSettings = brandingSettings
@@ -221,9 +226,11 @@ public struct CheckoutSessionCreateParams: StripeParams {
         self.excludedPaymentMethodTypes = excludedPaymentMethodTypes
         self.expand = expand
         self.expiresAt = expiresAt
+        self.integrationIdentifier = integrationIdentifier
         self.invoiceCreation = invoiceCreation
         self.lineItems = lineItems
         self.locale = locale
+        self.managedPayments = managedPayments
         self.metadata = metadata
         self.mode = mode
         self.nameCollection = nameCollection
@@ -234,7 +241,6 @@ public struct CheckoutSessionCreateParams: StripeParams {
         self.paymentMethodConfiguration = paymentMethodConfiguration
         self.paymentMethodData = paymentMethodData
         self.paymentMethodOptions = paymentMethodOptions
-        self.paymentMethodTypes = paymentMethodTypes
         self.permissions = permissions
         self.phoneNumberCollection = phoneNumberCollection
         self.redirectOnCompletion = redirectOnCompletion
@@ -255,6 +261,7 @@ public struct CheckoutSessionCreateParams: StripeParams {
         case adaptivePricing = "adaptive_pricing"
         case afterExpiration = "after_expiration"
         case allowPromotionCodes = "allow_promotion_codes"
+        case allowedPaymentMethodTypes = "allowed_payment_method_types"
         case automaticTax = "automatic_tax"
         case billingAddressCollection = "billing_address_collection"
         case brandingSettings = "branding_settings"
@@ -273,9 +280,11 @@ public struct CheckoutSessionCreateParams: StripeParams {
         case excludedPaymentMethodTypes = "excluded_payment_method_types"
         case expand
         case expiresAt = "expires_at"
+        case integrationIdentifier = "integration_identifier"
         case invoiceCreation = "invoice_creation"
         case lineItems = "line_items"
         case locale
+        case managedPayments = "managed_payments"
         case metadata
         case mode
         case nameCollection = "name_collection"
@@ -286,7 +295,6 @@ public struct CheckoutSessionCreateParams: StripeParams {
         case paymentMethodConfiguration = "payment_method_configuration"
         case paymentMethodData = "payment_method_data"
         case paymentMethodOptions = "payment_method_options"
-        case paymentMethodTypes = "payment_method_types"
         case permissions
         case phoneNumberCollection = "phone_number_collection"
         case redirectOnCompletion = "redirect_on_completion"
@@ -315,7 +323,7 @@ public struct CheckoutSessionExpireParams: StripeParams {
 
 public struct CheckoutSessionUpdateParams: StripeParams {
     /// Information about the customer collected within the Checkout Session. Can only be set when updating
-    /// `embedded` or `custom` sessions.
+    /// `embedded_page` or `elements` sessions.
     public var collectedInformation: CheckoutSessionUpdateCollectedInformation?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
@@ -331,14 +339,22 @@ public struct CheckoutSessionUpdateParams: StripeParams {
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
     /// empty value to `metadata`.
     public var metadata: [String: String]?
+    /// A subset of parameters to apply to the PaymentIntent for Checkout Sessions in `payment` mode. You
+    /// can only update these parameters when `ui_mode` is `elements` and while the session is active. If
+    /// the PaymentIntent requires customer action or confirmation, updating these parameters abandons the
+    /// current payment attempt and returns the PaymentIntent to `requires_payment_method`. You can't update
+    /// these parameters after the PaymentIntent begins processing, requires capture, succeeds, or is
+    /// canceled.
+    public var paymentIntentData: CheckoutSessionUpdatePaymentIntentData?
     /// The shipping rate options to apply to this Session. Up to a maximum of 5.
     public var shippingOptions: [CheckoutSessionUpdateShippingOptions]?
 
-    public init(collectedInformation: CheckoutSessionUpdateCollectedInformation? = nil, expand: [String]? = nil, lineItems: [CheckoutSessionUpdateLineItems]? = nil, metadata: [String: String]? = nil, shippingOptions: [CheckoutSessionUpdateShippingOptions]? = nil) {
+    public init(collectedInformation: CheckoutSessionUpdateCollectedInformation? = nil, expand: [String]? = nil, lineItems: [CheckoutSessionUpdateLineItems]? = nil, metadata: [String: String]? = nil, paymentIntentData: CheckoutSessionUpdatePaymentIntentData? = nil, shippingOptions: [CheckoutSessionUpdateShippingOptions]? = nil) {
         self.collectedInformation = collectedInformation
         self.expand = expand
         self.lineItems = lineItems
         self.metadata = metadata
+        self.paymentIntentData = paymentIntentData
         self.shippingOptions = shippingOptions
     }
 
@@ -347,6 +363,7 @@ public struct CheckoutSessionUpdateParams: StripeParams {
         case expand
         case lineItems = "line_items"
         case metadata
+        case paymentIntentData = "payment_intent_data"
         case shippingOptions = "shipping_options"
     }
 }
@@ -365,7 +382,7 @@ public struct CheckoutSessionCreateAdaptivePricing: StripeParams {
 }
 
 /// Configure actions after a Checkout Session has expired. You can't set this parameter if `ui_mode` is
-/// `custom`.
+/// `elements`.
 public struct CheckoutSessionCreateAfterExpiration: StripeParams {
     /// Configure a Checkout Session that can be used to recover an expired session.
     public var recovery: CheckoutSessionCreateAfterExpirationRecovery?
@@ -429,7 +446,7 @@ public struct CheckoutSessionCreateAutomaticTaxLiability: StripeParams {
 }
 
 /// The branding settings for the Checkout Session. This parameter is not allowed if ui_mode is
-/// `custom`.
+/// `elements`.
 public struct CheckoutSessionCreateBrandingSettings: StripeParams {
     /// A hex color value starting with `#` representing the background color for the Checkout Session.
     public var backgroundColor: String?
@@ -510,7 +527,8 @@ public struct CheckoutSessionCreateConsentCollection: StripeParams {
     public var paymentMethodReuseAgreement: CheckoutSessionCreateConsentCollectionPaymentMethodReuseAgreement?
     /// If set to `auto`, enables the collection of customer consent for promotional communications. The
     /// Checkout Session will determine whether to display an option to opt into promotional communication
-    /// from the merchant depending on the customer's locale. Only available to US merchants.
+    /// from the merchant depending on the customer's locale. Only available to US merchants and US
+    /// customers.
     public var promotions: CheckoutSessionCreateConsentCollectionPromotions?
     /// If set to `required`, it requires customers to check a terms of service checkbox before being able
     /// to pay. There must be a valid terms of service URL set in your [Dashboard
@@ -574,7 +592,7 @@ public struct CheckoutSessionCreateCustomFields: StripeParams {
 
 /// The label for the field, displayed to the customer.
 public struct CheckoutSessionCreateCustomFieldsLabel: StripeParams {
-    /// Custom text for the label, displayed to the customer. Up to 50 characters.
+    /// Custom text for the label, displayed to the customer. Up to 100 characters.
     public var custom: String
     /// The type of the label.
     public var type: CheckoutSessionCreateCustomFieldsLabelType
@@ -589,8 +607,7 @@ public struct CheckoutSessionCreateCustomFieldsLabel: StripeParams {
 public struct CheckoutSessionCreateCustomFieldsDropdown: StripeParams {
     /// The options available for the customer to select. Up to 200 options allowed.
     public var options: [CheckoutSessionCreateCustomFieldsDropdownOptions]
-    /// The value that will pre-fill the field on the payment page.Must match a `value` in the `options`
-    /// array.
+    /// The value that pre-fills the field on the payment page. Must match a `value` in the `options` array.
     public var defaultValue: String?
 
     public init(options: [CheckoutSessionCreateCustomFieldsDropdownOptions], defaultValue: String? = nil) {
@@ -620,7 +637,7 @@ public struct CheckoutSessionCreateCustomFieldsDropdownOptions: StripeParams {
 
 /// Configuration for `type=numeric` fields.
 public struct CheckoutSessionCreateCustomFieldsNumeric: StripeParams {
-    /// The value that will pre-fill the field on the payment page.
+    /// The value that pre-fills the field on the payment page.
     public var defaultValue: String?
     /// The maximum character length constraint for the customer's input.
     public var maximumLength: Int?
@@ -642,7 +659,7 @@ public struct CheckoutSessionCreateCustomFieldsNumeric: StripeParams {
 
 /// Configuration for `type=text` fields.
 public struct CheckoutSessionCreateCustomFieldsText: StripeParams {
-    /// The value that will pre-fill the field on the payment page.
+    /// The value that pre-fills the field on the payment page.
     public var defaultValue: String?
     /// The maximum character length constraint for the customer's input.
     public var maximumLength: Int?
@@ -663,7 +680,7 @@ public struct CheckoutSessionCreateCustomFieldsText: StripeParams {
 }
 
 /// Display additional text for your customers using custom text. You can't set this parameter if
-/// `ui_mode` is `custom`.
+/// `ui_mode` is `elements`.
 public struct CheckoutSessionCreateCustomText: StripeParams {
     /// Custom text that should be displayed after the payment confirmation button.
     public var afterSubmit: CheckoutSessionCreateCustomTextAfterSubmit?
@@ -690,7 +707,7 @@ public struct CheckoutSessionCreateCustomText: StripeParams {
 }
 
 public struct CheckoutSessionCreateCustomTextAfterSubmit: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -699,7 +716,7 @@ public struct CheckoutSessionCreateCustomTextAfterSubmit: StripeParams {
 }
 
 public struct CheckoutSessionCreateCustomTextShippingAddress: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -708,7 +725,7 @@ public struct CheckoutSessionCreateCustomTextShippingAddress: StripeParams {
 }
 
 public struct CheckoutSessionCreateCustomTextSubmit: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -717,7 +734,7 @@ public struct CheckoutSessionCreateCustomTextSubmit: StripeParams {
 }
 
 public struct CheckoutSessionCreateCustomTextTermsOfServiceAcceptance: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -871,10 +888,6 @@ public struct CheckoutSessionCreateLineItems: StripeParams {
     /// When set, provides configuration for this item’s quantity to be adjusted by the customer during
     /// Checkout.
     public var adjustableQuantity: CheckoutSessionCreateLineItemsAdjustableQuantity?
-    /// The [tax rates](https://docs.stripe.com/api/tax_rates) that will be applied to this line item
-    /// depending on the customer's billing/shipping address. We currently support the following countries:
-    /// US, GB, AU, and all countries in the EU. You can't set this parameter if `ui_mode` is `custom`.
-    public var dynamicTaxRates: [String]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
@@ -883,8 +896,10 @@ public struct CheckoutSessionCreateLineItems: StripeParams {
     /// The ID of the [Price](https://docs.stripe.com/api/prices) or
     /// [Plan](https://docs.stripe.com/api/plans) object. One of `price` or `price_data` is required.
     public var price: String?
-    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-    /// `price` or `price_data` is required.
+    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline, for [dynamic
+    /// pricing](https://docs.stripe.com/products-prices/how-products-and-prices-work#inline-pricing) when
+    /// the amount isn't known ahead of time. One of `price` or `price_data` is required when creating a new
+    /// line item.
     public var priceData: CheckoutSessionCreateLineItemsPriceData?
     /// The quantity of the line item being purchased. Quantity should not be defined when
     /// `recurring.usage_type=metered`.
@@ -892,9 +907,8 @@ public struct CheckoutSessionCreateLineItems: StripeParams {
     /// The [tax rates](https://docs.stripe.com/api/tax_rates) which apply to this line item.
     public var taxRates: [String]?
 
-    public init(adjustableQuantity: CheckoutSessionCreateLineItemsAdjustableQuantity? = nil, dynamicTaxRates: [String]? = nil, metadata: [String: String]? = nil, price: String? = nil, priceData: CheckoutSessionCreateLineItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(adjustableQuantity: CheckoutSessionCreateLineItemsAdjustableQuantity? = nil, metadata: [String: String]? = nil, price: String? = nil, priceData: CheckoutSessionCreateLineItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
         self.adjustableQuantity = adjustableQuantity
-        self.dynamicTaxRates = dynamicTaxRates
         self.metadata = metadata
         self.price = price
         self.priceData = priceData
@@ -904,7 +918,6 @@ public struct CheckoutSessionCreateLineItems: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case adjustableQuantity = "adjustable_quantity"
-        case dynamicTaxRates = "dynamic_tax_rates"
         case metadata
         case price
         case priceData = "price_data"
@@ -932,8 +945,10 @@ public struct CheckoutSessionCreateLineItemsAdjustableQuantity: StripeParams {
     }
 }
 
-/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-/// `price` or `price_data` is required.
+/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline, for [dynamic
+/// pricing](https://docs.stripe.com/products-prices/how-products-and-prices-work#inline-pricing) when
+/// the amount isn't known ahead of time. One of `price` or `price_data` is required when creating a new
+/// line item.
 public struct CheckoutSessionCreateLineItemsPriceData: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -998,16 +1013,20 @@ public struct CheckoutSessionCreateLineItemsPriceDataProductData: StripeParams {
     public var metadata: [String: String]?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: CheckoutSessionCreateLineItemsPriceDataProductDataTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal.
     public var unitLabel: String?
 
-    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, unitLabel: String? = nil) {
+    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, taxDetails: CheckoutSessionCreateLineItemsPriceDataProductDataTaxDetails? = nil, unitLabel: String? = nil) {
         self.name = name
         self.description = description
         self.images = images
         self.metadata = metadata
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
     }
 
@@ -1017,7 +1036,29 @@ public struct CheckoutSessionCreateLineItemsPriceDataProductData: StripeParams {
         case metadata
         case name
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
+    }
+}
+
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct CheckoutSessionCreateLineItemsPriceDataProductDataTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }
 
@@ -1041,10 +1082,23 @@ public struct CheckoutSessionCreateLineItemsPriceDataRecurring: StripeParams {
     }
 }
 
+/// Settings for Managed Payments for this Checkout Session and resulting
+/// [PaymentIntents](/api/payment_intents/object), [Invoices](/api/invoices/object), and
+/// [Subscriptions](/api/subscriptions/object).
+public struct CheckoutSessionCreateManagedPayments: StripeParams {
+    /// Set to `true` to enable [Managed Payments](https://docs.stripe.com/payments/managed-payments),
+    /// Stripe's merchant of record solution, for this session.
+    public var enabled: Bool?
+
+    public init(enabled: Bool? = nil) {
+        self.enabled = enabled
+    }
+}
+
 /// Controls name collection settings for the session. You can configure Checkout to collect your
 /// customers' business names, individual names, or both. Each name field can be either required or
 /// optional. If a [Customer](https://docs.stripe.com/api/customers) is created or provided, the names
-/// can be saved to the Customer object as well. You can't set this parameter if `ui_mode` is `custom`.
+/// can be saved to the Customer object as well.
 public struct CheckoutSessionCreateNameCollection: StripeParams {
     /// Controls settings applied for collecting the customer's business name on the session.
     public var business: CheckoutSessionCreateNameCollectionBusiness?
@@ -1320,7 +1374,7 @@ public struct CheckoutSessionCreatePaymentMethodData: StripeParams {
 /// Payment-method-specific configuration.
 public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
     /// contains details about the ACSS Debit payment method options. You can't set this parameter if
-    /// `ui_mode` is `custom`.
+    /// `ui_mode` is `elements`.
     public var acssDebit: CheckoutSessionCreatePaymentMethodOptionsAcssDebit?
     /// contains details about the Affirm payment method options.
     public var affirm: CheckoutSessionCreatePaymentMethodOptionsAffirm?
@@ -1340,12 +1394,16 @@ public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
     public var bancontact: CheckoutSessionCreatePaymentMethodOptionsBancontact?
     /// contains details about the Billie payment method options.
     public var billie: CheckoutSessionCreatePaymentMethodOptionsBillie?
+    /// contains details about the BLIK payment method options.
+    public var blik: CheckoutSessionCreatePaymentMethodOptionsBlik?
     /// contains details about the Boleto payment method options.
     public var boleto: CheckoutSessionCreatePaymentMethodOptionsBoleto?
     /// contains details about the Card payment method options.
     public var card: CheckoutSessionCreatePaymentMethodOptionsCard?
     /// contains details about the Cashapp Pay payment method options.
     public var cashapp: CheckoutSessionCreatePaymentMethodOptionsCashapp?
+    /// contains details about the Crypto payment method options.
+    public var crypto: CheckoutSessionCreatePaymentMethodOptionsCrypto?
     /// contains details about the Customer Balance payment method options.
     public var customerBalance: CheckoutSessionCreatePaymentMethodOptionsCustomerBalance?
     /// contains details about the DemoPay payment method options.
@@ -1368,7 +1426,7 @@ public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
     public var konbini: CheckoutSessionCreatePaymentMethodOptionsKonbini?
     /// contains details about the Korean card payment method options.
     public var krCard: CheckoutSessionCreatePaymentMethodOptionsKrCard?
-    /// contains details about the Link payment method options.
+    /// contains details about the Link payment method options (Link is also known as Onelink in the UK).
     public var link: CheckoutSessionCreatePaymentMethodOptionsLink?
     /// contains details about the Mobilepay payment method options.
     public var mobilepay: CheckoutSessionCreatePaymentMethodOptionsMobilepay?
@@ -1398,20 +1456,28 @@ public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
     public var samsungPay: CheckoutSessionCreatePaymentMethodOptionsSamsungPay?
     /// contains details about the Satispay payment method options.
     public var satispay: CheckoutSessionCreatePaymentMethodOptionsSatispay?
+    /// contains details about the Scalapay payment method options.
+    public var scalapay: CheckoutSessionCreatePaymentMethodOptionsScalapay?
     /// contains details about the Sepa Debit payment method options.
     public var sepaDebit: CheckoutSessionCreatePaymentMethodOptionsSepaDebit?
+    /// contains details about the SeQura payment method options.
+    public var sequra: CheckoutSessionCreatePaymentMethodOptionsSequra?
     /// contains details about the Sofort payment method options.
     public var sofort: CheckoutSessionCreatePaymentMethodOptionsSofort?
+    /// contains details about the Sunbit payment method options.
+    public var sunbit: CheckoutSessionCreatePaymentMethodOptionsSunbit?
     /// contains details about the Swish payment method options.
     public var swish: CheckoutSessionCreatePaymentMethodOptionsSwish?
     /// contains details about the TWINT payment method options.
     public var twint: CheckoutSessionCreatePaymentMethodOptionsTwint?
+    /// contains details about the UPI payment method options.
+    public var upi: CheckoutSessionCreatePaymentMethodOptionsUpi?
     /// contains details about the Us Bank Account payment method options.
     public var usBankAccount: CheckoutSessionCreatePaymentMethodOptionsUsBankAccount?
     /// contains details about the WeChat Pay payment method options.
     public var wechatPay: CheckoutSessionCreatePaymentMethodOptionsWechatPay?
 
-    public init(acssDebit: CheckoutSessionCreatePaymentMethodOptionsAcssDebit? = nil, affirm: CheckoutSessionCreatePaymentMethodOptionsAffirm? = nil, afterpayClearpay: CheckoutSessionCreatePaymentMethodOptionsAfterpayClearpay? = nil, alipay: CheckoutSessionCreatePaymentMethodOptionsAlipay? = nil, alma: CheckoutSessionCreatePaymentMethodOptionsAlma? = nil, amazonPay: CheckoutSessionCreatePaymentMethodOptionsAmazonPay? = nil, auBecsDebit: CheckoutSessionCreatePaymentMethodOptionsAuBecsDebit? = nil, bacsDebit: CheckoutSessionCreatePaymentMethodOptionsBacsDebit? = nil, bancontact: CheckoutSessionCreatePaymentMethodOptionsBancontact? = nil, billie: CheckoutSessionCreatePaymentMethodOptionsBillie? = nil, boleto: CheckoutSessionCreatePaymentMethodOptionsBoleto? = nil, card: CheckoutSessionCreatePaymentMethodOptionsCard? = nil, cashapp: CheckoutSessionCreatePaymentMethodOptionsCashapp? = nil, customerBalance: CheckoutSessionCreatePaymentMethodOptionsCustomerBalance? = nil, demoPay: CheckoutSessionCreatePaymentMethodOptionsDemoPay? = nil, eps: CheckoutSessionCreatePaymentMethodOptionsEps? = nil, fpx: CheckoutSessionCreatePaymentMethodOptionsFpx? = nil, giropay: CheckoutSessionCreatePaymentMethodOptionsGiropay? = nil, grabpay: CheckoutSessionCreatePaymentMethodOptionsGrabpay? = nil, ideal: CheckoutSessionCreatePaymentMethodOptionsIdeal? = nil, kakaoPay: CheckoutSessionCreatePaymentMethodOptionsKakaoPay? = nil, klarna: CheckoutSessionCreatePaymentMethodOptionsKlarna? = nil, konbini: CheckoutSessionCreatePaymentMethodOptionsKonbini? = nil, krCard: CheckoutSessionCreatePaymentMethodOptionsKrCard? = nil, link: CheckoutSessionCreatePaymentMethodOptionsLink? = nil, mobilepay: CheckoutSessionCreatePaymentMethodOptionsMobilepay? = nil, multibanco: CheckoutSessionCreatePaymentMethodOptionsMultibanco? = nil, naverPay: CheckoutSessionCreatePaymentMethodOptionsNaverPay? = nil, oxxo: CheckoutSessionCreatePaymentMethodOptionsOxxo? = nil, p24: CheckoutSessionCreatePaymentMethodOptionsP24? = nil, payByBank: [String: String]? = nil, payco: CheckoutSessionCreatePaymentMethodOptionsPayco? = nil, paynow: CheckoutSessionCreatePaymentMethodOptionsPaynow? = nil, paypal: CheckoutSessionCreatePaymentMethodOptionsPaypal? = nil, payto: CheckoutSessionCreatePaymentMethodOptionsPayto? = nil, pix: CheckoutSessionCreatePaymentMethodOptionsPix? = nil, revolutPay: CheckoutSessionCreatePaymentMethodOptionsRevolutPay? = nil, samsungPay: CheckoutSessionCreatePaymentMethodOptionsSamsungPay? = nil, satispay: CheckoutSessionCreatePaymentMethodOptionsSatispay? = nil, sepaDebit: CheckoutSessionCreatePaymentMethodOptionsSepaDebit? = nil, sofort: CheckoutSessionCreatePaymentMethodOptionsSofort? = nil, swish: CheckoutSessionCreatePaymentMethodOptionsSwish? = nil, twint: CheckoutSessionCreatePaymentMethodOptionsTwint? = nil, usBankAccount: CheckoutSessionCreatePaymentMethodOptionsUsBankAccount? = nil, wechatPay: CheckoutSessionCreatePaymentMethodOptionsWechatPay? = nil) {
+    public init(acssDebit: CheckoutSessionCreatePaymentMethodOptionsAcssDebit? = nil, affirm: CheckoutSessionCreatePaymentMethodOptionsAffirm? = nil, afterpayClearpay: CheckoutSessionCreatePaymentMethodOptionsAfterpayClearpay? = nil, alipay: CheckoutSessionCreatePaymentMethodOptionsAlipay? = nil, alma: CheckoutSessionCreatePaymentMethodOptionsAlma? = nil, amazonPay: CheckoutSessionCreatePaymentMethodOptionsAmazonPay? = nil, auBecsDebit: CheckoutSessionCreatePaymentMethodOptionsAuBecsDebit? = nil, bacsDebit: CheckoutSessionCreatePaymentMethodOptionsBacsDebit? = nil, bancontact: CheckoutSessionCreatePaymentMethodOptionsBancontact? = nil, billie: CheckoutSessionCreatePaymentMethodOptionsBillie? = nil, blik: CheckoutSessionCreatePaymentMethodOptionsBlik? = nil, boleto: CheckoutSessionCreatePaymentMethodOptionsBoleto? = nil, card: CheckoutSessionCreatePaymentMethodOptionsCard? = nil, cashapp: CheckoutSessionCreatePaymentMethodOptionsCashapp? = nil, crypto: CheckoutSessionCreatePaymentMethodOptionsCrypto? = nil, customerBalance: CheckoutSessionCreatePaymentMethodOptionsCustomerBalance? = nil, demoPay: CheckoutSessionCreatePaymentMethodOptionsDemoPay? = nil, eps: CheckoutSessionCreatePaymentMethodOptionsEps? = nil, fpx: CheckoutSessionCreatePaymentMethodOptionsFpx? = nil, giropay: CheckoutSessionCreatePaymentMethodOptionsGiropay? = nil, grabpay: CheckoutSessionCreatePaymentMethodOptionsGrabpay? = nil, ideal: CheckoutSessionCreatePaymentMethodOptionsIdeal? = nil, kakaoPay: CheckoutSessionCreatePaymentMethodOptionsKakaoPay? = nil, klarna: CheckoutSessionCreatePaymentMethodOptionsKlarna? = nil, konbini: CheckoutSessionCreatePaymentMethodOptionsKonbini? = nil, krCard: CheckoutSessionCreatePaymentMethodOptionsKrCard? = nil, link: CheckoutSessionCreatePaymentMethodOptionsLink? = nil, mobilepay: CheckoutSessionCreatePaymentMethodOptionsMobilepay? = nil, multibanco: CheckoutSessionCreatePaymentMethodOptionsMultibanco? = nil, naverPay: CheckoutSessionCreatePaymentMethodOptionsNaverPay? = nil, oxxo: CheckoutSessionCreatePaymentMethodOptionsOxxo? = nil, p24: CheckoutSessionCreatePaymentMethodOptionsP24? = nil, payByBank: [String: String]? = nil, payco: CheckoutSessionCreatePaymentMethodOptionsPayco? = nil, paynow: CheckoutSessionCreatePaymentMethodOptionsPaynow? = nil, paypal: CheckoutSessionCreatePaymentMethodOptionsPaypal? = nil, payto: CheckoutSessionCreatePaymentMethodOptionsPayto? = nil, pix: CheckoutSessionCreatePaymentMethodOptionsPix? = nil, revolutPay: CheckoutSessionCreatePaymentMethodOptionsRevolutPay? = nil, samsungPay: CheckoutSessionCreatePaymentMethodOptionsSamsungPay? = nil, satispay: CheckoutSessionCreatePaymentMethodOptionsSatispay? = nil, scalapay: CheckoutSessionCreatePaymentMethodOptionsScalapay? = nil, sepaDebit: CheckoutSessionCreatePaymentMethodOptionsSepaDebit? = nil, sequra: CheckoutSessionCreatePaymentMethodOptionsSequra? = nil, sofort: CheckoutSessionCreatePaymentMethodOptionsSofort? = nil, sunbit: CheckoutSessionCreatePaymentMethodOptionsSunbit? = nil, swish: CheckoutSessionCreatePaymentMethodOptionsSwish? = nil, twint: CheckoutSessionCreatePaymentMethodOptionsTwint? = nil, upi: CheckoutSessionCreatePaymentMethodOptionsUpi? = nil, usBankAccount: CheckoutSessionCreatePaymentMethodOptionsUsBankAccount? = nil, wechatPay: CheckoutSessionCreatePaymentMethodOptionsWechatPay? = nil) {
         self.acssDebit = acssDebit
         self.affirm = affirm
         self.afterpayClearpay = afterpayClearpay
@@ -1422,9 +1488,11 @@ public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
         self.bacsDebit = bacsDebit
         self.bancontact = bancontact
         self.billie = billie
+        self.blik = blik
         self.boleto = boleto
         self.card = card
         self.cashapp = cashapp
+        self.crypto = crypto
         self.customerBalance = customerBalance
         self.demoPay = demoPay
         self.eps = eps
@@ -1451,10 +1519,14 @@ public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
         self.revolutPay = revolutPay
         self.samsungPay = samsungPay
         self.satispay = satispay
+        self.scalapay = scalapay
         self.sepaDebit = sepaDebit
+        self.sequra = sequra
         self.sofort = sofort
+        self.sunbit = sunbit
         self.swish = swish
         self.twint = twint
+        self.upi = upi
         self.usBankAccount = usBankAccount
         self.wechatPay = wechatPay
     }
@@ -1470,9 +1542,11 @@ public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
         case bacsDebit = "bacs_debit"
         case bancontact
         case billie
+        case blik
         case boleto
         case card
         case cashapp
+        case crypto
         case customerBalance = "customer_balance"
         case demoPay = "demo_pay"
         case eps
@@ -1499,17 +1573,21 @@ public struct CheckoutSessionCreatePaymentMethodOptions: StripeParams {
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
+        case upi
         case usBankAccount = "us_bank_account"
         case wechatPay = "wechat_pay"
     }
 }
 
 /// contains details about the ACSS Debit payment method options. You can't set this parameter if
-/// `ui_mode` is `custom`.
+/// `ui_mode` is `elements`.
 public struct CheckoutSessionCreatePaymentMethodOptionsAcssDebit: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies). This is only accepted for
@@ -1827,6 +1905,38 @@ public struct CheckoutSessionCreatePaymentMethodOptionsBillie: StripeParams {
     }
 }
 
+/// contains details about the BLIK payment method options.
+public struct CheckoutSessionCreatePaymentMethodOptionsBlik: StripeParams {
+    /// Additional fields for Mandate creation
+    public var mandateOptions: CheckoutSessionCreatePaymentMethodOptionsBlikMandateOptions?
+    public var setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsBlikSetupFutureUsage?
+
+    public init(mandateOptions: CheckoutSessionCreatePaymentMethodOptionsBlikMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsBlikSetupFutureUsage? = nil) {
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+    }
+}
+
+/// Additional fields for Mandate creation
+public struct CheckoutSessionCreatePaymentMethodOptionsBlikMandateOptions: StripeParams {
+    /// Date when the mandate expires and no further payments will be charged. If not provided, the mandate
+    /// will be set to be indefinite.
+    public var expiresAt: Int?
+
+    public init(expiresAt: Int? = nil) {
+        self.expiresAt = expiresAt
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case expiresAt = "expires_at"
+    }
+}
+
 /// contains details about the Boleto payment method options.
 public struct CheckoutSessionCreatePaymentMethodOptionsBoleto: StripeParams {
     /// The number of calendar days before a Boleto voucher expires. For example, if you create a Boleto
@@ -1882,7 +1992,7 @@ public struct CheckoutSessionCreatePaymentMethodOptionsCard: StripeParams {
     /// information on how this configuration interacts with Radar and our SCA Engine.
     public var requestThreeDSecure: CheckoutSessionCreatePaymentMethodOptionsCardRequestThreeDSecure?
     /// Restrictions to apply to the card payment method. For example, you can block specific card brands.
-    /// You can't set this parameter if `ui_mode` is `custom`.
+    /// You can't set this parameter if `ui_mode` is `elements`.
     public var restrictions: CheckoutSessionCreatePaymentMethodOptionsCardRestrictions?
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
     /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
@@ -1950,18 +2060,23 @@ public struct CheckoutSessionCreatePaymentMethodOptionsCardInstallments: StripeP
 }
 
 /// Restrictions to apply to the card payment method. For example, you can block specific card brands.
-/// You can't set this parameter if `ui_mode` is `custom`.
+/// You can't set this parameter if `ui_mode` is `elements`.
 public struct CheckoutSessionCreatePaymentMethodOptionsCardRestrictions: StripeParams {
-    /// Specify the card brands to block in the Checkout Session. If a customer enters or selects a card
-    /// belonging to a blocked brand, they can't complete the Session.
+    /// The card brands to block. If a customer enters or selects a card belonging to a blocked brand, they
+    /// can't complete the payment.
     public var brandsBlocked: [CheckoutSessionCreatePaymentMethodOptionsCardRestrictionsBrandsBlocked]?
+    /// Card funding types to block for this Checkout Session. Supported values are `credit`, `debit`, and
+    /// `prepaid`.
+    public var fundingTypesBlocked: [CheckoutSessionCreatePaymentMethodOptionsCardRestrictionsFundingTypesBlocked]?
 
-    public init(brandsBlocked: [CheckoutSessionCreatePaymentMethodOptionsCardRestrictionsBrandsBlocked]? = nil) {
+    public init(brandsBlocked: [CheckoutSessionCreatePaymentMethodOptionsCardRestrictionsBrandsBlocked]? = nil, fundingTypesBlocked: [CheckoutSessionCreatePaymentMethodOptionsCardRestrictionsFundingTypesBlocked]? = nil) {
         self.brandsBlocked = brandsBlocked
+        self.fundingTypesBlocked = fundingTypesBlocked
     }
 
     public enum CodingKeys: String, CodingKey {
         case brandsBlocked = "brands_blocked"
+        case fundingTypesBlocked = "funding_types_blocked"
     }
 }
 
@@ -1989,6 +2104,30 @@ public struct CheckoutSessionCreatePaymentMethodOptionsCashapp: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
+    }
+}
+
+/// contains details about the Crypto payment method options.
+public struct CheckoutSessionCreatePaymentMethodOptionsCrypto: StripeParams {
+    /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
+    /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
+    /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
+    /// customer completes any required actions. If you don't provide a Customer, you can still
+    /// [attach](/api/payment_methods/attach) the payment method to a Customer after the transaction
+    /// completes. If the payment method is `card_present` and isn't a digital wallet, Stripe creates and
+    /// attaches a
+    /// [generated_card](/api/charges/object#charge_object-payment_method_details-card_present-generated_card)
+    /// payment method representing the card to the Customer instead. When processing card payments, Stripe
+    /// uses `setup_future_usage` to help you comply with regional legislation and network rules, such as
+    /// [SCA](/strong-customer-authentication).
+    public var setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsCryptoSetupFutureUsage?
+
+    public init(setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsCryptoSetupFutureUsage? = nil) {
+        self.setupFutureUsage = setupFutureUsage
+    }
+
+    public enum CodingKeys: String, CodingKey {
         case setupFutureUsage = "setup_future_usage"
     }
 }
@@ -2052,8 +2191,8 @@ public struct CheckoutSessionCreatePaymentMethodOptionsCustomerBalanceBankTransf
 
 /// Configuration for eu_bank_transfer funding type.
 public struct CheckoutSessionCreatePaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer: StripeParams {
-    /// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-    /// `ES`, `FR`, `IE`, or `NL`.
+    /// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+    /// `IE`, or `NL`.
     public var country: String
 
     public init(country: String) {
@@ -2367,7 +2506,7 @@ public struct CheckoutSessionCreatePaymentMethodOptionsKrCard: StripeParams {
     }
 }
 
-/// contains details about the Link payment method options.
+/// contains details about the Link payment method options (Link is also known as Onelink in the UK).
 public struct CheckoutSessionCreatePaymentMethodOptionsLink: StripeParams {
     /// Controls when the funds will be captured from the customer's account.
     public var captureMethod: CheckoutSessionCreatePaymentMethodOptionsLinkCaptureMethod?
@@ -2537,13 +2676,27 @@ public struct CheckoutSessionCreatePaymentMethodOptionsP24: StripeParams {
 public struct CheckoutSessionCreatePaymentMethodOptionsPayco: StripeParams {
     /// Controls when the funds will be captured from the customer's account.
     public var captureMethod: CheckoutSessionCreatePaymentMethodOptionsPaycoCaptureMethod?
+    /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
+    /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
+    /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
+    /// customer completes any required actions. If you don't provide a Customer, you can still
+    /// [attach](/api/payment_methods/attach) the payment method to a Customer after the transaction
+    /// completes. If the payment method is `card_present` and isn't a digital wallet, Stripe creates and
+    /// attaches a
+    /// [generated_card](/api/charges/object#charge_object-payment_method_details-card_present-generated_card)
+    /// payment method representing the card to the Customer instead. When processing card payments, Stripe
+    /// uses `setup_future_usage` to help you comply with regional legislation and network rules, such as
+    /// [SCA](/strong-customer-authentication).
+    public var setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsPaycoSetupFutureUsage?
 
-    public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsPaycoCaptureMethod? = nil) {
+    public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsPaycoCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsPaycoSetupFutureUsage? = nil) {
         self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
     }
 
     public enum CodingKeys: String, CodingKey {
         case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
     }
 }
 
@@ -2688,9 +2841,11 @@ public struct CheckoutSessionCreatePaymentMethodOptionsPaytoMandateOptions: Stri
 public struct CheckoutSessionCreatePaymentMethodOptionsPix: StripeParams {
     /// Determines if the amount includes the IOF tax. Defaults to `never`.
     public var amountIncludesIof: CheckoutSessionCreatePaymentMethodOptionsPixAmountIncludesIof?
-    /// The number of seconds (between 10 and 1209600) after which Pix payment will expire. Defaults to
-    /// 86400 seconds.
+    /// The number of seconds after PaymentIntent confirmation when the Pix expires (between 60 and 1209600,
+    /// inclusive). If unspecified, defaults to 14400 seconds (4 hours).
     public var expiresAfterSeconds: Int?
+    /// Additional fields for mandate creation.
+    public var mandateOptions: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptions?
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
     /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
     /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
@@ -2704,16 +2859,65 @@ public struct CheckoutSessionCreatePaymentMethodOptionsPix: StripeParams {
     /// [SCA](/strong-customer-authentication).
     public var setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsPixSetupFutureUsage?
 
-    public init(amountIncludesIof: CheckoutSessionCreatePaymentMethodOptionsPixAmountIncludesIof? = nil, expiresAfterSeconds: Int? = nil, setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsPixSetupFutureUsage? = nil) {
+    public init(amountIncludesIof: CheckoutSessionCreatePaymentMethodOptionsPixAmountIncludesIof? = nil, expiresAfterSeconds: Int? = nil, mandateOptions: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsPixSetupFutureUsage? = nil) {
         self.amountIncludesIof = amountIncludesIof
         self.expiresAfterSeconds = expiresAfterSeconds
+        self.mandateOptions = mandateOptions
         self.setupFutureUsage = setupFutureUsage
     }
 
     public enum CodingKeys: String, CodingKey {
         case amountIncludesIof = "amount_includes_iof"
         case expiresAfterSeconds = "expires_after_seconds"
+        case mandateOptions = "mandate_options"
         case setupFutureUsage = "setup_future_usage"
+    }
+}
+
+/// Additional fields for mandate creation.
+public struct CheckoutSessionCreatePaymentMethodOptionsPixMandateOptions: StripeParams {
+    /// Amount to be charged for future payments. Required when `amount_type=fixed`. If not provided for
+    /// `amount_type=maximum`, defaults to 40000.
+    public var amount: Int?
+    /// Determines if the amount includes the IOF tax. Defaults to `never`.
+    public var amountIncludesIof: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsAmountIncludesIof?
+    /// Type of amount. Defaults to `maximum`.
+    public var amountType: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsAmountType?
+    /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
+    /// Only `brl` is supported currently.
+    public var currency: String?
+    /// Date when the mandate expires and no further payments will be charged, in `YYYY-MM-DD`. If not
+    /// provided, the mandate will be active until canceled. If provided, end date should be after start
+    /// date.
+    public var endDate: String?
+    /// Schedule at which the future payments will be charged. Defaults to `monthly`.
+    public var paymentSchedule: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsPaymentSchedule?
+    /// Subscription name displayed to buyers in their bank app. Defaults to the displayable business name.
+    public var reference: String?
+    /// Start date of the mandate, in `YYYY-MM-DD`. Start date should be at least 3 days in the future.
+    /// Defaults to 3 days after the current date.
+    public var startDate: String?
+
+    public init(amount: Int? = nil, amountIncludesIof: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsAmountIncludesIof? = nil, amountType: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsAmountType? = nil, currency: String? = nil, endDate: String? = nil, paymentSchedule: CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsPaymentSchedule? = nil, reference: String? = nil, startDate: String? = nil) {
+        self.amount = amount
+        self.amountIncludesIof = amountIncludesIof
+        self.amountType = amountType
+        self.currency = currency
+        self.endDate = endDate
+        self.paymentSchedule = paymentSchedule
+        self.reference = reference
+        self.startDate = startDate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountIncludesIof = "amount_includes_iof"
+        case amountType = "amount_type"
+        case currency
+        case endDate = "end_date"
+        case paymentSchedule = "payment_schedule"
+        case reference
+        case startDate = "start_date"
     }
 }
 
@@ -2749,13 +2953,27 @@ public struct CheckoutSessionCreatePaymentMethodOptionsRevolutPay: StripeParams 
 public struct CheckoutSessionCreatePaymentMethodOptionsSamsungPay: StripeParams {
     /// Controls when the funds will be captured from the customer's account.
     public var captureMethod: CheckoutSessionCreatePaymentMethodOptionsSamsungPayCaptureMethod?
+    /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
+    /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
+    /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
+    /// customer completes any required actions. If you don't provide a Customer, you can still
+    /// [attach](/api/payment_methods/attach) the payment method to a Customer after the transaction
+    /// completes. If the payment method is `card_present` and isn't a digital wallet, Stripe creates and
+    /// attaches a
+    /// [generated_card](/api/charges/object#charge_object-payment_method_details-card_present-generated_card)
+    /// payment method representing the card to the Customer instead. When processing card payments, Stripe
+    /// uses `setup_future_usage` to help you comply with regional legislation and network rules, such as
+    /// [SCA](/strong-customer-authentication).
+    public var setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsSamsungPaySetupFutureUsage?
 
-    public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsSamsungPayCaptureMethod? = nil) {
+    public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsSamsungPayCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsSamsungPaySetupFutureUsage? = nil) {
         self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
     }
 
     public enum CodingKeys: String, CodingKey {
         case captureMethod = "capture_method"
+        case setupFutureUsage = "setup_future_usage"
     }
 }
 
@@ -2765,6 +2983,20 @@ public struct CheckoutSessionCreatePaymentMethodOptionsSatispay: StripeParams {
     public var captureMethod: CheckoutSessionCreatePaymentMethodOptionsSatispayCaptureMethod?
 
     public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsSatispayCaptureMethod? = nil) {
+        self.captureMethod = captureMethod
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+    }
+}
+
+/// contains details about the Scalapay payment method options.
+public struct CheckoutSessionCreatePaymentMethodOptionsScalapay: StripeParams {
+    /// Controls when the funds will be captured from the customer's account.
+    public var captureMethod: CheckoutSessionCreatePaymentMethodOptionsScalapayCaptureMethod?
+
+    public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsScalapayCaptureMethod? = nil) {
         self.captureMethod = captureMethod
     }
 
@@ -2823,6 +3055,20 @@ public struct CheckoutSessionCreatePaymentMethodOptionsSepaDebitMandateOptions: 
     }
 }
 
+/// contains details about the SeQura payment method options.
+public struct CheckoutSessionCreatePaymentMethodOptionsSequra: StripeParams {
+    /// Controls when the funds will be captured from the customer's account.
+    public var captureMethod: CheckoutSessionCreatePaymentMethodOptionsSequraCaptureMethod?
+
+    public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsSequraCaptureMethod? = nil) {
+        self.captureMethod = captureMethod
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
+    }
+}
+
 /// contains details about the Sofort payment method options.
 public struct CheckoutSessionCreatePaymentMethodOptionsSofort: StripeParams {
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
@@ -2843,6 +3089,34 @@ public struct CheckoutSessionCreatePaymentMethodOptionsSofort: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case setupFutureUsage = "setup_future_usage"
+    }
+}
+
+/// contains details about the Sunbit payment method options.
+public struct CheckoutSessionCreatePaymentMethodOptionsSunbit: StripeParams {
+    /// Controls when the funds will be captured from the customer's account.
+    public var captureMethod: CheckoutSessionCreatePaymentMethodOptionsSunbitCaptureMethod?
+    /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
+    /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
+    /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
+    /// customer completes any required actions. If you don't provide a Customer, you can still
+    /// [attach](/api/payment_methods/attach) the payment method to a Customer after the transaction
+    /// completes. If the payment method is `card_present` and isn't a digital wallet, Stripe creates and
+    /// attaches a
+    /// [generated_card](/api/charges/object#charge_object-payment_method_details-card_present-generated_card)
+    /// payment method representing the card to the Customer instead. When processing card payments, Stripe
+    /// uses `setup_future_usage` to help you comply with regional legislation and network rules, such as
+    /// [SCA](/strong-customer-authentication).
+    public var setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsSunbitSetupFutureUsage?
+
+    public init(captureMethod: CheckoutSessionCreatePaymentMethodOptionsSunbitCaptureMethod? = nil, setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsSunbitSetupFutureUsage? = nil) {
+        self.captureMethod = captureMethod
+        self.setupFutureUsage = setupFutureUsage
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case captureMethod = "capture_method"
         case setupFutureUsage = "setup_future_usage"
     }
 }
@@ -2879,6 +3153,51 @@ public struct CheckoutSessionCreatePaymentMethodOptionsTwint: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case setupFutureUsage = "setup_future_usage"
+    }
+}
+
+/// contains details about the UPI payment method options.
+public struct CheckoutSessionCreatePaymentMethodOptionsUpi: StripeParams {
+    /// Additional fields for Mandate creation
+    public var mandateOptions: CheckoutSessionCreatePaymentMethodOptionsUpiMandateOptions?
+    public var setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsUpiSetupFutureUsage?
+
+    public init(mandateOptions: CheckoutSessionCreatePaymentMethodOptionsUpiMandateOptions? = nil, setupFutureUsage: CheckoutSessionCreatePaymentMethodOptionsUpiSetupFutureUsage? = nil) {
+        self.mandateOptions = mandateOptions
+        self.setupFutureUsage = setupFutureUsage
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+        case setupFutureUsage = "setup_future_usage"
+    }
+}
+
+/// Additional fields for Mandate creation
+public struct CheckoutSessionCreatePaymentMethodOptionsUpiMandateOptions: StripeParams {
+    /// Amount to be charged for future payments.
+    public var amount: Int?
+    /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
+    /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
+    /// param.
+    public var amountType: CheckoutSessionCreatePaymentMethodOptionsUpiMandateOptionsAmountType?
+    /// A description of the mandate or subscription that is meant to be displayed to the customer.
+    public var description: String?
+    /// End date of the mandate or subscription.
+    public var endDate: Int?
+
+    public init(amount: Int? = nil, amountType: CheckoutSessionCreatePaymentMethodOptionsUpiMandateOptionsAmountType? = nil, description: String? = nil, endDate: Int? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.description = description
+        self.endDate = endDate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case description
+        case endDate = "end_date"
     }
 }
 
@@ -2967,16 +3286,15 @@ public struct CheckoutSessionCreatePaymentMethodOptionsWechatPay: StripeParams {
     }
 }
 
-/// This property is used to set up permissions for various actions (e.g., update) on the
-/// CheckoutSession object. Can only be set when creating `embedded` or `custom` sessions. For specific
-/// permissions, please refer to their dedicated subsections, such as
+/// This property is used to set up permissions for various actions (for example, update) on the
+/// CheckoutSession object. Can only be set when creating `embedded_page` or `elements` sessions. For
+/// specific permissions, please refer to their dedicated subsections, such as
 /// `permissions.update_shipping_details`.
 public struct CheckoutSessionCreatePermissions: StripeParams {
     /// Determines which entity is allowed to update the shipping details. Default is `client_only`. Stripe
     /// Checkout client will automatically update the shipping details. If set to `server_only`, only your
-    /// server is allowed to update the shipping details. When set to `server_only`, you must add the
-    /// onShippingDetailsChange event handler when initializing the Stripe Checkout client and manually
-    /// update the shipping details from your server using the Stripe API.
+    /// server is allowed to update the shipping details. This parameter is only supported when
+    /// `ui_mode=elements`.
     public var updateShippingDetails: CheckoutSessionCreatePermissionsUpdateShippingDetails?
 
     public init(updateShippingDetails: CheckoutSessionCreatePermissionsUpdateShippingDetails? = nil) {
@@ -3204,9 +3522,11 @@ public struct CheckoutSessionCreateSubscriptionData: StripeParams {
     /// application fees
     /// [documentation](https://stripe.com/docs/connect/subscriptions#collecting-fees-on-subscriptions).
     public var applicationFeePercent: Double?
-    /// A future timestamp to anchor the subscription's billing cycle for new subscriptions. You can't set
-    /// this parameter if `ui_mode` is `custom`.
+    /// A future timestamp to anchor the subscription's billing cycle for new subscriptions.
     public var billingCycleAnchor: Int?
+    /// Configures when the subscription schedule's billing cycle anchors to a specific day of the week or
+    /// month.
+    public var billingCycleAnchorConfig: CheckoutSessionCreateSubscriptionDataBillingCycleAnchorConfig?
     /// Controls how prorations and invoices for subscriptions are calculated and orchestrated.
     public var billingMode: CheckoutSessionCreateSubscriptionDataBillingMode?
     /// The tax rates that will apply to any subscription item that does not have `tax_rates` set. Invoices
@@ -3225,6 +3545,10 @@ public struct CheckoutSessionCreateSubscriptionData: StripeParams {
     public var metadata: [String: String]?
     /// The account on behalf of which to charge, for each of the subscription's invoices.
     public var onBehalfOf: String?
+    /// Specifies an interval for how often to bill for any pending invoice items. It is analogous to
+    /// calling [Create an invoice](https://docs.stripe.com/api#create_invoice) for the given subscription
+    /// at the specified interval.
+    public var pendingInvoiceItemInterval: CheckoutSessionCreateSubscriptionDataPendingInvoiceItemInterval?
     /// Determines how to handle prorations resulting from the `billing_cycle_anchor`. If no value is
     /// passed, the default is `create_prorations`.
     public var prorationBehavior: CheckoutSessionCreateSubscriptionDataProrationBehavior?
@@ -3240,15 +3564,17 @@ public struct CheckoutSessionCreateSubscriptionData: StripeParams {
     /// Settings related to subscription trials.
     public var trialSettings: CheckoutSessionCreateSubscriptionDataTrialSettings?
 
-    public init(applicationFeePercent: Double? = nil, billingCycleAnchor: Int? = nil, billingMode: CheckoutSessionCreateSubscriptionDataBillingMode? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, invoiceSettings: CheckoutSessionCreateSubscriptionDataInvoiceSettings? = nil, metadata: [String: String]? = nil, onBehalfOf: String? = nil, prorationBehavior: CheckoutSessionCreateSubscriptionDataProrationBehavior? = nil, transferData: CheckoutSessionCreateSubscriptionDataTransferData? = nil, trialEnd: Int? = nil, trialPeriodDays: Int? = nil, trialSettings: CheckoutSessionCreateSubscriptionDataTrialSettings? = nil) {
+    public init(applicationFeePercent: Double? = nil, billingCycleAnchor: Int? = nil, billingCycleAnchorConfig: CheckoutSessionCreateSubscriptionDataBillingCycleAnchorConfig? = nil, billingMode: CheckoutSessionCreateSubscriptionDataBillingMode? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, invoiceSettings: CheckoutSessionCreateSubscriptionDataInvoiceSettings? = nil, metadata: [String: String]? = nil, onBehalfOf: String? = nil, pendingInvoiceItemInterval: CheckoutSessionCreateSubscriptionDataPendingInvoiceItemInterval? = nil, prorationBehavior: CheckoutSessionCreateSubscriptionDataProrationBehavior? = nil, transferData: CheckoutSessionCreateSubscriptionDataTransferData? = nil, trialEnd: Int? = nil, trialPeriodDays: Int? = nil, trialSettings: CheckoutSessionCreateSubscriptionDataTrialSettings? = nil) {
         self.applicationFeePercent = applicationFeePercent
         self.billingCycleAnchor = billingCycleAnchor
+        self.billingCycleAnchorConfig = billingCycleAnchorConfig
         self.billingMode = billingMode
         self.defaultTaxRates = defaultTaxRates
         self.description = description
         self.invoiceSettings = invoiceSettings
         self.metadata = metadata
         self.onBehalfOf = onBehalfOf
+        self.pendingInvoiceItemInterval = pendingInvoiceItemInterval
         self.prorationBehavior = prorationBehavior
         self.transferData = transferData
         self.trialEnd = trialEnd
@@ -3259,17 +3585,50 @@ public struct CheckoutSessionCreateSubscriptionData: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case applicationFeePercent = "application_fee_percent"
         case billingCycleAnchor = "billing_cycle_anchor"
+        case billingCycleAnchorConfig = "billing_cycle_anchor_config"
         case billingMode = "billing_mode"
         case defaultTaxRates = "default_tax_rates"
         case description
         case invoiceSettings = "invoice_settings"
         case metadata
         case onBehalfOf = "on_behalf_of"
+        case pendingInvoiceItemInterval = "pending_invoice_item_interval"
         case prorationBehavior = "proration_behavior"
         case transferData = "transfer_data"
         case trialEnd = "trial_end"
         case trialPeriodDays = "trial_period_days"
         case trialSettings = "trial_settings"
+    }
+}
+
+/// Configures when the subscription schedule's billing cycle anchors to a specific day of the week or
+/// month.
+public struct CheckoutSessionCreateSubscriptionDataBillingCycleAnchorConfig: StripeParams {
+    /// The day of the month the anchor should be. Ranges from 1 to 31.
+    public var dayOfMonth: Int
+    /// The hour of the day the anchor should be. Ranges from 0 to 23.
+    public var hour: Int?
+    /// The minute of the hour the anchor should be. Ranges from 0 to 59.
+    public var minute: Int?
+    /// The month to start full cycle periods. Ranges from 1 to 12.
+    public var month: Int?
+    /// The second of the minute the anchor should be. Ranges from 0 to 59.
+    public var second: Int?
+
+    public init(dayOfMonth: Int, hour: Int? = nil, minute: Int? = nil, month: Int? = nil, second: Int? = nil) {
+        self.dayOfMonth = dayOfMonth
+        self.hour = hour
+        self.minute = minute
+        self.month = month
+        self.second = second
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case dayOfMonth = "day_of_month"
+        case hour
+        case minute
+        case month
+        case second
     }
 }
 
@@ -3303,12 +3662,45 @@ public struct CheckoutSessionCreateSubscriptionDataBillingModeFlexible: StripePa
 
 /// All invoices will be billed using the specified settings.
 public struct CheckoutSessionCreateSubscriptionDataInvoiceSettings: StripeParams {
+    /// The account tax IDs associated with the subscription. Will be set on invoices generated by the
+    /// subscription.
+    public var accountTaxIds: [String]?
+    /// A list of up to 4 custom fields to be displayed on the invoice.
+    public var customFields: [CheckoutSessionCreateSubscriptionDataInvoiceSettingsCustomFields]?
+    /// An arbitrary string attached to the object. Often useful for displaying to users.
+    public var description: String?
+    /// Footer to be displayed on the invoice.
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: CheckoutSessionCreateSubscriptionDataInvoiceSettingsIssuer?
 
-    public init(issuer: CheckoutSessionCreateSubscriptionDataInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [CheckoutSessionCreateSubscriptionDataInvoiceSettingsCustomFields]? = nil, description: String? = nil, footer: String? = nil, issuer: CheckoutSessionCreateSubscriptionDataInvoiceSettingsIssuer? = nil) {
+        self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
+        case description
+        case footer
+        case issuer
+    }
+}
+
+public struct CheckoutSessionCreateSubscriptionDataInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -3323,6 +3715,27 @@ public struct CheckoutSessionCreateSubscriptionDataInvoiceSettingsIssuer: Stripe
     public init(type: CheckoutSessionCreateSubscriptionDataInvoiceSettingsIssuerType, account: String? = nil) {
         self.type = type
         self.account = account
+    }
+}
+
+/// Specifies an interval for how often to bill for any pending invoice items. It is analogous to
+/// calling [Create an invoice](https://docs.stripe.com/api#create_invoice) for the given subscription
+/// at the specified interval.
+public struct CheckoutSessionCreateSubscriptionDataPendingInvoiceItemInterval: StripeParams {
+    /// Specifies invoicing frequency. Either `day`, `week`, `month` or `year`.
+    public var interval: CheckoutSessionCreateSubscriptionDataPendingInvoiceItemIntervalInterval
+    /// The number of intervals between invoices. For example, `interval=month` and `interval_count=3` bills
+    /// every 3 months. Maximum of one year interval allowed (1 year, 12 months, or 52 weeks).
+    public var intervalCount: Int?
+
+    public init(interval: CheckoutSessionCreateSubscriptionDataPendingInvoiceItemIntervalInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
     }
 }
 
@@ -3381,7 +3794,7 @@ public struct CheckoutSessionCreateTaxIdCollection: StripeParams {
     /// Enable tax ID collection during checkout. Defaults to `false`.
     public var enabled: Bool
     /// Describes whether a tax ID is required during checkout. Defaults to `never`. You can't set this
-    /// parameter if `ui_mode` is `custom`.
+    /// parameter if `ui_mode` is `elements`.
     public var required: CheckoutSessionCreateTaxIdCollectionRequired?
 
     public init(enabled: Bool, required: CheckoutSessionCreateTaxIdCollectionRequired? = nil) {
@@ -3392,7 +3805,7 @@ public struct CheckoutSessionCreateTaxIdCollection: StripeParams {
 
 /// Wallet-specific configuration.
 public struct CheckoutSessionCreateWalletOptions: StripeParams {
-    /// contains details about the Link wallet options.
+    /// contains details about the Link wallet options (Link is also known as Onelink in the UK).
     public var link: CheckoutSessionCreateWalletOptionsLink?
 
     public init(link: CheckoutSessionCreateWalletOptionsLink? = nil) {
@@ -3400,7 +3813,7 @@ public struct CheckoutSessionCreateWalletOptions: StripeParams {
     }
 }
 
-/// contains details about the Link wallet options.
+/// contains details about the Link wallet options (Link is also known as Onelink in the UK).
 public struct CheckoutSessionCreateWalletOptionsLink: StripeParams {
     /// Specifies whether Checkout should display Link as a payment option. By default, Checkout will
     /// display all the supported wallets that the Checkout Session was created with. This is the `auto`
@@ -3413,7 +3826,7 @@ public struct CheckoutSessionCreateWalletOptionsLink: StripeParams {
 }
 
 /// Information about the customer collected within the Checkout Session. Can only be set when updating
-/// `embedded` or `custom` sessions.
+/// `embedded_page` or `elements` sessions.
 public struct CheckoutSessionUpdateCollectedInformation: StripeParams {
     /// The shipping details to apply to this Session.
     public var shippingDetails: CheckoutSessionUpdateCollectedInformationShippingDetails?
@@ -3488,8 +3901,10 @@ public struct CheckoutSessionUpdateLineItems: StripeParams {
     /// The ID of the [Price](https://docs.stripe.com/api/prices). One of `price` or `price_data` is
     /// required when creating a new line item.
     public var price: String?
-    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-    /// `price` or `price_data` is required when creating a new line item.
+    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline, for [dynamic
+    /// pricing](https://docs.stripe.com/products-prices/how-products-and-prices-work#inline-pricing) when
+    /// the amount isn't known ahead of time. One of `price` or `price_data` is required when creating a new
+    /// line item.
     public var priceData: CheckoutSessionUpdateLineItemsPriceData?
     /// The quantity of the line item being purchased. Quantity should not be defined when
     /// `recurring.usage_type=metered`.
@@ -3538,8 +3953,10 @@ public struct CheckoutSessionUpdateLineItemsAdjustableQuantity: StripeParams {
     }
 }
 
-/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-/// `price` or `price_data` is required when creating a new line item.
+/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline, for [dynamic
+/// pricing](https://docs.stripe.com/products-prices/how-products-and-prices-work#inline-pricing) when
+/// the amount isn't known ahead of time. One of `price` or `price_data` is required when creating a new
+/// line item.
 public struct CheckoutSessionUpdateLineItemsPriceData: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -3604,16 +4021,20 @@ public struct CheckoutSessionUpdateLineItemsPriceDataProductData: StripeParams {
     public var metadata: [String: String]?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: CheckoutSessionUpdateLineItemsPriceDataProductDataTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal.
     public var unitLabel: String?
 
-    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, unitLabel: String? = nil) {
+    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, taxDetails: CheckoutSessionUpdateLineItemsPriceDataProductDataTaxDetails? = nil, unitLabel: String? = nil) {
         self.name = name
         self.description = description
         self.images = images
         self.metadata = metadata
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
     }
 
@@ -3623,7 +4044,29 @@ public struct CheckoutSessionUpdateLineItemsPriceDataProductData: StripeParams {
         case metadata
         case name
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
+    }
+}
+
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct CheckoutSessionUpdateLineItemsPriceDataProductDataTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }
 
@@ -3644,6 +4087,67 @@ public struct CheckoutSessionUpdateLineItemsPriceDataRecurring: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case interval
         case intervalCount = "interval_count"
+    }
+}
+
+/// A subset of parameters to apply to the PaymentIntent for Checkout Sessions in `payment` mode. You
+/// can only update these parameters when `ui_mode` is `elements` and while the session is active. If
+/// the PaymentIntent requires customer action or confirmation, updating these parameters abandons the
+/// current payment attempt and returns the PaymentIntent to `requires_payment_method`. You can't update
+/// these parameters after the PaymentIntent begins processing, requires capture, succeeds, or is
+/// canceled.
+public struct CheckoutSessionUpdatePaymentIntentData: StripeParams {
+    /// An arbitrary string attached to the object. Often useful for displaying to users. Pass an empty
+    /// string to clear a previously configured value.
+    public var description: String?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
+    /// empty value to `metadata`.
+    public var metadata: [String: String]?
+    /// Indicates that you intend to [make future
+    /// payments](https://docs.stripe.com/payments/payment-intents#future-usage) with the payment method
+    /// collected by this Checkout Session. When setting this to `on_session`, Checkout will show a notice
+    /// to the customer that their payment details will be saved. When setting this to `off_session`,
+    /// Checkout will show a notice to the customer that their payment details will be saved and used for
+    /// future payments. If a Customer has been provided or Checkout creates a new Customer, Checkout will
+    /// attach the payment method to the Customer. If Checkout does not create a Customer, the payment
+    /// method is not attached to a Customer. To reuse the payment method, you can retrieve it from the
+    /// Checkout Session's PaymentIntent. When processing card payments, Checkout also uses
+    /// `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation
+    /// and network rules, such as SCA. You must wrap any Checkout Session update that mutates
+    /// `setup_future_usage` in [`runServerUpdate`](/js/custom_checkout/run_server_update) and await it
+    /// before continuing with the payment. Pass an empty string to remove a previously supplied
+    /// configuration.
+    public var setupFutureUsage: CheckoutSessionUpdatePaymentIntentDataSetupFutureUsage?
+    /// Text that appears on the customer's statement as the statement descriptor for a non-card charge.
+    /// This value overrides the account's default statement descriptor. For information about requirements,
+    /// including the 22-character limit, see [the Statement Descriptor
+    /// docs](https://docs.stripe.com/get-started/account/statement-descriptors). Setting this value for a
+    /// card charge returns an error. For card charges, set the
+    /// [statement_descriptor_suffix](https://docs.stripe.com/get-started/account/statement-descriptors#dynamic)
+    /// instead. Pass an empty string to clear a previously configured value.
+    public var statementDescriptor: String?
+    /// Provides information about a card charge. Concatenated to the account's [statement descriptor
+    /// prefix](https://docs.stripe.com/get-started/account/statement-descriptors#static) to form the
+    /// complete statement descriptor that appears on the customer's statement. Pass an empty string to
+    /// clear a previously configured value.
+    public var statementDescriptorSuffix: String?
+
+    public init(description: String? = nil, metadata: [String: String]? = nil, setupFutureUsage: CheckoutSessionUpdatePaymentIntentDataSetupFutureUsage? = nil, statementDescriptor: String? = nil, statementDescriptorSuffix: String? = nil) {
+        self.description = description
+        self.metadata = metadata
+        self.setupFutureUsage = setupFutureUsage
+        self.statementDescriptor = statementDescriptor
+        self.statementDescriptorSuffix = statementDescriptorSuffix
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case description
+        case metadata
+        case setupFutureUsage = "setup_future_usage"
+        case statementDescriptor = "statement_descriptor"
+        case statementDescriptorSuffix = "statement_descriptor_suffix"
     }
 }
 

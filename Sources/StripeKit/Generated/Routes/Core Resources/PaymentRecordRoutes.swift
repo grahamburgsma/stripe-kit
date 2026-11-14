@@ -13,13 +13,16 @@ import NIOHTTP1
 
 public struct PaymentRecordRoutes: Sendable {
 
+    /// Retrieves a Payment Record with the given ID
+    public var retrieve: @Sendable (_ id: String, _ expand: [String]?) async throws -> PaymentRecord
+
+    /// List all the Payment Records for a given merchant.
+    public var list: @Sendable (_ expand: [String]?) async throws -> PaymentRecordList
+
     /// Report a new Payment Record. You may report a Payment Record as it is initialized and later report
     /// updates through the other report_* methods, or report Payment Records in a terminal state directly,
     /// through this method.
-    public var create: @Sendable (_ params: PaymentRecordCreateParams) async throws -> PaymentRecord
-
-    /// Retrieves a Payment Record with the given ID
-    public var list: @Sendable (_ id: String, _ expand: [String]?) async throws -> PaymentRecordList
+    public var reportPayment: @Sendable (_ params: PaymentRecordReportPaymentParams) async throws -> PaymentRecord
 
     /// Report a new payment attempt on the specified Payment Record. A new payment attempt can only be
     /// specified if all other payment attempts are canceled or failed.
@@ -44,22 +47,31 @@ public struct PaymentRecordRoutes: Sendable {
 extension PaymentRecordRoutes {
     static func live(handler: StripeAPIHandler) -> Self {
         PaymentRecordRoutes(
-            create: { params in
-                let body = params.toFormBody()
-                return try await handler.send(
-                    method: .POST,
-                    path: "/v1/payment_records/report_payment",
-                    body: .bytes(ByteBuffer(string: body))
-                ) as PaymentRecord
-            },
-            list: { id, expand in
+            retrieve: { id, expand in
                 var query = ""
                 if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
                 let path = query.isEmpty ? "/v1/payment_records/\(id)" : "/v1/payment_records/\(id)?\(query)"
                 return try await handler.send(
                     method: .GET,
                     path: path
+                ) as PaymentRecord
+            },
+            list: { expand in
+                var query = ""
+                if let expand { query = expand.map { "expand[]=\($0)" }.joined(separator: "&") }
+                let path = query.isEmpty ? "/v1/payment_records" : "/v1/payment_records?\(query)"
+                return try await handler.send(
+                    method: .GET,
+                    path: path
                 ) as PaymentRecordList
+            },
+            reportPayment: { params in
+                let body = params.toFormBody()
+                return try await handler.send(
+                    method: .POST,
+                    path: "/v1/payment_records/report_payment",
+                    body: .bytes(ByteBuffer(string: body))
+                ) as PaymentRecord
             },
             reportPaymentAttempt: { id, params in
                 let body = params.toFormBody()

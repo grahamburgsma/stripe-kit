@@ -17,17 +17,23 @@ public struct FinancialConnectionsSessionCreateParams: StripeParams {
     public var expand: [String]?
     /// Filters to restrict the kinds of accounts to collect.
     public var filters: FinancialConnectionsSessionCreateFilters?
+    /// Settings for configuring Session-specific limits.
+    public var limits: FinancialConnectionsSessionCreateLimits?
+    /// Customize manual entry behavior
+    public var manualEntry: FinancialConnectionsSessionCreateManualEntry?
     /// List of data features that you would like to retrieve upon account creation.
     public var prefetch: [FinancialConnectionsSessionCreatePrefetch]?
     /// For webview integrations only. Upon completing OAuth login in the native browser, the user will be
     /// redirected to this URL to return to your app.
     public var returnUrl: String?
 
-    public init(accountHolder: FinancialConnectionsSessionCreateAccountHolder, permissions: [FinancialConnectionsSessionCreatePermissions], expand: [String]? = nil, filters: FinancialConnectionsSessionCreateFilters? = nil, prefetch: [FinancialConnectionsSessionCreatePrefetch]? = nil, returnUrl: String? = nil) {
+    public init(accountHolder: FinancialConnectionsSessionCreateAccountHolder, permissions: [FinancialConnectionsSessionCreatePermissions], expand: [String]? = nil, filters: FinancialConnectionsSessionCreateFilters? = nil, limits: FinancialConnectionsSessionCreateLimits? = nil, manualEntry: FinancialConnectionsSessionCreateManualEntry? = nil, prefetch: [FinancialConnectionsSessionCreatePrefetch]? = nil, returnUrl: String? = nil) {
         self.accountHolder = accountHolder
         self.permissions = permissions
         self.expand = expand
         self.filters = filters
+        self.limits = limits
+        self.manualEntry = manualEntry
         self.prefetch = prefetch
         self.returnUrl = returnUrl
     }
@@ -36,6 +42,8 @@ public struct FinancialConnectionsSessionCreateParams: StripeParams {
         case accountHolder = "account_holder"
         case expand
         case filters
+        case limits
+        case manualEntry = "manual_entry"
         case permissions
         case prefetch
         case returnUrl = "return_url"
@@ -76,16 +84,42 @@ public struct FinancialConnectionsSessionCreateFilters: StripeParams {
     /// Restricts the Session to subcategories of accounts that can be linked. Valid subcategories are:
     /// `checking`, `savings`, `mortgage`, `line_of_credit`, `credit_card`.
     public var accountSubcategories: [FinancialConnectionsSessionCreateFiltersAccountSubcategories]?
-    /// List of countries from which to collect accounts.
-    public var countries: [String]?
+    /// Country from which to collect accounts.
+    public var country: String?
+    /// Whether the session should require payment method support and successful account number retrieval
+    /// before completion.
+    public var requirePaymentMethodSupport: FinancialConnectionsSessionCreateFiltersRequirePaymentMethodSupport?
 
-    public init(accountSubcategories: [FinancialConnectionsSessionCreateFiltersAccountSubcategories]? = nil, countries: [String]? = nil) {
+    public init(accountSubcategories: [FinancialConnectionsSessionCreateFiltersAccountSubcategories]? = nil, country: String? = nil, requirePaymentMethodSupport: FinancialConnectionsSessionCreateFiltersRequirePaymentMethodSupport? = nil) {
         self.accountSubcategories = accountSubcategories
-        self.countries = countries
+        self.country = country
+        self.requirePaymentMethodSupport = requirePaymentMethodSupport
     }
 
     public enum CodingKeys: String, CodingKey {
         case accountSubcategories = "account_subcategories"
-        case countries
+        case country
+        case requirePaymentMethodSupport = "require_payment_method_support"
+    }
+}
+
+/// Settings for configuring Session-specific limits.
+public struct FinancialConnectionsSessionCreateLimits: StripeParams {
+    /// The number of accounts that can be linked in this Session. Pass an empty value to allow any number
+    /// of accounts.
+    public var accounts: Int
+
+    public init(accounts: Int) {
+        self.accounts = accounts
+    }
+}
+
+/// Customize manual entry behavior
+public struct FinancialConnectionsSessionCreateManualEntry: StripeParams {
+    /// How manual entry should be handled.
+    public var mode: FinancialConnectionsSessionCreateManualEntryMode?
+
+    public init(mode: FinancialConnectionsSessionCreateManualEntryMode? = nil) {
+        self.mode = mode
     }
 }

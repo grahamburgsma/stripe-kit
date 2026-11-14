@@ -8,10 +8,9 @@
 import Foundation
 
 public struct PaymentMethodDetailsAffirm: Codable, Sendable {
-    /// ID of the [location](https://docs.stripe.com/api/terminal/locations) that this transaction's reader
-    /// is assigned to.
+    /// ID of the location that this reader is assigned to.
     public var location: String?
-    /// ID of the [reader](https://docs.stripe.com/api/terminal/readers) this transaction was made on.
+    /// ID of the reader this transaction was made on.
     public var reader: String?
     /// The Affirm transaction ID associated with this payment.
     public var transactionId: String?

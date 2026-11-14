@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Occurs when an SetupIntent has successfully setup a payment method.
+/// Occurs when a SetupIntent has successfully setup a payment method.
 public struct SetupIntentSucceeded: Codable, Sendable {
     public var object: SetupIntent
 }

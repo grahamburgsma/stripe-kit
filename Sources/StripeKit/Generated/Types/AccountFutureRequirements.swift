@@ -25,7 +25,8 @@ public struct AccountFutureRequirements: Codable, Sendable {
     public var currentlyDue: [String]?
     /// This is typed as an enum for consistency with `requirements.disabled_reason`.
     public var disabledReason: AccountFutureRequirementsDisabledReason?
-    /// Details about validation and verification failures for `due` requirements that must be resolved.
+    /// Fields that are `currently_due` and need to be collected again because validation or verification
+    /// failed.
     @ExpandableCollection<AccountRequirementsError>
     public var errors: [String]?
     /// Fields you must collect when all thresholds are reached. As they become required, they appear in

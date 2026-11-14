@@ -8,12 +8,16 @@
 import Foundation
 
 public struct PaymentPagesPrivateCardPaymentMethodOptionsResourceRestrictions: Codable, Sendable {
-    /// Specify the card brands to block in the Checkout Session. If a customer enters or selects a card
-    /// belonging to a blocked brand, they can't complete the Session.
+    /// The card brands to block. If a customer enters or selects a card belonging to a blocked brand, they
+    /// can't complete the payment.
     public var brandsBlocked: [String]?
+    /// Card funding types to block for this Checkout Session. Supported values are `credit`, `debit`, and
+    /// `prepaid`.
+    public var fundingTypesBlocked: [String]?
 
     public enum CodingKeys: String, CodingKey {
         case brandsBlocked = "brands_blocked"
+        case fundingTypesBlocked = "funding_types_blocked"
     }
 }
 

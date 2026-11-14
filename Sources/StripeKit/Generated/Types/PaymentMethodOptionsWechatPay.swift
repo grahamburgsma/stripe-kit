@@ -8,7 +8,7 @@
 import Foundation
 
 public struct PaymentMethodOptionsWechatPay: Codable, Sendable {
-    /// The app ID registered with WeChat Pay. Only required when client is ios or android.
+    /// The app ID registered with WeChat Pay. Only required when client is ios, android, or mini_program.
     public var appId: String?
     /// The client type that the end customer will pay from
     public var client: PaymentMethodOptionsWechatPayClient?

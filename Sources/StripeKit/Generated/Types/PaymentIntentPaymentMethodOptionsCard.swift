@@ -43,6 +43,8 @@ public struct PaymentIntentPaymentMethodOptionsCard: Codable, Sendable {
     /// When enabled, using a card that is attached to a customer will require the CVC to be provided again
     /// (i.e. using the cvc_token parameter).
     public var requireCvcRecollection: Bool?
+    /// Set to indicate the future transaction type usage for the card being set up.
+    public var setupCredentialUsage: PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage?
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
     /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
     /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
@@ -67,6 +69,8 @@ public struct PaymentIntentPaymentMethodOptionsCard: Codable, Sendable {
     /// *concatenation* of both prefix and suffix (including separators) will appear truncated to 17
     /// characters.
     public var statementDescriptorSuffixKanji: String?
+    /// Selected usage to indicate the transaction type of the off-session payment.
+    public var storedCredentialUsage: PaymentIntentPaymentMethodOptionsCardStoredCredentialUsage?
 
     public enum CodingKeys: String, CodingKey {
         case captureMethod = "capture_method"
@@ -79,9 +83,11 @@ public struct PaymentIntentPaymentMethodOptionsCard: Codable, Sendable {
         case requestOvercapture = "request_overcapture"
         case requestThreeDSecure = "request_three_d_secure"
         case requireCvcRecollection = "require_cvc_recollection"
+        case setupCredentialUsage = "setup_credential_usage"
         case setupFutureUsage = "setup_future_usage"
         case statementDescriptorSuffixKana = "statement_descriptor_suffix_kana"
         case statementDescriptorSuffixKanji = "statement_descriptor_suffix_kanji"
+        case storedCredentialUsage = "stored_credential_usage"
     }
 }
 
@@ -149,6 +155,13 @@ public enum PaymentIntentPaymentMethodOptionsCardRequestThreeDSecure: String, Co
     case challenge
 }
 
+/// Set to indicate the future transaction type usage for the card being set up.
+public enum PaymentIntentPaymentMethodOptionsCardSetupCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
+}
+
 /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
 /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
 /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
@@ -164,6 +177,13 @@ public enum PaymentIntentPaymentMethodOptionsCardSetupFutureUsage: String, Codab
     case none
     case offSession = "off_session"
     case onSession = "on_session"
+}
+
+/// Selected usage to indicate the transaction type of the off-session payment.
+public enum PaymentIntentPaymentMethodOptionsCardStoredCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
 }
 
 public struct PaymentIntentPaymentMethodOptionsCardList: Codable, Sendable {

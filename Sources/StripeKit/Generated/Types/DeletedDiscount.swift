@@ -9,7 +9,7 @@ import Foundation
 
 public struct DeletedDiscount: Codable, Sendable {
     /// The Checkout session that this coupon is applied to, if it is applied to a particular session in
-    /// payment mode. Will not be present for subscription mode.
+    /// payment mode. Not present for subscription mode.
     public var checkoutSession: String?
     /// The ID of the customer associated with this discount.
     @Expandable<Customer>
@@ -18,7 +18,7 @@ public struct DeletedDiscount: Codable, Sendable {
     public var customerAccount: String?
     /// Always true for a deleted object
     public var deleted: Bool
-    /// The ID of the discount object. Discounts cannot be fetched by ID. Use `expand[]=discounts` in API
+    /// The ID of the discount object. Discounts can't be fetched by ID. Use `expand[]=discounts` in API
     /// calls to expand discount IDs in an array.
     public var id: String
     /// The invoice that the discount's coupon was applied to, if it was applied directly to a particular

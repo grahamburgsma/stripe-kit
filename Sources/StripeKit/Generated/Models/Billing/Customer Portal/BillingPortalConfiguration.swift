@@ -21,7 +21,7 @@ public struct BillingPortalConfiguration: Codable, Sendable {
     public var created: Int
     /// The default URL to redirect customers to when they click on the portal's link to return to your
     /// website. This can be
-    /// [overriden](https://docs.stripe.com/api/customer_portal/sessions/create#create_portal_session-return_url)
+    /// [overridden](https://docs.stripe.com/api/customer_portal/sessions/create#create_portal_session-return_url)
     /// when creating the session.
     public var defaultReturnUrl: String?
     @Expandable<PortalFeatures>
@@ -32,8 +32,8 @@ public struct BillingPortalConfiguration: Codable, Sendable {
     /// Dashboard and portal sessions will use this configuration unless it is overriden when creating the
     /// session.
     public var isDefault: Bool
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     @Expandable<PortalLoginPage>
     public var loginPage: String?

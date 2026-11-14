@@ -8,6 +8,13 @@
 import Foundation
 
 public struct PaymentMethodDetailsCardWalletLink: Codable, Sendable {
+    /// The [funding source group code](https://docs.stripe.com/payments/link/link-payment-methods) applied
+    /// to this Link payment at confirmation time.
+    public var fundingSourceGroup: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case fundingSourceGroup = "funding_source_group"
+    }
 }
 
 public struct PaymentMethodDetailsCardWalletLinkList: Codable, Sendable {

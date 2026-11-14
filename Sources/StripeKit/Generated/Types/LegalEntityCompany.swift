@@ -16,6 +16,8 @@ public struct LegalEntityCompany: Codable, Sendable {
     /// The Kanji variation of the company's primary address (Japan only).
     @Expandable<LegalEntityJapanAddress>
     public var addressKanji: String?
+    @Expandable<Address>
+    public var administrativeAddress: String?
     /// Whether the company's directors have been provided. This Boolean will be `true` if you've manually
     /// indicated that all directors are provided via [the `directors_provided`
     /// parameter](https://docs.stripe.com/api/accounts/update#update_account-company-directors_provided).
@@ -64,6 +66,10 @@ public struct LegalEntityCompany: Codable, Sendable {
     public var ownershipExemptionReason: LegalEntityCompanyOwnershipExemptionReason?
     /// The company's phone number (used for verification).
     public var phone: String?
+    @Expandable<Address>
+    public var physicalAddress: String?
+    @Expandable<Address>
+    public var principalPlaceOfBusiness: String?
     @Expandable<LegalEntityRegistrationDate>
     public var registrationDate: String?
     /// This hash is used to attest that the representative is authorized to act as the representative of
@@ -91,6 +97,7 @@ public struct LegalEntityCompany: Codable, Sendable {
         case address
         case addressKana = "address_kana"
         case addressKanji = "address_kanji"
+        case administrativeAddress = "administrative_address"
         case directorsProvided = "directors_provided"
         case directorshipDeclaration = "directorship_declaration"
         case executivesProvided = "executives_provided"
@@ -103,6 +110,8 @@ public struct LegalEntityCompany: Codable, Sendable {
         case ownershipDeclaration = "ownership_declaration"
         case ownershipExemptionReason = "ownership_exemption_reason"
         case phone
+        case physicalAddress = "physical_address"
+        case principalPlaceOfBusiness = "principal_place_of_business"
         case registrationDate = "registration_date"
         case representativeDeclaration = "representative_declaration"
         case structure

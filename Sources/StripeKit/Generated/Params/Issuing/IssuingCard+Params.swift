@@ -26,6 +26,9 @@ public struct IssuingCardCreateParams: StripeParams {
     /// The new financial account ID the card will be associated with. This field allows a card to be
     /// reassigned to a different financial account.
     public var financialAccount: String?
+    /// Rules that control the lifecycle of this card, such as automatic cancellation. Refer to our
+    /// [documentation](/issuing/controls/lifecycle-controls) for more details.
+    public var lifecycleControls: IssuingCardCreateLifecycleControls?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
@@ -50,7 +53,7 @@ public struct IssuingCardCreateParams: StripeParams {
     /// on past-due Cardholder requirements. Defaults to `inactive`.
     public var status: IssuingCardCreateStatus?
 
-    public init(currency: String, type: IssuingCardCreateType, cardholder: String? = nil, expMonth: Int? = nil, expYear: Int? = nil, expand: [String]? = nil, financialAccount: String? = nil, metadata: [String: String]? = nil, personalizationDesign: String? = nil, pin: IssuingCardCreatePin? = nil, replacementFor: String? = nil, replacementReason: IssuingCardCreateReplacementReason? = nil, secondLine: String? = nil, shipping: IssuingCardCreateShipping? = nil, spendingControls: IssuingCardCreateSpendingControls? = nil, status: IssuingCardCreateStatus? = nil) {
+    public init(currency: String, type: IssuingCardCreateType, cardholder: String? = nil, expMonth: Int? = nil, expYear: Int? = nil, expand: [String]? = nil, financialAccount: String? = nil, lifecycleControls: IssuingCardCreateLifecycleControls? = nil, metadata: [String: String]? = nil, personalizationDesign: String? = nil, pin: IssuingCardCreatePin? = nil, replacementFor: String? = nil, replacementReason: IssuingCardCreateReplacementReason? = nil, secondLine: String? = nil, shipping: IssuingCardCreateShipping? = nil, spendingControls: IssuingCardCreateSpendingControls? = nil, status: IssuingCardCreateStatus? = nil) {
         self.currency = currency
         self.type = type
         self.cardholder = cardholder
@@ -58,6 +61,7 @@ public struct IssuingCardCreateParams: StripeParams {
         self.expYear = expYear
         self.expand = expand
         self.financialAccount = financialAccount
+        self.lifecycleControls = lifecycleControls
         self.metadata = metadata
         self.personalizationDesign = personalizationDesign
         self.pin = pin
@@ -76,6 +80,7 @@ public struct IssuingCardCreateParams: StripeParams {
         case expYear = "exp_year"
         case expand
         case financialAccount = "financial_account"
+        case lifecycleControls = "lifecycle_controls"
         case metadata
         case personalizationDesign = "personalization_design"
         case pin
@@ -94,6 +99,9 @@ public struct IssuingCardUpdateParams: StripeParams {
     public var cancellationReason: IssuingCardUpdateCancellationReason?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
+    /// The new financial account ID the card will be associated with. This field allows a card to be
+    /// reassigned to a different financial account.
+    public var financialAccount: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
@@ -113,9 +121,10 @@ public struct IssuingCardUpdateParams: StripeParams {
     /// `cancellation_reason`.
     public var status: IssuingCardUpdateStatus?
 
-    public init(cancellationReason: IssuingCardUpdateCancellationReason? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, personalizationDesign: String? = nil, pin: IssuingCardUpdatePin? = nil, shipping: IssuingCardUpdateShipping? = nil, spendingControls: IssuingCardUpdateSpendingControls? = nil, status: IssuingCardUpdateStatus? = nil) {
+    public init(cancellationReason: IssuingCardUpdateCancellationReason? = nil, expand: [String]? = nil, financialAccount: String? = nil, metadata: [String: String]? = nil, personalizationDesign: String? = nil, pin: IssuingCardUpdatePin? = nil, shipping: IssuingCardUpdateShipping? = nil, spendingControls: IssuingCardUpdateSpendingControls? = nil, status: IssuingCardUpdateStatus? = nil) {
         self.cancellationReason = cancellationReason
         self.expand = expand
+        self.financialAccount = financialAccount
         self.metadata = metadata
         self.personalizationDesign = personalizationDesign
         self.pin = pin
@@ -127,12 +136,44 @@ public struct IssuingCardUpdateParams: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case cancellationReason = "cancellation_reason"
         case expand
+        case financialAccount = "financial_account"
         case metadata
         case personalizationDesign = "personalization_design"
         case pin
         case shipping
         case spendingControls = "spending_controls"
         case status
+    }
+}
+
+/// Rules that control the lifecycle of this card, such as automatic cancellation. Refer to our
+/// [documentation](/issuing/controls/lifecycle-controls) for more details.
+public struct IssuingCardCreateLifecycleControls: StripeParams {
+    /// Cancels the card after the specified conditions are met.
+    public var cancelAfter: IssuingCardCreateLifecycleControlsCancelAfter
+
+    public init(cancelAfter: IssuingCardCreateLifecycleControlsCancelAfter) {
+        self.cancelAfter = cancelAfter
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case cancelAfter = "cancel_after"
+    }
+}
+
+/// Cancels the card after the specified conditions are met.
+public struct IssuingCardCreateLifecycleControlsCancelAfter: StripeParams {
+    /// The card is automatically cancelled when it makes this number of non-zero payment authorizations and
+    /// transactions. The count includes penny authorizations, but doesn't include non-payment actions, such
+    /// as authorization advice.
+    public var paymentCount: Int
+
+    public init(paymentCount: Int) {
+        self.paymentCount = paymentCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case paymentCount = "payment_count"
     }
 }
 
@@ -158,6 +199,10 @@ public struct IssuingCardCreateShipping: StripeParams {
     public var name: String
     /// Address validation settings.
     public var addressValidation: IssuingCardCreateShippingAddressValidation?
+    /// The name of the business at the shipping address, used on the shipping label to ensure delivery when
+    /// the card is shipped to a cardholder's workplace. Allowed characters: `A-Z`, `a-z`, `0-9`, ` `, `.`,
+    /// `-`. All other characters are stripped or ASCII-normalized when printed.
+    public var businessName: String?
     /// Customs information for the shipment.
     public var customs: IssuingCardCreateShippingCustoms?
     /// Phone number of the recipient of the shipment.
@@ -169,10 +214,11 @@ public struct IssuingCardCreateShipping: StripeParams {
     /// Packaging options.
     public var type: IssuingCardCreateShippingType?
 
-    public init(address: IssuingCardCreateShippingAddress, name: String, addressValidation: IssuingCardCreateShippingAddressValidation? = nil, customs: IssuingCardCreateShippingCustoms? = nil, phoneNumber: String? = nil, requireSignature: Bool? = nil, service: IssuingCardCreateShippingService? = nil, type: IssuingCardCreateShippingType? = nil) {
+    public init(address: IssuingCardCreateShippingAddress, name: String, addressValidation: IssuingCardCreateShippingAddressValidation? = nil, businessName: String? = nil, customs: IssuingCardCreateShippingCustoms? = nil, phoneNumber: String? = nil, requireSignature: Bool? = nil, service: IssuingCardCreateShippingService? = nil, type: IssuingCardCreateShippingType? = nil) {
         self.address = address
         self.name = name
         self.addressValidation = addressValidation
+        self.businessName = businessName
         self.customs = customs
         self.phoneNumber = phoneNumber
         self.requireSignature = requireSignature
@@ -183,6 +229,7 @@ public struct IssuingCardCreateShipping: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case address
         case addressValidation = "address_validation"
+        case businessName = "business_name"
         case customs
         case name
         case phoneNumber = "phone_number"
@@ -254,6 +301,10 @@ public struct IssuingCardCreateShippingCustoms: StripeParams {
 /// Rules that control spending for this card. Refer to our
 /// [documentation](https://docs.stripe.com/issuing/controls/spending-controls) for more details.
 public struct IssuingCardCreateSpendingControls: StripeParams {
+    /// Array of card presence statuses from which authorizations will be allowed. Possible options are
+    /// `present`, `not_present`. All other statuses will be blocked. Cannot be set with
+    /// `blocked_card_presences`. Provide an empty value to unset this control.
+    public var allowedCardPresences: [IssuingCardCreateSpendingControlsAllowedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to allow. All other categories will be blocked. Cannot be set with
@@ -264,6 +315,10 @@ public struct IssuingCardCreateSpendingControls: StripeParams {
     /// 3166 alpha-2 country codes (e.g. `US`). Cannot be set with `blocked_merchant_countries`. Provide an
     /// empty value to unset this control.
     public var allowedMerchantCountries: [String]?
+    /// Array of card presence statuses from which authorizations will be declined. Possible options are
+    /// `present`, `not_present`. Cannot be set with `allowed_card_presences`. Provide an empty value to
+    /// unset this control.
+    public var blockedCardPresences: [IssuingCardCreateSpendingControlsBlockedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to decline. All other categories will be allowed. Cannot be set with
@@ -277,17 +332,21 @@ public struct IssuingCardCreateSpendingControls: StripeParams {
     /// `replacement_for` card and _that_ card's `replacement_for` card, up the chain).
     public var spendingLimits: [IssuingCardCreateSpendingControlsSpendingLimits]?
 
-    public init(allowedCategories: [IssuingCardCreateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCategories: [IssuingCardCreateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [IssuingCardCreateSpendingControlsSpendingLimits]? = nil) {
+    public init(allowedCardPresences: [IssuingCardCreateSpendingControlsAllowedCardPresences]? = nil, allowedCategories: [IssuingCardCreateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCardPresences: [IssuingCardCreateSpendingControlsBlockedCardPresences]? = nil, blockedCategories: [IssuingCardCreateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [IssuingCardCreateSpendingControlsSpendingLimits]? = nil) {
+        self.allowedCardPresences = allowedCardPresences
         self.allowedCategories = allowedCategories
         self.allowedMerchantCountries = allowedMerchantCountries
+        self.blockedCardPresences = blockedCardPresences
         self.blockedCategories = blockedCategories
         self.blockedMerchantCountries = blockedMerchantCountries
         self.spendingLimits = spendingLimits
     }
 
     public enum CodingKeys: String, CodingKey {
+        case allowedCardPresences = "allowed_card_presences"
         case allowedCategories = "allowed_categories"
         case allowedMerchantCountries = "allowed_merchant_countries"
+        case blockedCardPresences = "blocked_card_presences"
         case blockedCategories = "blocked_categories"
         case blockedMerchantCountries = "blocked_merchant_countries"
         case spendingLimits = "spending_limits"
@@ -333,6 +392,10 @@ public struct IssuingCardUpdateShipping: StripeParams {
     public var name: String
     /// Address validation settings.
     public var addressValidation: IssuingCardUpdateShippingAddressValidation?
+    /// The name of the business at the shipping address, used on the shipping label to ensure delivery when
+    /// the card is shipped to a cardholder's workplace. Allowed characters: `A-Z`, `a-z`, `0-9`, ` `, `.`,
+    /// `-`. All other characters are stripped or ASCII-normalized when printed.
+    public var businessName: String?
     /// Customs information for the shipment.
     public var customs: IssuingCardUpdateShippingCustoms?
     /// Phone number of the recipient of the shipment.
@@ -344,10 +407,11 @@ public struct IssuingCardUpdateShipping: StripeParams {
     /// Packaging options.
     public var type: IssuingCardUpdateShippingType?
 
-    public init(address: IssuingCardUpdateShippingAddress, name: String, addressValidation: IssuingCardUpdateShippingAddressValidation? = nil, customs: IssuingCardUpdateShippingCustoms? = nil, phoneNumber: String? = nil, requireSignature: Bool? = nil, service: IssuingCardUpdateShippingService? = nil, type: IssuingCardUpdateShippingType? = nil) {
+    public init(address: IssuingCardUpdateShippingAddress, name: String, addressValidation: IssuingCardUpdateShippingAddressValidation? = nil, businessName: String? = nil, customs: IssuingCardUpdateShippingCustoms? = nil, phoneNumber: String? = nil, requireSignature: Bool? = nil, service: IssuingCardUpdateShippingService? = nil, type: IssuingCardUpdateShippingType? = nil) {
         self.address = address
         self.name = name
         self.addressValidation = addressValidation
+        self.businessName = businessName
         self.customs = customs
         self.phoneNumber = phoneNumber
         self.requireSignature = requireSignature
@@ -358,6 +422,7 @@ public struct IssuingCardUpdateShipping: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case address
         case addressValidation = "address_validation"
+        case businessName = "business_name"
         case customs
         case name
         case phoneNumber = "phone_number"
@@ -429,6 +494,10 @@ public struct IssuingCardUpdateShippingCustoms: StripeParams {
 /// Rules that control spending for this card. Refer to our
 /// [documentation](https://docs.stripe.com/issuing/controls/spending-controls) for more details.
 public struct IssuingCardUpdateSpendingControls: StripeParams {
+    /// Array of card presence statuses from which authorizations will be allowed. Possible options are
+    /// `present`, `not_present`. All other statuses will be blocked. Cannot be set with
+    /// `blocked_card_presences`. Provide an empty value to unset this control.
+    public var allowedCardPresences: [IssuingCardUpdateSpendingControlsAllowedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to allow. All other categories will be blocked. Cannot be set with
@@ -439,6 +508,10 @@ public struct IssuingCardUpdateSpendingControls: StripeParams {
     /// 3166 alpha-2 country codes (e.g. `US`). Cannot be set with `blocked_merchant_countries`. Provide an
     /// empty value to unset this control.
     public var allowedMerchantCountries: [String]?
+    /// Array of card presence statuses from which authorizations will be declined. Possible options are
+    /// `present`, `not_present`. Cannot be set with `allowed_card_presences`. Provide an empty value to
+    /// unset this control.
+    public var blockedCardPresences: [IssuingCardUpdateSpendingControlsBlockedCardPresences]?
     /// Array of strings containing
     /// [categories](https://docs.stripe.com/api#issuing_authorization_object-merchant_data-category) of
     /// authorizations to decline. All other categories will be allowed. Cannot be set with
@@ -452,17 +525,21 @@ public struct IssuingCardUpdateSpendingControls: StripeParams {
     /// `replacement_for` card and _that_ card's `replacement_for` card, up the chain).
     public var spendingLimits: [IssuingCardUpdateSpendingControlsSpendingLimits]?
 
-    public init(allowedCategories: [IssuingCardUpdateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCategories: [IssuingCardUpdateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [IssuingCardUpdateSpendingControlsSpendingLimits]? = nil) {
+    public init(allowedCardPresences: [IssuingCardUpdateSpendingControlsAllowedCardPresences]? = nil, allowedCategories: [IssuingCardUpdateSpendingControlsAllowedCategories]? = nil, allowedMerchantCountries: [String]? = nil, blockedCardPresences: [IssuingCardUpdateSpendingControlsBlockedCardPresences]? = nil, blockedCategories: [IssuingCardUpdateSpendingControlsBlockedCategories]? = nil, blockedMerchantCountries: [String]? = nil, spendingLimits: [IssuingCardUpdateSpendingControlsSpendingLimits]? = nil) {
+        self.allowedCardPresences = allowedCardPresences
         self.allowedCategories = allowedCategories
         self.allowedMerchantCountries = allowedMerchantCountries
+        self.blockedCardPresences = blockedCardPresences
         self.blockedCategories = blockedCategories
         self.blockedMerchantCountries = blockedMerchantCountries
         self.spendingLimits = spendingLimits
     }
 
     public enum CodingKeys: String, CodingKey {
+        case allowedCardPresences = "allowed_card_presences"
         case allowedCategories = "allowed_categories"
         case allowedMerchantCountries = "allowed_merchant_countries"
+        case blockedCardPresences = "blocked_card_presences"
         case blockedCategories = "blocked_categories"
         case blockedMerchantCountries = "blocked_merchant_countries"
         case spendingLimits = "spending_limits"

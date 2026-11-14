@@ -21,6 +21,8 @@ public struct DisputeEvidenceDetails: Codable, Sendable {
     public var pastDue: Bool
     /// The number of times evidence has been submitted. Typically, you may only submit evidence once.
     public var submissionCount: Int
+    /// Whether the dispute was submitted manually, with Smart Disputes, or not submitted.
+    public var submissionMethod: DisputeEvidenceDetailsSubmissionMethod
 
     public enum CodingKeys: String, CodingKey {
         case dueBy = "due_by"
@@ -28,7 +30,15 @@ public struct DisputeEvidenceDetails: Codable, Sendable {
         case hasEvidence = "has_evidence"
         case pastDue = "past_due"
         case submissionCount = "submission_count"
+        case submissionMethod = "submission_method"
     }
+}
+
+/// Whether the dispute was submitted manually, with Smart Disputes, or not submitted.
+public enum DisputeEvidenceDetailsSubmissionMethod: String, Codable, Sendable {
+    case manual
+    case notSubmitted = "not_submitted"
+    case smartDisputes = "smart_disputes"
 }
 
 public struct DisputeEvidenceDetailsList: Codable, Sendable {

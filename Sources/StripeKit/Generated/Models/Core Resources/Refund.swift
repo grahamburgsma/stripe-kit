@@ -24,6 +24,11 @@ public struct Refund: Codable, Sendable {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
     public var currency: String
+    /// ID of the customer of this refund.
+    @Expandable<Customer>
+    public var customer: String?
+    /// ID of the account of this refund.
+    public var customerAccount: String?
     /// An arbitrary string attached to the object. You can use this for displaying to users (available on
     /// non-card refunds only).
     public var description: String?
@@ -52,6 +57,9 @@ public struct Refund: Codable, Sendable {
     /// ID of the PaymentIntent that's refunded.
     @Expandable<PaymentIntent>
     public var paymentIntent: String?
+    /// ID of the payment method associated with this refund.
+    @Expandable<PaymentMethod>
+    public var paymentMethod: String?
     /// Provides the reason for why the refund is pending. Possible values are: `processing`,
     /// `insufficient_funds`, or `charge_pending`.
     public var pendingReason: RefundPendingReason?
@@ -80,6 +88,8 @@ public struct Refund: Codable, Sendable {
         case charge
         case created
         case currency
+        case customer
+        case customerAccount = "customer_account"
         case description
         case destinationDetails = "destination_details"
         case failureBalanceTransaction = "failure_balance_transaction"
@@ -90,6 +100,7 @@ public struct Refund: Codable, Sendable {
         case nextAction = "next_action"
         case object
         case paymentIntent = "payment_intent"
+        case paymentMethod = "payment_method"
         case pendingReason = "pending_reason"
         case presentmentDetails = "presentment_details"
         case reason

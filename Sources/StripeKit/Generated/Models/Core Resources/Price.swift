@@ -8,7 +8,7 @@
 import Foundation
 
 /// Prices define the unit cost, currency, and (optional) billing cycle for both recurring and one-time
-/// purchases of products. [Products](https://api.stripe.com#products) help you track inventory or
+/// purchases of products. [Products](https://docs.stripe.com/api#products) help you track inventory or
 /// provisioning, and prices help you track payment terms. Different physical goods or levels of service
 /// should be represented by products, and pricing options should be represented by prices. This
 /// approach lets you change prices without having to change your provisioning scheme. For example, you
@@ -40,8 +40,8 @@ public struct Price: Codable, Sendable {
     public var customUnitAmount: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// A lookup key used to retrieve prices dynamically from a static string. This may be up to 200
     /// characters.

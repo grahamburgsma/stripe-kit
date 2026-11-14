@@ -13,7 +13,7 @@ import NIOHTTP1
 
 public struct FinancialConnectionsAccountRoutes: Sendable {
 
-    /// Retrieves the details of an Financial Connections Account.
+    /// Retrieves the details of a Financial Connections Account.
     public var retrieve: @Sendable (_ account: String, _ expand: [String]?) async throws -> FinancialConnectionsAccount
 
     /// Returns a list of Financial Connections Account objects.

@@ -15,12 +15,13 @@ public struct Settings: Codable, Sendable {
     /// The place where your business is located.
     @Expandable<TaxProductResourceTaxSettingsHeadOffice>
     public var headOffice: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: SettingsObject
-    /// The status of the Tax `Settings`.
+    /// Whether these settings have the information Stripe Tax needs to calculate tax. It doesn't reflect
+    /// whether your integration is ready to collect tax.
     public var status: SettingsStatus
     @Expandable<TaxProductResourceTaxSettingsStatusDetails>
     public var statusDetails: String?
@@ -40,7 +41,8 @@ public enum SettingsObject: String, Codable, Sendable {
     case taxSettings = "tax.settings"
 }
 
-/// The status of the Tax `Settings`.
+/// Whether these settings have the information Stripe Tax needs to calculate tax. It doesn't reflect
+/// whether your integration is ready to collect tax.
 public enum SettingsStatus: String, Codable, Sendable {
     case active
     case pending

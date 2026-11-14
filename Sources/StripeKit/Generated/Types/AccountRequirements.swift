@@ -18,12 +18,13 @@ public struct AccountRequirements: Codable, Sendable {
     /// fields may disable the account sooner if the next threshold is reached before they are collected.
     public var currentDeadline: Int?
     /// Fields that need to be resolved to keep the account enabled. If not resolved by `current_deadline`,
-    /// these fields will appear in `past_due` as well, and the account is disabled.
+    /// these fields will appear in `past_due` as well, and the account will be disabled.
     public var currentlyDue: [String]?
     /// If the account is disabled, this enum describes why. [Learn more about handling verification
     /// issues](https://docs.stripe.com/connect/handling-api-verification).
     public var disabledReason: AccountRequirementsDisabledReason?
-    /// Details about validation and verification failures for `due` requirements that must be resolved.
+    /// Fields that are `currently_due` and need to be collected again because validation or verification
+    /// failed.
     @ExpandableCollection<AccountRequirementsError>
     public var errors: [String]?
     /// Fields you must collect when all thresholds are reached. As they become required, they appear in

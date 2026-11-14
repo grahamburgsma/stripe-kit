@@ -35,12 +35,14 @@ public struct FinancialConnectionsAccount: Codable, Sendable {
     public var institutionName: String
     /// The last 4 digits of the account number. If present, this will be 4 numeric characters.
     public var last4: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: FinancialConnectionsAccountObject
-    /// The most recent information about the account's owners.
+    /// The ID of the [Financial Connections Account
+    /// Ownership](https://docs.stripe.com/api/financial_connections/ownership) object associated with this
+    /// account.
     @Expandable<AccountOwnership>
     public var ownership: String?
     /// The state of the most recent attempt to refresh the account owners.
@@ -50,6 +52,8 @@ public struct FinancialConnectionsAccount: Codable, Sendable {
     public var permissions: [String]?
     /// The status of the link to the account.
     public var status: FinancialConnectionsAccountStatus
+    @Expandable<BankConnectionsResourceAccountStatusDetails>
+    public var statusDetails: String?
     /// If `category` is `cash`, one of: - `checking` - `savings` - `other` If `category` is `credit`, one
     /// of: - `mortgage` - `line_of_credit` - `credit_card` - `other` If `category` is `investment` or
     /// `other`, this will be `other`.
@@ -81,6 +85,7 @@ public struct FinancialConnectionsAccount: Codable, Sendable {
         case ownershipRefresh = "ownership_refresh"
         case permissions
         case status
+        case statusDetails = "status_details"
         case subcategory
         case subscriptions
         case supportedPaymentMethodTypes = "supported_payment_method_types"

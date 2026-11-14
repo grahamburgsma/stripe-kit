@@ -12,6 +12,8 @@ public struct ConnectEmbeddedAccountSessionCreateComponents: Codable, Sendable {
     public var accountManagement: String?
     @Expandable<ConnectEmbeddedAccountConfigClaim>
     public var accountOnboarding: String?
+    @Expandable<ConnectEmbeddedBaseConfigClaim>
+    public var balanceReport: String?
     @Expandable<ConnectEmbeddedPayoutsConfig>
     public var balances: String?
     @Expandable<ConnectEmbeddedDisputesListConfig>
@@ -34,22 +36,33 @@ public struct ConnectEmbeddedAccountSessionCreateComponents: Codable, Sendable {
     public var paymentDetails: String?
     @Expandable<ConnectEmbeddedPaymentDisputesConfig>
     public var paymentDisputes: String?
+    @Expandable<ConnectEmbeddedPaymentMethodSettingsConfigClaim>
+    public var paymentMethodSettings: String?
     @Expandable<ConnectEmbeddedPaymentsConfigClaim>
     public var payments: String?
     @Expandable<ConnectEmbeddedBaseConfigClaim>
     public var payoutDetails: String?
+    @Expandable<ConnectEmbeddedBaseConfigClaim>
+    public var payoutReconciliationReport: String?
     @Expandable<ConnectEmbeddedPayoutsConfig>
     public var payouts: String?
     @Expandable<ConnectEmbeddedBaseConfigClaim>
     public var payoutsList: String?
+    @Expandable<ConnectEmbeddedBaseConfig>
+    public var reportingChart: String?
     @Expandable<ConnectEmbeddedBaseConfigClaim>
     public var taxRegistrations: String?
     @Expandable<ConnectEmbeddedBaseConfigClaim>
     public var taxSettings: String?
+    @Expandable<ConnectEmbeddedBaseConfig>
+    public var terminalHardwareOrders: String?
+    @Expandable<ConnectEmbeddedBaseConfig>
+    public var terminalHardwareShop: String?
 
     public enum CodingKeys: String, CodingKey {
         case accountManagement = "account_management"
         case accountOnboarding = "account_onboarding"
+        case balanceReport = "balance_report"
         case balances
         case disputesList = "disputes_list"
         case documents
@@ -61,12 +74,17 @@ public struct ConnectEmbeddedAccountSessionCreateComponents: Codable, Sendable {
         case notificationBanner = "notification_banner"
         case paymentDetails = "payment_details"
         case paymentDisputes = "payment_disputes"
+        case paymentMethodSettings = "payment_method_settings"
         case payments
         case payoutDetails = "payout_details"
+        case payoutReconciliationReport = "payout_reconciliation_report"
         case payouts
         case payoutsList = "payouts_list"
+        case reportingChart = "reporting_chart"
         case taxRegistrations = "tax_registrations"
         case taxSettings = "tax_settings"
+        case terminalHardwareOrders = "terminal_hardware_orders"
+        case terminalHardwareShop = "terminal_hardware_shop"
     }
 }
 

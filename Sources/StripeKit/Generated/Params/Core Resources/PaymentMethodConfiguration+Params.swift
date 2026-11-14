@@ -58,6 +58,9 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
     /// website or app. You get [immediate notification](/payments/payment-methods#payment-notification) of
     /// whether the payment succeeded or failed.
     public var billie: PaymentMethodConfigurationCreateBillie?
+    /// To enable Bizum, buyers need a Spanish IBAN from a bank connected to Bizum. Within their banking
+    /// app, they can enable Bizum and link their mobile number to their IBAN.
+    public var bizum: PaymentMethodConfigurationCreateBizum?
     /// BLIK is a [single use](https://docs.stripe.com/payments/payment-methods#usage) payment method that
     /// requires customers to authenticate their payments. When customers want to pay online using BLIK,
     /// they request a six-digit code from their banking application and enter it into the payment
@@ -196,6 +199,8 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
     /// using their PayPal account. Check this [page](https://docs.stripe.com/payments/paypal) for more
     /// details.
     public var paypal: PaymentMethodConfigurationCreatePaypal?
+    /// Customers can pay with PayPay online or using the PayPay app.
+    public var paypay: PaymentMethodConfigurationCreatePaypay?
     /// PayTo is a [real-time](https://docs.stripe.com/payments/real-time) payment method that enables
     /// customers in Australia to pay by providing their bank account details. Customers must accept a
     /// mandate authorizing you to debit their account. Check this
@@ -216,24 +221,42 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
     /// Samsung Pay is a [single-use](https://docs.stripe.com/payments/payment-methods#usage local wallet
     /// available in South Korea.
     public var samsungPay: PaymentMethodConfigurationCreateSamsungPay?
-    /// Satispay is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
-    /// where customers are required to [authenticate](/payments/payment-methods#customer-actions) their
-    /// payment. Customers pay by being redirected from your website or app, authorizing the payment with
-    /// Satispay, then returning to your website or app. You get [immediate
+    /// Satispay is a [single-use](/payments/payment-methods#usage) payment method where customers are
+    /// required to [authenticate](/payments/payment-methods#customer-actions) their payment. Customers pay
+    /// by being redirected from your website or app, authorizing the payment with Satispay, then returning
+    /// to your website or app. You get [immediate
     /// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
     /// failed.
     public var satispay: PaymentMethodConfigurationCreateSatispay?
+    /// Scalapay is a [single-use](/payments/payment-methods#usage) payment method that lets customers pay
+    /// in 3 or 4 installments. Customers are redirected from your website or app, authorize the payment
+    /// with Scalapay, then return to your website or app. You get [immediate
+    /// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
+    /// failed.
+    public var scalapay: PaymentMethodConfigurationCreateScalapay?
     /// The [Single Euro Payments Area (SEPA)](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area) is
     /// an initiative of the European Union to simplify payments within and across member countries. SEPA
     /// established and enforced banking standards to allow for the direct debiting of every EUR-denominated
     /// bank account within the SEPA region, check this [page](https://docs.stripe.com/payments/sepa-debit)
     /// for more details.
     public var sepaDebit: PaymentMethodConfigurationCreateSepaDebit?
+    /// SeQura is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method that
+    /// offers customers payment terms ranging from 7-120 days. Customers are redirected from your website
+    /// or app, authorize the payment with SeQura, then return to your website or app. You get [immediate
+    /// notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of whether the
+    /// payment succeeded or failed.
+    public var sequra: PaymentMethodConfigurationCreateSequra?
     /// Stripe users in Europe and the United States can use the [Payment Intents
     /// API](https://stripe.com/docs/payments/payment-intents)—a single integration path for creating
     /// payments using any supported method—to accept [Sofort](https://www.sofort.com/) payments from
     /// customers. Check this [page](https://docs.stripe.com/payments/sofort) for more details.
     public var sofort: PaymentMethodConfigurationCreateSofort?
+    /// Sunbit is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
+    /// where customers choose to pay in 3, 6, or 12 installments. Customers are redirected from your
+    /// website or app, authorize the payment with Sunbit, then return to your website or app. You get
+    /// [immediate notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of
+    /// whether the payment succeeded or failed.
+    public var sunbit: PaymentMethodConfigurationCreateSunbit?
     /// Swish is a [real-time](https://docs.stripe.com/payments/real-time) payment method popular in Sweden.
     /// It allows customers to [authenticate and
     /// approve](https://docs.stripe.com/payments/payment-methods#customer-actions) payments using the Swish
@@ -243,6 +266,9 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
     /// Twint is a payment method popular in Switzerland. It allows customers to pay using their mobile
     /// phone. Check this [page](https://docs.stripe.com/payments/twint) for more details.
     public var twint: PaymentMethodConfigurationCreateTwint?
+    /// Unified Payment Interface (UPI) is India's leading payment method with exponential growth since it
+    /// launched in 2016.
+    public var upi: PaymentMethodConfigurationCreateUpi?
     /// Stripe users in the United States can accept ACH direct debit payments from customers with a US bank
     /// account using the Automated Clearing House (ACH) payments system operated by Nacha. Check this
     /// [page](https://docs.stripe.com/payments/ach-direct-debit) for more details.
@@ -256,7 +282,7 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
     /// [page](https://docs.stripe.com/payments/zip) for more details like country availability.
     public var zip: PaymentMethodConfigurationCreateZip?
 
-    public init(acssDebit: PaymentMethodConfigurationCreateAcssDebit? = nil, affirm: PaymentMethodConfigurationCreateAffirm? = nil, afterpayClearpay: PaymentMethodConfigurationCreateAfterpayClearpay? = nil, alipay: PaymentMethodConfigurationCreateAlipay? = nil, alma: PaymentMethodConfigurationCreateAlma? = nil, amazonPay: PaymentMethodConfigurationCreateAmazonPay? = nil, applePay: PaymentMethodConfigurationCreateApplePay? = nil, applePayLater: PaymentMethodConfigurationCreateApplePayLater? = nil, auBecsDebit: PaymentMethodConfigurationCreateAuBecsDebit? = nil, bacsDebit: PaymentMethodConfigurationCreateBacsDebit? = nil, bancontact: PaymentMethodConfigurationCreateBancontact? = nil, billie: PaymentMethodConfigurationCreateBillie? = nil, blik: PaymentMethodConfigurationCreateBlik? = nil, boleto: PaymentMethodConfigurationCreateBoleto? = nil, card: PaymentMethodConfigurationCreateCard? = nil, cartesBancaires: PaymentMethodConfigurationCreateCartesBancaires? = nil, cashapp: PaymentMethodConfigurationCreateCashapp? = nil, crypto: PaymentMethodConfigurationCreateCrypto? = nil, customerBalance: PaymentMethodConfigurationCreateCustomerBalance? = nil, eps: PaymentMethodConfigurationCreateEps? = nil, expand: [String]? = nil, fpx: PaymentMethodConfigurationCreateFpx? = nil, frMealVoucherConecs: PaymentMethodConfigurationCreateFrMealVoucherConecs? = nil, giropay: PaymentMethodConfigurationCreateGiropay? = nil, googlePay: PaymentMethodConfigurationCreateGooglePay? = nil, grabpay: PaymentMethodConfigurationCreateGrabpay? = nil, ideal: PaymentMethodConfigurationCreateIdeal? = nil, jcb: PaymentMethodConfigurationCreateJcb? = nil, kakaoPay: PaymentMethodConfigurationCreateKakaoPay? = nil, klarna: PaymentMethodConfigurationCreateKlarna? = nil, konbini: PaymentMethodConfigurationCreateKonbini? = nil, krCard: PaymentMethodConfigurationCreateKrCard? = nil, link: PaymentMethodConfigurationCreateLink? = nil, mbWay: PaymentMethodConfigurationCreateMbWay? = nil, mobilepay: PaymentMethodConfigurationCreateMobilepay? = nil, multibanco: PaymentMethodConfigurationCreateMultibanco? = nil, name: String? = nil, naverPay: PaymentMethodConfigurationCreateNaverPay? = nil, nzBankAccount: PaymentMethodConfigurationCreateNzBankAccount? = nil, oxxo: PaymentMethodConfigurationCreateOxxo? = nil, p24: PaymentMethodConfigurationCreateP24? = nil, parent: String? = nil, payByBank: PaymentMethodConfigurationCreatePayByBank? = nil, payco: PaymentMethodConfigurationCreatePayco? = nil, paynow: PaymentMethodConfigurationCreatePaynow? = nil, paypal: PaymentMethodConfigurationCreatePaypal? = nil, payto: PaymentMethodConfigurationCreatePayto? = nil, pix: PaymentMethodConfigurationCreatePix? = nil, promptpay: PaymentMethodConfigurationCreatePromptpay? = nil, revolutPay: PaymentMethodConfigurationCreateRevolutPay? = nil, samsungPay: PaymentMethodConfigurationCreateSamsungPay? = nil, satispay: PaymentMethodConfigurationCreateSatispay? = nil, sepaDebit: PaymentMethodConfigurationCreateSepaDebit? = nil, sofort: PaymentMethodConfigurationCreateSofort? = nil, swish: PaymentMethodConfigurationCreateSwish? = nil, twint: PaymentMethodConfigurationCreateTwint? = nil, usBankAccount: PaymentMethodConfigurationCreateUsBankAccount? = nil, wechatPay: PaymentMethodConfigurationCreateWechatPay? = nil, zip: PaymentMethodConfigurationCreateZip? = nil) {
+    public init(acssDebit: PaymentMethodConfigurationCreateAcssDebit? = nil, affirm: PaymentMethodConfigurationCreateAffirm? = nil, afterpayClearpay: PaymentMethodConfigurationCreateAfterpayClearpay? = nil, alipay: PaymentMethodConfigurationCreateAlipay? = nil, alma: PaymentMethodConfigurationCreateAlma? = nil, amazonPay: PaymentMethodConfigurationCreateAmazonPay? = nil, applePay: PaymentMethodConfigurationCreateApplePay? = nil, applePayLater: PaymentMethodConfigurationCreateApplePayLater? = nil, auBecsDebit: PaymentMethodConfigurationCreateAuBecsDebit? = nil, bacsDebit: PaymentMethodConfigurationCreateBacsDebit? = nil, bancontact: PaymentMethodConfigurationCreateBancontact? = nil, billie: PaymentMethodConfigurationCreateBillie? = nil, bizum: PaymentMethodConfigurationCreateBizum? = nil, blik: PaymentMethodConfigurationCreateBlik? = nil, boleto: PaymentMethodConfigurationCreateBoleto? = nil, card: PaymentMethodConfigurationCreateCard? = nil, cartesBancaires: PaymentMethodConfigurationCreateCartesBancaires? = nil, cashapp: PaymentMethodConfigurationCreateCashapp? = nil, crypto: PaymentMethodConfigurationCreateCrypto? = nil, customerBalance: PaymentMethodConfigurationCreateCustomerBalance? = nil, eps: PaymentMethodConfigurationCreateEps? = nil, expand: [String]? = nil, fpx: PaymentMethodConfigurationCreateFpx? = nil, frMealVoucherConecs: PaymentMethodConfigurationCreateFrMealVoucherConecs? = nil, giropay: PaymentMethodConfigurationCreateGiropay? = nil, googlePay: PaymentMethodConfigurationCreateGooglePay? = nil, grabpay: PaymentMethodConfigurationCreateGrabpay? = nil, ideal: PaymentMethodConfigurationCreateIdeal? = nil, jcb: PaymentMethodConfigurationCreateJcb? = nil, kakaoPay: PaymentMethodConfigurationCreateKakaoPay? = nil, klarna: PaymentMethodConfigurationCreateKlarna? = nil, konbini: PaymentMethodConfigurationCreateKonbini? = nil, krCard: PaymentMethodConfigurationCreateKrCard? = nil, link: PaymentMethodConfigurationCreateLink? = nil, mbWay: PaymentMethodConfigurationCreateMbWay? = nil, mobilepay: PaymentMethodConfigurationCreateMobilepay? = nil, multibanco: PaymentMethodConfigurationCreateMultibanco? = nil, name: String? = nil, naverPay: PaymentMethodConfigurationCreateNaverPay? = nil, nzBankAccount: PaymentMethodConfigurationCreateNzBankAccount? = nil, oxxo: PaymentMethodConfigurationCreateOxxo? = nil, p24: PaymentMethodConfigurationCreateP24? = nil, parent: String? = nil, payByBank: PaymentMethodConfigurationCreatePayByBank? = nil, payco: PaymentMethodConfigurationCreatePayco? = nil, paynow: PaymentMethodConfigurationCreatePaynow? = nil, paypal: PaymentMethodConfigurationCreatePaypal? = nil, paypay: PaymentMethodConfigurationCreatePaypay? = nil, payto: PaymentMethodConfigurationCreatePayto? = nil, pix: PaymentMethodConfigurationCreatePix? = nil, promptpay: PaymentMethodConfigurationCreatePromptpay? = nil, revolutPay: PaymentMethodConfigurationCreateRevolutPay? = nil, samsungPay: PaymentMethodConfigurationCreateSamsungPay? = nil, satispay: PaymentMethodConfigurationCreateSatispay? = nil, scalapay: PaymentMethodConfigurationCreateScalapay? = nil, sepaDebit: PaymentMethodConfigurationCreateSepaDebit? = nil, sequra: PaymentMethodConfigurationCreateSequra? = nil, sofort: PaymentMethodConfigurationCreateSofort? = nil, sunbit: PaymentMethodConfigurationCreateSunbit? = nil, swish: PaymentMethodConfigurationCreateSwish? = nil, twint: PaymentMethodConfigurationCreateTwint? = nil, upi: PaymentMethodConfigurationCreateUpi? = nil, usBankAccount: PaymentMethodConfigurationCreateUsBankAccount? = nil, wechatPay: PaymentMethodConfigurationCreateWechatPay? = nil, zip: PaymentMethodConfigurationCreateZip? = nil) {
         self.acssDebit = acssDebit
         self.affirm = affirm
         self.afterpayClearpay = afterpayClearpay
@@ -269,6 +295,7 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
         self.bacsDebit = bacsDebit
         self.bancontact = bancontact
         self.billie = billie
+        self.bizum = bizum
         self.blik = blik
         self.boleto = boleto
         self.card = card
@@ -303,16 +330,21 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
         self.payco = payco
         self.paynow = paynow
         self.paypal = paypal
+        self.paypay = paypay
         self.payto = payto
         self.pix = pix
         self.promptpay = promptpay
         self.revolutPay = revolutPay
         self.samsungPay = samsungPay
         self.satispay = satispay
+        self.scalapay = scalapay
         self.sepaDebit = sepaDebit
+        self.sequra = sequra
         self.sofort = sofort
+        self.sunbit = sunbit
         self.swish = swish
         self.twint = twint
+        self.upi = upi
         self.usBankAccount = usBankAccount
         self.wechatPay = wechatPay
         self.zip = zip
@@ -331,6 +363,7 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
         case bacsDebit = "bacs_debit"
         case bancontact
         case billie
+        case bizum
         case blik
         case boleto
         case card
@@ -365,16 +398,21 @@ public struct PaymentMethodConfigurationCreateParams: StripeParams {
         case payco
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
+        case upi
         case usBankAccount = "us_bank_account"
         case wechatPay = "wechat_pay"
         case zip
@@ -434,6 +472,9 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
     /// website or app. You get [immediate notification](/payments/payment-methods#payment-notification) of
     /// whether the payment succeeded or failed.
     public var billie: PaymentMethodConfigurationUpdateBillie?
+    /// To enable Bizum, buyers need a Spanish IBAN from a bank connected to Bizum. Within their banking
+    /// app, they can enable Bizum and link their mobile number to their IBAN.
+    public var bizum: PaymentMethodConfigurationUpdateBizum?
     /// BLIK is a [single use](https://docs.stripe.com/payments/payment-methods#usage) payment method that
     /// requires customers to authenticate their payments. When customers want to pay online using BLIK,
     /// they request a six-digit code from their banking application and enter it into the payment
@@ -570,6 +611,8 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
     /// using their PayPal account. Check this [page](https://docs.stripe.com/payments/paypal) for more
     /// details.
     public var paypal: PaymentMethodConfigurationUpdatePaypal?
+    /// Customers can pay with PayPay online or using the PayPay app.
+    public var paypay: PaymentMethodConfigurationUpdatePaypay?
     /// PayTo is a [real-time](https://docs.stripe.com/payments/real-time) payment method that enables
     /// customers in Australia to pay by providing their bank account details. Customers must accept a
     /// mandate authorizing you to debit their account. Check this
@@ -590,24 +633,42 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
     /// Samsung Pay is a [single-use](https://docs.stripe.com/payments/payment-methods#usage local wallet
     /// available in South Korea.
     public var samsungPay: PaymentMethodConfigurationUpdateSamsungPay?
-    /// Satispay is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
-    /// where customers are required to [authenticate](/payments/payment-methods#customer-actions) their
-    /// payment. Customers pay by being redirected from your website or app, authorizing the payment with
-    /// Satispay, then returning to your website or app. You get [immediate
+    /// Satispay is a [single-use](/payments/payment-methods#usage) payment method where customers are
+    /// required to [authenticate](/payments/payment-methods#customer-actions) their payment. Customers pay
+    /// by being redirected from your website or app, authorizing the payment with Satispay, then returning
+    /// to your website or app. You get [immediate
     /// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
     /// failed.
     public var satispay: PaymentMethodConfigurationUpdateSatispay?
+    /// Scalapay is a [single-use](/payments/payment-methods#usage) payment method that lets customers pay
+    /// in 3 or 4 installments. Customers are redirected from your website or app, authorize the payment
+    /// with Scalapay, then return to your website or app. You get [immediate
+    /// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
+    /// failed.
+    public var scalapay: PaymentMethodConfigurationUpdateScalapay?
     /// The [Single Euro Payments Area (SEPA)](https://en.wikipedia.org/wiki/Single_Euro_Payments_Area) is
     /// an initiative of the European Union to simplify payments within and across member countries. SEPA
     /// established and enforced banking standards to allow for the direct debiting of every EUR-denominated
     /// bank account within the SEPA region, check this [page](https://docs.stripe.com/payments/sepa-debit)
     /// for more details.
     public var sepaDebit: PaymentMethodConfigurationUpdateSepaDebit?
+    /// SeQura is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method that
+    /// offers customers payment terms ranging from 7-120 days. Customers are redirected from your website
+    /// or app, authorize the payment with SeQura, then return to your website or app. You get [immediate
+    /// notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of whether the
+    /// payment succeeded or failed.
+    public var sequra: PaymentMethodConfigurationUpdateSequra?
     /// Stripe users in Europe and the United States can use the [Payment Intents
     /// API](https://stripe.com/docs/payments/payment-intents)—a single integration path for creating
     /// payments using any supported method—to accept [Sofort](https://www.sofort.com/) payments from
     /// customers. Check this [page](https://docs.stripe.com/payments/sofort) for more details.
     public var sofort: PaymentMethodConfigurationUpdateSofort?
+    /// Sunbit is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
+    /// where customers choose to pay in 3, 6, or 12 installments. Customers are redirected from your
+    /// website or app, authorize the payment with Sunbit, then return to your website or app. You get
+    /// [immediate notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of
+    /// whether the payment succeeded or failed.
+    public var sunbit: PaymentMethodConfigurationUpdateSunbit?
     /// Swish is a [real-time](https://docs.stripe.com/payments/real-time) payment method popular in Sweden.
     /// It allows customers to [authenticate and
     /// approve](https://docs.stripe.com/payments/payment-methods#customer-actions) payments using the Swish
@@ -617,6 +678,9 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
     /// Twint is a payment method popular in Switzerland. It allows customers to pay using their mobile
     /// phone. Check this [page](https://docs.stripe.com/payments/twint) for more details.
     public var twint: PaymentMethodConfigurationUpdateTwint?
+    /// Unified Payment Interface (UPI) is India's leading payment method with exponential growth since it
+    /// launched in 2016.
+    public var upi: PaymentMethodConfigurationUpdateUpi?
     /// Stripe users in the United States can accept ACH direct debit payments from customers with a US bank
     /// account using the Automated Clearing House (ACH) payments system operated by Nacha. Check this
     /// [page](https://docs.stripe.com/payments/ach-direct-debit) for more details.
@@ -630,7 +694,7 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
     /// [page](https://docs.stripe.com/payments/zip) for more details like country availability.
     public var zip: PaymentMethodConfigurationUpdateZip?
 
-    public init(acssDebit: PaymentMethodConfigurationUpdateAcssDebit? = nil, active: Bool? = nil, affirm: PaymentMethodConfigurationUpdateAffirm? = nil, afterpayClearpay: PaymentMethodConfigurationUpdateAfterpayClearpay? = nil, alipay: PaymentMethodConfigurationUpdateAlipay? = nil, alma: PaymentMethodConfigurationUpdateAlma? = nil, amazonPay: PaymentMethodConfigurationUpdateAmazonPay? = nil, applePay: PaymentMethodConfigurationUpdateApplePay? = nil, applePayLater: PaymentMethodConfigurationUpdateApplePayLater? = nil, auBecsDebit: PaymentMethodConfigurationUpdateAuBecsDebit? = nil, bacsDebit: PaymentMethodConfigurationUpdateBacsDebit? = nil, bancontact: PaymentMethodConfigurationUpdateBancontact? = nil, billie: PaymentMethodConfigurationUpdateBillie? = nil, blik: PaymentMethodConfigurationUpdateBlik? = nil, boleto: PaymentMethodConfigurationUpdateBoleto? = nil, card: PaymentMethodConfigurationUpdateCard? = nil, cartesBancaires: PaymentMethodConfigurationUpdateCartesBancaires? = nil, cashapp: PaymentMethodConfigurationUpdateCashapp? = nil, crypto: PaymentMethodConfigurationUpdateCrypto? = nil, customerBalance: PaymentMethodConfigurationUpdateCustomerBalance? = nil, eps: PaymentMethodConfigurationUpdateEps? = nil, expand: [String]? = nil, fpx: PaymentMethodConfigurationUpdateFpx? = nil, frMealVoucherConecs: PaymentMethodConfigurationUpdateFrMealVoucherConecs? = nil, giropay: PaymentMethodConfigurationUpdateGiropay? = nil, googlePay: PaymentMethodConfigurationUpdateGooglePay? = nil, grabpay: PaymentMethodConfigurationUpdateGrabpay? = nil, ideal: PaymentMethodConfigurationUpdateIdeal? = nil, jcb: PaymentMethodConfigurationUpdateJcb? = nil, kakaoPay: PaymentMethodConfigurationUpdateKakaoPay? = nil, klarna: PaymentMethodConfigurationUpdateKlarna? = nil, konbini: PaymentMethodConfigurationUpdateKonbini? = nil, krCard: PaymentMethodConfigurationUpdateKrCard? = nil, link: PaymentMethodConfigurationUpdateLink? = nil, mbWay: PaymentMethodConfigurationUpdateMbWay? = nil, mobilepay: PaymentMethodConfigurationUpdateMobilepay? = nil, multibanco: PaymentMethodConfigurationUpdateMultibanco? = nil, name: String? = nil, naverPay: PaymentMethodConfigurationUpdateNaverPay? = nil, nzBankAccount: PaymentMethodConfigurationUpdateNzBankAccount? = nil, oxxo: PaymentMethodConfigurationUpdateOxxo? = nil, p24: PaymentMethodConfigurationUpdateP24? = nil, payByBank: PaymentMethodConfigurationUpdatePayByBank? = nil, payco: PaymentMethodConfigurationUpdatePayco? = nil, paynow: PaymentMethodConfigurationUpdatePaynow? = nil, paypal: PaymentMethodConfigurationUpdatePaypal? = nil, payto: PaymentMethodConfigurationUpdatePayto? = nil, pix: PaymentMethodConfigurationUpdatePix? = nil, promptpay: PaymentMethodConfigurationUpdatePromptpay? = nil, revolutPay: PaymentMethodConfigurationUpdateRevolutPay? = nil, samsungPay: PaymentMethodConfigurationUpdateSamsungPay? = nil, satispay: PaymentMethodConfigurationUpdateSatispay? = nil, sepaDebit: PaymentMethodConfigurationUpdateSepaDebit? = nil, sofort: PaymentMethodConfigurationUpdateSofort? = nil, swish: PaymentMethodConfigurationUpdateSwish? = nil, twint: PaymentMethodConfigurationUpdateTwint? = nil, usBankAccount: PaymentMethodConfigurationUpdateUsBankAccount? = nil, wechatPay: PaymentMethodConfigurationUpdateWechatPay? = nil, zip: PaymentMethodConfigurationUpdateZip? = nil) {
+    public init(acssDebit: PaymentMethodConfigurationUpdateAcssDebit? = nil, active: Bool? = nil, affirm: PaymentMethodConfigurationUpdateAffirm? = nil, afterpayClearpay: PaymentMethodConfigurationUpdateAfterpayClearpay? = nil, alipay: PaymentMethodConfigurationUpdateAlipay? = nil, alma: PaymentMethodConfigurationUpdateAlma? = nil, amazonPay: PaymentMethodConfigurationUpdateAmazonPay? = nil, applePay: PaymentMethodConfigurationUpdateApplePay? = nil, applePayLater: PaymentMethodConfigurationUpdateApplePayLater? = nil, auBecsDebit: PaymentMethodConfigurationUpdateAuBecsDebit? = nil, bacsDebit: PaymentMethodConfigurationUpdateBacsDebit? = nil, bancontact: PaymentMethodConfigurationUpdateBancontact? = nil, billie: PaymentMethodConfigurationUpdateBillie? = nil, bizum: PaymentMethodConfigurationUpdateBizum? = nil, blik: PaymentMethodConfigurationUpdateBlik? = nil, boleto: PaymentMethodConfigurationUpdateBoleto? = nil, card: PaymentMethodConfigurationUpdateCard? = nil, cartesBancaires: PaymentMethodConfigurationUpdateCartesBancaires? = nil, cashapp: PaymentMethodConfigurationUpdateCashapp? = nil, crypto: PaymentMethodConfigurationUpdateCrypto? = nil, customerBalance: PaymentMethodConfigurationUpdateCustomerBalance? = nil, eps: PaymentMethodConfigurationUpdateEps? = nil, expand: [String]? = nil, fpx: PaymentMethodConfigurationUpdateFpx? = nil, frMealVoucherConecs: PaymentMethodConfigurationUpdateFrMealVoucherConecs? = nil, giropay: PaymentMethodConfigurationUpdateGiropay? = nil, googlePay: PaymentMethodConfigurationUpdateGooglePay? = nil, grabpay: PaymentMethodConfigurationUpdateGrabpay? = nil, ideal: PaymentMethodConfigurationUpdateIdeal? = nil, jcb: PaymentMethodConfigurationUpdateJcb? = nil, kakaoPay: PaymentMethodConfigurationUpdateKakaoPay? = nil, klarna: PaymentMethodConfigurationUpdateKlarna? = nil, konbini: PaymentMethodConfigurationUpdateKonbini? = nil, krCard: PaymentMethodConfigurationUpdateKrCard? = nil, link: PaymentMethodConfigurationUpdateLink? = nil, mbWay: PaymentMethodConfigurationUpdateMbWay? = nil, mobilepay: PaymentMethodConfigurationUpdateMobilepay? = nil, multibanco: PaymentMethodConfigurationUpdateMultibanco? = nil, name: String? = nil, naverPay: PaymentMethodConfigurationUpdateNaverPay? = nil, nzBankAccount: PaymentMethodConfigurationUpdateNzBankAccount? = nil, oxxo: PaymentMethodConfigurationUpdateOxxo? = nil, p24: PaymentMethodConfigurationUpdateP24? = nil, payByBank: PaymentMethodConfigurationUpdatePayByBank? = nil, payco: PaymentMethodConfigurationUpdatePayco? = nil, paynow: PaymentMethodConfigurationUpdatePaynow? = nil, paypal: PaymentMethodConfigurationUpdatePaypal? = nil, paypay: PaymentMethodConfigurationUpdatePaypay? = nil, payto: PaymentMethodConfigurationUpdatePayto? = nil, pix: PaymentMethodConfigurationUpdatePix? = nil, promptpay: PaymentMethodConfigurationUpdatePromptpay? = nil, revolutPay: PaymentMethodConfigurationUpdateRevolutPay? = nil, samsungPay: PaymentMethodConfigurationUpdateSamsungPay? = nil, satispay: PaymentMethodConfigurationUpdateSatispay? = nil, scalapay: PaymentMethodConfigurationUpdateScalapay? = nil, sepaDebit: PaymentMethodConfigurationUpdateSepaDebit? = nil, sequra: PaymentMethodConfigurationUpdateSequra? = nil, sofort: PaymentMethodConfigurationUpdateSofort? = nil, sunbit: PaymentMethodConfigurationUpdateSunbit? = nil, swish: PaymentMethodConfigurationUpdateSwish? = nil, twint: PaymentMethodConfigurationUpdateTwint? = nil, upi: PaymentMethodConfigurationUpdateUpi? = nil, usBankAccount: PaymentMethodConfigurationUpdateUsBankAccount? = nil, wechatPay: PaymentMethodConfigurationUpdateWechatPay? = nil, zip: PaymentMethodConfigurationUpdateZip? = nil) {
         self.acssDebit = acssDebit
         self.active = active
         self.affirm = affirm
@@ -644,6 +708,7 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
         self.bacsDebit = bacsDebit
         self.bancontact = bancontact
         self.billie = billie
+        self.bizum = bizum
         self.blik = blik
         self.boleto = boleto
         self.card = card
@@ -677,16 +742,21 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
         self.payco = payco
         self.paynow = paynow
         self.paypal = paypal
+        self.paypay = paypay
         self.payto = payto
         self.pix = pix
         self.promptpay = promptpay
         self.revolutPay = revolutPay
         self.samsungPay = samsungPay
         self.satispay = satispay
+        self.scalapay = scalapay
         self.sepaDebit = sepaDebit
+        self.sequra = sequra
         self.sofort = sofort
+        self.sunbit = sunbit
         self.swish = swish
         self.twint = twint
+        self.upi = upi
         self.usBankAccount = usBankAccount
         self.wechatPay = wechatPay
         self.zip = zip
@@ -706,6 +776,7 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
         case bacsDebit = "bacs_debit"
         case bancontact
         case billie
+        case bizum
         case blik
         case boleto
         case card
@@ -739,16 +810,21 @@ public struct PaymentMethodConfigurationUpdateParams: StripeParams {
         case payco
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
+        case upi
         case usBankAccount = "us_bank_account"
         case wechatPay = "wechat_pay"
         case zip
@@ -1065,6 +1141,31 @@ public struct PaymentMethodConfigurationCreateBillieDisplayPreference: StripePar
     public var preference: PaymentMethodConfigurationCreateBillieDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationCreateBillieDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// To enable Bizum, buyers need a Spanish IBAN from a bank connected to Bizum. Within their banking
+/// app, they can enable Bizum and link their mobile number to their IBAN.
+public struct PaymentMethodConfigurationCreateBizum: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationCreateBizumDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationCreateBizumDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationCreateBizumDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationCreateBizumDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationCreateBizumDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }
@@ -1883,6 +1984,30 @@ public struct PaymentMethodConfigurationCreatePaypalDisplayPreference: StripePar
     }
 }
 
+/// Customers can pay with PayPay online or using the PayPay app.
+public struct PaymentMethodConfigurationCreatePaypay: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationCreatePaypayDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationCreatePaypayDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationCreatePaypayDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationCreatePaypayDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationCreatePaypayDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
 /// PayTo is a [real-time](https://docs.stripe.com/payments/real-time) payment method that enables
 /// customers in Australia to pay by providing their bank account details. Customers must accept a
 /// mandate authorizing you to debit their account. Check this
@@ -2013,10 +2138,10 @@ public struct PaymentMethodConfigurationCreateSamsungPayDisplayPreference: Strip
     }
 }
 
-/// Satispay is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
-/// where customers are required to [authenticate](/payments/payment-methods#customer-actions) their
-/// payment. Customers pay by being redirected from your website or app, authorizing the payment with
-/// Satispay, then returning to your website or app. You get [immediate
+/// Satispay is a [single-use](/payments/payment-methods#usage) payment method where customers are
+/// required to [authenticate](/payments/payment-methods#customer-actions) their payment. Customers pay
+/// by being redirected from your website or app, authorizing the payment with Satispay, then returning
+/// to your website or app. You get [immediate
 /// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
 /// failed.
 public struct PaymentMethodConfigurationCreateSatispay: StripeParams {
@@ -2038,6 +2163,34 @@ public struct PaymentMethodConfigurationCreateSatispayDisplayPreference: StripeP
     public var preference: PaymentMethodConfigurationCreateSatispayDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationCreateSatispayDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// Scalapay is a [single-use](/payments/payment-methods#usage) payment method that lets customers pay
+/// in 3 or 4 installments. Customers are redirected from your website or app, authorize the payment
+/// with Scalapay, then return to your website or app. You get [immediate
+/// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
+/// failed.
+public struct PaymentMethodConfigurationCreateScalapay: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationCreateScalapayDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationCreateScalapayDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationCreateScalapayDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationCreateScalapayDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationCreateScalapayDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }
@@ -2070,6 +2223,34 @@ public struct PaymentMethodConfigurationCreateSepaDebitDisplayPreference: Stripe
     }
 }
 
+/// SeQura is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method that
+/// offers customers payment terms ranging from 7-120 days. Customers are redirected from your website
+/// or app, authorize the payment with SeQura, then return to your website or app. You get [immediate
+/// notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of whether the
+/// payment succeeded or failed.
+public struct PaymentMethodConfigurationCreateSequra: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationCreateSequraDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationCreateSequraDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationCreateSequraDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationCreateSequraDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationCreateSequraDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
 /// Stripe users in Europe and the United States can use the [Payment Intents
 /// API](https://stripe.com/docs/payments/payment-intents)—a single integration path for creating
 /// payments using any supported method—to accept [Sofort](https://www.sofort.com/) payments from
@@ -2093,6 +2274,34 @@ public struct PaymentMethodConfigurationCreateSofortDisplayPreference: StripePar
     public var preference: PaymentMethodConfigurationCreateSofortDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationCreateSofortDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// Sunbit is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
+/// where customers choose to pay in 3, 6, or 12 installments. Customers are redirected from your
+/// website or app, authorize the payment with Sunbit, then return to your website or app. You get
+/// [immediate notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of
+/// whether the payment succeeded or failed.
+public struct PaymentMethodConfigurationCreateSunbit: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationCreateSunbitDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationCreateSunbitDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationCreateSunbitDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationCreateSunbitDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationCreateSunbitDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }
@@ -2146,6 +2355,31 @@ public struct PaymentMethodConfigurationCreateTwintDisplayPreference: StripePara
     public var preference: PaymentMethodConfigurationCreateTwintDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationCreateTwintDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// Unified Payment Interface (UPI) is India's leading payment method with exponential growth since it
+/// launched in 2016.
+public struct PaymentMethodConfigurationCreateUpi: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationCreateUpiDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationCreateUpiDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationCreateUpiDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationCreateUpiDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationCreateUpiDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }
@@ -2538,6 +2772,31 @@ public struct PaymentMethodConfigurationUpdateBillieDisplayPreference: StripePar
     public var preference: PaymentMethodConfigurationUpdateBillieDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationUpdateBillieDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// To enable Bizum, buyers need a Spanish IBAN from a bank connected to Bizum. Within their banking
+/// app, they can enable Bizum and link their mobile number to their IBAN.
+public struct PaymentMethodConfigurationUpdateBizum: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationUpdateBizumDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationUpdateBizumDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationUpdateBizumDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationUpdateBizumDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationUpdateBizumDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }
@@ -3356,6 +3615,30 @@ public struct PaymentMethodConfigurationUpdatePaypalDisplayPreference: StripePar
     }
 }
 
+/// Customers can pay with PayPay online or using the PayPay app.
+public struct PaymentMethodConfigurationUpdatePaypay: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationUpdatePaypayDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationUpdatePaypayDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationUpdatePaypayDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationUpdatePaypayDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationUpdatePaypayDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
 /// PayTo is a [real-time](https://docs.stripe.com/payments/real-time) payment method that enables
 /// customers in Australia to pay by providing their bank account details. Customers must accept a
 /// mandate authorizing you to debit their account. Check this
@@ -3486,10 +3769,10 @@ public struct PaymentMethodConfigurationUpdateSamsungPayDisplayPreference: Strip
     }
 }
 
-/// Satispay is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
-/// where customers are required to [authenticate](/payments/payment-methods#customer-actions) their
-/// payment. Customers pay by being redirected from your website or app, authorizing the payment with
-/// Satispay, then returning to your website or app. You get [immediate
+/// Satispay is a [single-use](/payments/payment-methods#usage) payment method where customers are
+/// required to [authenticate](/payments/payment-methods#customer-actions) their payment. Customers pay
+/// by being redirected from your website or app, authorizing the payment with Satispay, then returning
+/// to your website or app. You get [immediate
 /// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
 /// failed.
 public struct PaymentMethodConfigurationUpdateSatispay: StripeParams {
@@ -3511,6 +3794,34 @@ public struct PaymentMethodConfigurationUpdateSatispayDisplayPreference: StripeP
     public var preference: PaymentMethodConfigurationUpdateSatispayDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationUpdateSatispayDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// Scalapay is a [single-use](/payments/payment-methods#usage) payment method that lets customers pay
+/// in 3 or 4 installments. Customers are redirected from your website or app, authorize the payment
+/// with Scalapay, then return to your website or app. You get [immediate
+/// notification](/payments/payment-methods#payment-notification) of whether the payment succeeded or
+/// failed.
+public struct PaymentMethodConfigurationUpdateScalapay: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationUpdateScalapayDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationUpdateScalapayDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationUpdateScalapayDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationUpdateScalapayDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationUpdateScalapayDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }
@@ -3543,6 +3854,34 @@ public struct PaymentMethodConfigurationUpdateSepaDebitDisplayPreference: Stripe
     }
 }
 
+/// SeQura is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method that
+/// offers customers payment terms ranging from 7-120 days. Customers are redirected from your website
+/// or app, authorize the payment with SeQura, then return to your website or app. You get [immediate
+/// notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of whether the
+/// payment succeeded or failed.
+public struct PaymentMethodConfigurationUpdateSequra: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationUpdateSequraDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationUpdateSequraDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationUpdateSequraDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationUpdateSequraDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationUpdateSequraDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
 /// Stripe users in Europe and the United States can use the [Payment Intents
 /// API](https://stripe.com/docs/payments/payment-intents)—a single integration path for creating
 /// payments using any supported method—to accept [Sofort](https://www.sofort.com/) payments from
@@ -3566,6 +3905,34 @@ public struct PaymentMethodConfigurationUpdateSofortDisplayPreference: StripePar
     public var preference: PaymentMethodConfigurationUpdateSofortDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationUpdateSofortDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// Sunbit is a [single-use](https://docs.stripe.com/payments/payment-methods#usage) payment method
+/// where customers choose to pay in 3, 6, or 12 installments. Customers are redirected from your
+/// website or app, authorize the payment with Sunbit, then return to your website or app. You get
+/// [immediate notification](https://docs.stripe.com/payments/payment-methods#payment-notification) of
+/// whether the payment succeeded or failed.
+public struct PaymentMethodConfigurationUpdateSunbit: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationUpdateSunbitDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationUpdateSunbitDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationUpdateSunbitDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationUpdateSunbitDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationUpdateSunbitDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }
@@ -3619,6 +3986,31 @@ public struct PaymentMethodConfigurationUpdateTwintDisplayPreference: StripePara
     public var preference: PaymentMethodConfigurationUpdateTwintDisplayPreferencePreference?
 
     public init(preference: PaymentMethodConfigurationUpdateTwintDisplayPreferencePreference? = nil) {
+        self.preference = preference
+    }
+}
+
+/// Unified Payment Interface (UPI) is India's leading payment method with exponential growth since it
+/// launched in 2016.
+public struct PaymentMethodConfigurationUpdateUpi: StripeParams {
+    /// Whether or not the payment method should be displayed.
+    public var displayPreference: PaymentMethodConfigurationUpdateUpiDisplayPreference?
+
+    public init(displayPreference: PaymentMethodConfigurationUpdateUpiDisplayPreference? = nil) {
+        self.displayPreference = displayPreference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case displayPreference = "display_preference"
+    }
+}
+
+/// Whether or not the payment method should be displayed.
+public struct PaymentMethodConfigurationUpdateUpiDisplayPreference: StripeParams {
+    /// The account's preference for whether or not to display this payment method.
+    public var preference: PaymentMethodConfigurationUpdateUpiDisplayPreferencePreference?
+
+    public init(preference: PaymentMethodConfigurationUpdateUpiDisplayPreferencePreference? = nil) {
         self.preference = preference
     }
 }

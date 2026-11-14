@@ -7,25 +7,27 @@
 
 import Foundation
 
-public enum PaymentRecordCreateCustomerPresence: String, Codable, Sendable {
+public enum PaymentRecordReportPaymentCustomerPresence: String, Codable, Sendable {
     case offSession = "off_session"
     case onSession = "on_session"
 }
 
-public enum PaymentRecordCreateOutcome: String, Codable, Sendable {
+public enum PaymentRecordReportPaymentOutcome: String, Codable, Sendable {
+    case canceled
     case failed
     case guaranteed
 }
 
-public enum PaymentRecordCreatePaymentMethodDetailsType: String, Codable, Sendable {
+public enum PaymentRecordReportPaymentPaymentMethodDetailsType: String, Codable, Sendable {
     case custom
 }
 
-public enum PaymentRecordCreateProcessorDetailsType: String, Codable, Sendable {
+public enum PaymentRecordReportPaymentProcessorDetailsType: String, Codable, Sendable {
     case custom
 }
 
 public enum PaymentRecordReportPaymentAttemptOutcome: String, Codable, Sendable {
+    case canceled
     case failed
     case guaranteed
 }

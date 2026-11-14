@@ -29,6 +29,9 @@ public struct Subscription: Codable, Sendable {
     public var billingCycleAnchorConfig: String?
     @Expandable<SubscriptionsResourceBillingMode>
     public var billingMode: String?
+    /// Billing schedules for this subscription.
+    @ExpandableCollection<SubscriptionsResourceBillingSchedules>
+    public var billingSchedules: [String]?
     /// Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing
     /// period
     @Expandable<SubscriptionBillingThresholds>
@@ -102,9 +105,13 @@ public struct Subscription: Codable, Sendable {
     /// cycles or is updated).
     @Expandable<Invoice>
     public var latestInvoice: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
+    /// Settings for Managed Payments for this Subscription and resulting [Invoices](/api/invoices/object)
+    /// and [PaymentIntents](/api/payment_intents/object).
+    @Expandable<SmorResourceManagedPayments>
+    public var managedPayments: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     public var metadata: [String: String]
@@ -127,8 +134,8 @@ public struct Subscription: Codable, Sendable {
     @Expandable<SubscriptionsResourcePaymentSettings>
     public var paymentSettings: String?
     /// Specifies an interval for how often to bill for any pending invoice items. It is analogous to
-    /// calling [Create an invoice](https://docs.stripe.com/api#create_invoice) for the given subscription
-    /// at the specified interval.
+    /// calling [Create an invoice](/api/invoices/create) for the given subscription at the specified
+    /// interval.
     @Expandable<SubscriptionPendingInvoiceItemInterval>
     public var pendingInvoiceItemInterval: String?
     /// You can use this [SetupIntent](https://docs.stripe.com/api/setup_intents) to collect user
@@ -141,6 +148,8 @@ public struct Subscription: Codable, Sendable {
     /// will be applied to the subscription once the `latest_invoice` has been paid.
     @Expandable<SubscriptionsResourcePendingUpdate>
     public var pendingUpdate: String?
+    @Expandable<SubscriptionsResourceSubscriptionPresentmentDetails>
+    public var presentmentDetails: String?
     /// The schedule attached to the subscription
     @Expandable<SubscriptionSchedule>
     public var schedule: String?
@@ -154,11 +163,12 @@ public struct Subscription: Codable, Sendable {
     /// `active` status. If the first invoice is not paid within 23 hours, the subscription transitions to
     /// `incomplete_expired`. This is a terminal status, the open invoice will be voided and no further
     /// invoices will be generated. A subscription that is currently in a trial period is `trialing` and
-    /// moves to `active` when the trial period is over. A subscription can only enter a `paused` status
-    /// [when a trial ends without a payment
-    /// method](https://docs.stripe.com/billing/subscriptions/trials#create-free-trials-without-payment). A
-    /// `paused` subscription doesn't generate invoices and can be resumed after your customer adds their
-    /// payment method. The `paused` status is different from [pausing
+    /// moves to `active` when the trial period is over. A subscription can enter a `paused` status in
+    /// several ways, including [when a trial ends without a payment
+    /// method](https://docs.stripe.com/billing/subscriptions/trials/free-trials#create-free-trials-without-payment)
+    /// or when you pause it using the [pause endpoint](https://docs.stripe.com/api/subscriptions/pause). A
+    /// `paused` subscription doesn't advance to a new billing period or generate invoices until it resumes.
+    /// The `paused` status is different from [pausing
     /// collection](https://docs.stripe.com/billing/subscriptions/pause-payment), which still generates
     /// invoices and leaves the subscription's status unchanged. If subscription
     /// `collection_method=charge_automatically`, it becomes `past_due` when payment is required but cannot
@@ -171,6 +181,8 @@ public struct Subscription: Codable, Sendable {
     /// closed). After receiving updated payment information from a customer, you may choose to reopen and
     /// pay their closed invoices.
     public var status: SubscriptionStatus
+    @Expandable<SubscriptionsResourceStatusDetailsPublic>
+    public var statusDetails: String?
     /// ID of the test clock this subscription belongs to.
     @Expandable<TestClock>
     public var testClock: String?
@@ -181,7 +193,7 @@ public struct Subscription: Codable, Sendable {
     /// If the subscription has a trial, the end of that trial.
     public var trialEnd: Int?
     /// Settings related to subscription trials.
-    @Expandable<SubscriptionsTrialsResourceTrialSettings>
+    @Expandable<SubscriptionsResourceTrialSettingsTrialSettings>
     public var trialSettings: String?
     /// If the subscription has a trial, the beginning of that trial.
     public var trialStart: Int?
@@ -193,6 +205,7 @@ public struct Subscription: Codable, Sendable {
         case billingCycleAnchor = "billing_cycle_anchor"
         case billingCycleAnchorConfig = "billing_cycle_anchor_config"
         case billingMode = "billing_mode"
+        case billingSchedules = "billing_schedules"
         case billingThresholds = "billing_thresholds"
         case cancelAt = "cancel_at"
         case cancelAtPeriodEnd = "cancel_at_period_end"
@@ -215,6 +228,7 @@ public struct Subscription: Codable, Sendable {
         case items
         case latestInvoice = "latest_invoice"
         case livemode
+        case managedPayments = "managed_payments"
         case metadata
         case nextPendingInvoiceItemInvoice = "next_pending_invoice_item_invoice"
         case object
@@ -224,9 +238,11 @@ public struct Subscription: Codable, Sendable {
         case pendingInvoiceItemInterval = "pending_invoice_item_interval"
         case pendingSetupIntent = "pending_setup_intent"
         case pendingUpdate = "pending_update"
+        case presentmentDetails = "presentment_details"
         case schedule
         case startDate = "start_date"
         case status
+        case statusDetails = "status_details"
         case testClock = "test_clock"
         case transferData = "transfer_data"
         case trialEnd = "trial_end"
@@ -256,11 +272,12 @@ public enum SubscriptionObject: String, Codable, Sendable {
 /// `active` status. If the first invoice is not paid within 23 hours, the subscription transitions to
 /// `incomplete_expired`. This is a terminal status, the open invoice will be voided and no further
 /// invoices will be generated. A subscription that is currently in a trial period is `trialing` and
-/// moves to `active` when the trial period is over. A subscription can only enter a `paused` status
-/// [when a trial ends without a payment
-/// method](https://docs.stripe.com/billing/subscriptions/trials#create-free-trials-without-payment). A
-/// `paused` subscription doesn't generate invoices and can be resumed after your customer adds their
-/// payment method. The `paused` status is different from [pausing
+/// moves to `active` when the trial period is over. A subscription can enter a `paused` status in
+/// several ways, including [when a trial ends without a payment
+/// method](https://docs.stripe.com/billing/subscriptions/trials/free-trials#create-free-trials-without-payment)
+/// or when you pause it using the [pause endpoint](https://docs.stripe.com/api/subscriptions/pause). A
+/// `paused` subscription doesn't advance to a new billing period or generate invoices until it resumes.
+/// The `paused` status is different from [pausing
 /// collection](https://docs.stripe.com/billing/subscriptions/pause-payment), which still generates
 /// invoices and leaves the subscription's status unchanged. If subscription
 /// `collection_method=charge_automatically`, it becomes `past_due` when payment is required but cannot

@@ -46,15 +46,14 @@ public struct Payout: Codable, Sendable {
     /// balance transaction and returns the funds from the failed payout back in your balance.
     @Expandable<BalanceTransaction>
     public var failureBalanceTransaction: String?
-    /// Error code that provides a reason for a payout failure, if available. View our [list of failure
-    /// codes](https://docs.stripe.com/api#payout_failures).
+    /// Error code that provides a reason for a payout failure, if available.
     public var failureCode: String?
     /// Message that provides the reason for a payout failure, if available.
     public var failureMessage: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

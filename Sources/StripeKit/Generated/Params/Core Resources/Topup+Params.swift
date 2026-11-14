@@ -31,9 +31,14 @@ public struct TopupCreateParams: StripeParams {
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
     /// empty value to `metadata`.
     public var metadata: [String: String]?
+    /// The ID of a PaymentMethod representing the payment method to be used for the top-up. A PaymentMethod
+    /// of type `us_bank_account` can be used.
+    public var paymentMethod: String?
+    /// Payment method-specific configuration for this top-up.
+    public var paymentMethodOptions: TopupCreatePaymentMethodOptions?
     /// The ID of a source to transfer funds from. For most users, this should be left unspecified which
-    /// will use the bank account that was set up in the dashboard for the specified currency. In test mode,
-    /// this can be a test bank token (see [Testing
+    /// will use the bank account that was set up in the dashboard for the specified currency. While
+    /// testing, this can be a test bank token (see [Testing
     /// Top-ups](https://docs.stripe.com/connect/testing#testing-top-ups)).
     public var source: String?
     /// Extra information about a top-up for the source's bank statement. Limited to 15 ASCII characters.
@@ -41,12 +46,14 @@ public struct TopupCreateParams: StripeParams {
     /// A string that identifies this top-up as part of a group.
     public var transferGroup: String?
 
-    public init(amount: Int, currency: String, description: String? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, source: String? = nil, statementDescriptor: String? = nil, transferGroup: String? = nil) {
+    public init(amount: Int, currency: String, description: String? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, paymentMethod: String? = nil, paymentMethodOptions: TopupCreatePaymentMethodOptions? = nil, source: String? = nil, statementDescriptor: String? = nil, transferGroup: String? = nil) {
         self.amount = amount
         self.currency = currency
         self.description = description
         self.expand = expand
         self.metadata = metadata
+        self.paymentMethod = paymentMethod
+        self.paymentMethodOptions = paymentMethodOptions
         self.source = source
         self.statementDescriptor = statementDescriptor
         self.transferGroup = transferGroup
@@ -58,6 +65,8 @@ public struct TopupCreateParams: StripeParams {
         case description
         case expand
         case metadata
+        case paymentMethod = "payment_method"
+        case paymentMethodOptions = "payment_method_options"
         case source
         case statementDescriptor = "statement_descriptor"
         case transferGroup = "transfer_group"
@@ -79,5 +88,26 @@ public struct TopupUpdateParams: StripeParams {
         self.description = description
         self.expand = expand
         self.metadata = metadata
+    }
+}
+
+/// Payment method-specific configuration for this top-up.
+public struct TopupCreatePaymentMethodOptions: StripeParams {
+    public var usBankAccount: TopupCreatePaymentMethodOptionsUsBankAccount?
+
+    public init(usBankAccount: TopupCreatePaymentMethodOptionsUsBankAccount? = nil) {
+        self.usBankAccount = usBankAccount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case usBankAccount = "us_bank_account"
+    }
+}
+
+public struct TopupCreatePaymentMethodOptionsUsBankAccount: StripeParams {
+    public var network: TopupCreatePaymentMethodOptionsUsBankAccountNetwork
+
+    public init(network: TopupCreatePaymentMethodOptionsUsBankAccountNetwork) {
+        self.network = network
     }
 }

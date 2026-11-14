@@ -82,8 +82,7 @@ public struct MeterUpdateParams: StripeParams {
 
 /// The default settings to aggregate a meter's events with.
 public struct MeterCreateDefaultAggregation: StripeParams {
-    /// Specifies how events are aggregated. Allowed values are `count` to count the number of events, `sum`
-    /// to sum each event's value and `last` to take the last event's value in the window.
+    /// Specifies how events are aggregated.
     public var formula: MeterCreateDefaultAggregationFormula
 
     public init(formula: MeterCreateDefaultAggregationFormula) {

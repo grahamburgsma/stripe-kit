@@ -7,6 +7,65 @@
 
 import Foundation
 
+public enum CheckoutSessionCreateAllowedPaymentMethodTypes: String, Codable, Sendable {
+    case acssDebit = "acss_debit"
+    case affirm
+    case afterpayClearpay = "afterpay_clearpay"
+    case alipay
+    case alma
+    case amazonPay = "amazon_pay"
+    case auBecsDebit = "au_becs_debit"
+    case bacsDebit = "bacs_debit"
+    case bancontact
+    case billie
+    case bizum
+    case blik
+    case boleto
+    case card
+    case cashapp
+    case crypto
+    case customerBalance = "customer_balance"
+    case eps
+    case fpx
+    case giropay
+    case grabpay
+    case ideal
+    case kakaoPay = "kakao_pay"
+    case klarna
+    case konbini
+    case krCard = "kr_card"
+    case link
+    case mbWay = "mb_way"
+    case mobilepay
+    case multibanco
+    case naverPay = "naver_pay"
+    case nzBankAccount = "nz_bank_account"
+    case oxxo
+    case p24
+    case payByBank = "pay_by_bank"
+    case payco
+    case paynow
+    case paypal
+    case paypay
+    case payto
+    case pix
+    case promptpay
+    case revolutPay = "revolut_pay"
+    case samsungPay = "samsung_pay"
+    case satispay
+    case scalapay
+    case sepaDebit = "sepa_debit"
+    case sequra
+    case sofort
+    case sunbit
+    case swish
+    case twint
+    case upi
+    case usBankAccount = "us_bank_account"
+    case wechatPay = "wechat_pay"
+    case zip
+}
+
 public enum CheckoutSessionCreateAutomaticTaxLiabilityType: String, Codable, Sendable {
     case account
     case `self` = "self"
@@ -118,6 +177,7 @@ public enum CheckoutSessionCreateExcludedPaymentMethodTypes: String, Codable, Se
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case card
@@ -144,16 +204,21 @@ public enum CheckoutSessionCreateExcludedPaymentMethodTypes: String, Codable, Se
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
@@ -198,6 +263,7 @@ public enum CheckoutSessionCreateLocale: String, Codable, Sendable {
     case fil
     case fr
     case frCa = "fr-CA"
+    case hiIn = "hi-IN"
     case hr
     case hu
     case id
@@ -337,10 +403,16 @@ public enum CheckoutSessionCreatePaymentMethodOptionsBacsDebitSetupFutureUsage: 
 
 public enum CheckoutSessionCreatePaymentMethodOptionsBancontactSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
 }
 
 public enum CheckoutSessionCreatePaymentMethodOptionsBillieCaptureMethod: String, Codable, Sendable {
     case manual
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsBlikSetupFutureUsage: String, Codable, Sendable {
+    case none
+    case offSession = "off_session"
 }
 
 public enum CheckoutSessionCreatePaymentMethodOptionsBoletoSetupFutureUsage: String, Codable, Sendable {
@@ -386,6 +458,12 @@ public enum CheckoutSessionCreatePaymentMethodOptionsCardRestrictionsBrandsBlock
     case visa
 }
 
+public enum CheckoutSessionCreatePaymentMethodOptionsCardRestrictionsFundingTypesBlocked: String, Codable, Sendable {
+    case credit
+    case debit
+    case prepaid
+}
+
 public enum CheckoutSessionCreatePaymentMethodOptionsCardSetupFutureUsage: String, Codable, Sendable {
     case offSession = "off_session"
     case onSession = "on_session"
@@ -399,6 +477,10 @@ public enum CheckoutSessionCreatePaymentMethodOptionsCashappSetupFutureUsage: St
     case none
     case offSession = "off_session"
     case onSession = "on_session"
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsCryptoSetupFutureUsage: String, Codable, Sendable {
+    case none
 }
 
 public enum CheckoutSessionCreatePaymentMethodOptionsCustomerBalanceBankTransferRequestedAddressTypes: String, Codable, Sendable {
@@ -531,6 +613,10 @@ public enum CheckoutSessionCreatePaymentMethodOptionsPaycoCaptureMethod: String,
     case manual
 }
 
+public enum CheckoutSessionCreatePaymentMethodOptionsPaycoSetupFutureUsage: String, Codable, Sendable {
+    case none
+}
+
 public enum CheckoutSessionCreatePaymentMethodOptionsPaynowSetupFutureUsage: String, Codable, Sendable {
     case none
 }
@@ -608,8 +694,27 @@ public enum CheckoutSessionCreatePaymentMethodOptionsPixAmountIncludesIof: Strin
     case never
 }
 
+public enum CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsPixMandateOptionsPaymentSchedule: String, Codable, Sendable {
+    case halfyearly
+    case monthly
+    case quarterly
+    case weekly
+    case yearly
+}
+
 public enum CheckoutSessionCreatePaymentMethodOptionsPixSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
 }
 
 public enum CheckoutSessionCreatePaymentMethodOptionsRevolutPayCaptureMethod: String, Codable, Sendable {
@@ -625,7 +730,15 @@ public enum CheckoutSessionCreatePaymentMethodOptionsSamsungPayCaptureMethod: St
     case manual
 }
 
+public enum CheckoutSessionCreatePaymentMethodOptionsSamsungPaySetupFutureUsage: String, Codable, Sendable {
+    case none
+}
+
 public enum CheckoutSessionCreatePaymentMethodOptionsSatispayCaptureMethod: String, Codable, Sendable {
+    case manual
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsScalapayCaptureMethod: String, Codable, Sendable {
     case manual
 }
 
@@ -635,12 +748,36 @@ public enum CheckoutSessionCreatePaymentMethodOptionsSepaDebitSetupFutureUsage: 
     case onSession = "on_session"
 }
 
+public enum CheckoutSessionCreatePaymentMethodOptionsSequraCaptureMethod: String, Codable, Sendable {
+    case manual
+}
+
 public enum CheckoutSessionCreatePaymentMethodOptionsSofortSetupFutureUsage: String, Codable, Sendable {
+    case none
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsSunbitCaptureMethod: String, Codable, Sendable {
+    case manual
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsSunbitSetupFutureUsage: String, Codable, Sendable {
     case none
 }
 
 public enum CheckoutSessionCreatePaymentMethodOptionsTwintSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum CheckoutSessionCreatePaymentMethodOptionsUpiSetupFutureUsage: String, Codable, Sendable {
+    case none
+    case offSession = "off_session"
+    case onSession = "on_session"
 }
 
 public enum CheckoutSessionCreatePaymentMethodOptionsUsBankAccountFinancialConnectionsPermissions: String, Codable, Sendable {
@@ -675,59 +812,6 @@ public enum CheckoutSessionCreatePaymentMethodOptionsWechatPayClient: String, Co
 
 public enum CheckoutSessionCreatePaymentMethodOptionsWechatPaySetupFutureUsage: String, Codable, Sendable {
     case none
-}
-
-public enum CheckoutSessionCreatePaymentMethodTypes: String, Codable, Sendable {
-    case acssDebit = "acss_debit"
-    case affirm
-    case afterpayClearpay = "afterpay_clearpay"
-    case alipay
-    case alma
-    case amazonPay = "amazon_pay"
-    case auBecsDebit = "au_becs_debit"
-    case bacsDebit = "bacs_debit"
-    case bancontact
-    case billie
-    case blik
-    case boleto
-    case card
-    case cashapp
-    case crypto
-    case customerBalance = "customer_balance"
-    case eps
-    case fpx
-    case giropay
-    case grabpay
-    case ideal
-    case kakaoPay = "kakao_pay"
-    case klarna
-    case konbini
-    case krCard = "kr_card"
-    case link
-    case mbWay = "mb_way"
-    case mobilepay
-    case multibanco
-    case naverPay = "naver_pay"
-    case nzBankAccount = "nz_bank_account"
-    case oxxo
-    case p24
-    case payByBank = "pay_by_bank"
-    case payco
-    case paynow
-    case paypal
-    case payto
-    case pix
-    case promptpay
-    case revolutPay = "revolut_pay"
-    case samsungPay = "samsung_pay"
-    case satispay
-    case sepaDebit = "sepa_debit"
-    case sofort
-    case swish
-    case twint
-    case usBankAccount = "us_bank_account"
-    case wechatPay = "wechat_pay"
-    case zip
 }
 
 public enum CheckoutSessionCreatePermissionsUpdateShippingDetails: String, Codable, Sendable {
@@ -1047,6 +1131,13 @@ public enum CheckoutSessionCreateSubscriptionDataInvoiceSettingsIssuerType: Stri
     case `self` = "self"
 }
 
+public enum CheckoutSessionCreateSubscriptionDataPendingInvoiceItemIntervalInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
 public enum CheckoutSessionCreateSubscriptionDataProrationBehavior: String, Codable, Sendable {
     case createProrations = "create_prorations"
     case none
@@ -1064,9 +1155,10 @@ public enum CheckoutSessionCreateTaxIdCollectionRequired: String, Codable, Senda
 }
 
 public enum CheckoutSessionCreateUiMode: String, Codable, Sendable {
-    case custom
-    case embedded
-    case hosted
+    case elements
+    case embeddedPage = "embedded_page"
+    case form
+    case hostedPage = "hosted_page"
 }
 
 public enum CheckoutSessionCreateWalletOptionsLinkDisplay: String, Codable, Sendable {
@@ -1085,6 +1177,11 @@ public enum CheckoutSessionUpdateLineItemsPriceDataTaxBehavior: String, Codable,
     case exclusive
     case inclusive
     case unspecified
+}
+
+public enum CheckoutSessionUpdatePaymentIntentDataSetupFutureUsage: String, Codable, Sendable {
+    case offSession = "off_session"
+    case onSession = "on_session"
 }
 
 public enum CheckoutSessionUpdateShippingOptionsShippingRateDataDeliveryEstimateMaximumUnit: String, Codable, Sendable {

@@ -29,18 +29,23 @@ public struct TestClockAdvanceParams: StripeParams {
 public struct TestClockCreateParams: StripeParams {
     /// The initial frozen time for this test clock.
     public var frozenTime: Int
+    /// Existing customer this test clock will be attached to. Once attached, customers can't be removed
+    /// from a test clock.
+    public var customer: String?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
     /// The name for this test clock.
     public var name: String?
 
-    public init(frozenTime: Int, expand: [String]? = nil, name: String? = nil) {
+    public init(frozenTime: Int, customer: String? = nil, expand: [String]? = nil, name: String? = nil) {
         self.frozenTime = frozenTime
+        self.customer = customer
         self.expand = expand
         self.name = name
     }
 
     public enum CodingKeys: String, CodingKey {
+        case customer
         case expand
         case frozenTime = "frozen_time"
         case name

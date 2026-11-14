@@ -9,7 +9,7 @@ import Foundation
 
 /// Invoices are statements of amounts owed by a customer, and are either generated one-off, or
 /// generated periodically from a subscription. They contain [invoice
-/// items](https://api.stripe.com#invoiceitems), and proration adjustments that may be caused by
+/// items](https://docs.stripe.com/api#invoiceitems), and proration adjustments that may be caused by
 /// subscription upgrades/downgrades (if necessary). If your invoice is configured to be billed through
 /// automatic charges, Stripe automatically finalizes your invoice and attempts payment. Note that
 /// finalizing the invoice, [when
@@ -48,6 +48,8 @@ public struct Invoice: Codable, Sendable {
     public var amountOverpaid: Int
     /// The amount, in cents (or local equivalent), that was paid.
     public var amountPaid: Int
+    /// Amount, in cents (or local equivalent), that was paid on the invoice outside of Stripe.
+    public var amountPaidOffStripe: Int?
     /// The difference between amount_due and amount_paid, in cents (or local equivalent).
     public var amountRemaining: Int
     /// This is the sum of all the shipping amounts.
@@ -191,8 +193,8 @@ public struct Invoice: Codable, Sendable {
     /// reverse chronological order, and (3) invoice items added after invoice creation in chronological
     /// order.
     public var lines: LineItemList
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -215,17 +217,15 @@ public struct Invoice: Codable, Sendable {
     public var parent: String?
     @Expandable<InvoicesPaymentSettings>
     public var paymentSettings: String?
-    /// Payments for this invoice
+    /// Payments for this invoice. Use [invoice payment](/api/invoice-payment) to get more details.
     public var payments: InvoicePaymentList?
-    /// End of the usage period during which invoice items were added to this invoice. This looks back one
-    /// period for a subscription invoice. Use the [line item
+    /// The latest timestamp at which invoice items can be associated with this invoice. Use the [line item
     /// period](/api/invoices/line_item#invoice_line_item_object-period) to get the service period for each
     /// price.
     public var periodEnd: Int
-    /// Start of the usage period during which invoice items were added to this invoice. This looks back one
-    /// period for a subscription invoice. Use the [line item
-    /// period](/api/invoices/line_item#invoice_line_item_object-period) to get the service period for each
-    /// price.
+    /// The earliest timestamp at which invoice items can be associated with this invoice. Use the [line
+    /// item period](/api/invoices/line_item#invoice_line_item_object-period) to get the service period for
+    /// each price.
     public var periodStart: Int
     /// Total amount of all post-payment credit notes issued for this invoice.
     public var postPaymentCreditNotesAmount: Int
@@ -233,8 +233,8 @@ public struct Invoice: Codable, Sendable {
     public var prePaymentCreditNotesAmount: Int
     /// This is the transaction number that appears on email receipts sent for this invoice.
     public var receiptNumber: String?
-    /// The rendering-related settings that control how the invoice is displayed on customer-facing surfaces
-    /// such as PDF and Hosted Invoice Page.
+    /// The rendering-related settings that control how invoices render in customer-facing interfaces such
+    /// as the PDF or hosted invoice page.
     @Expandable<InvoicesResourceInvoiceRendering>
     public var rendering: String?
     /// The details of the cost of shipping, including the ShippingRate applied on the invoice.
@@ -253,6 +253,8 @@ public struct Invoice: Codable, Sendable {
     /// The status of the invoice, one of `draft`, `open`, `paid`, `uncollectible`, or `void`. [Learn
     /// more](https://docs.stripe.com/billing/invoices/workflow#workflow-overview)
     public var status: InvoiceStatus?
+    @Expandable<InvoicesResourceStatusDetails>
+    public var statusDetails: String?
     @Expandable<InvoicesResourceStatusTransitions>
     public var statusTransitions: String?
     @Expandable<Subscription>
@@ -296,6 +298,7 @@ public struct Invoice: Codable, Sendable {
         case amountDue = "amount_due"
         case amountOverpaid = "amount_overpaid"
         case amountPaid = "amount_paid"
+        case amountPaidOffStripe = "amount_paid_off_stripe"
         case amountRemaining = "amount_remaining"
         case amountShipping = "amount_shipping"
         case application
@@ -356,6 +359,7 @@ public struct Invoice: Codable, Sendable {
         case startingBalance = "starting_balance"
         case statementDescriptor = "statement_descriptor"
         case status
+        case statusDetails = "status_details"
         case statusTransitions = "status_transitions"
         case subscription
         case subtotal

@@ -27,6 +27,11 @@ public struct PaymentMethodDetailsCard: Codable, Sendable {
     /// A high-level description of the type of cards issued in this range. (For internal use only and not
     /// typically available in standard API requests.)
     public var description: String?
+    /// The Electronic Commerce Indicator (ECI) returned by the card network in the authorization response.
+    /// Indicates the level of authentication used. Only populated for Visa and Mastercard transactions.
+    /// This is the network's final ECI and can differ from the request value. An authenticated ECI alone
+    /// doesn't determine liability shift.
+    public var electronicCommerceIndicator: String?
     /// Two-digit number representing the card's expiration month.
     public var expMonth: Int
     /// Four-digit number representing the card's expiration year.
@@ -57,6 +62,7 @@ public struct PaymentMethodDetailsCard: Codable, Sendable {
     /// The last four digits of the card.
     public var last4: String?
     /// ID of the mandate used to make this payment or created by it.
+    @Expandable<Mandate>
     public var mandate: String?
     /// True if this payment was marked as MOTO and out of scope for SCA.
     public var moto: Bool?
@@ -78,9 +84,20 @@ public struct PaymentMethodDetailsCard: Codable, Sendable {
     public var overcapture: String?
     /// Status of a card based on the card issuer.
     public var regulatedStatus: PaymentMethodDetailsCardRegulatedStatus?
+    /// The payment_method_options.card.setup_credential_usage value that was passed when setup_future_usage
+    /// was present at confirmation, one of `recurring`, `unscheduled`, or `installment`
+    public var setupCredentialUsage: PaymentMethodDetailsCardSetupCredentialUsage?
+    /// The payment_method_options.card.stored_credential_usage value that was passed for an off session,
+    /// merchant-initiated transaction.
+    public var storedCredentialUsage: PaymentMethodDetailsCardStoredCredentialUsage?
     /// Populated if this transaction used 3D Secure authentication.
     @Expandable<ThreeDSecureDetailsCharge>
     public var threeDSecure: String?
+    /// Transaction Link ID (TLID) is a unique identifier for a transaction. This is used by some card
+    /// networks, such as Mastercard, for transaction linking, in addition to Network Transaction IDs. This
+    /// value will be present if it is returned by the financial network in the authorization response, and
+    /// null otherwise.
+    public var transactionLinkId: String?
     /// If this Card is part of a card wallet, this contains the details of the card wallet.
     @Expandable<PaymentMethodDetailsCardWallet>
     public var wallet: String?
@@ -93,6 +110,7 @@ public struct PaymentMethodDetailsCard: Codable, Sendable {
         case checks
         case country
         case description
+        case electronicCommerceIndicator = "electronic_commerce_indicator"
         case expMonth = "exp_month"
         case expYear = "exp_year"
         case extendedAuthorization = "extended_authorization"
@@ -111,7 +129,10 @@ public struct PaymentMethodDetailsCard: Codable, Sendable {
         case networkTransactionId = "network_transaction_id"
         case overcapture
         case regulatedStatus = "regulated_status"
+        case setupCredentialUsage = "setup_credential_usage"
+        case storedCredentialUsage = "stored_credential_usage"
         case threeDSecure = "three_d_secure"
+        case transactionLinkId = "transaction_link_id"
         case wallet
     }
 }
@@ -120,6 +141,22 @@ public struct PaymentMethodDetailsCard: Codable, Sendable {
 public enum PaymentMethodDetailsCardRegulatedStatus: String, Codable, Sendable {
     case regulated
     case unregulated
+}
+
+/// The payment_method_options.card.setup_credential_usage value that was passed when setup_future_usage
+/// was present at confirmation, one of `recurring`, `unscheduled`, or `installment`
+public enum PaymentMethodDetailsCardSetupCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
+}
+
+/// The payment_method_options.card.stored_credential_usage value that was passed for an off session,
+/// merchant-initiated transaction.
+public enum PaymentMethodDetailsCardStoredCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
 }
 
 public struct PaymentMethodDetailsCardList: Codable, Sendable {

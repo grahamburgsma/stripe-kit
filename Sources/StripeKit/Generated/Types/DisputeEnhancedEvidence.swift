@@ -8,12 +8,15 @@
 import Foundation
 
 public struct DisputeEnhancedEvidence: Codable, Sendable {
+    @Expandable<DisputeEnhancedEvidenceMastercardCompliance>
+    public var mastercardCompliance: String?
     @Expandable<DisputeEnhancedEvidenceVisaCompellingEvidence3>
     public var visaCompellingEvidence3: String?
     @Expandable<DisputeEnhancedEvidenceVisaCompliance>
     public var visaCompliance: String?
 
     public enum CodingKeys: String, CodingKey {
+        case mastercardCompliance = "mastercard_compliance"
         case visaCompellingEvidence3 = "visa_compelling_evidence_3"
         case visaCompliance = "visa_compliance"
     }

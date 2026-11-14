@@ -52,6 +52,8 @@ public struct PaymentMethodConfiguration: Codable, Sendable {
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var billie: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
+    public var bizum: String?
+    @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var blik: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var boleto: String?
@@ -93,8 +95,8 @@ public struct PaymentMethodConfiguration: Codable, Sendable {
     public var krCard: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var link: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var mbWay: String?
@@ -125,6 +127,8 @@ public struct PaymentMethodConfiguration: Codable, Sendable {
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var paypal: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
+    public var paypay: String?
+    @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var payto: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var pix: String?
@@ -137,13 +141,21 @@ public struct PaymentMethodConfiguration: Codable, Sendable {
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var satispay: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
+    public var scalapay: String?
+    @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var sepaDebit: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
+    public var sequra: String?
+    @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var sofort: String?
+    @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
+    public var sunbit: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var swish: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var twint: String?
+    @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
+    public var upi: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
     public var usBankAccount: String?
     @Expandable<PaymentMethodConfigResourcePaymentMethodProperties>
@@ -165,6 +177,7 @@ public struct PaymentMethodConfiguration: Codable, Sendable {
         case bacsDebit = "bacs_debit"
         case bancontact
         case billie
+        case bizum
         case blik
         case boleto
         case card
@@ -201,16 +214,21 @@ public struct PaymentMethodConfiguration: Codable, Sendable {
         case payco
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
+        case upi
         case usBankAccount = "us_bank_account"
         case wechatPay = "wechat_pay"
         case zip

@@ -8,11 +8,11 @@
 import Foundation
 
 /// A coupon contains information about a percent-off or amount-off discount you might want to apply to
-/// a customer. Coupons may be applied to [subscriptions](https://api.stripe.com#subscriptions),
-/// [invoices](https://api.stripe.com#invoices), [checkout
-/// sessions](https://docs.stripe.com/api/checkout/sessions), [quotes](https://api.stripe.com#quotes),
-/// and more. Coupons do not work with conventional one-off
-/// [charges](https://api.stripe.com#create_charge) or [payment
+/// a customer. Coupons may be applied to [subscriptions](https://docs.stripe.com/api#subscriptions),
+/// [invoices](https://docs.stripe.com/api#invoices), [checkout
+/// sessions](https://docs.stripe.com/api/checkout/sessions),
+/// [quotes](https://docs.stripe.com/api#quotes), and more. Coupons do not work with conventional
+/// one-off [charges](/api/charges/create) or [payment
 /// intents](https://docs.stripe.com/api/payment_intents).
 public struct Coupon: Codable, Sendable {
     /// Amount (in the `currency` specified) that will be taken off the subtotal of any invoices for this
@@ -37,8 +37,8 @@ public struct Coupon: Codable, Sendable {
     public var durationInMonths: Int?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Maximum number of times this coupon can be redeemed, in total, across all customers, before it is no
     /// longer valid.

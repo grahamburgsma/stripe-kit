@@ -45,6 +45,9 @@ public struct ProductCreateParams: StripeParams {
     public var statementDescriptor: String?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: ProductCreateTaxDetails?
     /// The type of the product. Defaults to `service` if not explicitly specified, enabling use of this
     /// product with Subscriptions and Plans. Set this parameter to `good` to use this product with Orders
     /// and SKUs. On API versions before `2018-02-05`, this field defaults to `good` for compatibility
@@ -56,7 +59,7 @@ public struct ProductCreateParams: StripeParams {
     /// A URL of a publicly-accessible webpage for this product.
     public var url: String?
 
-    public init(name: String, active: Bool? = nil, defaultPriceData: ProductCreateDefaultPriceData? = nil, description: String? = nil, expand: [String]? = nil, id: String? = nil, images: [String]? = nil, marketingFeatures: [ProductCreateMarketingFeatures]? = nil, metadata: [String: String]? = nil, packageDimensions: ProductCreatePackageDimensions? = nil, shippable: Bool? = nil, statementDescriptor: String? = nil, taxCode: String? = nil, type: ProductCreateType? = nil, unitLabel: String? = nil, url: String? = nil) {
+    public init(name: String, active: Bool? = nil, defaultPriceData: ProductCreateDefaultPriceData? = nil, description: String? = nil, expand: [String]? = nil, id: String? = nil, images: [String]? = nil, marketingFeatures: [ProductCreateMarketingFeatures]? = nil, metadata: [String: String]? = nil, packageDimensions: ProductCreatePackageDimensions? = nil, shippable: Bool? = nil, statementDescriptor: String? = nil, taxCode: String? = nil, taxDetails: ProductCreateTaxDetails? = nil, type: ProductCreateType? = nil, unitLabel: String? = nil, url: String? = nil) {
         self.name = name
         self.active = active
         self.defaultPriceData = defaultPriceData
@@ -70,6 +73,7 @@ public struct ProductCreateParams: StripeParams {
         self.shippable = shippable
         self.statementDescriptor = statementDescriptor
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.type = type
         self.unitLabel = unitLabel
         self.url = url
@@ -89,6 +93,7 @@ public struct ProductCreateParams: StripeParams {
         case shippable
         case statementDescriptor = "statement_descriptor"
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case type
         case unitLabel = "unit_label"
         case url
@@ -131,13 +136,16 @@ public struct ProductUpdateParams: StripeParams {
     public var statementDescriptor: String?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: ProductUpdateTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal. May only be set if `type=service`.
     public var unitLabel: String?
     /// A URL of a publicly-accessible webpage for this product.
     public var url: String?
 
-    public init(active: Bool? = nil, defaultPrice: String? = nil, description: String? = nil, expand: [String]? = nil, images: [String]? = nil, marketingFeatures: [ProductUpdateMarketingFeatures]? = nil, metadata: [String: String]? = nil, name: String? = nil, packageDimensions: ProductUpdatePackageDimensions? = nil, shippable: Bool? = nil, statementDescriptor: String? = nil, taxCode: String? = nil, unitLabel: String? = nil, url: String? = nil) {
+    public init(active: Bool? = nil, defaultPrice: String? = nil, description: String? = nil, expand: [String]? = nil, images: [String]? = nil, marketingFeatures: [ProductUpdateMarketingFeatures]? = nil, metadata: [String: String]? = nil, name: String? = nil, packageDimensions: ProductUpdatePackageDimensions? = nil, shippable: Bool? = nil, statementDescriptor: String? = nil, taxCode: String? = nil, taxDetails: ProductUpdateTaxDetails? = nil, unitLabel: String? = nil, url: String? = nil) {
         self.active = active
         self.defaultPrice = defaultPrice
         self.description = description
@@ -150,6 +158,7 @@ public struct ProductUpdateParams: StripeParams {
         self.shippable = shippable
         self.statementDescriptor = statementDescriptor
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
         self.url = url
     }
@@ -167,6 +176,7 @@ public struct ProductUpdateParams: StripeParams {
         case shippable
         case statementDescriptor = "statement_descriptor"
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
         case url
     }
@@ -297,6 +307,27 @@ public struct ProductCreatePackageDimensions: StripeParams {
     }
 }
 
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct ProductCreateTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
+    }
+}
+
 public struct ProductUpdateMarketingFeatures: StripeParams {
     /// The marketing feature name. Up to 80 characters long.
     public var name: String
@@ -321,5 +352,24 @@ public struct ProductUpdatePackageDimensions: StripeParams {
         self.length = length
         self.weight = weight
         self.width = width
+    }
+}
+
+public struct ProductUpdateTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }

@@ -41,8 +41,12 @@ public struct IssuingCard: Codable, Sendable {
     /// null, cancel and reissue the card to prevent fraudulent activity risk.
     @Expandable<IssuingCardFraudWarning>
     public var latestFraudWarning: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// Rules that control the lifecycle of this card, such as automatic cancellation. Refer to our
+    /// [documentation](/issuing/controls/lifecycle-controls) for more details.
+    @Expandable<IssuingCardLifecycleControls>
+    public var lifecycleControls: String?
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -95,6 +99,7 @@ public struct IssuingCard: Codable, Sendable {
         case id
         case last4
         case latestFraudWarning = "latest_fraud_warning"
+        case lifecycleControls = "lifecycle_controls"
         case livemode
         case metadata
         case number
@@ -115,6 +120,7 @@ public struct IssuingCard: Codable, Sendable {
 /// The reason why the card was canceled.
 public enum IssuingCardCancellationReason: String, Codable, Sendable {
     case designRejected = "design_rejected"
+    case fulfillmentError = "fulfillment_error"
     case lost
     case stolen
 }
@@ -128,6 +134,7 @@ public enum IssuingCardObject: String, Codable, Sendable {
 public enum IssuingCardReplacementReason: String, Codable, Sendable {
     case damaged
     case expired
+    case fulfillmentError = "fulfillment_error"
     case lost
     case stolen
 }

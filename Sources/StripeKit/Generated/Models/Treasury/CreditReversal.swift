@@ -7,8 +7,13 @@
 
 import Foundation
 
-/// You can reverse some [ReceivedCredits](https://api.stripe.com#received_credits) depending on their
-/// network and source flow. Reversing a ReceivedCredit leads to the creation of a new object known as a
+/// Legacy CreditReversals are part of the v1 version of Treasury for platforms and do not support many
+/// of the features introduced in [Treasury for platforms v2](https://docs.stripe.com/treasury/connect).
+/// Use [Received
+/// Credits](https://docs.stripe.com/api/v2/money-management/received-credits?api-version=preview)
+/// instead of building a new v1 integration. You can reverse some
+/// [ReceivedCredits](https://docs.stripe.com/api#received_credits) depending on their network and
+/// source flow. Reversing a ReceivedCredit leads to the creation of a new object known as a
 /// CreditReversal.
 public struct CreditReversal: Codable, Sendable {
     /// Amount (in cents) transferred.
@@ -26,8 +31,8 @@ public struct CreditReversal: Codable, Sendable {
     public var hostedRegulatoryReceiptUrl: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

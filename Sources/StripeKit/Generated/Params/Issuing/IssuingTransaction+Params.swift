@@ -221,7 +221,7 @@ public struct IssuingTransactionCreatePurchaseDetailsFleetReportedBreakdown: Str
 
 /// Breakdown of fuel portion of the purchase.
 public struct IssuingTransactionCreatePurchaseDetailsFleetReportedBreakdownFuel: StripeParams {
-    /// Gross fuel amount that should equal Fuel Volume multipled by Fuel Unit Cost, inclusive of taxes.
+    /// Gross fuel amount that should equal Fuel Volume multiplied by Fuel Unit Cost, inclusive of taxes.
     public var grossAmountDecimal: String?
 
     public init(grossAmountDecimal: String? = nil) {

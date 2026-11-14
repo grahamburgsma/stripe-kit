@@ -20,10 +20,11 @@ public struct InvoiceRoutes: Sendable {
     /// Retrieves the invoice with the given ID.
     public var retrieve: @Sendable (_ invoice: String, _ expand: [String]?) async throws -> Invoice
 
-    /// Draft invoices are fully editable. Once an invoice is finalized, monetary values, as well as
-    /// collection_method, become uneditable. If you would like to stop the Stripe Billing engine from
-    /// automatically finalizing, reattempting payments on, sending reminders for, or automatically
-    /// reconciling invoices, pass auto_advance=false.
+    /// Draft invoices are fully editable. Once an invoice is finalized, you can no longer change most of
+    /// its details, including monetary values and collection_method. For most invoices, this also includes
+    /// description. If you would like to stop the Stripe Billing engine from automatically finalizing,
+    /// reattempting payments on, sending reminders for, or automatically reconciling invoices, pass
+    /// auto_advance=false.
     public var update: @Sendable (_ invoice: String, _ params: InvoiceUpdateParams?) async throws -> Invoice
 
     /// You can list all invoices, or list the invoices for a specific customer. The invoices are returned

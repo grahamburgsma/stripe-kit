@@ -11,13 +11,25 @@ public struct BankConnectionsResourceLinkAccountSessionFilters: Codable, Sendabl
     /// Restricts the Session to subcategories of accounts that can be linked. Valid subcategories are:
     /// `checking`, `savings`, `mortgage`, `line_of_credit`, `credit_card`.
     public var accountSubcategories: [String]?
-    /// List of countries from which to filter accounts.
-    public var countries: [String]?
+    /// Country from which to filter accounts.
+    public var country: String?
+    /// Whether the Session should require that linked accounts support payments and retrieve account
+    /// numbers before completion.
+    public var requirePaymentMethodSupport: BankConnectionsResourceLinkAccountSessionFiltersRequirePaymentMethodSupport?
 
     public enum CodingKeys: String, CodingKey {
         case accountSubcategories = "account_subcategories"
-        case countries
+        case country
+        case requirePaymentMethodSupport = "require_payment_method_support"
     }
+}
+
+/// Whether the Session should require that linked accounts support payments and retrieve account
+/// numbers before completion.
+public enum BankConnectionsResourceLinkAccountSessionFiltersRequirePaymentMethodSupport: String, Codable, Sendable {
+    case all
+    case atLeastOne = "at_least_one"
+    case none
 }
 
 public struct BankConnectionsResourceLinkAccountSessionFiltersList: Codable, Sendable {

@@ -15,10 +15,25 @@ public struct TransferData: Codable, Sendable {
     /// be a positive integer representing how much to transfer in the smallest currency unit (e.g., 100
     /// cents to charge $1.00).
     public var amount: Int?
+    /// An arbitrary string attached to the transfer. Often useful for displaying to users.
+    public var description: String?
     /// The account (if any) that the payment is attributed to for tax reporting, and where funds from the
     /// payment are transferred to after payment success.
     @Expandable<Account>
     public var destination: String?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    public var metadata: [String: String]?
+    @Expandable<PaymentData>
+    public var paymentData: String?
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case description
+        case destination
+        case metadata
+        case paymentData = "payment_data"
+    }
 }
 
 public struct TransferDataList: Codable, Sendable {

@@ -47,6 +47,7 @@ public enum SupplierRemovalPathway: String, Codable, Sendable {
     case biomassCarbonRemovalAndStorage = "biomass_carbon_removal_and_storage"
     case directAirCapture = "direct_air_capture"
     case enhancedWeathering = "enhanced_weathering"
+    case marineCarbonRemoval = "marine_carbon_removal"
 }
 
 public struct SupplierList: Codable, Sendable {

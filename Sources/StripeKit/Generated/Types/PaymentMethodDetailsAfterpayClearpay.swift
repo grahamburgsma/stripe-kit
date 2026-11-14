@@ -10,7 +10,7 @@ import Foundation
 public struct PaymentMethodDetailsAfterpayClearpay: Codable, Sendable {
     /// The Afterpay order ID associated with this payment intent.
     public var orderId: String?
-    /// Order identifier shown to the merchant in Afterpay’s online portal.
+    /// Order identifier shown to the merchant in Afterpay's online portal.
     public var reference: String?
 
     public enum CodingKeys: String, CodingKey {

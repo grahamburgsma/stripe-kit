@@ -11,10 +11,10 @@ public struct TreasuryReceivedCreditsResourceLinkedFlows: Codable, Sendable {
     /// The CreditReversal created as a result of this ReceivedCredit being reversed.
     public var creditReversal: String?
     /// Set if the ReceivedCredit was created due to an [Issuing
-    /// Authorization](https://api.stripe.com#issuing_authorizations) object.
+    /// Authorization](https://docs.stripe.com/api#issuing_authorizations) object.
     public var issuingAuthorization: String?
     /// Set if the ReceivedCredit is also viewable as an [Issuing
-    /// transaction](https://api.stripe.com#issuing_transactions) object.
+    /// transaction](https://docs.stripe.com/api#issuing_transactions) object.
     public var issuingTransaction: String?
     /// ID of the source flow. Set if `network` is `stripe` and the source flow is visible to the user.
     /// Examples of source flows include OutboundPayments, payouts, or CreditReversals.

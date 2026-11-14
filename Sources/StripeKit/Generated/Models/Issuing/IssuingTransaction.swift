@@ -20,7 +20,7 @@ public struct IssuingTransaction: Codable, Sendable {
     @Expandable<IssuingTransactionAmountDetails>
     public var amountDetails: String?
     /// The `Authorization` object that led to this transaction.
-    @Expandable<Authorization>
+    @Expandable<IssuingAuthorization>
     public var authorization: String?
     /// ID of the [balance transaction](https://docs.stripe.com/api/balance_transactions) associated with
     /// this transaction.
@@ -42,8 +42,8 @@ public struct IssuingTransaction: Codable, Sendable {
     public var dispute: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// The amount that the merchant will receive, denominated in `merchant_currency` and in the [smallest
     /// currency unit](https://docs.stripe.com/currencies#zero-decimal). It will be different from `amount`

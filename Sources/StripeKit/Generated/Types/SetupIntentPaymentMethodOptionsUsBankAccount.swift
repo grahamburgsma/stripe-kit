@@ -12,7 +12,7 @@ public struct SetupIntentPaymentMethodOptionsUsBankAccount: Codable, Sendable {
     public var financialConnections: String?
     @Expandable<PaymentMethodOptionsUsBankAccountMandateOptions>
     public var mandateOptions: String?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: SetupIntentPaymentMethodOptionsUsBankAccountVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -22,7 +22,7 @@ public struct SetupIntentPaymentMethodOptionsUsBankAccount: Codable, Sendable {
     }
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum SetupIntentPaymentMethodOptionsUsBankAccountVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

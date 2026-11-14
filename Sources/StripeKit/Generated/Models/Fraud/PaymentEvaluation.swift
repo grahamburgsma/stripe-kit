@@ -24,10 +24,8 @@ public struct PaymentEvaluation: Codable, Sendable {
     public var events: [String]?
     /// Unique identifier for the object.
     public var id: String
-    @Expandable<InsightsResourcesPaymentEvaluationInsights>
-    public var insights: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -39,6 +37,11 @@ public struct PaymentEvaluation: Codable, Sendable {
     public var outcome: String?
     @Expandable<InsightsResourcesPaymentEvaluationPaymentDetails>
     public var paymentDetails: String?
+    /// Recommended action based on the score of the `fraudulent_payment` signal. Possible values are
+    /// `block`, `continue` and `request_three_d_secure`.
+    public var recommendedAction: PaymentEvaluationRecommendedAction
+    @Expandable<InsightsResourcesPaymentEvaluationSignals>
+    public var signals: String?
 
     public enum CodingKeys: String, CodingKey {
         case clientDeviceMetadataDetails = "client_device_metadata_details"
@@ -46,18 +49,26 @@ public struct PaymentEvaluation: Codable, Sendable {
         case customerDetails = "customer_details"
         case events
         case id
-        case insights
         case livemode
         case metadata
         case object
         case outcome
         case paymentDetails = "payment_details"
+        case recommendedAction = "recommended_action"
+        case signals
     }
 }
 
 /// String representing the object's type. Objects of the same type share the same value.
 public enum PaymentEvaluationObject: String, Codable, Sendable {
     case radarPaymentEvaluation = "radar.payment_evaluation"
+}
+
+/// Recommended action based on the score of the `fraudulent_payment` signal. Possible values are
+/// `block`, `continue` and `request_three_d_secure`.
+public enum PaymentEvaluationRecommendedAction: String, Codable, Sendable {
+    case block
+    case `continue` = "continue"
 }
 
 public struct PaymentEvaluationList: Codable, Sendable {

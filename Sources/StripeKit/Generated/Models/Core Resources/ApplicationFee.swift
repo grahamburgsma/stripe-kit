@@ -7,6 +7,10 @@
 
 import Foundation
 
+/// When you collect a transaction fee on top of a charge made for your user (using
+/// [Connect](https://docs.stripe.com/connect)), an `Application Fee` object is created in your account.
+/// You can list, retrieve, and refund application fees. Related guide: [Collecting application
+/// fees](https://docs.stripe.com/connect/direct-charges#collect-fees)
 public struct ApplicationFee: Codable, Sendable {
     /// ID of the Stripe account this fee was taken from.
     @Expandable<Account>
@@ -37,8 +41,8 @@ public struct ApplicationFee: Codable, Sendable {
     public var feeSource: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: ApplicationFeeObject

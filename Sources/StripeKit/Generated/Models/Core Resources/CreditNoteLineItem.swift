@@ -24,9 +24,12 @@ public struct CreditNoteLineItem: Codable, Sendable {
     public var id: String
     /// ID of the invoice line item being credited
     public var invoiceLineItem: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    public var metadata: [String: String]?
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: CreditNoteLineItemObject
     /// The pretax credit amounts (ex: discount, credit grants, etc) for this line item.
@@ -57,6 +60,7 @@ public struct CreditNoteLineItem: Codable, Sendable {
         case id
         case invoiceLineItem = "invoice_line_item"
         case livemode
+        case metadata
         case object
         case pretaxCreditAmounts = "pretax_credit_amounts"
         case quantity

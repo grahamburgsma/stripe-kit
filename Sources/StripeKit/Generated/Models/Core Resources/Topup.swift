@@ -27,21 +27,30 @@ public struct Topup: Codable, Sendable {
     /// Date the funds are expected to arrive in your Stripe account for payouts. This factors in delays
     /// like weekends or bank holidays. May not be specified depending on status of top-up.
     public var expectedAvailabilityDate: Int?
-    /// Error code explaining reason for top-up failure if available (see [the errors
-    /// section](https://docs.stripe.com/api#errors) for a list of codes).
+    /// Error code explaining reason for top-up failure if available (see [the errors section](/api/errors)
+    /// for a list of codes).
     public var failureCode: String?
     /// Message to user further explaining reason for top-up failure if available.
     public var failureMessage: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// Indicates whether the top-up was initiated by Stripe or by the user.
+    public var initiatedBy: TopupInitiatedBy?
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     public var metadata: [String: String]
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: TopupObject
+    /// The ID of a PaymentMethod representing the payment method used for the top-up. A PaymentMethod of
+    /// type `us_bank_account` can be used.
+    @Expandable<PaymentMethod>
+    public var paymentMethod: String?
+    /// Payment-method-specific configuration for this top-up.
+    @Expandable<TopupResourcePaymentMethodOptions>
+    public var paymentMethodOptions: String?
     /// The source field is deprecated. It might not always be present in the API response.
     @Expandable<Source>
     public var source: String?
@@ -63,14 +72,23 @@ public struct Topup: Codable, Sendable {
         case failureCode = "failure_code"
         case failureMessage = "failure_message"
         case id
+        case initiatedBy = "initiated_by"
         case livemode
         case metadata
         case object
+        case paymentMethod = "payment_method"
+        case paymentMethodOptions = "payment_method_options"
         case source
         case statementDescriptor = "statement_descriptor"
         case status
         case transferGroup = "transfer_group"
     }
+}
+
+/// Indicates whether the top-up was initiated by Stripe or by the user.
+public enum TopupInitiatedBy: String, Codable, Sendable {
+    case stripe
+    case user
 }
 
 /// String representing the object's type. Objects of the same type share the same value.

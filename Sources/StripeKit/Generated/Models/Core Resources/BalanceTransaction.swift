@@ -26,7 +26,7 @@ public struct BalanceTransaction: Codable, Sendable {
     /// An arbitrary string attached to the object. Often useful for displaying to users.
     public var description: String?
     /// If applicable, this transaction uses an exchange rate. If money converts from currency A to currency
-    /// B, then the `amount` in currency A, multipled by the `exchange_rate`, equals the `amount` in
+    /// B, then the `amount` in currency A, multiplied by the `exchange_rate`, equals the `amount` in
     /// currency B. For example, if you charge a customer 10.00 EUR, the PaymentIntent's `amount` is `1000`
     /// and `currency` is `eur`. If this converts to 12.34 USD in your Stripe account, the
     /// BalanceTransaction's `amount` is `1234`, its `currency` is `usd`, and the `exchange_rate` is
@@ -54,18 +54,20 @@ public struct BalanceTransaction: Codable, Sendable {
     public var source: String?
     /// The transaction's net funds status in the Stripe balance, which are either `available` or `pending`.
     public var status: String
-    /// Transaction type: `adjustment`, `advance`, `advance_funding`, `anticipation_repayment`,
+    /// Transaction type: `tax_fund`, `adjustment`, `advance`, `advance_funding`, `anticipation_repayment`,
     /// `application_fee`, `application_fee_refund`, `charge`, `climate_order_purchase`,
-    /// `climate_order_refund`, `connect_collection_transfer`, `contribution`, `issuing_authorization_hold`,
-    /// `issuing_authorization_release`, `issuing_dispute`, `issuing_transaction`, `obligation_outbound`,
+    /// `climate_order_refund`, `connect_collection_transfer`, `contribution`, `inbound_transfer`,
+    /// `inbound_transfer_reversal`, `issuing_authorization_hold`, `issuing_authorization_release`,
+    /// `issuing_dispute`, `issuing_dispute_provisional_credit`,
+    /// `issuing_dispute_provisional_credit_reversal`, `issuing_transaction`, `obligation_outbound`,
     /// `obligation_reversal_inbound`, `payment`, `payment_failure_refund`, `payment_network_reserve_hold`,
     /// `payment_network_reserve_release`, `payment_refund`, `payment_reversal`, `payment_unreconciled`,
     /// `payout`, `payout_cancel`, `payout_failure`, `payout_minimum_balance_hold`,
     /// `payout_minimum_balance_release`, `refund`, `refund_failure`, `reserve_transaction`,
     /// `reserved_funds`, `reserve_hold`, `reserve_release`, `stripe_fee`, `stripe_fx_fee`,
     /// `stripe_balance_payment_debit`, `stripe_balance_payment_debit_reversal`, `tax_fee`, `topup`,
-    /// `topup_reversal`, `transfer`, `transfer_cancel`, `transfer_failure`, or `transfer_refund`. Learn
-    /// more about [balance transaction types and what they
+    /// `topup_reversal`, `transfer`, `transfer_cancel`, `transfer_failure`, `transfer_refund`, or
+    /// `fee_credit_funding`. Learn more about [balance transaction types and what they
     /// represent](https://stripe.com/docs/reports/balance-transaction-types). To classify transactions for
     /// accounting purposes, consider `reporting_category` instead.
     public var type: BalanceTransactionType
@@ -103,18 +105,20 @@ public enum BalanceTransactionObject: String, Codable, Sendable {
     case balanceTransaction = "balance_transaction"
 }
 
-/// Transaction type: `adjustment`, `advance`, `advance_funding`, `anticipation_repayment`,
+/// Transaction type: `tax_fund`, `adjustment`, `advance`, `advance_funding`, `anticipation_repayment`,
 /// `application_fee`, `application_fee_refund`, `charge`, `climate_order_purchase`,
-/// `climate_order_refund`, `connect_collection_transfer`, `contribution`, `issuing_authorization_hold`,
-/// `issuing_authorization_release`, `issuing_dispute`, `issuing_transaction`, `obligation_outbound`,
+/// `climate_order_refund`, `connect_collection_transfer`, `contribution`, `inbound_transfer`,
+/// `inbound_transfer_reversal`, `issuing_authorization_hold`, `issuing_authorization_release`,
+/// `issuing_dispute`, `issuing_dispute_provisional_credit`,
+/// `issuing_dispute_provisional_credit_reversal`, `issuing_transaction`, `obligation_outbound`,
 /// `obligation_reversal_inbound`, `payment`, `payment_failure_refund`, `payment_network_reserve_hold`,
 /// `payment_network_reserve_release`, `payment_refund`, `payment_reversal`, `payment_unreconciled`,
 /// `payout`, `payout_cancel`, `payout_failure`, `payout_minimum_balance_hold`,
 /// `payout_minimum_balance_release`, `refund`, `refund_failure`, `reserve_transaction`,
 /// `reserved_funds`, `reserve_hold`, `reserve_release`, `stripe_fee`, `stripe_fx_fee`,
 /// `stripe_balance_payment_debit`, `stripe_balance_payment_debit_reversal`, `tax_fee`, `topup`,
-/// `topup_reversal`, `transfer`, `transfer_cancel`, `transfer_failure`, or `transfer_refund`. Learn
-/// more about [balance transaction types and what they
+/// `topup_reversal`, `transfer`, `transfer_cancel`, `transfer_failure`, `transfer_refund`, or
+/// `fee_credit_funding`. Learn more about [balance transaction types and what they
 /// represent](https://stripe.com/docs/reports/balance-transaction-types). To classify transactions for
 /// accounting purposes, consider `reporting_category` instead.
 public enum BalanceTransactionType: String, Codable, Sendable {
@@ -129,9 +133,14 @@ public enum BalanceTransactionType: String, Codable, Sendable {
     case climateOrderRefund = "climate_order_refund"
     case connectCollectionTransfer = "connect_collection_transfer"
     case contribution
+    case feeCreditFunding = "fee_credit_funding"
+    case inboundTransfer = "inbound_transfer"
+    case inboundTransferReversal = "inbound_transfer_reversal"
     case issuingAuthorizationHold = "issuing_authorization_hold"
     case issuingAuthorizationRelease = "issuing_authorization_release"
     case issuingDispute = "issuing_dispute"
+    case issuingDisputeProvisionalCredit = "issuing_dispute_provisional_credit"
+    case issuingDisputeProvisionalCreditReversal = "issuing_dispute_provisional_credit_reversal"
     case issuingTransaction = "issuing_transaction"
     case obligationOutbound = "obligation_outbound"
     case obligationReversalInbound = "obligation_reversal_inbound"
@@ -158,6 +167,7 @@ public enum BalanceTransactionType: String, Codable, Sendable {
     case stripeFee = "stripe_fee"
     case stripeFxFee = "stripe_fx_fee"
     case taxFee = "tax_fee"
+    case taxFund = "tax_fund"
     case topup
     case topupReversal = "topup_reversal"
     case transfer

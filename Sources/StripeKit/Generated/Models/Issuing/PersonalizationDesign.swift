@@ -11,7 +11,9 @@ import Foundation
 /// that represents a product line.
 public struct PersonalizationDesign: Codable, Sendable {
     /// The file for the card logo to use with physical bundles that support card logos. Must have a
-    /// `purpose` value of `issuing_logo`.
+    /// `purpose` value of `issuing_logo`. Image must be in PNG format with dimensions of 1000px by 200px.
+    /// It must be a binary (black and white) image containing a black logo on a white background. We don't
+    /// accept grayscale.
     @Expandable<File>
     public var cardLogo: String?
     /// Hash containing carrier text, for use with physical bundles that support carrier text.
@@ -21,8 +23,8 @@ public struct PersonalizationDesign: Codable, Sendable {
     public var created: Int
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// A lookup key used to retrieve personalization designs dynamically from a static string. This may be
     /// up to 200 characters.

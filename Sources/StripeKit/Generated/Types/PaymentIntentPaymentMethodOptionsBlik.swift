@@ -8,6 +8,8 @@
 import Foundation
 
 public struct PaymentIntentPaymentMethodOptionsBlik: Codable, Sendable {
+    @Expandable<PaymentIntentPaymentMethodOptionsMandateOptionsBlik>
+    public var mandateOptions: String?
     /// Indicates that you intend to make future payments with this PaymentIntent's payment method. If you
     /// provide a Customer with the PaymentIntent, you can use this parameter to [attach the payment
     /// method](/payments/save-during-payment) to the Customer after the PaymentIntent is confirmed and the
@@ -22,6 +24,7 @@ public struct PaymentIntentPaymentMethodOptionsBlik: Codable, Sendable {
     public var setupFutureUsage: PaymentIntentPaymentMethodOptionsBlikSetupFutureUsage?
 
     public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
         case setupFutureUsage = "setup_future_usage"
     }
 }
@@ -39,6 +42,7 @@ public struct PaymentIntentPaymentMethodOptionsBlik: Codable, Sendable {
 /// [SCA](/strong-customer-authentication).
 public enum PaymentIntentPaymentMethodOptionsBlikSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
 }
 
 public struct PaymentIntentPaymentMethodOptionsBlikList: Codable, Sendable {

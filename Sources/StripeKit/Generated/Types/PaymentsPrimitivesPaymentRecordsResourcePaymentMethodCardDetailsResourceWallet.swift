@@ -14,15 +14,18 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsRe
     public var dynamicLast4: String?
     @Expandable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWalletResourceGooglePay>
     public var googlePay: String?
-    /// The type of the card wallet, one of `apple_pay` or `google_pay`. An additional hash is included on
-    /// the Wallet subhash with a name matching this value. It contains additional information specific to
-    /// the card wallet type.
+    @Expandable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetailsResourceWalletResourceLink>
+    public var link: String?
+    /// The type of the card wallet, one of `apple_pay`, `google_pay`, or `link`. An additional hash is
+    /// included on the Wallet subhash with a name matching this value. It contains additional information
+    /// specific to the card wallet type.
     public var type: String
 
     public enum CodingKeys: String, CodingKey {
         case applePay = "apple_pay"
         case dynamicLast4 = "dynamic_last4"
         case googlePay = "google_pay"
+        case link
         case type
     }
 }

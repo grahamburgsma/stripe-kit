@@ -98,6 +98,8 @@ public struct RegistrationCreateCountryOptions: StripeParams {
     public var bj: RegistrationCreateCountryOptionsBj?
     /// Options for the registration in BS.
     public var bs: RegistrationCreateCountryOptionsBs?
+    /// Options for the registration in BW.
+    public var bw: RegistrationCreateCountryOptionsBw?
     /// Options for the registration in BY.
     public var by: RegistrationCreateCountryOptionsBy?
     /// Options for the registration in CA.
@@ -106,6 +108,8 @@ public struct RegistrationCreateCountryOptions: StripeParams {
     public var cd: RegistrationCreateCountryOptionsCd?
     /// Options for the registration in CH.
     public var ch: RegistrationCreateCountryOptionsCh?
+    /// Options for the registration in CI.
+    public var ci: RegistrationCreateCountryOptionsCi?
     /// Options for the registration in CL.
     public var cl: RegistrationCreateCountryOptionsCl?
     /// Options for the registration in CM.
@@ -142,6 +146,8 @@ public struct RegistrationCreateCountryOptions: StripeParams {
     public var gb: RegistrationCreateCountryOptionsGb?
     /// Options for the registration in GE.
     public var ge: RegistrationCreateCountryOptionsGe?
+    /// Options for the registration in GH.
+    public var gh: RegistrationCreateCountryOptionsGh?
     /// Options for the registration in GN.
     public var gn: RegistrationCreateCountryOptionsGn?
     /// Options for the registration in GR.
@@ -174,6 +180,8 @@ public struct RegistrationCreateCountryOptions: StripeParams {
     public var kz: RegistrationCreateCountryOptionsKz?
     /// Options for the registration in LA.
     public var la: RegistrationCreateCountryOptionsLa?
+    /// Options for the registration in LK.
+    public var lk: RegistrationCreateCountryOptionsLk?
     /// Options for the registration in LT.
     public var lt: RegistrationCreateCountryOptionsLt?
     /// Options for the registration in LU.
@@ -192,6 +200,8 @@ public struct RegistrationCreateCountryOptions: StripeParams {
     public var mr: RegistrationCreateCountryOptionsMr?
     /// Options for the registration in MT.
     public var mt: RegistrationCreateCountryOptionsMt?
+    /// Options for the registration in MU.
+    public var mu: RegistrationCreateCountryOptionsMu?
     /// Options for the registration in MX.
     public var mx: RegistrationCreateCountryOptionsMx?
     /// Options for the registration in MY.
@@ -265,7 +275,7 @@ public struct RegistrationCreateCountryOptions: StripeParams {
     /// Options for the registration in ZW.
     public var zw: RegistrationCreateCountryOptionsZw?
 
-    public init(ae: RegistrationCreateCountryOptionsAe? = nil, al: RegistrationCreateCountryOptionsAl? = nil, am: RegistrationCreateCountryOptionsAm? = nil, ao: RegistrationCreateCountryOptionsAo? = nil, at: RegistrationCreateCountryOptionsAt? = nil, au: RegistrationCreateCountryOptionsAu? = nil, aw: RegistrationCreateCountryOptionsAw? = nil, az: RegistrationCreateCountryOptionsAz? = nil, ba: RegistrationCreateCountryOptionsBa? = nil, bb: RegistrationCreateCountryOptionsBb? = nil, bd: RegistrationCreateCountryOptionsBd? = nil, be: RegistrationCreateCountryOptionsBe? = nil, bf: RegistrationCreateCountryOptionsBf? = nil, bg: RegistrationCreateCountryOptionsBg? = nil, bh: RegistrationCreateCountryOptionsBh? = nil, bj: RegistrationCreateCountryOptionsBj? = nil, bs: RegistrationCreateCountryOptionsBs? = nil, by: RegistrationCreateCountryOptionsBy? = nil, ca: RegistrationCreateCountryOptionsCa? = nil, cd: RegistrationCreateCountryOptionsCd? = nil, ch: RegistrationCreateCountryOptionsCh? = nil, cl: RegistrationCreateCountryOptionsCl? = nil, cm: RegistrationCreateCountryOptionsCm? = nil, co: RegistrationCreateCountryOptionsCo? = nil, cr: RegistrationCreateCountryOptionsCr? = nil, cv: RegistrationCreateCountryOptionsCv? = nil, cy: RegistrationCreateCountryOptionsCy? = nil, cz: RegistrationCreateCountryOptionsCz? = nil, de: RegistrationCreateCountryOptionsDe? = nil, dk: RegistrationCreateCountryOptionsDk? = nil, ec: RegistrationCreateCountryOptionsEc? = nil, ee: RegistrationCreateCountryOptionsEe? = nil, eg: RegistrationCreateCountryOptionsEg? = nil, es: RegistrationCreateCountryOptionsEs? = nil, et: RegistrationCreateCountryOptionsEt? = nil, fi: RegistrationCreateCountryOptionsFi? = nil, fr: RegistrationCreateCountryOptionsFr? = nil, gb: RegistrationCreateCountryOptionsGb? = nil, ge: RegistrationCreateCountryOptionsGe? = nil, gn: RegistrationCreateCountryOptionsGn? = nil, gr: RegistrationCreateCountryOptionsGr? = nil, hr: RegistrationCreateCountryOptionsHr? = nil, hu: RegistrationCreateCountryOptionsHu? = nil, id: RegistrationCreateCountryOptionsId? = nil, ie: RegistrationCreateCountryOptionsIe? = nil, `in`: RegistrationCreateCountryOptionsIn? = nil, `is`: RegistrationCreateCountryOptionsIs? = nil, it: RegistrationCreateCountryOptionsIt? = nil, jp: RegistrationCreateCountryOptionsJp? = nil, ke: RegistrationCreateCountryOptionsKe? = nil, kg: RegistrationCreateCountryOptionsKg? = nil, kh: RegistrationCreateCountryOptionsKh? = nil, kr: RegistrationCreateCountryOptionsKr? = nil, kz: RegistrationCreateCountryOptionsKz? = nil, la: RegistrationCreateCountryOptionsLa? = nil, lt: RegistrationCreateCountryOptionsLt? = nil, lu: RegistrationCreateCountryOptionsLu? = nil, lv: RegistrationCreateCountryOptionsLv? = nil, ma: RegistrationCreateCountryOptionsMa? = nil, md: RegistrationCreateCountryOptionsMd? = nil, me: RegistrationCreateCountryOptionsMe? = nil, mk: RegistrationCreateCountryOptionsMk? = nil, mr: RegistrationCreateCountryOptionsMr? = nil, mt: RegistrationCreateCountryOptionsMt? = nil, mx: RegistrationCreateCountryOptionsMx? = nil, my: RegistrationCreateCountryOptionsMy? = nil, ng: RegistrationCreateCountryOptionsNg? = nil, nl: RegistrationCreateCountryOptionsNl? = nil, no: RegistrationCreateCountryOptionsNo? = nil, np: RegistrationCreateCountryOptionsNp? = nil, nz: RegistrationCreateCountryOptionsNz? = nil, om: RegistrationCreateCountryOptionsOm? = nil, pe: RegistrationCreateCountryOptionsPe? = nil, ph: RegistrationCreateCountryOptionsPh? = nil, pl: RegistrationCreateCountryOptionsPl? = nil, pt: RegistrationCreateCountryOptionsPt? = nil, ro: RegistrationCreateCountryOptionsRo? = nil, rs: RegistrationCreateCountryOptionsRs? = nil, ru: RegistrationCreateCountryOptionsRu? = nil, sa: RegistrationCreateCountryOptionsSa? = nil, se: RegistrationCreateCountryOptionsSe? = nil, sg: RegistrationCreateCountryOptionsSg? = nil, si: RegistrationCreateCountryOptionsSi? = nil, sk: RegistrationCreateCountryOptionsSk? = nil, sn: RegistrationCreateCountryOptionsSn? = nil, sr: RegistrationCreateCountryOptionsSr? = nil, th: RegistrationCreateCountryOptionsTh? = nil, tj: RegistrationCreateCountryOptionsTj? = nil, tr: RegistrationCreateCountryOptionsTr? = nil, tw: RegistrationCreateCountryOptionsTw? = nil, tz: RegistrationCreateCountryOptionsTz? = nil, ua: RegistrationCreateCountryOptionsUa? = nil, ug: RegistrationCreateCountryOptionsUg? = nil, us: RegistrationCreateCountryOptionsUs? = nil, uy: RegistrationCreateCountryOptionsUy? = nil, uz: RegistrationCreateCountryOptionsUz? = nil, vn: RegistrationCreateCountryOptionsVn? = nil, za: RegistrationCreateCountryOptionsZa? = nil, zm: RegistrationCreateCountryOptionsZm? = nil, zw: RegistrationCreateCountryOptionsZw? = nil) {
+    public init(ae: RegistrationCreateCountryOptionsAe? = nil, al: RegistrationCreateCountryOptionsAl? = nil, am: RegistrationCreateCountryOptionsAm? = nil, ao: RegistrationCreateCountryOptionsAo? = nil, at: RegistrationCreateCountryOptionsAt? = nil, au: RegistrationCreateCountryOptionsAu? = nil, aw: RegistrationCreateCountryOptionsAw? = nil, az: RegistrationCreateCountryOptionsAz? = nil, ba: RegistrationCreateCountryOptionsBa? = nil, bb: RegistrationCreateCountryOptionsBb? = nil, bd: RegistrationCreateCountryOptionsBd? = nil, be: RegistrationCreateCountryOptionsBe? = nil, bf: RegistrationCreateCountryOptionsBf? = nil, bg: RegistrationCreateCountryOptionsBg? = nil, bh: RegistrationCreateCountryOptionsBh? = nil, bj: RegistrationCreateCountryOptionsBj? = nil, bs: RegistrationCreateCountryOptionsBs? = nil, bw: RegistrationCreateCountryOptionsBw? = nil, by: RegistrationCreateCountryOptionsBy? = nil, ca: RegistrationCreateCountryOptionsCa? = nil, cd: RegistrationCreateCountryOptionsCd? = nil, ch: RegistrationCreateCountryOptionsCh? = nil, ci: RegistrationCreateCountryOptionsCi? = nil, cl: RegistrationCreateCountryOptionsCl? = nil, cm: RegistrationCreateCountryOptionsCm? = nil, co: RegistrationCreateCountryOptionsCo? = nil, cr: RegistrationCreateCountryOptionsCr? = nil, cv: RegistrationCreateCountryOptionsCv? = nil, cy: RegistrationCreateCountryOptionsCy? = nil, cz: RegistrationCreateCountryOptionsCz? = nil, de: RegistrationCreateCountryOptionsDe? = nil, dk: RegistrationCreateCountryOptionsDk? = nil, ec: RegistrationCreateCountryOptionsEc? = nil, ee: RegistrationCreateCountryOptionsEe? = nil, eg: RegistrationCreateCountryOptionsEg? = nil, es: RegistrationCreateCountryOptionsEs? = nil, et: RegistrationCreateCountryOptionsEt? = nil, fi: RegistrationCreateCountryOptionsFi? = nil, fr: RegistrationCreateCountryOptionsFr? = nil, gb: RegistrationCreateCountryOptionsGb? = nil, ge: RegistrationCreateCountryOptionsGe? = nil, gh: RegistrationCreateCountryOptionsGh? = nil, gn: RegistrationCreateCountryOptionsGn? = nil, gr: RegistrationCreateCountryOptionsGr? = nil, hr: RegistrationCreateCountryOptionsHr? = nil, hu: RegistrationCreateCountryOptionsHu? = nil, id: RegistrationCreateCountryOptionsId? = nil, ie: RegistrationCreateCountryOptionsIe? = nil, `in`: RegistrationCreateCountryOptionsIn? = nil, `is`: RegistrationCreateCountryOptionsIs? = nil, it: RegistrationCreateCountryOptionsIt? = nil, jp: RegistrationCreateCountryOptionsJp? = nil, ke: RegistrationCreateCountryOptionsKe? = nil, kg: RegistrationCreateCountryOptionsKg? = nil, kh: RegistrationCreateCountryOptionsKh? = nil, kr: RegistrationCreateCountryOptionsKr? = nil, kz: RegistrationCreateCountryOptionsKz? = nil, la: RegistrationCreateCountryOptionsLa? = nil, lk: RegistrationCreateCountryOptionsLk? = nil, lt: RegistrationCreateCountryOptionsLt? = nil, lu: RegistrationCreateCountryOptionsLu? = nil, lv: RegistrationCreateCountryOptionsLv? = nil, ma: RegistrationCreateCountryOptionsMa? = nil, md: RegistrationCreateCountryOptionsMd? = nil, me: RegistrationCreateCountryOptionsMe? = nil, mk: RegistrationCreateCountryOptionsMk? = nil, mr: RegistrationCreateCountryOptionsMr? = nil, mt: RegistrationCreateCountryOptionsMt? = nil, mu: RegistrationCreateCountryOptionsMu? = nil, mx: RegistrationCreateCountryOptionsMx? = nil, my: RegistrationCreateCountryOptionsMy? = nil, ng: RegistrationCreateCountryOptionsNg? = nil, nl: RegistrationCreateCountryOptionsNl? = nil, no: RegistrationCreateCountryOptionsNo? = nil, np: RegistrationCreateCountryOptionsNp? = nil, nz: RegistrationCreateCountryOptionsNz? = nil, om: RegistrationCreateCountryOptionsOm? = nil, pe: RegistrationCreateCountryOptionsPe? = nil, ph: RegistrationCreateCountryOptionsPh? = nil, pl: RegistrationCreateCountryOptionsPl? = nil, pt: RegistrationCreateCountryOptionsPt? = nil, ro: RegistrationCreateCountryOptionsRo? = nil, rs: RegistrationCreateCountryOptionsRs? = nil, ru: RegistrationCreateCountryOptionsRu? = nil, sa: RegistrationCreateCountryOptionsSa? = nil, se: RegistrationCreateCountryOptionsSe? = nil, sg: RegistrationCreateCountryOptionsSg? = nil, si: RegistrationCreateCountryOptionsSi? = nil, sk: RegistrationCreateCountryOptionsSk? = nil, sn: RegistrationCreateCountryOptionsSn? = nil, sr: RegistrationCreateCountryOptionsSr? = nil, th: RegistrationCreateCountryOptionsTh? = nil, tj: RegistrationCreateCountryOptionsTj? = nil, tr: RegistrationCreateCountryOptionsTr? = nil, tw: RegistrationCreateCountryOptionsTw? = nil, tz: RegistrationCreateCountryOptionsTz? = nil, ua: RegistrationCreateCountryOptionsUa? = nil, ug: RegistrationCreateCountryOptionsUg? = nil, us: RegistrationCreateCountryOptionsUs? = nil, uy: RegistrationCreateCountryOptionsUy? = nil, uz: RegistrationCreateCountryOptionsUz? = nil, vn: RegistrationCreateCountryOptionsVn? = nil, za: RegistrationCreateCountryOptionsZa? = nil, zm: RegistrationCreateCountryOptionsZm? = nil, zw: RegistrationCreateCountryOptionsZw? = nil) {
         self.ae = ae
         self.al = al
         self.am = am
@@ -283,10 +293,12 @@ public struct RegistrationCreateCountryOptions: StripeParams {
         self.bh = bh
         self.bj = bj
         self.bs = bs
+        self.bw = bw
         self.by = by
         self.ca = ca
         self.cd = cd
         self.ch = ch
+        self.ci = ci
         self.cl = cl
         self.cm = cm
         self.co = co
@@ -305,6 +317,7 @@ public struct RegistrationCreateCountryOptions: StripeParams {
         self.fr = fr
         self.gb = gb
         self.ge = ge
+        self.gh = gh
         self.gn = gn
         self.gr = gr
         self.hr = hr
@@ -321,6 +334,7 @@ public struct RegistrationCreateCountryOptions: StripeParams {
         self.kr = kr
         self.kz = kz
         self.la = la
+        self.lk = lk
         self.lt = lt
         self.lu = lu
         self.lv = lv
@@ -330,6 +344,7 @@ public struct RegistrationCreateCountryOptions: StripeParams {
         self.mk = mk
         self.mr = mr
         self.mt = mt
+        self.mu = mu
         self.mx = mx
         self.my = my
         self.ng = ng
@@ -777,6 +792,16 @@ public struct RegistrationCreateCountryOptionsBsStandard: StripeParams {
     }
 }
 
+/// Options for the registration in BW.
+public struct RegistrationCreateCountryOptionsBw: StripeParams {
+    /// Type of registration to be created in `country`.
+    public var type: RegistrationCreateCountryOptionsBwType
+
+    public init(type: RegistrationCreateCountryOptionsBwType) {
+        self.type = type
+    }
+}
+
 /// Options for the registration in BY.
 public struct RegistrationCreateCountryOptionsBy: StripeParams {
     /// Type of registration to be created in `country`.
@@ -866,6 +891,16 @@ public struct RegistrationCreateCountryOptionsChStandard: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case placeOfSupplyScheme = "place_of_supply_scheme"
+    }
+}
+
+/// Options for the registration in CI.
+public struct RegistrationCreateCountryOptionsCi: StripeParams {
+    /// Type of registration to be created in `country`.
+    public var type: RegistrationCreateCountryOptionsCiType
+
+    public init(type: RegistrationCreateCountryOptionsCiType) {
+        self.type = type
     }
 }
 
@@ -1076,7 +1111,7 @@ public struct RegistrationCreateCountryOptionsEg: StripeParams {
 
 /// Options for the registration in ES.
 public struct RegistrationCreateCountryOptionsEs: StripeParams {
-    /// Type of registration to be created in an EU country.
+    /// Type of registration to be created in ES.
     public var type: RegistrationCreateCountryOptionsEsType
     /// Options for the standard registration.
     public var standard: RegistrationCreateCountryOptionsEsStandard?
@@ -1215,6 +1250,16 @@ public struct RegistrationCreateCountryOptionsGe: StripeParams {
     public var type: RegistrationCreateCountryOptionsGeType
 
     public init(type: RegistrationCreateCountryOptionsGeType) {
+        self.type = type
+    }
+}
+
+/// Options for the registration in GH.
+public struct RegistrationCreateCountryOptionsGh: StripeParams {
+    /// Type of registration to be created in `country`.
+    public var type: RegistrationCreateCountryOptionsGhType
+
+    public init(type: RegistrationCreateCountryOptionsGhType) {
         self.type = type
     }
 }
@@ -1515,6 +1560,16 @@ public struct RegistrationCreateCountryOptionsLa: StripeParams {
     }
 }
 
+/// Options for the registration in LK.
+public struct RegistrationCreateCountryOptionsLk: StripeParams {
+    /// Type of registration to be created in `country`.
+    public var type: RegistrationCreateCountryOptionsLkType
+
+    public init(type: RegistrationCreateCountryOptionsLkType) {
+        self.type = type
+    }
+}
+
 /// Options for the registration in LT.
 public struct RegistrationCreateCountryOptionsLt: StripeParams {
     /// Type of registration to be created in an EU country.
@@ -1721,6 +1776,16 @@ public struct RegistrationCreateCountryOptionsMtStandard: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case placeOfSupplyScheme = "place_of_supply_scheme"
+    }
+}
+
+/// Options for the registration in MU.
+public struct RegistrationCreateCountryOptionsMu: StripeParams {
+    /// Type of registration to be created in `country`.
+    public var type: RegistrationCreateCountryOptionsMuType
+
+    public init(type: RegistrationCreateCountryOptionsMuType) {
+        self.type = type
     }
 }
 
@@ -2241,36 +2306,133 @@ public struct RegistrationCreateCountryOptionsUs: StripeParams {
     public var state: String
     /// Type of registration to be created in the US.
     public var type: RegistrationCreateCountryOptionsUsType
+    /// Options for the admission tax registration.
+    public var admissionsTax: RegistrationCreateCountryOptionsUsAdmissionsTax?
+    /// Options for the attendance tax registration.
+    public var attendanceTax: RegistrationCreateCountryOptionsUsAttendanceTax?
+    /// Options for the entertainment tax registration.
+    public var entertainmentTax: RegistrationCreateCountryOptionsUsEntertainmentTax?
+    /// Options for the gross receipts tax registration.
+    public var grossReceiptsTax: RegistrationCreateCountryOptionsUsGrossReceiptsTax?
+    /// Options for the hospitality tax registration.
+    public var hospitalityTax: RegistrationCreateCountryOptionsUsHospitalityTax?
     /// Options for the local amusement tax registration.
     public var localAmusementTax: RegistrationCreateCountryOptionsUsLocalAmusementTax?
     /// Options for the local lease tax registration.
     public var localLeaseTax: RegistrationCreateCountryOptionsUsLocalLeaseTax?
+    /// Options for the luxury tax registration.
+    public var luxuryTax: RegistrationCreateCountryOptionsUsLuxuryTax?
+    /// Options for the mass transit parking tax registration.
+    public var massTransitParkingTax: RegistrationCreateCountryOptionsUsMassTransitParkingTax?
+    /// Options for the parking tax registration.
+    public var parkingTax: RegistrationCreateCountryOptionsUsParkingTax?
+    /// Options for the resort tax registration.
+    public var resortTax: RegistrationCreateCountryOptionsUsResortTax?
     /// Options for the state sales tax registration.
     public var stateSalesTax: RegistrationCreateCountryOptionsUsStateSalesTax?
+    /// Options for the tourism tax registration.
+    public var tourismTax: RegistrationCreateCountryOptionsUsTourismTax?
+    /// Options for the utility users tax registration.
+    public var utilityUsersTax: RegistrationCreateCountryOptionsUsUtilityUsersTax?
 
-    public init(state: String, type: RegistrationCreateCountryOptionsUsType, localAmusementTax: RegistrationCreateCountryOptionsUsLocalAmusementTax? = nil, localLeaseTax: RegistrationCreateCountryOptionsUsLocalLeaseTax? = nil, stateSalesTax: RegistrationCreateCountryOptionsUsStateSalesTax? = nil) {
+    public init(state: String, type: RegistrationCreateCountryOptionsUsType, admissionsTax: RegistrationCreateCountryOptionsUsAdmissionsTax? = nil, attendanceTax: RegistrationCreateCountryOptionsUsAttendanceTax? = nil, entertainmentTax: RegistrationCreateCountryOptionsUsEntertainmentTax? = nil, grossReceiptsTax: RegistrationCreateCountryOptionsUsGrossReceiptsTax? = nil, hospitalityTax: RegistrationCreateCountryOptionsUsHospitalityTax? = nil, localAmusementTax: RegistrationCreateCountryOptionsUsLocalAmusementTax? = nil, localLeaseTax: RegistrationCreateCountryOptionsUsLocalLeaseTax? = nil, luxuryTax: RegistrationCreateCountryOptionsUsLuxuryTax? = nil, massTransitParkingTax: RegistrationCreateCountryOptionsUsMassTransitParkingTax? = nil, parkingTax: RegistrationCreateCountryOptionsUsParkingTax? = nil, resortTax: RegistrationCreateCountryOptionsUsResortTax? = nil, stateSalesTax: RegistrationCreateCountryOptionsUsStateSalesTax? = nil, tourismTax: RegistrationCreateCountryOptionsUsTourismTax? = nil, utilityUsersTax: RegistrationCreateCountryOptionsUsUtilityUsersTax? = nil) {
         self.state = state
         self.type = type
+        self.admissionsTax = admissionsTax
+        self.attendanceTax = attendanceTax
+        self.entertainmentTax = entertainmentTax
+        self.grossReceiptsTax = grossReceiptsTax
+        self.hospitalityTax = hospitalityTax
         self.localAmusementTax = localAmusementTax
         self.localLeaseTax = localLeaseTax
+        self.luxuryTax = luxuryTax
+        self.massTransitParkingTax = massTransitParkingTax
+        self.parkingTax = parkingTax
+        self.resortTax = resortTax
         self.stateSalesTax = stateSalesTax
+        self.tourismTax = tourismTax
+        self.utilityUsersTax = utilityUsersTax
     }
 
     public enum CodingKeys: String, CodingKey {
+        case admissionsTax = "admissions_tax"
+        case attendanceTax = "attendance_tax"
+        case entertainmentTax = "entertainment_tax"
+        case grossReceiptsTax = "gross_receipts_tax"
+        case hospitalityTax = "hospitality_tax"
         case localAmusementTax = "local_amusement_tax"
         case localLeaseTax = "local_lease_tax"
+        case luxuryTax = "luxury_tax"
+        case massTransitParkingTax = "mass_transit_parking_tax"
+        case parkingTax = "parking_tax"
+        case resortTax = "resort_tax"
         case state
         case stateSalesTax = "state_sales_tax"
+        case tourismTax = "tourism_tax"
         case type
+        case utilityUsersTax = "utility_users_tax"
+    }
+}
+
+/// Options for the admission tax registration.
+public struct RegistrationCreateCountryOptionsUsAdmissionsTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=admissions_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the attendance tax registration.
+public struct RegistrationCreateCountryOptionsUsAttendanceTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=attendance_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the entertainment tax registration.
+public struct RegistrationCreateCountryOptionsUsEntertainmentTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=entertainment_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the gross receipts tax registration.
+public struct RegistrationCreateCountryOptionsUsGrossReceiptsTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=gross_receipts_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the hospitality tax registration.
+public struct RegistrationCreateCountryOptionsUsHospitalityTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=hospitality_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
     }
 }
 
 /// Options for the local amusement tax registration.
 public struct RegistrationCreateCountryOptionsUsLocalAmusementTax: StripeParams {
-    /// A [FIPS code](https://www.census.gov/library/reference/code-lists/ansi.html) representing the local
-    /// jurisdiction. Supported FIPS codes are: `14000` (Chicago), `02154` (Arlington Heights), `06613`
-    /// (Bloomington), `10906` (Campton Hills), `21696` (East Dundee), `24582` (Evanston), `45421`
-    /// (Lynwood), `48892` (Midlothian), `64343` (River Grove), and `68081` (Schiller Park).
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=amusement_tax#registration-types).
     public var jurisdiction: String
 
     public init(jurisdiction: String) {
@@ -2282,6 +2444,50 @@ public struct RegistrationCreateCountryOptionsUsLocalAmusementTax: StripeParams 
 public struct RegistrationCreateCountryOptionsUsLocalLeaseTax: StripeParams {
     /// A [FIPS code](https://www.census.gov/library/reference/code-lists/ansi.html) representing the local
     /// jurisdiction. Supported FIPS codes are: `14000` (Chicago).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the luxury tax registration.
+public struct RegistrationCreateCountryOptionsUsLuxuryTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=luxury_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the mass transit parking tax registration.
+public struct RegistrationCreateCountryOptionsUsMassTransitParkingTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=mass_transit_parking_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the parking tax registration.
+public struct RegistrationCreateCountryOptionsUsParkingTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=parking_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the resort tax registration.
+public struct RegistrationCreateCountryOptionsUsResortTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=resort_tax#registration-types).
     public var jurisdiction: String
 
     public init(jurisdiction: String) {
@@ -2303,11 +2509,33 @@ public struct RegistrationCreateCountryOptionsUsStateSalesTaxElections: StripePa
     /// The type of the election for the state sales tax registration.
     public var type: RegistrationCreateCountryOptionsUsStateSalesTaxElectionsType
     /// A [FIPS code](https://www.census.gov/library/reference/code-lists/ansi.html) representing the local
-    /// jurisdiction. Supported FIPS codes are: `003` (Allegheny County) and `60000` (Philadelphia City).
+    /// jurisdiction.
     public var jurisdiction: String?
 
     public init(type: RegistrationCreateCountryOptionsUsStateSalesTaxElectionsType, jurisdiction: String? = nil) {
         self.type = type
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the tourism tax registration.
+public struct RegistrationCreateCountryOptionsUsTourismTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=tourism_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
+        self.jurisdiction = jurisdiction
+    }
+}
+
+/// Options for the utility users tax registration.
+public struct RegistrationCreateCountryOptionsUsUtilityUsersTax: StripeParams {
+    /// A jurisdiction code representing the [local
+    /// jurisdiction](/tax/registering?type=utility_users_tax#registration-types).
+    public var jurisdiction: String
+
+    public init(jurisdiction: String) {
         self.jurisdiction = jurisdiction
     }
 }

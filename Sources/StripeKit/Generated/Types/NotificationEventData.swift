@@ -9,8 +9,8 @@ import Foundation
 
 public struct NotificationEventData: Codable, Sendable {
     /// Object containing the API resource relevant to the event. For example, an `invoice.created` event
-    /// will have a full [invoice object](https://api.stripe.com#invoice_object) as the value of the object
-    /// key.
+    /// will have a full [invoice object](https://docs.stripe.com/api#invoice_object) as the value of the
+    /// object key.
     public var object: [String: AnyCodableValue]
     /// Object containing the names of the updated attributes and their values prior to the event (only
     /// included in events of type `*.updated`). If an array attribute has any updated elements, this object

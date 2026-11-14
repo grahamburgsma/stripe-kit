@@ -14,7 +14,7 @@ public struct BillingPortalConfigurationCreateParams: StripeParams {
     public var businessProfile: BillingPortalConfigurationCreateBusinessProfile?
     /// The default URL to redirect customers to when they click on the portal's link to return to your
     /// website. This can be
-    /// [overriden](https://docs.stripe.com/api/customer_portal/sessions/create#create_portal_session-return_url)
+    /// [overridden](https://docs.stripe.com/api/customer_portal/sessions/create#create_portal_session-return_url)
     /// when creating the session.
     public var defaultReturnUrl: String?
     /// Specifies which fields in the response should be expanded.
@@ -58,7 +58,7 @@ public struct BillingPortalConfigurationUpdateParams: StripeParams {
     public var businessProfile: BillingPortalConfigurationUpdateBusinessProfile?
     /// The default URL to redirect customers to when they click on the portal's link to return to your
     /// website. This can be
-    /// [overriden](https://docs.stripe.com/api/customer_portal/sessions/create#create_portal_session-return_url)
+    /// [overridden](https://docs.stripe.com/api/customer_portal/sessions/create#create_portal_session-return_url)
     /// when creating the session.
     public var defaultReturnUrl: String?
     /// Specifies which fields in the response should be expanded.
@@ -109,14 +109,17 @@ public struct BillingPortalConfigurationCreateFeatures: StripeParams {
     public var paymentMethodUpdate: BillingPortalConfigurationCreateFeaturesPaymentMethodUpdate?
     /// Information about canceling subscriptions in the portal.
     public var subscriptionCancel: BillingPortalConfigurationCreateFeaturesSubscriptionCancel?
+    /// Information about pausing subscriptions in the portal.
+    public var subscriptionPause: BillingPortalConfigurationCreateFeaturesSubscriptionPause?
     /// Information about updating subscriptions in the portal.
     public var subscriptionUpdate: BillingPortalConfigurationCreateFeaturesSubscriptionUpdate?
 
-    public init(customerUpdate: BillingPortalConfigurationCreateFeaturesCustomerUpdate? = nil, invoiceHistory: BillingPortalConfigurationCreateFeaturesInvoiceHistory? = nil, paymentMethodUpdate: BillingPortalConfigurationCreateFeaturesPaymentMethodUpdate? = nil, subscriptionCancel: BillingPortalConfigurationCreateFeaturesSubscriptionCancel? = nil, subscriptionUpdate: BillingPortalConfigurationCreateFeaturesSubscriptionUpdate? = nil) {
+    public init(customerUpdate: BillingPortalConfigurationCreateFeaturesCustomerUpdate? = nil, invoiceHistory: BillingPortalConfigurationCreateFeaturesInvoiceHistory? = nil, paymentMethodUpdate: BillingPortalConfigurationCreateFeaturesPaymentMethodUpdate? = nil, subscriptionCancel: BillingPortalConfigurationCreateFeaturesSubscriptionCancel? = nil, subscriptionPause: BillingPortalConfigurationCreateFeaturesSubscriptionPause? = nil, subscriptionUpdate: BillingPortalConfigurationCreateFeaturesSubscriptionUpdate? = nil) {
         self.customerUpdate = customerUpdate
         self.invoiceHistory = invoiceHistory
         self.paymentMethodUpdate = paymentMethodUpdate
         self.subscriptionCancel = subscriptionCancel
+        self.subscriptionPause = subscriptionPause
         self.subscriptionUpdate = subscriptionUpdate
     }
 
@@ -125,6 +128,7 @@ public struct BillingPortalConfigurationCreateFeatures: StripeParams {
         case invoiceHistory = "invoice_history"
         case paymentMethodUpdate = "payment_method_update"
         case subscriptionCancel = "subscription_cancel"
+        case subscriptionPause = "subscription_pause"
         case subscriptionUpdate = "subscription_update"
     }
 }
@@ -215,10 +219,70 @@ public struct BillingPortalConfigurationCreateFeaturesSubscriptionCancelCancella
     public var enabled: Bool
     /// Which cancellation reasons will be given as options to the customer.
     public var options: [BillingPortalConfigurationCreateFeaturesSubscriptionCancelCancellationReasonOptions]
+    /// The IDs of custom feedback options to use for this cancellation reason.
+    public var feedbackOptions: [String]?
 
-    public init(enabled: Bool, options: [BillingPortalConfigurationCreateFeaturesSubscriptionCancelCancellationReasonOptions]) {
+    public init(enabled: Bool, options: [BillingPortalConfigurationCreateFeaturesSubscriptionCancelCancellationReasonOptions], feedbackOptions: [String]? = nil) {
         self.enabled = enabled
         self.options = options
+        self.feedbackOptions = feedbackOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case enabled
+        case feedbackOptions = "feedback_options"
+        case options
+    }
+}
+
+/// Information about pausing subscriptions in the portal.
+public struct BillingPortalConfigurationCreateFeaturesSubscriptionPause: StripeParams {
+    /// Controls how long a subscription can be paused. Defaults to `interval_options` with a single
+    /// one-month option.
+    public var duration: BillingPortalConfigurationCreateFeaturesSubscriptionPauseDuration?
+    /// Whether the feature is enabled. Customers can only pause subscriptions in the [redesigned customer
+    /// portal](/customer-management).
+    public var enabled: Bool?
+
+    public init(duration: BillingPortalConfigurationCreateFeaturesSubscriptionPauseDuration? = nil, enabled: Bool? = nil) {
+        self.duration = duration
+        self.enabled = enabled
+    }
+}
+
+/// Controls how long a subscription can be paused. Defaults to `interval_options` with a single
+/// one-month option.
+public struct BillingPortalConfigurationCreateFeaturesSubscriptionPauseDuration: StripeParams {
+    /// Whether subscriptions can be paused indefinitely or for a preset duration.
+    public var type: BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationType
+    /// The preset pause durations customers can choose from. Required when `type` is `interval_options`.
+    public var intervalOptions: [BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationIntervalOptions]?
+
+    public init(type: BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationType, intervalOptions: [BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationIntervalOptions]? = nil) {
+        self.type = type
+        self.intervalOptions = intervalOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case intervalOptions = "interval_options"
+        case type
+    }
+}
+
+public struct BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationIntervalOptions: StripeParams {
+    /// Specifies the pause duration unit. Either `day`, `week`, `month`, or `year`.
+    public var interval: BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationIntervalOptionsInterval
+    /// The number of intervals in the pause duration. Defaults to 1. The maximum duration is three years.
+    public var intervalCount: Int?
+
+    public init(interval: BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationIntervalOptionsInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
     }
 }
 
@@ -390,14 +454,17 @@ public struct BillingPortalConfigurationUpdateFeatures: StripeParams {
     public var paymentMethodUpdate: BillingPortalConfigurationUpdateFeaturesPaymentMethodUpdate?
     /// Information about canceling subscriptions in the portal.
     public var subscriptionCancel: BillingPortalConfigurationUpdateFeaturesSubscriptionCancel?
+    /// Information about pausing subscriptions in the portal.
+    public var subscriptionPause: BillingPortalConfigurationUpdateFeaturesSubscriptionPause?
     /// Information about updating subscriptions in the portal.
     public var subscriptionUpdate: BillingPortalConfigurationUpdateFeaturesSubscriptionUpdate?
 
-    public init(customerUpdate: BillingPortalConfigurationUpdateFeaturesCustomerUpdate? = nil, invoiceHistory: BillingPortalConfigurationUpdateFeaturesInvoiceHistory? = nil, paymentMethodUpdate: BillingPortalConfigurationUpdateFeaturesPaymentMethodUpdate? = nil, subscriptionCancel: BillingPortalConfigurationUpdateFeaturesSubscriptionCancel? = nil, subscriptionUpdate: BillingPortalConfigurationUpdateFeaturesSubscriptionUpdate? = nil) {
+    public init(customerUpdate: BillingPortalConfigurationUpdateFeaturesCustomerUpdate? = nil, invoiceHistory: BillingPortalConfigurationUpdateFeaturesInvoiceHistory? = nil, paymentMethodUpdate: BillingPortalConfigurationUpdateFeaturesPaymentMethodUpdate? = nil, subscriptionCancel: BillingPortalConfigurationUpdateFeaturesSubscriptionCancel? = nil, subscriptionPause: BillingPortalConfigurationUpdateFeaturesSubscriptionPause? = nil, subscriptionUpdate: BillingPortalConfigurationUpdateFeaturesSubscriptionUpdate? = nil) {
         self.customerUpdate = customerUpdate
         self.invoiceHistory = invoiceHistory
         self.paymentMethodUpdate = paymentMethodUpdate
         self.subscriptionCancel = subscriptionCancel
+        self.subscriptionPause = subscriptionPause
         self.subscriptionUpdate = subscriptionUpdate
     }
 
@@ -406,6 +473,7 @@ public struct BillingPortalConfigurationUpdateFeatures: StripeParams {
         case invoiceHistory = "invoice_history"
         case paymentMethodUpdate = "payment_method_update"
         case subscriptionCancel = "subscription_cancel"
+        case subscriptionPause = "subscription_pause"
         case subscriptionUpdate = "subscription_update"
     }
 }
@@ -494,12 +562,72 @@ public struct BillingPortalConfigurationUpdateFeaturesSubscriptionCancel: Stripe
 public struct BillingPortalConfigurationUpdateFeaturesSubscriptionCancelCancellationReason: StripeParams {
     /// Whether the feature is enabled.
     public var enabled: Bool
+    /// The IDs of custom feedback options to use for this cancellation reason.
+    public var feedbackOptions: [String]?
     /// Which cancellation reasons will be given as options to the customer.
     public var options: [BillingPortalConfigurationUpdateFeaturesSubscriptionCancelCancellationReasonOptions]?
 
-    public init(enabled: Bool, options: [BillingPortalConfigurationUpdateFeaturesSubscriptionCancelCancellationReasonOptions]? = nil) {
+    public init(enabled: Bool, feedbackOptions: [String]? = nil, options: [BillingPortalConfigurationUpdateFeaturesSubscriptionCancelCancellationReasonOptions]? = nil) {
         self.enabled = enabled
+        self.feedbackOptions = feedbackOptions
         self.options = options
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case enabled
+        case feedbackOptions = "feedback_options"
+        case options
+    }
+}
+
+/// Information about pausing subscriptions in the portal.
+public struct BillingPortalConfigurationUpdateFeaturesSubscriptionPause: StripeParams {
+    /// Controls how long a subscription can be paused. Defaults to `interval_options` with a single
+    /// one-month option.
+    public var duration: BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDuration?
+    /// Whether the feature is enabled. Customers can only pause subscriptions in the [redesigned customer
+    /// portal](/customer-management).
+    public var enabled: Bool?
+
+    public init(duration: BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDuration? = nil, enabled: Bool? = nil) {
+        self.duration = duration
+        self.enabled = enabled
+    }
+}
+
+/// Controls how long a subscription can be paused. Defaults to `interval_options` with a single
+/// one-month option.
+public struct BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDuration: StripeParams {
+    /// Whether subscriptions can be paused indefinitely or for a preset duration.
+    public var type: BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationType
+    /// The preset pause durations customers can choose from. Required when `type` is `interval_options`.
+    public var intervalOptions: [BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationIntervalOptions]?
+
+    public init(type: BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationType, intervalOptions: [BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationIntervalOptions]? = nil) {
+        self.type = type
+        self.intervalOptions = intervalOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case intervalOptions = "interval_options"
+        case type
+    }
+}
+
+public struct BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationIntervalOptions: StripeParams {
+    /// Specifies the pause duration unit. Either `day`, `week`, `month`, or `year`.
+    public var interval: BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationIntervalOptionsInterval
+    /// The number of intervals in the pause duration. Defaults to 1. The maximum duration is three years.
+    public var intervalCount: Int?
+
+    public init(interval: BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationIntervalOptionsInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
     }
 }
 

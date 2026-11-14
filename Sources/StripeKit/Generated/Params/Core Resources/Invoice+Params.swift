@@ -139,8 +139,8 @@ public struct InvoiceCreateParams: StripeParams {
     /// How to handle pending invoice items on invoice creation. Defaults to `exclude` if the parameter is
     /// omitted.
     public var pendingInvoiceItemsBehavior: InvoiceCreatePendingInvoiceItemsBehavior?
-    /// The rendering-related settings that control how the invoice is displayed on customer-facing surfaces
-    /// such as PDF and Hosted Invoice Page.
+    /// The rendering-related settings that control how invoices render in customer-facing interfaces such
+    /// as the PDF or hosted invoice page.
     public var rendering: InvoiceCreateRendering?
     /// Settings for the cost of shipping for this invoice.
     public var shippingCost: InvoiceCreateShippingCost?
@@ -505,8 +505,8 @@ public struct InvoiceUpdateParams: StripeParams {
     public var onBehalfOf: String?
     /// Configuration settings for the PaymentIntent that is generated when the invoice is finalized.
     public var paymentSettings: InvoiceUpdatePaymentSettings?
-    /// The rendering-related settings that control how the invoice is displayed on customer-facing surfaces
-    /// such as PDF and Hosted Invoice Page.
+    /// The rendering-related settings that control how invoices render in customer-facing interfaces such
+    /// as the PDF or hosted invoice page.
     public var rendering: InvoiceUpdateRendering?
     /// Settings for the cost of shipping for this invoice.
     public var shippingCost: InvoiceUpdateShippingCost?
@@ -653,9 +653,13 @@ public struct InvoiceAddLinesLines: StripeParams {
     public var priceData: InvoiceAddLinesLinesPriceData?
     /// The pricing information for the invoice item.
     public var pricing: InvoiceAddLinesLinesPricing?
-    /// Non-negative integer. The quantity of units for the line item.
+    /// Non-negative integer. The quantity of units for the line item. Use `quantity_decimal` instead to
+    /// provide decimal precision. This field will be deprecated in favor of `quantity_decimal` in a future
+    /// version.
     public var quantity: Int?
-    /// A list of up to 10 tax amounts for this line item. This can be useful if you calculate taxes on your
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the line item.
+    public var quantityDecimal: String?
+    /// A list of up to 20 tax amounts for this line item. This can be useful if you calculate taxes on your
     /// own or use a third-party to calculate them. You cannot set tax amounts if any line item has
     /// [tax_rates](https://docs.stripe.com/api/invoices/line_item#invoice_line_item_object-tax_rates) or if
     /// the invoice has
@@ -667,7 +671,7 @@ public struct InvoiceAddLinesLines: StripeParams {
     /// apply to this line item. Pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceAddLinesLinesDiscounts]? = nil, invoiceItem: String? = nil, metadata: [String: String]? = nil, period: InvoiceAddLinesLinesPeriod? = nil, priceData: InvoiceAddLinesLinesPriceData? = nil, pricing: InvoiceAddLinesLinesPricing? = nil, quantity: Int? = nil, taxAmounts: [InvoiceAddLinesLinesTaxAmounts]? = nil, taxRates: [String]? = nil) {
+    public init(amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceAddLinesLinesDiscounts]? = nil, invoiceItem: String? = nil, metadata: [String: String]? = nil, period: InvoiceAddLinesLinesPeriod? = nil, priceData: InvoiceAddLinesLinesPriceData? = nil, pricing: InvoiceAddLinesLinesPricing? = nil, quantity: Int? = nil, quantityDecimal: String? = nil, taxAmounts: [InvoiceAddLinesLinesTaxAmounts]? = nil, taxRates: [String]? = nil) {
         self.amount = amount
         self.description = description
         self.discountable = discountable
@@ -678,6 +682,7 @@ public struct InvoiceAddLinesLines: StripeParams {
         self.priceData = priceData
         self.pricing = pricing
         self.quantity = quantity
+        self.quantityDecimal = quantityDecimal
         self.taxAmounts = taxAmounts
         self.taxRates = taxRates
     }
@@ -693,6 +698,7 @@ public struct InvoiceAddLinesLines: StripeParams {
         case priceData = "price_data"
         case pricing
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case taxAmounts = "tax_amounts"
         case taxRates = "tax_rates"
     }
@@ -798,16 +804,20 @@ public struct InvoiceAddLinesLinesPriceDataProductData: StripeParams {
     public var metadata: [String: String]?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: InvoiceAddLinesLinesPriceDataProductDataTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal.
     public var unitLabel: String?
 
-    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, unitLabel: String? = nil) {
+    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, taxDetails: InvoiceAddLinesLinesPriceDataProductDataTaxDetails? = nil, unitLabel: String? = nil) {
         self.name = name
         self.description = description
         self.images = images
         self.metadata = metadata
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
     }
 
@@ -817,7 +827,29 @@ public struct InvoiceAddLinesLinesPriceDataProductData: StripeParams {
         case metadata
         case name
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
+    }
+}
+
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct InvoiceAddLinesLinesPriceDataProductDataTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }
 
@@ -1043,6 +1075,12 @@ public struct InvoiceCreatePaymentSettingsPaymentMethodOptions: StripeParams {
     /// If paying by `bancontact`, this sub-hash contains details about the Bancontact payment method
     /// options to pass to the invoice’s PaymentIntent.
     public var bancontact: InvoiceCreatePaymentSettingsPaymentMethodOptionsBancontact?
+    /// If paying by `billie`, this sub-hash contains details about the Billie payment method options to
+    /// pass to the invoice’s PaymentIntent.
+    public var billie: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillie?
+    /// If paying by `blik`, this sub-hash contains details about the Blik payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    public var blik: [String: String]?
     /// If paying by `card`, this sub-hash contains details about the Card payment method options to pass to
     /// the invoice’s PaymentIntent.
     public var card: InvoiceCreatePaymentSettingsPaymentMethodOptionsCard?
@@ -1055,32 +1093,46 @@ public struct InvoiceCreatePaymentSettingsPaymentMethodOptions: StripeParams {
     /// If paying by `payto`, this sub-hash contains details about the PayTo payment method options to pass
     /// to the invoice’s PaymentIntent.
     public var payto: InvoiceCreatePaymentSettingsPaymentMethodOptionsPayto?
+    /// If paying by `pix`, this sub-hash contains details about the Pix payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    public var pix: InvoiceCreatePaymentSettingsPaymentMethodOptionsPix?
     /// If paying by `sepa_debit`, this sub-hash contains details about the SEPA Direct Debit payment method
     /// options to pass to the invoice’s PaymentIntent.
     public var sepaDebit: [String: String]?
+    /// If paying by `upi`, this sub-hash contains details about the UPI payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    public var upi: InvoiceCreatePaymentSettingsPaymentMethodOptionsUpi?
     /// If paying by `us_bank_account`, this sub-hash contains details about the ACH direct debit payment
     /// method options to pass to the invoice’s PaymentIntent.
     public var usBankAccount: InvoiceCreatePaymentSettingsPaymentMethodOptionsUsBankAccount?
 
-    public init(acssDebit: InvoiceCreatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: InvoiceCreatePaymentSettingsPaymentMethodOptionsBancontact? = nil, card: InvoiceCreatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: InvoiceCreatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: InvoiceCreatePaymentSettingsPaymentMethodOptionsPayto? = nil, sepaDebit: [String: String]? = nil, usBankAccount: InvoiceCreatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
+    public init(acssDebit: InvoiceCreatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: InvoiceCreatePaymentSettingsPaymentMethodOptionsBancontact? = nil, billie: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillie? = nil, blik: [String: String]? = nil, card: InvoiceCreatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: InvoiceCreatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: InvoiceCreatePaymentSettingsPaymentMethodOptionsPayto? = nil, pix: InvoiceCreatePaymentSettingsPaymentMethodOptionsPix? = nil, sepaDebit: [String: String]? = nil, upi: InvoiceCreatePaymentSettingsPaymentMethodOptionsUpi? = nil, usBankAccount: InvoiceCreatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
         self.acssDebit = acssDebit
         self.bancontact = bancontact
+        self.billie = billie
+        self.blik = blik
         self.card = card
         self.customerBalance = customerBalance
         self.konbini = konbini
         self.payto = payto
+        self.pix = pix
         self.sepaDebit = sepaDebit
+        self.upi = upi
         self.usBankAccount = usBankAccount
     }
 
     public enum CodingKeys: String, CodingKey {
         case acssDebit = "acss_debit"
         case bancontact
+        case billie
+        case blik
         case card
         case customerBalance = "customer_balance"
         case konbini
         case payto
+        case pix
         case sepaDebit = "sepa_debit"
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }
@@ -1126,6 +1178,85 @@ public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsBancontact: Stripe
 
     public enum CodingKeys: String, CodingKey {
         case preferredLanguage = "preferred_language"
+    }
+}
+
+public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsBillie: StripeParams {
+    /// Registration details about the buyer's organization.
+    public var companyDetails: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails?
+    /// An identifier or reference that this payment corresponds to.
+    public var reference: String?
+
+    public init(companyDetails: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails? = nil, reference: String? = nil) {
+        self.companyDetails = companyDetails
+        self.reference = reference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case companyDetails = "company_details"
+        case reference
+    }
+}
+
+public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails: StripeParams {
+    /// The address the company or entity is registered with.
+    public var registeredAddress: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress?
+    /// Company or entity name.
+    public var registeredName: String?
+    /// The official registration number for the given registration type.
+    public var registrationNumber: String?
+    /// Type of registration the company or entity holds in their registered country.
+    public var registrationType: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType?
+    /// VAT ID number.
+    public var vat: String?
+
+    public init(registeredAddress: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress? = nil, registeredName: String? = nil, registrationNumber: String? = nil, registrationType: InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType? = nil, vat: String? = nil) {
+        self.registeredAddress = registeredAddress
+        self.registeredName = registeredName
+        self.registrationNumber = registrationNumber
+        self.registrationType = registrationType
+        self.vat = vat
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case registeredAddress = "registered_address"
+        case registeredName = "registered_name"
+        case registrationNumber = "registration_number"
+        case registrationType = "registration_type"
+        case vat
+    }
+}
+
+public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code.
+    public var country: String?
+    /// Address line 1 (for example, street, PO Box, or company name).
+    public var line1: String?
+    /// Address line 2 (for example, apartment, suite, unit, or building).
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region.
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
     }
 }
 
@@ -1224,8 +1355,8 @@ public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsCustomerBalanceBan
 
 /// Configuration for eu_bank_transfer funding type.
 public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer: StripeParams {
-    /// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-    /// `ES`, `FR`, `IE`, or `NL`.
+    /// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+    /// `IE`, or `NL`.
     public var country: String
 
     public init(country: String) {
@@ -1257,6 +1388,65 @@ public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsPaytoMandateOption
     public init(amount: Int? = nil, purpose: InvoiceCreatePaymentSettingsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil) {
         self.amount = amount
         self.purpose = purpose
+    }
+}
+
+public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsPix: StripeParams {
+    /// Determines if the amount includes the IOF tax. Defaults to `never`.
+    public var amountIncludesIof: InvoiceCreatePaymentSettingsPaymentMethodOptionsPixAmountIncludesIof?
+    /// The number of seconds after PaymentIntent confirmation when the Pix expires (between 60 and 1209600,
+    /// inclusive). If unspecified, defaults to 14400 seconds (4 hours).
+    public var expiresAfterSeconds: Int?
+
+    public init(amountIncludesIof: InvoiceCreatePaymentSettingsPaymentMethodOptionsPixAmountIncludesIof? = nil, expiresAfterSeconds: Int? = nil) {
+        self.amountIncludesIof = amountIncludesIof
+        self.expiresAfterSeconds = expiresAfterSeconds
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amountIncludesIof = "amount_includes_iof"
+        case expiresAfterSeconds = "expires_after_seconds"
+    }
+}
+
+public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsUpi: StripeParams {
+    /// Configuration options for setting up an eMandate
+    public var mandateOptions: InvoiceCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptions?
+
+    public init(mandateOptions: InvoiceCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptions? = nil) {
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up an eMandate
+public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptions: StripeParams {
+    /// Amount to be charged for future payments.
+    public var amount: Int?
+    /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
+    /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
+    /// param.
+    public var amountType: InvoiceCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType?
+    /// A description of the mandate or subscription that is meant to be displayed to the customer.
+    public var description: String?
+    /// End date of the mandate or subscription.
+    public var endDate: Int?
+
+    public init(amount: Int? = nil, amountType: InvoiceCreatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType? = nil, description: String? = nil, endDate: Int? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.description = description
+        self.endDate = endDate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case description
+        case endDate = "end_date"
     }
 }
 
@@ -1310,8 +1500,8 @@ public struct InvoiceCreatePaymentSettingsPaymentMethodOptionsUsBankAccountFinan
     }
 }
 
-/// The rendering-related settings that control how the invoice is displayed on customer-facing surfaces
-/// such as PDF and Hosted Invoice Page.
+/// The rendering-related settings that control how invoices render in customer-facing interfaces such
+/// as the PDF or hosted invoice page.
 public struct InvoiceCreateRendering: StripeParams {
     /// How line-item prices and amounts will be displayed with respect to tax on invoice PDFs. One of
     /// `exclude_tax` or `include_inclusive_tax`. `include_inclusive_tax` will include inclusive tax (and
@@ -1718,17 +1908,20 @@ public struct InvoiceCreatePreviewCustomerDetailsTax: StripeParams {
 
 public struct InvoiceCreatePreviewCustomerDetailsTaxIds: StripeParams {
     /// Type of the tax ID, one of `ad_nrt`, `ae_trn`, `al_tin`, `am_tin`, `ao_tin`, `ar_cuit`, `au_abn`,
-    /// `au_arn`, `aw_tin`, `az_tin`, `ba_tin`, `bb_tin`, `bd_bin`, `bf_ifu`, `bg_uic`, `bh_vat`, `bj_ifu`,
-    /// `bo_tin`, `br_cnpj`, `br_cpf`, `bs_tin`, `by_tin`, `ca_bn`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`,
-    /// `ca_pst_sk`, `ca_qst`, `cd_nif`, `ch_uid`, `ch_vat`, `cl_tin`, `cm_niu`, `cn_tin`, `co_nit`,
-    /// `cr_tin`, `cv_nif`, `de_stn`, `do_rcn`, `ec_ruc`, `eg_tin`, `es_cif`, `et_tin`, `eu_oss_vat`,
-    /// `eu_vat`, `gb_vat`, `ge_vat`, `gn_nif`, `hk_br`, `hr_oib`, `hu_tin`, `id_npwp`, `il_vat`, `in_gst`,
-    /// `is_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`, `kg_tin`, `kh_tin`, `kr_brn`, `kz_bin`, `la_tin`,
-    /// `li_uid`, `li_vat`, `ma_vat`, `md_vat`, `me_pib`, `mk_vat`, `mr_nif`, `mx_rfc`, `my_frp`, `my_itn`,
-    /// `my_sst`, `ng_tin`, `no_vat`, `no_voec`, `np_pan`, `nz_gst`, `om_vat`, `pe_ruc`, `ph_tin`, `pl_nip`,
-    /// `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`, `sn_ninea`,
-    /// `sr_fin`, `sv_nit`, `th_vat`, `tj_tin`, `tr_tin`, `tw_vat`, `tz_vat`, `ua_vat`, `ug_tin`, `us_ein`,
-    /// `uy_ruc`, `uz_tin`, `uz_vat`, `ve_rif`, `vn_tin`, `za_vat`, `zm_tin`, or `zw_tin`
+    /// `au_acn`, `au_arn`, `au_wpn`, `aw_tin`, `az_tin`, `ba_tin`, `bb_tin`, `bd_bin`, `bf_ifu`, `bg_uic`,
+    /// `bh_vat`, `bj_ifu`, `bo_tin`, `br_cnpj`, `br_cpf`, `bs_tin`, `bw_vat`, `by_tin`, `ca_bn`,
+    /// `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `ca_qst`, `cd_nif`, `ch_uid`, `ch_vat`,
+    /// `ci_vat`, `cl_tin`, `cm_niu`, `cn_tin`, `co_nit`, `cr_tin`, `cv_nif`, `cz_dic`, `de_stn`, `do_rcn`,
+    /// `ec_ruc`, `eg_tin`, `es_cif`, `et_tin`, `eu_oss_vat`, `eu_vat`, `fo_vat`, `fr_siren`, `fr_siret`,
+    /// `fr_spi`, `gb_vat`, `ge_vat`, `gh_tin`, `gi_tin`, `gn_nif`, `hk_br`, `hr_oib`, `hu_tin`, `ic_nif`,
+    /// `id_npwp`, `il_vat`, `in_gst`, `is_kt`, `is_vat`, `it_cf`, `jp_cn`, `jp_rn`, `jp_trn`, `ke_pin`,
+    /// `kg_tin`, `kh_tin`, `kr_brn`, `kz_bin`, `la_tin`, `li_uid`, `li_vat`, `lk_vat`, `ma_vat`, `md_cf`,
+    /// `md_vat`, `me_pib`, `mk_vat`, `mr_nif`, `mu_vat`, `mx_rfc`, `my_frp`, `my_itn`, `my_sst`, `mz_nuit`,
+    /// `ng_tin`, `no_vat`, `no_voec`, `np_pan`, `nz_bn`, `nz_gst`, `om_vat`, `pe_ruc`, `ph_tin`, `pl_nip`,
+    /// `pt_nif`, `py_ruc`, `ro_tin`, `rs_pib`, `ru_inn`, `ru_kpp`, `sa_vat`, `sg_gst`, `sg_uen`, `si_tin`,
+    /// `sm_coe`, `sn_ninea`, `sr_fin`, `sv_nit`, `th_vat`, `tj_tin`, `tr_tin`, `tt_bir`, `tt_vat`,
+    /// `tw_vat`, `tz_vat`, `ua_vat`, `ug_tin`, `us_ein`, `uy_ruc`, `uz_tin`, `uz_vat`, `ve_rif`, `vn_tin`,
+    /// `za_vat`, `zm_tin`, or `zw_tin`
     public var type: InvoiceCreatePreviewCustomerDetailsTaxIdsType
     /// Value of the tax ID.
     public var value: String
@@ -1790,13 +1983,16 @@ public struct InvoiceCreatePreviewInvoiceItems: StripeParams {
     /// documentation](https://docs.stripe.com/revenue-recognition/methodology/subscriptions-and-invoicing)
     /// for details.
     public var period: InvoiceCreatePreviewInvoiceItemsPeriod?
-    /// The ID of the price object. One of `price` or `price_data` is required.
+    /// The ID of the price object.
     public var price: String?
-    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-    /// `price` or `price_data` is required.
+    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline.
     public var priceData: InvoiceCreatePreviewInvoiceItemsPriceData?
-    /// Non-negative integer. The quantity of units for the invoice item.
+    /// Non-negative integer. The quantity of units for the invoice item. Use `quantity_decimal` instead to
+    /// provide decimal precision. This field will be deprecated in favor of `quantity_decimal` in a future
+    /// version.
     public var quantity: Int?
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the invoice item.
+    public var quantityDecimal: String?
     /// Only required if a [default tax
     /// behavior](https://docs.stripe.com/tax/products-prices-tax-categories-tax-behavior#setting-a-default-tax-behavior-(recommended))
     /// was not provided in the Stripe Tax settings. Specifies whether the price is considered inclusive of
@@ -1815,7 +2011,7 @@ public struct InvoiceCreatePreviewInvoiceItems: StripeParams {
     /// decimal places. Only one of `unit_amount` and `unit_amount_decimal` can be set.
     public var unitAmountDecimal: String?
 
-    public init(amount: Int? = nil, currency: String? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceCreatePreviewInvoiceItemsDiscounts]? = nil, invoiceitem: String? = nil, metadata: [String: String]? = nil, period: InvoiceCreatePreviewInvoiceItemsPeriod? = nil, price: String? = nil, priceData: InvoiceCreatePreviewInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxBehavior: InvoiceCreatePreviewInvoiceItemsTaxBehavior? = nil, taxCode: String? = nil, taxRates: [String]? = nil, unitAmount: Int? = nil, unitAmountDecimal: String? = nil) {
+    public init(amount: Int? = nil, currency: String? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceCreatePreviewInvoiceItemsDiscounts]? = nil, invoiceitem: String? = nil, metadata: [String: String]? = nil, period: InvoiceCreatePreviewInvoiceItemsPeriod? = nil, price: String? = nil, priceData: InvoiceCreatePreviewInvoiceItemsPriceData? = nil, quantity: Int? = nil, quantityDecimal: String? = nil, taxBehavior: InvoiceCreatePreviewInvoiceItemsTaxBehavior? = nil, taxCode: String? = nil, taxRates: [String]? = nil, unitAmount: Int? = nil, unitAmountDecimal: String? = nil) {
         self.amount = amount
         self.currency = currency
         self.description = description
@@ -1827,6 +2023,7 @@ public struct InvoiceCreatePreviewInvoiceItems: StripeParams {
         self.price = price
         self.priceData = priceData
         self.quantity = quantity
+        self.quantityDecimal = quantityDecimal
         self.taxBehavior = taxBehavior
         self.taxCode = taxCode
         self.taxRates = taxRates
@@ -1846,6 +2043,7 @@ public struct InvoiceCreatePreviewInvoiceItems: StripeParams {
         case price
         case priceData = "price_data"
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case taxBehavior = "tax_behavior"
         case taxCode = "tax_code"
         case taxRates = "tax_rates"
@@ -1893,8 +2091,7 @@ public struct InvoiceCreatePreviewInvoiceItemsPeriod: StripeParams {
     }
 }
 
-/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-/// `price` or `price_data` is required.
+/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline.
 public struct InvoiceCreatePreviewInvoiceItemsPriceData: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -1956,6 +2153,10 @@ public struct InvoiceCreatePreviewScheduleDetails: StripeParams {
     /// and keep the underlying subscription running. `cancel` will end the subscription schedule and cancel
     /// the underlying subscription.
     public var endBehavior: InvoiceCreatePreviewScheduleDetailsEndBehavior?
+    /// The subscription's pause behavior and optional resume behavior. You can provide one entry. Include
+    /// its `key` to update an existing pause schedule. Omit `pause_schedules` to leave the existing
+    /// schedule unchanged, or pass an empty string (`""`) to clear it.
+    public var pauseSchedules: [InvoiceCreatePreviewScheduleDetailsPauseSchedules]?
     /// List representing phases of the subscription schedule. Each phase can be customized to have
     /// different durations, plans, and coupons. If there are multiple phases, the `end_date` of one phase
     /// will always equal the `start_date` of the next phase.
@@ -1964,9 +2165,10 @@ public struct InvoiceCreatePreviewScheduleDetails: StripeParams {
     /// to prorate at the time of the request.
     public var prorationBehavior: InvoiceCreatePreviewScheduleDetailsProrationBehavior?
 
-    public init(billingMode: InvoiceCreatePreviewScheduleDetailsBillingMode? = nil, endBehavior: InvoiceCreatePreviewScheduleDetailsEndBehavior? = nil, phases: [InvoiceCreatePreviewScheduleDetailsPhases]? = nil, prorationBehavior: InvoiceCreatePreviewScheduleDetailsProrationBehavior? = nil) {
+    public init(billingMode: InvoiceCreatePreviewScheduleDetailsBillingMode? = nil, endBehavior: InvoiceCreatePreviewScheduleDetailsEndBehavior? = nil, pauseSchedules: [InvoiceCreatePreviewScheduleDetailsPauseSchedules]? = nil, phases: [InvoiceCreatePreviewScheduleDetailsPhases]? = nil, prorationBehavior: InvoiceCreatePreviewScheduleDetailsProrationBehavior? = nil) {
         self.billingMode = billingMode
         self.endBehavior = endBehavior
+        self.pauseSchedules = pauseSchedules
         self.phases = phases
         self.prorationBehavior = prorationBehavior
     }
@@ -1974,6 +2176,7 @@ public struct InvoiceCreatePreviewScheduleDetails: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case billingMode = "billing_mode"
         case endBehavior = "end_behavior"
+        case pauseSchedules = "pause_schedules"
         case phases
         case prorationBehavior = "proration_behavior"
     }
@@ -2004,6 +2207,195 @@ public struct InvoiceCreatePreviewScheduleDetailsBillingModeFlexible: StripePara
 
     public enum CodingKeys: String, CodingKey {
         case prorationDiscounts = "proration_discounts"
+    }
+}
+
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedules: StripeParams {
+    /// A unique identifier for this pause schedule entry.
+    public var key: String?
+    /// Configuration for when and how the subscription pauses.
+    public var pause: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPause?
+    /// Configuration for when and how the subscription resumes.
+    public var resume: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResume?
+
+    public init(key: String? = nil, pause: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPause? = nil, resume: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResume? = nil) {
+        self.key = key
+        self.pause = pause
+        self.resume = resume
+    }
+}
+
+/// Configuration for when and how the subscription pauses.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesPause: StripeParams {
+    /// When to pause the subscription.
+    public var pauseAt: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPausePauseAt?
+    /// Settings controlling billing behavior during the pause.
+    public var settings: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettings?
+
+    public init(pauseAt: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPausePauseAt? = nil, settings: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettings? = nil) {
+        self.pauseAt = pauseAt
+        self.settings = settings
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case pauseAt = "pause_at"
+        case settings
+    }
+}
+
+/// When to pause the subscription.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesPausePauseAt: StripeParams {
+    /// When to pause the subscription. Use `now` to pause immediately or `timestamp` to pause at a specific
+    /// time.
+    public var type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPausePauseAtType
+    /// The Unix timestamp at which to pause the subscription. Required when `type` is `timestamp`.
+    public var timestamp: Int?
+
+    public init(type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPausePauseAtType, timestamp: Int? = nil) {
+        self.type = type
+        self.timestamp = timestamp
+    }
+}
+
+/// Settings controlling billing behavior during the pause.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettings: StripeParams {
+    /// Controls what to bill for when pausing the subscription.
+    public var billFor: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillFor?
+    /// Determines whether to generate an invoice for outstanding amounts when pausing. When adding a pause
+    /// schedule, defaults to `pending_invoice_item`. On updates, the existing value is preserved if not
+    /// provided.
+    public var invoicingBehavior: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsInvoicingBehavior?
+    /// The pause type. Currently only `subscription` is supported.
+    public var type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsType?
+
+    public init(billFor: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillFor? = nil, invoicingBehavior: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsInvoicingBehavior? = nil, type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsType? = nil) {
+        self.billFor = billFor
+        self.invoicingBehavior = invoicingBehavior
+        self.type = type
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billFor = "bill_for"
+        case invoicingBehavior = "invoicing_behavior"
+        case type
+    }
+}
+
+/// Controls what to bill for when pausing the subscription.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillFor: StripeParams {
+    /// Controls whether to collect metered usage accrued up to the pause date.
+    public var outstandingUsageThrough: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForOutstandingUsageThrough?
+    /// Controls how unused time on subscription items is credited when pausing.
+    public var unusedTimeFrom: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForUnusedTimeFrom?
+
+    public init(outstandingUsageThrough: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForOutstandingUsageThrough? = nil, unusedTimeFrom: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForUnusedTimeFrom? = nil) {
+        self.outstandingUsageThrough = outstandingUsageThrough
+        self.unusedTimeFrom = unusedTimeFrom
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case outstandingUsageThrough = "outstanding_usage_through"
+        case unusedTimeFrom = "unused_time_from"
+    }
+}
+
+/// Controls whether to collect metered usage accrued up to the pause date.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForOutstandingUsageThrough: StripeParams {
+    /// Determines whether to collect metered usage accrued up to the pause date. When adding a pause
+    /// schedule, defaults to `pause_at`. On updates, the existing value is preserved if not provided.
+    public var type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForOutstandingUsageThroughType?
+
+    public init(type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForOutstandingUsageThroughType? = nil) {
+        self.type = type
+    }
+}
+
+/// Controls how unused time on subscription items is credited when pausing.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForUnusedTimeFrom: StripeParams {
+    /// Determines which point in the billing period unused time is credited from. When adding a pause
+    /// schedule, defaults to `pause_at`. On updates, the existing value is preserved if not provided.
+    public var type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForUnusedTimeFromType?
+
+    public init(type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesPauseSettingsBillForUnusedTimeFromType? = nil) {
+        self.type = type
+    }
+}
+
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesResume: StripeParams {
+    /// When to resume the subscription.
+    public var resumeAt: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAt?
+    /// Settings controlling how the subscription resumes.
+    public var settings: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettings?
+
+    public init(resumeAt: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAt? = nil, settings: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettings? = nil) {
+        self.resumeAt = resumeAt
+        self.settings = settings
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case resumeAt = "resume_at"
+        case settings
+    }
+}
+
+/// When to resume the subscription.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAt: StripeParams {
+    /// When to resume the subscription. Use `now` to resume immediately, `duration` to resume after a set
+    /// duration, or `timestamp` to resume at a specific time.
+    public var type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtType
+    /// The duration after which to resume the subscription. Required when `type` is `duration`.
+    public var duration: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtDuration?
+    /// The Unix timestamp at which to resume the subscription. Required when `type` is `timestamp`.
+    public var timestamp: Int?
+
+    public init(type: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtType, duration: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtDuration? = nil, timestamp: Int? = nil) {
+        self.type = type
+        self.duration = duration
+        self.timestamp = timestamp
+    }
+}
+
+/// The duration after which to resume the subscription. Required when `type` is `duration`.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtDuration: StripeParams {
+    /// The time unit for the resume duration. One of `day`, `week`, `month`, or `year`.
+    public var interval: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtDurationInterval
+    /// The number of intervals after which the subscription resumes.
+    public var intervalCount: Int?
+
+    public init(interval: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeResumeAtDurationInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+}
+
+/// Settings controlling how the subscription resumes.
+public struct InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettings: StripeParams {
+    /// Controls the billing cycle anchor when the subscription resumes. When adding a pause schedule,
+    /// defaults to `resume_at`. On updates, the existing value is preserved if not provided.
+    public var billingCycleAnchor: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsBillingCycleAnchor?
+    /// Controls whether Stripe attempts payment on the resumption invoice and how payment affects the
+    /// subscription's status. When adding a pause schedule, defaults to `resume_on_payment_success`. On
+    /// updates, the existing value is preserved if not provided.
+    public var paymentBehavior: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsPaymentBehavior?
+    /// Determines how to handle prorations when the subscription resumes. When adding a pause schedule,
+    /// defaults to `create_prorations`. On updates, the existing value is preserved if not provided.
+    public var prorationBehavior: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsProrationBehavior?
+
+    public init(billingCycleAnchor: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsBillingCycleAnchor? = nil, paymentBehavior: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsPaymentBehavior? = nil, prorationBehavior: InvoiceCreatePreviewScheduleDetailsPauseSchedulesResumeSettingsProrationBehavior? = nil) {
+        self.billingCycleAnchor = billingCycleAnchor
+        self.paymentBehavior = paymentBehavior
+        self.prorationBehavior = prorationBehavior
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billingCycleAnchor = "billing_cycle_anchor"
+        case paymentBehavior = "payment_behavior"
+        case prorationBehavior = "proration_behavior"
     }
 }
 
@@ -2080,7 +2472,9 @@ public struct InvoiceCreatePreviewScheduleDetailsPhases: StripeParams {
     /// price, quantity, etc.) of the current phase.
     public var prorationBehavior: InvoiceCreatePreviewScheduleDetailsPhasesProrationBehavior?
     /// The date at which this phase of the subscription schedule starts or `now`. Must be set on the first
-    /// phase.
+    /// phase. Prefer to specify `now` over an explicit timestamp when appropriate to avoid unexpected
+    /// behavior due to request delays or clock skew resulting in the phase being slightly backdated or
+    /// postdated.
     public var startDate: String?
     /// The data with which to automatically create a Transfer for each of the associated subscription's
     /// invoices.
@@ -2088,8 +2482,8 @@ public struct InvoiceCreatePreviewScheduleDetailsPhases: StripeParams {
     /// If set to true the entire phase is counted as a trial and the customer will not be charged for any
     /// fees.
     public var trial: Bool?
-    /// Sets the phase to trialing from the start date to this date. Must be before the phase end date, can
-    /// not be combined with `trial`
+    /// Sets the phase to trialing from the start date to this date. Must be within the phase. When
+    /// previewing an update, if combined with `trial=true`, it must match the phase end date.
     public var trialEnd: String?
 
     public init(items: [InvoiceCreatePreviewScheduleDetailsPhasesItems], addInvoiceItems: [InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItems]? = nil, applicationFeePercent: Double? = nil, automaticTax: InvoiceCreatePreviewScheduleDetailsPhasesAutomaticTax? = nil, billingCycleAnchor: InvoiceCreatePreviewScheduleDetailsPhasesBillingCycleAnchor? = nil, billingThresholds: InvoiceCreatePreviewScheduleDetailsPhasesBillingThresholds? = nil, collectionMethod: InvoiceCreatePreviewScheduleDetailsPhasesCollectionMethod? = nil, currency: String? = nil, defaultPaymentMethod: String? = nil, defaultTaxRates: [String]? = nil, description: String? = nil, discounts: [InvoiceCreatePreviewScheduleDetailsPhasesDiscounts]? = nil, duration: InvoiceCreatePreviewScheduleDetailsPhasesDuration? = nil, endDate: String? = nil, invoiceSettings: InvoiceCreatePreviewScheduleDetailsPhasesInvoiceSettings? = nil, metadata: [String: String]? = nil, onBehalfOf: String? = nil, prorationBehavior: InvoiceCreatePreviewScheduleDetailsPhasesProrationBehavior? = nil, startDate: String? = nil, transferData: InvoiceCreatePreviewScheduleDetailsPhasesTransferData? = nil, trial: Bool? = nil, trialEnd: String? = nil) {
@@ -2292,6 +2686,8 @@ public struct InvoiceCreatePreviewScheduleDetailsPhasesItemsPriceDataRecurring: 
 }
 
 public struct InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItems: StripeParams {
+    /// Controls whether discounts apply to this invoice item. Defaults to true if no value is provided.
+    public var discountable: Bool?
     /// The coupons to redeem into discounts for the item.
     public var discounts: [InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsDiscounts]?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
@@ -2312,7 +2708,8 @@ public struct InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItems: StripePa
     /// The tax rates which apply to the item. When set, the `default_tax_rates` do not apply to this item.
     public var taxRates: [String]?
 
-    public init(discounts: [InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(discountable: Bool? = nil, discounts: [InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsDiscounts]? = nil, metadata: [String: String]? = nil, period: InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsPeriod? = nil, price: String? = nil, priceData: InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+        self.discountable = discountable
         self.discounts = discounts
         self.metadata = metadata
         self.period = period
@@ -2323,6 +2720,7 @@ public struct InvoiceCreatePreviewScheduleDetailsPhasesAddInvoiceItems: StripePa
     }
 
     public enum CodingKeys: String, CodingKey {
+        case discountable
         case discounts
         case metadata
         case period
@@ -2591,9 +2989,11 @@ public struct InvoiceCreatePreviewSubscriptionDetails: StripeParams {
     /// cycle](https://docs.stripe.com/subscriptions/billing-cycle). This is used to determine the date of
     /// the first full invoice, and, for plans with `month` or `year` intervals, the day of the month for
     /// subsequent invoices. For existing subscriptions, the value can only be set to `now` or `unchanged`.
-    public var billingCycleAnchor: String?
+    public var billingCycleAnchor: InvoiceCreatePreviewSubscriptionDetailsBillingCycleAnchor?
     /// Controls how prorations and invoices for subscriptions are calculated and orchestrated.
     public var billingMode: InvoiceCreatePreviewSubscriptionDetailsBillingMode?
+    /// Sets the billing schedules for the subscription.
+    public var billingSchedules: [InvoiceCreatePreviewSubscriptionDetailsBillingSchedules]?
     /// A timestamp at which the subscription should cancel. If set to a date before the current period
     /// ends, this will cause a proration if prorations have been enabled using `proration_behavior`. If set
     /// during a future period, this will always cause a proration for that period.
@@ -2609,6 +3009,17 @@ public struct InvoiceCreatePreviewSubscriptionDetails: StripeParams {
     public var defaultTaxRates: [String]?
     /// A list of up to 20 subscription items, each with an attached price.
     public var items: [InvoiceCreatePreviewSubscriptionDetailsItems]?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
+    /// empty value to `metadata`.
+    public var metadata: [String: String]?
+    /// Previews the invoice that would be generated when pausing the subscription. Passing an empty hash
+    /// won't preview pausing and instead returns the next invoice. To receive a preview invoice, set
+    /// `invoicing_behavior` to `invoice`. A preview isn't available if the `bill_for` options produce no
+    /// billable amounts. `pending_invoice_item` never has a preview available because pausing wouldn't
+    /// generate an invoice, and paused subscriptions don't generate invoices either.
+    public var pause: InvoiceCreatePreviewSubscriptionDetailsPause?
     /// Determines how to handle [prorations](https://docs.stripe.com/billing/subscriptions/prorations) when
     /// the billing cycle changes (e.g., when switching plans, resetting `billing_cycle_anchor=now`, or
     /// starting a trial), or if an item's `quantity` changes. The default value is `create_prorations`.
@@ -2629,14 +3040,17 @@ public struct InvoiceCreatePreviewSubscriptionDetails: StripeParams {
     /// end. If set, one of `subscription_details.items` or `subscription` is required.
     public var trialEnd: String?
 
-    public init(billingCycleAnchor: String? = nil, billingMode: InvoiceCreatePreviewSubscriptionDetailsBillingMode? = nil, cancelAt: String? = nil, cancelAtPeriodEnd: Bool? = nil, cancelNow: Bool? = nil, defaultTaxRates: [String]? = nil, items: [InvoiceCreatePreviewSubscriptionDetailsItems]? = nil, prorationBehavior: InvoiceCreatePreviewSubscriptionDetailsProrationBehavior? = nil, prorationDate: Int? = nil, resumeAt: InvoiceCreatePreviewSubscriptionDetailsResumeAt? = nil, startDate: Int? = nil, trialEnd: String? = nil) {
+    public init(billingCycleAnchor: InvoiceCreatePreviewSubscriptionDetailsBillingCycleAnchor? = nil, billingMode: InvoiceCreatePreviewSubscriptionDetailsBillingMode? = nil, billingSchedules: [InvoiceCreatePreviewSubscriptionDetailsBillingSchedules]? = nil, cancelAt: String? = nil, cancelAtPeriodEnd: Bool? = nil, cancelNow: Bool? = nil, defaultTaxRates: [String]? = nil, items: [InvoiceCreatePreviewSubscriptionDetailsItems]? = nil, metadata: [String: String]? = nil, pause: InvoiceCreatePreviewSubscriptionDetailsPause? = nil, prorationBehavior: InvoiceCreatePreviewSubscriptionDetailsProrationBehavior? = nil, prorationDate: Int? = nil, resumeAt: InvoiceCreatePreviewSubscriptionDetailsResumeAt? = nil, startDate: Int? = nil, trialEnd: String? = nil) {
         self.billingCycleAnchor = billingCycleAnchor
         self.billingMode = billingMode
+        self.billingSchedules = billingSchedules
         self.cancelAt = cancelAt
         self.cancelAtPeriodEnd = cancelAtPeriodEnd
         self.cancelNow = cancelNow
         self.defaultTaxRates = defaultTaxRates
         self.items = items
+        self.metadata = metadata
+        self.pause = pause
         self.prorationBehavior = prorationBehavior
         self.prorationDate = prorationDate
         self.resumeAt = resumeAt
@@ -2647,16 +3061,36 @@ public struct InvoiceCreatePreviewSubscriptionDetails: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case billingCycleAnchor = "billing_cycle_anchor"
         case billingMode = "billing_mode"
+        case billingSchedules = "billing_schedules"
         case cancelAt = "cancel_at"
         case cancelAtPeriodEnd = "cancel_at_period_end"
         case cancelNow = "cancel_now"
         case defaultTaxRates = "default_tax_rates"
         case items
+        case metadata
+        case pause
         case prorationBehavior = "proration_behavior"
         case prorationDate = "proration_date"
         case resumeAt = "resume_at"
         case startDate = "start_date"
         case trialEnd = "trial_end"
+    }
+}
+
+/// For new subscriptions, a future timestamp to anchor the subscription's [billing
+/// cycle](https://docs.stripe.com/subscriptions/billing-cycle). This is used to determine the date of
+/// the first full invoice, and, for plans with `month` or `year` intervals, the day of the month for
+/// subsequent invoices. For existing subscriptions, the value can only be set to `now` or `unchanged`.
+public struct InvoiceCreatePreviewSubscriptionDetailsBillingCycleAnchor: StripeParams {
+    /// Determines how the subscription's billing cycle anchor behaves for the invoice preview.
+    public var type: InvoiceCreatePreviewSubscriptionDetailsBillingCycleAnchorType
+    /// A timestamp to use as the subscription's billing cycle anchor. Only valid when `type` is
+    /// `timestamp`.
+    public var timestamp: Int?
+
+    public init(type: InvoiceCreatePreviewSubscriptionDetailsBillingCycleAnchorType, timestamp: Int? = nil) {
+        self.type = type
+        self.timestamp = timestamp
     }
 }
 
@@ -2688,6 +3122,76 @@ public struct InvoiceCreatePreviewSubscriptionDetailsBillingModeFlexible: Stripe
     }
 }
 
+public struct InvoiceCreatePreviewSubscriptionDetailsBillingSchedules: StripeParams {
+    /// Configure billing schedule differently for individual subscription items.
+    public var appliesTo: [InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesAppliesTo]?
+    /// The end date for the billing schedule. You must not set this earlier than current period end for
+    /// every applicable subscription item.
+    public var billUntil: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntil?
+    /// Specify a key for the billing schedule. Must be unique to this field, alphanumeric, and up to 200
+    /// characters. If not provided, a unique key will be generated.
+    public var key: String?
+
+    public init(appliesTo: [InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesAppliesTo]? = nil, billUntil: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntil? = nil, key: String? = nil) {
+        self.appliesTo = appliesTo
+        self.billUntil = billUntil
+        self.key = key
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case appliesTo = "applies_to"
+        case billUntil = "bill_until"
+        case key
+    }
+}
+
+public struct InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesAppliesTo: StripeParams {
+    /// Controls which subscription items the billing schedule applies to.
+    public var type: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesAppliesToType
+    /// The ID of the price object.
+    public var price: String?
+
+    public init(type: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesAppliesToType, price: String? = nil) {
+        self.type = type
+        self.price = price
+    }
+}
+
+/// The end date for the billing schedule. You must not set this earlier than current period end for
+/// every applicable subscription item.
+public struct InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntil: StripeParams {
+    /// Describes how the billing schedule will determine the end date. Either `duration` or `timestamp`.
+    public var type: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilType
+    /// Specifies the billing period.
+    public var duration: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilDuration?
+    /// The end date of the billing schedule.
+    public var timestamp: Int?
+
+    public init(type: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilType, duration: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilDuration? = nil, timestamp: Int? = nil) {
+        self.type = type
+        self.duration = duration
+        self.timestamp = timestamp
+    }
+}
+
+/// Specifies the billing period.
+public struct InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilDuration: StripeParams {
+    /// Specifies billing duration. Either `day`, `week`, `month` or `year`.
+    public var interval: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilDurationInterval
+    /// The multiplier applied to the interval.
+    public var intervalCount: Int?
+
+    public init(interval: InvoiceCreatePreviewSubscriptionDetailsBillingSchedulesBillUntilDurationInterval, intervalCount: Int? = nil) {
+        self.interval = interval
+        self.intervalCount = intervalCount
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case interval
+        case intervalCount = "interval_count"
+    }
+}
+
 public struct InvoiceCreatePreviewSubscriptionDetailsItems: StripeParams {
     /// Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing
     /// period. Pass an empty string to remove previously-defined thresholds.
@@ -2695,11 +3199,15 @@ public struct InvoiceCreatePreviewSubscriptionDetailsItems: StripeParams {
     /// Delete all usage for a given subscription item. You must pass this when deleting a usage records
     /// subscription item. `clear_usage` has no effect if the plan has a billing meter attached.
     public var clearUsage: Bool?
+    /// The trial offer to apply to this subscription item.
+    public var currentTrial: InvoiceCreatePreviewSubscriptionDetailsItemsCurrentTrial?
     /// A flag that, if set to `true`, will delete the specified item.
     public var deleted: Bool?
     /// The coupons to redeem into discounts for the subscription item.
     public var discounts: [InvoiceCreatePreviewSubscriptionDetailsItemsDiscounts]?
-    /// Subscription item to update.
+    /// Subscription item to update. If you omit `id`, the API adds a new subscription item rather than
+    /// updating the existing one. See [Changing a subscription's
+    /// price](https://docs.stripe.com/billing/subscriptions/change-price#changing).
     public var id: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -2708,11 +3216,14 @@ public struct InvoiceCreatePreviewSubscriptionDetailsItems: StripeParams {
     public var metadata: [String: String]?
     /// Plan ID for this item, as a string.
     public var plan: String?
-    /// The ID of the price object. One of `price` or `price_data` is required. When changing a subscription
-    /// item's price, `quantity` is set to 1 unless a `quantity` parameter is provided.
+    /// The ID of the price object. You can use either `price` or `price_data`, but not both, to set or
+    /// change this item's price. If you're updating an existing item without changing its price, omit both.
+    /// When changing a subscription item's price, `quantity` is set to 1 unless a `quantity` parameter is
+    /// provided.
     public var price: String?
-    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-    /// `price` or `price_data` is required.
+    /// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. You can use
+    /// either `price` or `price_data`, but not both, to set or change this item's price. If you're updating
+    /// an existing item without changing its price, omit both.
     public var priceData: InvoiceCreatePreviewSubscriptionDetailsItemsPriceData?
     /// Quantity for this item.
     public var quantity: Int?
@@ -2721,9 +3232,10 @@ public struct InvoiceCreatePreviewSubscriptionDetailsItems: StripeParams {
     /// on the Subscription. When updating, pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(billingThresholds: InvoiceCreatePreviewSubscriptionDetailsItemsBillingThresholds? = nil, clearUsage: Bool? = nil, deleted: Bool? = nil, discounts: [InvoiceCreatePreviewSubscriptionDetailsItemsDiscounts]? = nil, id: String? = nil, metadata: [String: String]? = nil, plan: String? = nil, price: String? = nil, priceData: InvoiceCreatePreviewSubscriptionDetailsItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
+    public init(billingThresholds: InvoiceCreatePreviewSubscriptionDetailsItemsBillingThresholds? = nil, clearUsage: Bool? = nil, currentTrial: InvoiceCreatePreviewSubscriptionDetailsItemsCurrentTrial? = nil, deleted: Bool? = nil, discounts: [InvoiceCreatePreviewSubscriptionDetailsItemsDiscounts]? = nil, id: String? = nil, metadata: [String: String]? = nil, plan: String? = nil, price: String? = nil, priceData: InvoiceCreatePreviewSubscriptionDetailsItemsPriceData? = nil, quantity: Int? = nil, taxRates: [String]? = nil) {
         self.billingThresholds = billingThresholds
         self.clearUsage = clearUsage
+        self.currentTrial = currentTrial
         self.deleted = deleted
         self.discounts = discounts
         self.id = id
@@ -2738,6 +3250,7 @@ public struct InvoiceCreatePreviewSubscriptionDetailsItems: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case billingThresholds = "billing_thresholds"
         case clearUsage = "clear_usage"
+        case currentTrial = "current_trial"
         case deleted
         case discounts
         case id
@@ -2765,6 +3278,20 @@ public struct InvoiceCreatePreviewSubscriptionDetailsItemsBillingThresholds: Str
     }
 }
 
+/// The trial offer to apply to this subscription item.
+public struct InvoiceCreatePreviewSubscriptionDetailsItemsCurrentTrial: StripeParams {
+    /// The ID of the trial offer to apply to the subscription item.
+    public var trialOffer: String
+
+    public init(trialOffer: String) {
+        self.trialOffer = trialOffer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case trialOffer = "trial_offer"
+    }
+}
+
 public struct InvoiceCreatePreviewSubscriptionDetailsItemsDiscounts: StripeParams {
     /// ID of the coupon to create a new discount for.
     public var coupon: String?
@@ -2786,8 +3313,9 @@ public struct InvoiceCreatePreviewSubscriptionDetailsItemsDiscounts: StripeParam
     }
 }
 
-/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. One of
-/// `price` or `price_data` is required.
+/// Data used to generate a new [Price](https://docs.stripe.com/api/prices) object inline. You can use
+/// either `price` or `price_data`, but not both, to set or change this item's price. If you're updating
+/// an existing item without changing its price, omit both.
 public struct InvoiceCreatePreviewSubscriptionDetailsItemsPriceData: StripeParams {
     /// Three-letter [ISO currency code](https://www.iso.org/iso-4217-currency-codes.html), in lowercase.
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
@@ -2846,6 +3374,70 @@ public struct InvoiceCreatePreviewSubscriptionDetailsItemsPriceDataRecurring: St
     public enum CodingKeys: String, CodingKey {
         case interval
         case intervalCount = "interval_count"
+    }
+}
+
+/// Previews the invoice that would be generated when pausing the subscription. Passing an empty hash
+/// won't preview pausing and instead returns the next invoice. To receive a preview invoice, set
+/// `invoicing_behavior` to `invoice`. A preview isn't available if the `bill_for` options produce no
+/// billable amounts. `pending_invoice_item` never has a preview available because pausing wouldn't
+/// generate an invoice, and paused subscriptions don't generate invoices either.
+public struct InvoiceCreatePreviewSubscriptionDetailsPause: StripeParams {
+    /// Controls what to bill for when pausing the subscription.
+    public var billFor: InvoiceCreatePreviewSubscriptionDetailsPauseBillFor?
+    /// Determines how to handle debits and credits when pausing. Defaults to `pending_invoice_item`.
+    public var invoicingBehavior: InvoiceCreatePreviewSubscriptionDetailsPauseInvoicingBehavior?
+    /// The type of pause to apply. Defaults to `subscription`.
+    public var type: InvoiceCreatePreviewSubscriptionDetailsPauseType?
+
+    public init(billFor: InvoiceCreatePreviewSubscriptionDetailsPauseBillFor? = nil, invoicingBehavior: InvoiceCreatePreviewSubscriptionDetailsPauseInvoicingBehavior? = nil, type: InvoiceCreatePreviewSubscriptionDetailsPauseType? = nil) {
+        self.billFor = billFor
+        self.invoicingBehavior = invoicingBehavior
+        self.type = type
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case billFor = "bill_for"
+        case invoicingBehavior = "invoicing_behavior"
+        case type
+    }
+}
+
+/// Controls what to bill for when pausing the subscription.
+public struct InvoiceCreatePreviewSubscriptionDetailsPauseBillFor: StripeParams {
+    /// Controls when to bill for metered usage in the current period. Defaults to `{ type: "now" }`.
+    public var outstandingUsageThrough: InvoiceCreatePreviewSubscriptionDetailsPauseBillForOutstandingUsageThrough?
+    /// Controls when to credit for unused time on licensed items. Defaults to `{ type: "now" }`.
+    public var unusedTimeFrom: InvoiceCreatePreviewSubscriptionDetailsPauseBillForUnusedTimeFrom?
+
+    public init(outstandingUsageThrough: InvoiceCreatePreviewSubscriptionDetailsPauseBillForOutstandingUsageThrough? = nil, unusedTimeFrom: InvoiceCreatePreviewSubscriptionDetailsPauseBillForUnusedTimeFrom? = nil) {
+        self.outstandingUsageThrough = outstandingUsageThrough
+        self.unusedTimeFrom = unusedTimeFrom
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case outstandingUsageThrough = "outstanding_usage_through"
+        case unusedTimeFrom = "unused_time_from"
+    }
+}
+
+/// Controls when to bill for metered usage in the current period. Defaults to `{ type: "now" }`.
+public struct InvoiceCreatePreviewSubscriptionDetailsPauseBillForOutstandingUsageThrough: StripeParams {
+    /// When to bill metered usage in the current period.
+    public var type: InvoiceCreatePreviewSubscriptionDetailsPauseBillForOutstandingUsageThroughType
+
+    public init(type: InvoiceCreatePreviewSubscriptionDetailsPauseBillForOutstandingUsageThroughType) {
+        self.type = type
+    }
+}
+
+/// Controls when to credit for unused time on licensed items. Defaults to `{ type: "now" }`.
+public struct InvoiceCreatePreviewSubscriptionDetailsPauseBillForUnusedTimeFrom: StripeParams {
+    /// When to credit for unused time.
+    public var type: InvoiceCreatePreviewSubscriptionDetailsPauseBillForUnusedTimeFromType
+
+    public init(type: InvoiceCreatePreviewSubscriptionDetailsPauseBillForUnusedTimeFromType) {
+        self.type = type
     }
 }
 
@@ -2975,6 +3567,12 @@ public struct InvoiceUpdatePaymentSettingsPaymentMethodOptions: StripeParams {
     /// If paying by `bancontact`, this sub-hash contains details about the Bancontact payment method
     /// options to pass to the invoice’s PaymentIntent.
     public var bancontact: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBancontact?
+    /// If paying by `billie`, this sub-hash contains details about the Billie payment method options to
+    /// pass to the invoice’s PaymentIntent.
+    public var billie: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillie?
+    /// If paying by `blik`, this sub-hash contains details about the Blik payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    public var blik: [String: String]?
     /// If paying by `card`, this sub-hash contains details about the Card payment method options to pass to
     /// the invoice’s PaymentIntent.
     public var card: InvoiceUpdatePaymentSettingsPaymentMethodOptionsCard?
@@ -2987,32 +3585,46 @@ public struct InvoiceUpdatePaymentSettingsPaymentMethodOptions: StripeParams {
     /// If paying by `payto`, this sub-hash contains details about the PayTo payment method options to pass
     /// to the invoice’s PaymentIntent.
     public var payto: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPayto?
+    /// If paying by `pix`, this sub-hash contains details about the Pix payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    public var pix: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPix?
     /// If paying by `sepa_debit`, this sub-hash contains details about the SEPA Direct Debit payment method
     /// options to pass to the invoice’s PaymentIntent.
     public var sepaDebit: [String: String]?
+    /// If paying by `upi`, this sub-hash contains details about the UPI payment method options to pass to
+    /// the invoice’s PaymentIntent.
+    public var upi: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpi?
     /// If paying by `us_bank_account`, this sub-hash contains details about the ACH direct debit payment
     /// method options to pass to the invoice’s PaymentIntent.
     public var usBankAccount: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUsBankAccount?
 
-    public init(acssDebit: InvoiceUpdatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBancontact? = nil, card: InvoiceUpdatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: InvoiceUpdatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPayto? = nil, sepaDebit: [String: String]? = nil, usBankAccount: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
+    public init(acssDebit: InvoiceUpdatePaymentSettingsPaymentMethodOptionsAcssDebit? = nil, bancontact: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBancontact? = nil, billie: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillie? = nil, blik: [String: String]? = nil, card: InvoiceUpdatePaymentSettingsPaymentMethodOptionsCard? = nil, customerBalance: InvoiceUpdatePaymentSettingsPaymentMethodOptionsCustomerBalance? = nil, konbini: [String: String]? = nil, payto: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPayto? = nil, pix: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPix? = nil, sepaDebit: [String: String]? = nil, upi: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpi? = nil, usBankAccount: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUsBankAccount? = nil) {
         self.acssDebit = acssDebit
         self.bancontact = bancontact
+        self.billie = billie
+        self.blik = blik
         self.card = card
         self.customerBalance = customerBalance
         self.konbini = konbini
         self.payto = payto
+        self.pix = pix
         self.sepaDebit = sepaDebit
+        self.upi = upi
         self.usBankAccount = usBankAccount
     }
 
     public enum CodingKeys: String, CodingKey {
         case acssDebit = "acss_debit"
         case bancontact
+        case billie
+        case blik
         case card
         case customerBalance = "customer_balance"
         case konbini
         case payto
+        case pix
         case sepaDebit = "sepa_debit"
+        case upi
         case usBankAccount = "us_bank_account"
     }
 }
@@ -3058,6 +3670,85 @@ public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsBancontact: Stripe
 
     public enum CodingKeys: String, CodingKey {
         case preferredLanguage = "preferred_language"
+    }
+}
+
+public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillie: StripeParams {
+    /// Registration details about the buyer's organization.
+    public var companyDetails: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails?
+    /// An identifier or reference that this payment corresponds to.
+    public var reference: String?
+
+    public init(companyDetails: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails? = nil, reference: String? = nil) {
+        self.companyDetails = companyDetails
+        self.reference = reference
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case companyDetails = "company_details"
+        case reference
+    }
+}
+
+public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetails: StripeParams {
+    /// The address the company or entity is registered with.
+    public var registeredAddress: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress?
+    /// Company or entity name.
+    public var registeredName: String?
+    /// The official registration number for the given registration type.
+    public var registrationNumber: String?
+    /// Type of registration the company or entity holds in their registered country.
+    public var registrationType: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType?
+    /// VAT ID number.
+    public var vat: String?
+
+    public init(registeredAddress: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress? = nil, registeredName: String? = nil, registrationNumber: String? = nil, registrationType: InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegistrationType? = nil, vat: String? = nil) {
+        self.registeredAddress = registeredAddress
+        self.registeredName = registeredName
+        self.registrationNumber = registrationNumber
+        self.registrationType = registrationType
+        self.vat = vat
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case registeredAddress = "registered_address"
+        case registeredName = "registered_name"
+        case registrationNumber = "registration_number"
+        case registrationType = "registration_type"
+        case vat
+    }
+}
+
+public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsBillieCompanyDetailsRegisteredAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code.
+    public var country: String?
+    /// Address line 1 (for example, street, PO Box, or company name).
+    public var line1: String?
+    /// Address line 2 (for example, apartment, suite, unit, or building).
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region.
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
     }
 }
 
@@ -3156,8 +3847,8 @@ public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsCustomerBalanceBan
 
 /// Configuration for eu_bank_transfer funding type.
 public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsCustomerBalanceBankTransferEuBankTransfer: StripeParams {
-    /// The desired country code of the bank account information. Permitted values include: `BE`, `DE`,
-    /// `ES`, `FR`, `IE`, or `NL`.
+    /// The desired country code of the bank account information. Permitted values include: `DE`, `FR`,
+    /// `IE`, or `NL`.
     public var country: String
 
     public init(country: String) {
@@ -3189,6 +3880,65 @@ public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsPaytoMandateOption
     public init(amount: Int? = nil, purpose: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPaytoMandateOptionsPurpose? = nil) {
         self.amount = amount
         self.purpose = purpose
+    }
+}
+
+public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsPix: StripeParams {
+    /// Determines if the amount includes the IOF tax. Defaults to `never`.
+    public var amountIncludesIof: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPixAmountIncludesIof?
+    /// The number of seconds after PaymentIntent confirmation when the Pix expires (between 60 and 1209600,
+    /// inclusive). If unspecified, defaults to 14400 seconds (4 hours).
+    public var expiresAfterSeconds: Int?
+
+    public init(amountIncludesIof: InvoiceUpdatePaymentSettingsPaymentMethodOptionsPixAmountIncludesIof? = nil, expiresAfterSeconds: Int? = nil) {
+        self.amountIncludesIof = amountIncludesIof
+        self.expiresAfterSeconds = expiresAfterSeconds
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amountIncludesIof = "amount_includes_iof"
+        case expiresAfterSeconds = "expires_after_seconds"
+    }
+}
+
+public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpi: StripeParams {
+    /// Configuration options for setting up an eMandate
+    public var mandateOptions: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptions?
+
+    public init(mandateOptions: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptions? = nil) {
+        self.mandateOptions = mandateOptions
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case mandateOptions = "mandate_options"
+    }
+}
+
+/// Configuration options for setting up an eMandate
+public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptions: StripeParams {
+    /// Amount to be charged for future payments.
+    public var amount: Int?
+    /// One of `fixed` or `maximum`. If `fixed`, the `amount` param refers to the exact amount to be charged
+    /// in future payments. If `maximum`, the amount charged can be up to the value passed for the `amount`
+    /// param.
+    public var amountType: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType?
+    /// A description of the mandate or subscription that is meant to be displayed to the customer.
+    public var description: String?
+    /// End date of the mandate or subscription.
+    public var endDate: Int?
+
+    public init(amount: Int? = nil, amountType: InvoiceUpdatePaymentSettingsPaymentMethodOptionsUpiMandateOptionsAmountType? = nil, description: String? = nil, endDate: Int? = nil) {
+        self.amount = amount
+        self.amountType = amountType
+        self.description = description
+        self.endDate = endDate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case amount
+        case amountType = "amount_type"
+        case description
+        case endDate = "end_date"
     }
 }
 
@@ -3242,8 +3992,8 @@ public struct InvoiceUpdatePaymentSettingsPaymentMethodOptionsUsBankAccountFinan
     }
 }
 
-/// The rendering-related settings that control how the invoice is displayed on customer-facing surfaces
-/// such as PDF and Hosted Invoice Page.
+/// The rendering-related settings that control how invoices render in customer-facing interfaces such
+/// as the PDF or hosted invoice page.
 public struct InvoiceUpdateRendering: StripeParams {
     /// How line-item prices and amounts will be displayed with respect to tax on invoice PDFs. One of
     /// `exclude_tax` or `include_inclusive_tax`. `include_inclusive_tax` will include inclusive tax (and
@@ -3512,9 +4262,13 @@ public struct InvoiceUpdateLinesLines: StripeParams {
     public var priceData: InvoiceUpdateLinesLinesPriceData?
     /// The pricing information for the invoice item.
     public var pricing: InvoiceUpdateLinesLinesPricing?
-    /// Non-negative integer. The quantity of units for the line item.
+    /// Non-negative integer. The quantity of units for the line item. Use `quantity_decimal` instead to
+    /// provide decimal precision. This field will be deprecated in favor of `quantity_decimal` in a future
+    /// version.
     public var quantity: Int?
-    /// A list of up to 10 tax amounts for this line item. This can be useful if you calculate taxes on your
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the line item.
+    public var quantityDecimal: String?
+    /// A list of up to 20 tax amounts for this line item. This can be useful if you calculate taxes on your
     /// own or use a third-party to calculate them. You cannot set tax amounts if any line item has
     /// [tax_rates](https://docs.stripe.com/api/invoices/line_item#invoice_line_item_object-tax_rates) or if
     /// the invoice has
@@ -3526,7 +4280,7 @@ public struct InvoiceUpdateLinesLines: StripeParams {
     /// apply to this line item. Pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(id: String, amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceUpdateLinesLinesDiscounts]? = nil, metadata: [String: String]? = nil, period: InvoiceUpdateLinesLinesPeriod? = nil, priceData: InvoiceUpdateLinesLinesPriceData? = nil, pricing: InvoiceUpdateLinesLinesPricing? = nil, quantity: Int? = nil, taxAmounts: [InvoiceUpdateLinesLinesTaxAmounts]? = nil, taxRates: [String]? = nil) {
+    public init(id: String, amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [InvoiceUpdateLinesLinesDiscounts]? = nil, metadata: [String: String]? = nil, period: InvoiceUpdateLinesLinesPeriod? = nil, priceData: InvoiceUpdateLinesLinesPriceData? = nil, pricing: InvoiceUpdateLinesLinesPricing? = nil, quantity: Int? = nil, quantityDecimal: String? = nil, taxAmounts: [InvoiceUpdateLinesLinesTaxAmounts]? = nil, taxRates: [String]? = nil) {
         self.id = id
         self.amount = amount
         self.description = description
@@ -3537,6 +4291,7 @@ public struct InvoiceUpdateLinesLines: StripeParams {
         self.priceData = priceData
         self.pricing = pricing
         self.quantity = quantity
+        self.quantityDecimal = quantityDecimal
         self.taxAmounts = taxAmounts
         self.taxRates = taxRates
     }
@@ -3552,6 +4307,7 @@ public struct InvoiceUpdateLinesLines: StripeParams {
         case priceData = "price_data"
         case pricing
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case taxAmounts = "tax_amounts"
         case taxRates = "tax_rates"
     }
@@ -3657,16 +4413,20 @@ public struct InvoiceUpdateLinesLinesPriceDataProductData: StripeParams {
     public var metadata: [String: String]?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: InvoiceUpdateLinesLinesPriceDataProductDataTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal.
     public var unitLabel: String?
 
-    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, unitLabel: String? = nil) {
+    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, taxDetails: InvoiceUpdateLinesLinesPriceDataProductDataTaxDetails? = nil, unitLabel: String? = nil) {
         self.name = name
         self.description = description
         self.images = images
         self.metadata = metadata
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
     }
 
@@ -3676,7 +4436,29 @@ public struct InvoiceUpdateLinesLinesPriceDataProductData: StripeParams {
         case metadata
         case name
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
+    }
+}
+
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct InvoiceUpdateLinesLinesPriceDataProductDataTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }
 

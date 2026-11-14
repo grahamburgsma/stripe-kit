@@ -8,7 +8,7 @@
 import Foundation
 
 public struct IssuingTransactionFleetFuelPriceData: Codable, Sendable {
-    /// Gross fuel amount that should equal Fuel Volume multipled by Fuel Unit Cost, inclusive of taxes.
+    /// Gross fuel amount that should equal Fuel Volume multiplied by Fuel Unit Cost, inclusive of taxes.
     public var grossAmountDecimal: String?
 
     public enum CodingKeys: String, CodingKey {

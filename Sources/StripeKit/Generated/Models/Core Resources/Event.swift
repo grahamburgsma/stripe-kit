@@ -34,8 +34,8 @@ public struct Event: Codable, Sendable {
     public var data: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: EventObject
@@ -79,9 +79,19 @@ public enum EventType: String, Codable, Sendable {
     case applicationFeeCreated = "application_fee.created"
     case applicationFeeRefundUpdated = "application_fee.refund.updated"
     case applicationFeeRefunded = "application_fee.refunded"
+    case appsInstallCreated = "apps.install.created"
+    case appsInstallDeleted = "apps.install.deleted"
+    case appsInstallUpdated = "apps.install.updated"
     case balanceAvailable = "balance.available"
     case balanceSettingsUpdated = "balance_settings.updated"
     case billingAlertTriggered = "billing.alert.triggered"
+    case billingCreditBalanceTransactionCreated = "billing.credit_balance_transaction.created"
+    case billingCreditGrantCreated = "billing.credit_grant.created"
+    case billingCreditGrantUpdated = "billing.credit_grant.updated"
+    case billingMeterCreated = "billing.meter.created"
+    case billingMeterDeactivated = "billing.meter.deactivated"
+    case billingMeterReactivated = "billing.meter.reactivated"
+    case billingMeterUpdated = "billing.meter.updated"
     case billingPortalConfigurationCreated = "billing_portal.configuration.created"
     case billingPortalConfigurationUpdated = "billing_portal.configuration.updated"
     case billingPortalSessionCreated = "billing_portal.session.created"
@@ -145,11 +155,16 @@ public enum EventType: String, Codable, Sendable {
     case financialConnectionsAccountCreated = "financial_connections.account.created"
     case financialConnectionsAccountDeactivated = "financial_connections.account.deactivated"
     case financialConnectionsAccountDisconnected = "financial_connections.account.disconnected"
+    case financialConnectionsAccountExpectedDeactivationDateUpdated = "financial_connections.account.expected_deactivation_date_updated"
     case financialConnectionsAccountReactivated = "financial_connections.account.reactivated"
     case financialConnectionsAccountRefreshedBalance = "financial_connections.account.refreshed_balance"
     case financialConnectionsAccountRefreshedOwnership = "financial_connections.account.refreshed_ownership"
     case financialConnectionsAccountRefreshedTransactions = "financial_connections.account.refreshed_transactions"
+    case financialConnectionsAccountSupportedPaymentMethodTypesUpdated = "financial_connections.account.supported_payment_method_types_updated"
     case financialConnectionsAccountUpcomingAccountNumberExpiry = "financial_connections.account.upcoming_account_number_expiry"
+    case financialConnectionsAccountUpcomingDeactivation = "financial_connections.account.upcoming_deactivation"
+    case financialConnectionsAuthorizationExpectedDeactivationDateUpdated = "financial_connections.authorization.expected_deactivation_date_updated"
+    case financialConnectionsAuthorizationUpcomingDeactivation = "financial_connections.authorization.upcoming_deactivation"
     case identityVerificationSessionCanceled = "identity.verification_session.canceled"
     case identityVerificationSessionCreated = "identity.verification_session.created"
     case identityVerificationSessionProcessing = "identity.verification_session.processing"
@@ -245,6 +260,13 @@ public enum EventType: String, Codable, Sendable {
     case reportingReportRunFailed = "reporting.report_run.failed"
     case reportingReportRunSucceeded = "reporting.report_run.succeeded"
     case reportingReportTypeUpdated = "reporting.report_type.updated"
+    case reserveHoldCreated = "reserve.hold.created"
+    case reserveHoldUpdated = "reserve.hold.updated"
+    case reservePlanCreated = "reserve.plan.created"
+    case reservePlanDisabled = "reserve.plan.disabled"
+    case reservePlanExpired = "reserve.plan.expired"
+    case reservePlanUpdated = "reserve.plan.updated"
+    case reserveReleaseCreated = "reserve.release.created"
     case reviewClosed = "review.closed"
     case reviewOpened = "review.opened"
     case setupIntentCanceled = "setup_intent.canceled"
@@ -278,6 +300,13 @@ public enum EventType: String, Codable, Sendable {
     case testHelpersTestClockDeleted = "test_helpers.test_clock.deleted"
     case testHelpersTestClockInternalFailure = "test_helpers.test_clock.internal_failure"
     case testHelpersTestClockReady = "test_helpers.test_clock.ready"
+    case threeDSecureAuthenticationCanceled = "three_d_secure.authentication.canceled"
+    case threeDSecureAuthenticationChallengeStarted = "three_d_secure.authentication.challenge_started"
+    case threeDSecureAuthenticationErrored = "three_d_secure.authentication.errored"
+    case threeDSecureAuthenticationFailed = "three_d_secure.authentication.failed"
+    case threeDSecureAuthenticationRequiresChallenge = "three_d_secure.authentication.requires_challenge"
+    case threeDSecureAuthenticationRequiresSubmission = "three_d_secure.authentication.requires_submission"
+    case threeDSecureAuthenticationSucceeded = "three_d_secure.authentication.succeeded"
     case topupCanceled = "topup.canceled"
     case topupCreated = "topup.created"
     case topupFailed = "topup.failed"

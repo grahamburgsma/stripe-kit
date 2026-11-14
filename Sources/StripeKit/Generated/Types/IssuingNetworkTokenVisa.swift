@@ -9,7 +9,7 @@ import Foundation
 
 public struct IssuingNetworkTokenVisa: Codable, Sendable {
     /// A unique reference ID from Visa to represent the card account number.
-    public var cardReferenceId: String
+    public var cardReferenceId: String?
     /// The network-unique identifier for the token.
     public var tokenReferenceId: String
     /// The ID of the entity requesting tokenization, specific to Visa.

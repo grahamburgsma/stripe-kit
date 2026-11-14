@@ -40,7 +40,8 @@ public struct Order: Codable, Sendable {
     /// Details about the delivery of carbon removal for this order.
     @ExpandableCollection<ClimateRemovalsOrderDeliveries>
     public var deliveryDetails: [String]?
-    /// The year this order is expected to be delivered.
+    /// The year this order is expected to be delivered. If the year is in the past, the order is a spot
+    /// purchase and will be delivered within 30 days of purchase.
     public var expectedDeliveryYear: Int
     /// Unique identifier for the object.
     public var id: String

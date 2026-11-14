@@ -13,7 +13,7 @@ import NIOHTTP1
 
 public struct ScheduledQueryRunRoutes: Sendable {
 
-    /// Retrieves the details of an scheduled query run.
+    /// Retrieves the details of a scheduled query run.
     public var retrieve: @Sendable (_ scheduledQueryRun: String, _ expand: [String]?) async throws -> ScheduledQueryRun
 
     /// Returns a list of scheduled query runs.

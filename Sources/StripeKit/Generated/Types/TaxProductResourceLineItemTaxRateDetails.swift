@@ -25,19 +25,34 @@ public struct TaxProductResourceLineItemTaxRateDetails: Codable, Sendable {
 
 /// The tax type, such as `vat` or `sales_tax`.
 public enum TaxProductResourceLineItemTaxRateDetailsTaxType: String, Codable, Sendable {
+    case admissionsTax = "admissions_tax"
     case amusementTax = "amusement_tax"
+    case attendanceTax = "attendance_tax"
     case communicationsTax = "communications_tax"
+    case digitalExciseTax = "digital_excise_tax"
+    case entertainmentTax = "entertainment_tax"
+    case getFund = "get_fund"
+    case grossReceiptsTax = "gross_receipts_tax"
     case gst
+    case hospitalityTax = "hospitality_tax"
     case hst
     case igst
     case jct
     case leaseTax = "lease_tax"
+    case luxuryTax = "luxury_tax"
+    case massTransitParkingTax = "mass_transit_parking_tax"
+    case nhil
+    case parkingTax = "parking_tax"
     case pst
     case qst
+    case recyclingFee = "recycling_fee"
+    case resortTax = "resort_tax"
     case retailDeliveryFee = "retail_delivery_fee"
     case rst
     case salesTax = "sales_tax"
     case serviceTax = "service_tax"
+    case tourismTax = "tourism_tax"
+    case utilityUsersTax = "utility_users_tax"
     case vat
 }
 

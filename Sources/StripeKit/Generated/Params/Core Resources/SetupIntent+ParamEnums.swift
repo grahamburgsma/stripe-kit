@@ -13,6 +13,108 @@ public enum SetupIntentCancelCancellationReason: String, Codable, Sendable {
     case requestedByCustomer = "requested_by_customer"
 }
 
+public enum SetupIntentConfirmAllowedPaymentMethodTypes: String, Codable, Sendable {
+    case acssDebit = "acss_debit"
+    case affirm
+    case afterpayClearpay = "afterpay_clearpay"
+    case alipay
+    case alma
+    case amazonPay = "amazon_pay"
+    case auBecsDebit = "au_becs_debit"
+    case bacsDebit = "bacs_debit"
+    case bancontact
+    case billie
+    case bizum
+    case blik
+    case bokuPromptpay = "boku_promptpay"
+    case boleto
+    case capchasePay = "capchase_pay"
+    case card
+    case cardPresent = "card_present"
+    case cashapp
+    case checkScan = "check_scan"
+    case clickToPay = "click_to_pay"
+    case crypto
+    case customerBalance = "customer_balance"
+    case demoPay = "demo_pay"
+    case duitnow
+    case dummyAuthPush = "dummy_auth_push"
+    case dummyPassthroughCard = "dummy_passthrough_card"
+    case edenred
+    case eps
+    case fpx
+    case gcash
+    case getbalance
+    case giftCard = "gift_card"
+    case giropay
+    case gopay
+    case grabpay
+    case idBankTransfer = "id_bank_transfer"
+    case ideal
+    case interacPresent = "interac_present"
+    case kakaoPay = "kakao_pay"
+    case klarna
+    case knet
+    case konbini
+    case krCard = "kr_card"
+    case krMarket = "kr_market"
+    case kriya
+    case link
+    case mbWay = "mb_way"
+    case mobilepay
+    case momo
+    case mondu
+    case multibanco
+    case naverPay = "naver_pay"
+    case netbanking
+    case ngBank = "ng_bank"
+    case ngBankTransfer = "ng_bank_transfer"
+    case ngCard = "ng_card"
+    case ngMarket = "ng_market"
+    case ngUssd = "ng_ussd"
+    case ngWallet = "ng_wallet"
+    case nzBankAccount = "nz_bank_account"
+    case octopus
+    case oxxo
+    case p24
+    case paperCheck = "paper_check"
+    case payByBank = "pay_by_bank"
+    case payco
+    case paynow
+    case paypal
+    case paypay
+    case payto
+    case pix
+    case promptpay
+    case qris
+    case rechnung
+    case revolutPay = "revolut_pay"
+    case samsungPay = "samsung_pay"
+    case satispay
+    case scalapay
+    case sepaDebit = "sepa_debit"
+    case sequra
+    case shopPay = "shop_pay"
+    case shopeepay
+    case sofort
+    case southKoreaMarket = "south_korea_market"
+    case stripeBalance = "stripe_balance"
+    case sunbit
+    case swish
+    case tamara
+    case testPay = "test_pay"
+    case touchNGo = "touch_n_go"
+    case truemoney
+    case twint
+    case upi
+    case usBankAccount = "us_bank_account"
+    case usCashVoucher = "us_cash_voucher"
+    case vipps
+    case wechatPay = "wechat_pay"
+    case wero
+    case zip
+}
+
 public enum SetupIntentConfirmMandateDataCustomerAcceptanceType: String, Codable, Sendable {
     case offline
     case online
@@ -69,14 +171,17 @@ public enum SetupIntentConfirmPaymentMethodDataFpxBank: String, Codable, Sendabl
     case bankMuamalat = "bank_muamalat"
     case bankOfChina = "bank_of_china"
     case bankRakyat = "bank_rakyat"
+    case bnpParibas = "bnp_paribas"
     case bsn
     case cimb
+    case citibank
     case deutscheBank = "deutsche_bank"
     case hongLeongBank = "hong_leong_bank"
     case hsbc
     case kfh
     case maybank2e
     case maybank2u
+    case mbsbBank = "mbsb_bank"
     case ocbc
     case pbEnterprise = "pb_enterprise"
     case publicBank = "public_bank"
@@ -162,6 +267,7 @@ public enum SetupIntentConfirmPaymentMethodDataType: String, Codable, Sendable {
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case cashapp
@@ -188,19 +294,29 @@ public enum SetupIntentConfirmPaymentMethodDataType: String, Codable, Sendable {
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
+}
+
+public enum SetupIntentConfirmPaymentMethodDataUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
 }
 
 public enum SetupIntentConfirmPaymentMethodDataUsBankAccountAccountHolderType: String, Codable, Sendable {
@@ -277,6 +393,12 @@ public enum SetupIntentConfirmPaymentMethodOptionsCardRequestThreeDSecure: Strin
     case any
     case automatic
     case challenge
+}
+
+public enum SetupIntentConfirmPaymentMethodOptionsCardSetupCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
 }
 
 public enum SetupIntentConfirmPaymentMethodOptionsCardThreeDSecureAresTransStatus: String, Codable, Sendable {
@@ -407,6 +529,35 @@ public enum SetupIntentConfirmPaymentMethodOptionsPaytoMandateOptionsPurpose: St
     case utility
 }
 
+public enum SetupIntentConfirmPaymentMethodOptionsPixMandateOptionsAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum SetupIntentConfirmPaymentMethodOptionsPixMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum SetupIntentConfirmPaymentMethodOptionsPixMandateOptionsPaymentSchedule: String, Codable, Sendable {
+    case halfyearly
+    case monthly
+    case quarterly
+    case weekly
+    case yearly
+}
+
+public enum SetupIntentConfirmPaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum SetupIntentConfirmPaymentMethodOptionsUpiSetupFutureUsage: String, Codable, Sendable {
+    case none
+    case offSession = "off_session"
+    case onSession = "on_session"
+}
+
 public enum SetupIntentConfirmPaymentMethodOptionsUsBankAccountFinancialConnectionsFiltersAccountSubcategories: String, Codable, Sendable {
     case checking
     case savings
@@ -440,6 +591,108 @@ public enum SetupIntentConfirmPaymentMethodOptionsUsBankAccountVerificationMetho
     case microdeposits
 }
 
+public enum SetupIntentCreateAllowedPaymentMethodTypes: String, Codable, Sendable {
+    case acssDebit = "acss_debit"
+    case affirm
+    case afterpayClearpay = "afterpay_clearpay"
+    case alipay
+    case alma
+    case amazonPay = "amazon_pay"
+    case auBecsDebit = "au_becs_debit"
+    case bacsDebit = "bacs_debit"
+    case bancontact
+    case billie
+    case bizum
+    case blik
+    case bokuPromptpay = "boku_promptpay"
+    case boleto
+    case capchasePay = "capchase_pay"
+    case card
+    case cardPresent = "card_present"
+    case cashapp
+    case checkScan = "check_scan"
+    case clickToPay = "click_to_pay"
+    case crypto
+    case customerBalance = "customer_balance"
+    case demoPay = "demo_pay"
+    case duitnow
+    case dummyAuthPush = "dummy_auth_push"
+    case dummyPassthroughCard = "dummy_passthrough_card"
+    case edenred
+    case eps
+    case fpx
+    case gcash
+    case getbalance
+    case giftCard = "gift_card"
+    case giropay
+    case gopay
+    case grabpay
+    case idBankTransfer = "id_bank_transfer"
+    case ideal
+    case interacPresent = "interac_present"
+    case kakaoPay = "kakao_pay"
+    case klarna
+    case knet
+    case konbini
+    case krCard = "kr_card"
+    case krMarket = "kr_market"
+    case kriya
+    case link
+    case mbWay = "mb_way"
+    case mobilepay
+    case momo
+    case mondu
+    case multibanco
+    case naverPay = "naver_pay"
+    case netbanking
+    case ngBank = "ng_bank"
+    case ngBankTransfer = "ng_bank_transfer"
+    case ngCard = "ng_card"
+    case ngMarket = "ng_market"
+    case ngUssd = "ng_ussd"
+    case ngWallet = "ng_wallet"
+    case nzBankAccount = "nz_bank_account"
+    case octopus
+    case oxxo
+    case p24
+    case paperCheck = "paper_check"
+    case payByBank = "pay_by_bank"
+    case payco
+    case paynow
+    case paypal
+    case paypay
+    case payto
+    case pix
+    case promptpay
+    case qris
+    case rechnung
+    case revolutPay = "revolut_pay"
+    case samsungPay = "samsung_pay"
+    case satispay
+    case scalapay
+    case sepaDebit = "sepa_debit"
+    case sequra
+    case shopPay = "shop_pay"
+    case shopeepay
+    case sofort
+    case southKoreaMarket = "south_korea_market"
+    case stripeBalance = "stripe_balance"
+    case sunbit
+    case swish
+    case tamara
+    case testPay = "test_pay"
+    case touchNGo = "touch_n_go"
+    case truemoney
+    case twint
+    case upi
+    case usBankAccount = "us_bank_account"
+    case usCashVoucher = "us_cash_voucher"
+    case vipps
+    case wechatPay = "wechat_pay"
+    case wero
+    case zip
+}
+
 public enum SetupIntentCreateAutomaticPaymentMethodsAllowRedirects: String, Codable, Sendable {
     case always
     case never
@@ -456,6 +709,7 @@ public enum SetupIntentCreateExcludedPaymentMethodTypes: String, Codable, Sendab
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case card
@@ -482,16 +736,21 @@ public enum SetupIntentCreateExcludedPaymentMethodTypes: String, Codable, Sendab
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
@@ -558,14 +817,17 @@ public enum SetupIntentCreatePaymentMethodDataFpxBank: String, Codable, Sendable
     case bankMuamalat = "bank_muamalat"
     case bankOfChina = "bank_of_china"
     case bankRakyat = "bank_rakyat"
+    case bnpParibas = "bnp_paribas"
     case bsn
     case cimb
+    case citibank
     case deutscheBank = "deutsche_bank"
     case hongLeongBank = "hong_leong_bank"
     case hsbc
     case kfh
     case maybank2e
     case maybank2u
+    case mbsbBank = "mbsb_bank"
     case ocbc
     case pbEnterprise = "pb_enterprise"
     case publicBank = "public_bank"
@@ -651,6 +913,7 @@ public enum SetupIntentCreatePaymentMethodDataType: String, Codable, Sendable {
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case cashapp
@@ -677,19 +940,29 @@ public enum SetupIntentCreatePaymentMethodDataType: String, Codable, Sendable {
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
+}
+
+public enum SetupIntentCreatePaymentMethodDataUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
 }
 
 public enum SetupIntentCreatePaymentMethodDataUsBankAccountAccountHolderType: String, Codable, Sendable {
@@ -766,6 +1039,12 @@ public enum SetupIntentCreatePaymentMethodOptionsCardRequestThreeDSecure: String
     case any
     case automatic
     case challenge
+}
+
+public enum SetupIntentCreatePaymentMethodOptionsCardSetupCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
 }
 
 public enum SetupIntentCreatePaymentMethodOptionsCardThreeDSecureAresTransStatus: String, Codable, Sendable {
@@ -896,6 +1175,35 @@ public enum SetupIntentCreatePaymentMethodOptionsPaytoMandateOptionsPurpose: Str
     case utility
 }
 
+public enum SetupIntentCreatePaymentMethodOptionsPixMandateOptionsAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum SetupIntentCreatePaymentMethodOptionsPixMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum SetupIntentCreatePaymentMethodOptionsPixMandateOptionsPaymentSchedule: String, Codable, Sendable {
+    case halfyearly
+    case monthly
+    case quarterly
+    case weekly
+    case yearly
+}
+
+public enum SetupIntentCreatePaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum SetupIntentCreatePaymentMethodOptionsUpiSetupFutureUsage: String, Codable, Sendable {
+    case none
+    case offSession = "off_session"
+    case onSession = "on_session"
+}
+
 public enum SetupIntentCreatePaymentMethodOptionsUsBankAccountFinancialConnectionsFiltersAccountSubcategories: String, Codable, Sendable {
     case checking
     case savings
@@ -934,6 +1242,108 @@ public enum SetupIntentCreateUsage: String, Codable, Sendable {
     case onSession = "on_session"
 }
 
+public enum SetupIntentUpdateAllowedPaymentMethodTypes: String, Codable, Sendable {
+    case acssDebit = "acss_debit"
+    case affirm
+    case afterpayClearpay = "afterpay_clearpay"
+    case alipay
+    case alma
+    case amazonPay = "amazon_pay"
+    case auBecsDebit = "au_becs_debit"
+    case bacsDebit = "bacs_debit"
+    case bancontact
+    case billie
+    case bizum
+    case blik
+    case bokuPromptpay = "boku_promptpay"
+    case boleto
+    case capchasePay = "capchase_pay"
+    case card
+    case cardPresent = "card_present"
+    case cashapp
+    case checkScan = "check_scan"
+    case clickToPay = "click_to_pay"
+    case crypto
+    case customerBalance = "customer_balance"
+    case demoPay = "demo_pay"
+    case duitnow
+    case dummyAuthPush = "dummy_auth_push"
+    case dummyPassthroughCard = "dummy_passthrough_card"
+    case edenred
+    case eps
+    case fpx
+    case gcash
+    case getbalance
+    case giftCard = "gift_card"
+    case giropay
+    case gopay
+    case grabpay
+    case idBankTransfer = "id_bank_transfer"
+    case ideal
+    case interacPresent = "interac_present"
+    case kakaoPay = "kakao_pay"
+    case klarna
+    case knet
+    case konbini
+    case krCard = "kr_card"
+    case krMarket = "kr_market"
+    case kriya
+    case link
+    case mbWay = "mb_way"
+    case mobilepay
+    case momo
+    case mondu
+    case multibanco
+    case naverPay = "naver_pay"
+    case netbanking
+    case ngBank = "ng_bank"
+    case ngBankTransfer = "ng_bank_transfer"
+    case ngCard = "ng_card"
+    case ngMarket = "ng_market"
+    case ngUssd = "ng_ussd"
+    case ngWallet = "ng_wallet"
+    case nzBankAccount = "nz_bank_account"
+    case octopus
+    case oxxo
+    case p24
+    case paperCheck = "paper_check"
+    case payByBank = "pay_by_bank"
+    case payco
+    case paynow
+    case paypal
+    case paypay
+    case payto
+    case pix
+    case promptpay
+    case qris
+    case rechnung
+    case revolutPay = "revolut_pay"
+    case samsungPay = "samsung_pay"
+    case satispay
+    case scalapay
+    case sepaDebit = "sepa_debit"
+    case sequra
+    case shopPay = "shop_pay"
+    case shopeepay
+    case sofort
+    case southKoreaMarket = "south_korea_market"
+    case stripeBalance = "stripe_balance"
+    case sunbit
+    case swish
+    case tamara
+    case testPay = "test_pay"
+    case touchNGo = "touch_n_go"
+    case truemoney
+    case twint
+    case upi
+    case usBankAccount = "us_bank_account"
+    case usCashVoucher = "us_cash_voucher"
+    case vipps
+    case wechatPay = "wechat_pay"
+    case wero
+    case zip
+}
+
 public enum SetupIntentUpdateExcludedPaymentMethodTypes: String, Codable, Sendable {
     case acssDebit = "acss_debit"
     case affirm
@@ -945,6 +1355,7 @@ public enum SetupIntentUpdateExcludedPaymentMethodTypes: String, Codable, Sendab
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case card
@@ -971,16 +1382,21 @@ public enum SetupIntentUpdateExcludedPaymentMethodTypes: String, Codable, Sendab
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
@@ -1042,14 +1458,17 @@ public enum SetupIntentUpdatePaymentMethodDataFpxBank: String, Codable, Sendable
     case bankMuamalat = "bank_muamalat"
     case bankOfChina = "bank_of_china"
     case bankRakyat = "bank_rakyat"
+    case bnpParibas = "bnp_paribas"
     case bsn
     case cimb
+    case citibank
     case deutscheBank = "deutsche_bank"
     case hongLeongBank = "hong_leong_bank"
     case hsbc
     case kfh
     case maybank2e
     case maybank2u
+    case mbsbBank = "mbsb_bank"
     case ocbc
     case pbEnterprise = "pb_enterprise"
     case publicBank = "public_bank"
@@ -1135,6 +1554,7 @@ public enum SetupIntentUpdatePaymentMethodDataType: String, Codable, Sendable {
     case bacsDebit = "bacs_debit"
     case bancontact
     case billie
+    case bizum
     case blik
     case boleto
     case cashapp
@@ -1161,19 +1581,29 @@ public enum SetupIntentUpdatePaymentMethodDataType: String, Codable, Sendable {
     case payco
     case paynow
     case paypal
+    case paypay
     case payto
     case pix
     case promptpay
     case revolutPay = "revolut_pay"
     case samsungPay = "samsung_pay"
     case satispay
+    case scalapay
     case sepaDebit = "sepa_debit"
+    case sequra
     case sofort
+    case sunbit
     case swish
     case twint
+    case upi
     case usBankAccount = "us_bank_account"
     case wechatPay = "wechat_pay"
     case zip
+}
+
+public enum SetupIntentUpdatePaymentMethodDataUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
 }
 
 public enum SetupIntentUpdatePaymentMethodDataUsBankAccountAccountHolderType: String, Codable, Sendable {
@@ -1250,6 +1680,12 @@ public enum SetupIntentUpdatePaymentMethodOptionsCardRequestThreeDSecure: String
     case any
     case automatic
     case challenge
+}
+
+public enum SetupIntentUpdatePaymentMethodOptionsCardSetupCredentialUsage: String, Codable, Sendable {
+    case installment
+    case recurring
+    case unscheduled
 }
 
 public enum SetupIntentUpdatePaymentMethodOptionsCardThreeDSecureAresTransStatus: String, Codable, Sendable {
@@ -1378,6 +1814,35 @@ public enum SetupIntentUpdatePaymentMethodOptionsPaytoMandateOptionsPurpose: Str
     case salary
     case tax
     case utility
+}
+
+public enum SetupIntentUpdatePaymentMethodOptionsPixMandateOptionsAmountIncludesIof: String, Codable, Sendable {
+    case always
+    case never
+}
+
+public enum SetupIntentUpdatePaymentMethodOptionsPixMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum SetupIntentUpdatePaymentMethodOptionsPixMandateOptionsPaymentSchedule: String, Codable, Sendable {
+    case halfyearly
+    case monthly
+    case quarterly
+    case weekly
+    case yearly
+}
+
+public enum SetupIntentUpdatePaymentMethodOptionsUpiMandateOptionsAmountType: String, Codable, Sendable {
+    case fixed
+    case maximum
+}
+
+public enum SetupIntentUpdatePaymentMethodOptionsUpiSetupFutureUsage: String, Codable, Sendable {
+    case none
+    case offSession = "off_session"
+    case onSession = "on_session"
 }
 
 public enum SetupIntentUpdatePaymentMethodOptionsUsBankAccountFinancialConnectionsFiltersAccountSubcategories: String, Codable, Sendable {

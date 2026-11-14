@@ -16,6 +16,7 @@ public struct VerificationSessionRedaction: Codable, Sendable {
 public enum VerificationSessionRedactionStatus: String, Codable, Sendable {
     case processing
     case redacted
+    case validated
 }
 
 public struct VerificationSessionRedactionList: Codable, Sendable {

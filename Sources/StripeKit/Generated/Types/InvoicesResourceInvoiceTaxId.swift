@@ -12,15 +12,17 @@ public struct InvoicesResourceInvoiceTaxId: Codable, Sendable {
     /// `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `hr_oib`, `pe_ruc`, `ro_tin`,
     /// `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`,
     /// `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`,
-    /// `es_cif`, `pl_nip`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `li_vat`, `my_itn`,
-    /// `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`,
-    /// `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`,
-    /// `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `al_tin`, `bh_vat`, `kz_bin`,
-    /// `ng_tin`, `om_vat`, `de_stn`, `ch_uid`, `tz_vat`, `uz_vat`, `uz_tin`, `md_vat`, `ma_vat`, `by_tin`,
-    /// `ao_tin`, `bs_tin`, `bb_tin`, `cd_nif`, `mr_nif`, `me_pib`, `zw_tin`, `ba_tin`, `gn_nif`, `mk_vat`,
-    /// `sr_fin`, `sn_ninea`, `am_tin`, `np_pan`, `tj_tin`, `ug_tin`, `zm_tin`, `kh_tin`, `aw_tin`,
-    /// `az_tin`, `bd_bin`, `bj_ifu`, `et_tin`, `kg_tin`, `la_tin`, `cm_niu`, `cv_nif`, `bf_ifu`, or
-    /// `unknown`
+    /// `es_cif`, `pl_nip`, `it_cf`, `fo_vat`, `gi_tin`, `py_ruc`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`,
+    /// `jp_trn`, `li_uid`, `li_vat`, `lk_vat`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`,
+    /// `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`,
+    /// `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`,
+    /// `eg_tin`, `ph_tin`, `al_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, `de_stn`, `ch_uid`, `tz_vat`,
+    /// `uz_vat`, `uz_tin`, `md_vat`, `ma_vat`, `by_tin`, `ao_tin`, `bs_tin`, `bb_tin`, `cd_nif`, `mr_nif`,
+    /// `me_pib`, `zw_tin`, `ba_tin`, `gn_nif`, `mk_vat`, `sr_fin`, `sn_ninea`, `am_tin`, `np_pan`,
+    /// `tj_tin`, `ug_tin`, `zm_tin`, `kh_tin`, `aw_tin`, `az_tin`, `bd_bin`, `au_acn`, `nz_bn`, `pt_nif`,
+    /// `cz_dic`, `fr_siret`, `fr_siren`, `fr_spi`, `sm_coe`, `tt_vat`, `tt_bir`, `mu_vat`, `mz_nuit`,
+    /// `au_wpn`, `md_cf`, `is_kt`, `bj_ifu`, `et_tin`, `kg_tin`, `la_tin`, `cm_niu`, `cv_nif`, `bf_ifu`,
+    /// `ic_nif`, `gh_tin`, `bw_vat`, `ci_vat`, or `unknown`
     public var type: InvoicesResourceInvoiceTaxIdType
     /// The value of the tax ID.
     public var value: String?
@@ -30,15 +32,17 @@ public struct InvoicesResourceInvoiceTaxId: Codable, Sendable {
 /// `cn_tin`, `co_nit`, `cr_tin`, `do_rcn`, `ec_ruc`, `eu_oss_vat`, `hr_oib`, `pe_ruc`, `ro_tin`,
 /// `rs_pib`, `sv_nit`, `uy_ruc`, `ve_rif`, `vn_tin`, `gb_vat`, `nz_gst`, `au_abn`, `au_arn`, `in_gst`,
 /// `no_vat`, `no_voec`, `za_vat`, `ch_vat`, `mx_rfc`, `sg_uen`, `ru_inn`, `ru_kpp`, `ca_bn`, `hk_br`,
-/// `es_cif`, `pl_nip`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`, `jp_trn`, `li_uid`, `li_vat`, `my_itn`,
-/// `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`, `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`,
-/// `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`, `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`,
-/// `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`, `eg_tin`, `ph_tin`, `al_tin`, `bh_vat`, `kz_bin`,
-/// `ng_tin`, `om_vat`, `de_stn`, `ch_uid`, `tz_vat`, `uz_vat`, `uz_tin`, `md_vat`, `ma_vat`, `by_tin`,
-/// `ao_tin`, `bs_tin`, `bb_tin`, `cd_nif`, `mr_nif`, `me_pib`, `zw_tin`, `ba_tin`, `gn_nif`, `mk_vat`,
-/// `sr_fin`, `sn_ninea`, `am_tin`, `np_pan`, `tj_tin`, `ug_tin`, `zm_tin`, `kh_tin`, `aw_tin`,
-/// `az_tin`, `bd_bin`, `bj_ifu`, `et_tin`, `kg_tin`, `la_tin`, `cm_niu`, `cv_nif`, `bf_ifu`, or
-/// `unknown`
+/// `es_cif`, `pl_nip`, `it_cf`, `fo_vat`, `gi_tin`, `py_ruc`, `tw_vat`, `th_vat`, `jp_cn`, `jp_rn`,
+/// `jp_trn`, `li_uid`, `li_vat`, `lk_vat`, `my_itn`, `us_ein`, `kr_brn`, `ca_qst`, `ca_gst_hst`,
+/// `ca_pst_bc`, `ca_pst_mb`, `ca_pst_sk`, `my_sst`, `sg_gst`, `ae_trn`, `cl_tin`, `sa_vat`, `id_npwp`,
+/// `my_frp`, `il_vat`, `ge_vat`, `ua_vat`, `is_vat`, `bg_uic`, `hu_tin`, `si_tin`, `ke_pin`, `tr_tin`,
+/// `eg_tin`, `ph_tin`, `al_tin`, `bh_vat`, `kz_bin`, `ng_tin`, `om_vat`, `de_stn`, `ch_uid`, `tz_vat`,
+/// `uz_vat`, `uz_tin`, `md_vat`, `ma_vat`, `by_tin`, `ao_tin`, `bs_tin`, `bb_tin`, `cd_nif`, `mr_nif`,
+/// `me_pib`, `zw_tin`, `ba_tin`, `gn_nif`, `mk_vat`, `sr_fin`, `sn_ninea`, `am_tin`, `np_pan`,
+/// `tj_tin`, `ug_tin`, `zm_tin`, `kh_tin`, `aw_tin`, `az_tin`, `bd_bin`, `au_acn`, `nz_bn`, `pt_nif`,
+/// `cz_dic`, `fr_siret`, `fr_siren`, `fr_spi`, `sm_coe`, `tt_vat`, `tt_bir`, `mu_vat`, `mz_nuit`,
+/// `au_wpn`, `md_cf`, `is_kt`, `bj_ifu`, `et_tin`, `kg_tin`, `la_tin`, `cm_niu`, `cv_nif`, `bf_ifu`,
+/// `ic_nif`, `gh_tin`, `bw_vat`, `ci_vat`, or `unknown`
 public enum InvoicesResourceInvoiceTaxIdType: String, Codable, Sendable {
     case adNrt = "ad_nrt"
     case aeTrn = "ae_trn"
@@ -47,7 +51,9 @@ public enum InvoicesResourceInvoiceTaxIdType: String, Codable, Sendable {
     case aoTin = "ao_tin"
     case arCuit = "ar_cuit"
     case auAbn = "au_abn"
+    case auAcn = "au_acn"
     case auArn = "au_arn"
+    case auWpn = "au_wpn"
     case awTin = "aw_tin"
     case azTin = "az_tin"
     case baTin = "ba_tin"
@@ -61,6 +67,7 @@ public enum InvoicesResourceInvoiceTaxIdType: String, Codable, Sendable {
     case brCnpj = "br_cnpj"
     case brCpf = "br_cpf"
     case bsTin = "bs_tin"
+    case bwVat = "bw_vat"
     case byTin = "by_tin"
     case caBn = "ca_bn"
     case caGstHst = "ca_gst_hst"
@@ -71,12 +78,14 @@ public enum InvoicesResourceInvoiceTaxIdType: String, Codable, Sendable {
     case cdNif = "cd_nif"
     case chUid = "ch_uid"
     case chVat = "ch_vat"
+    case ciVat = "ci_vat"
     case clTin = "cl_tin"
     case cmNiu = "cm_niu"
     case cnTin = "cn_tin"
     case coNit = "co_nit"
     case crTin = "cr_tin"
     case cvNif = "cv_nif"
+    case czDic = "cz_dic"
     case deStn = "de_stn"
     case doRcn = "do_rcn"
     case ecRuc = "ec_ruc"
@@ -85,16 +94,25 @@ public enum InvoicesResourceInvoiceTaxIdType: String, Codable, Sendable {
     case etTin = "et_tin"
     case euOssVat = "eu_oss_vat"
     case euVat = "eu_vat"
+    case foVat = "fo_vat"
+    case frSiren = "fr_siren"
+    case frSiret = "fr_siret"
+    case frSpi = "fr_spi"
     case gbVat = "gb_vat"
     case geVat = "ge_vat"
+    case ghTin = "gh_tin"
+    case giTin = "gi_tin"
     case gnNif = "gn_nif"
     case hkBr = "hk_br"
     case hrOib = "hr_oib"
     case huTin = "hu_tin"
+    case icNif = "ic_nif"
     case idNpwp = "id_npwp"
     case ilVat = "il_vat"
     case inGst = "in_gst"
+    case isKt = "is_kt"
     case isVat = "is_vat"
+    case itCf = "it_cf"
     case jpCn = "jp_cn"
     case jpRn = "jp_rn"
     case jpTrn = "jp_trn"
@@ -106,24 +124,31 @@ public enum InvoicesResourceInvoiceTaxIdType: String, Codable, Sendable {
     case laTin = "la_tin"
     case liUid = "li_uid"
     case liVat = "li_vat"
+    case lkVat = "lk_vat"
     case maVat = "ma_vat"
+    case mdCf = "md_cf"
     case mdVat = "md_vat"
     case mePib = "me_pib"
     case mkVat = "mk_vat"
     case mrNif = "mr_nif"
+    case muVat = "mu_vat"
     case mxRfc = "mx_rfc"
     case myFrp = "my_frp"
     case myItn = "my_itn"
     case mySst = "my_sst"
+    case mzNuit = "mz_nuit"
     case ngTin = "ng_tin"
     case noVat = "no_vat"
     case noVoec = "no_voec"
     case npPan = "np_pan"
+    case nzBn = "nz_bn"
     case nzGst = "nz_gst"
     case omVat = "om_vat"
     case peRuc = "pe_ruc"
     case phTin = "ph_tin"
     case plNip = "pl_nip"
+    case ptNif = "pt_nif"
+    case pyRuc = "py_ruc"
     case roTin = "ro_tin"
     case rsPib = "rs_pib"
     case ruInn = "ru_inn"
@@ -132,12 +157,15 @@ public enum InvoicesResourceInvoiceTaxIdType: String, Codable, Sendable {
     case sgGst = "sg_gst"
     case sgUen = "sg_uen"
     case siTin = "si_tin"
+    case smCoe = "sm_coe"
     case snNinea = "sn_ninea"
     case srFin = "sr_fin"
     case svNit = "sv_nit"
     case thVat = "th_vat"
     case tjTin = "tj_tin"
     case trTin = "tr_tin"
+    case ttBir = "tt_bir"
+    case ttVat = "tt_vat"
     case twVat = "tw_vat"
     case tzVat = "tz_vat"
     case uaVat = "ua_vat"

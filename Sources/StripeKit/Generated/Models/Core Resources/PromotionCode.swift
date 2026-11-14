@@ -18,7 +18,7 @@ public struct PromotionCode: Codable, Sendable {
     public var active: Bool
     /// The customer-facing code. Regardless of case, this code must be unique across all active promotion
     /// codes for each customer. Valid characters are lower case letters (a-z), upper case letters (A-Z),
-    /// and digits (0-9).
+    /// digits (0-9), and dashes (-).
     public var code: String
     /// Time at which the object was created. Measured in seconds since the Unix epoch.
     public var created: Int
@@ -31,8 +31,8 @@ public struct PromotionCode: Codable, Sendable {
     public var expiresAt: Int?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Maximum number of times this promotion code can be redeemed.
     public var maxRedemptions: Int?

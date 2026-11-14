@@ -82,16 +82,26 @@ public struct CheckoutSessionPaymentMethodOptions: Codable, Sendable {
     public var samsungPay: String?
     @Expandable<CheckoutSatispayPaymentMethodOptions>
     public var satispay: String?
+    @Expandable<CheckoutScalapayPaymentMethodOptions>
+    public var scalapay: String?
     @Expandable<CheckoutSepaDebitPaymentMethodOptions>
     public var sepaDebit: String?
+    @Expandable<CheckoutSequraPaymentMethodOptions>
+    public var sequra: String?
     @Expandable<CheckoutSofortPaymentMethodOptions>
     public var sofort: String?
+    @Expandable<CheckoutSunbitPaymentMethodOptions>
+    public var sunbit: String?
     @Expandable<CheckoutSwishPaymentMethodOptions>
     public var swish: String?
     @Expandable<CheckoutTwintPaymentMethodOptions>
     public var twint: String?
+    @Expandable<CheckoutUpiPaymentMethodOptions>
+    public var upi: String?
     @Expandable<CheckoutUsBankAccountPaymentMethodOptions>
     public var usBankAccount: String?
+    @Expandable<CheckoutWechatPayPaymentMethodOptions>
+    public var wechatPay: String?
 
     public enum CodingKeys: String, CodingKey {
         case acssDebit = "acss_debit"
@@ -131,11 +141,16 @@ public struct CheckoutSessionPaymentMethodOptions: Codable, Sendable {
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
+        case upi
         case usBankAccount = "us_bank_account"
+        case wechatPay = "wechat_pay"
     }
 }
 

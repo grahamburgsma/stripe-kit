@@ -19,8 +19,8 @@ public struct MeterEventSummary: Codable, Sendable {
     public var endTime: Int
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// The meter associated with this event summary.
     public var meter: String

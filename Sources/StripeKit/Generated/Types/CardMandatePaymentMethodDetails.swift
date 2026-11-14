@@ -8,6 +8,8 @@
 import Foundation
 
 public struct CardMandatePaymentMethodDetails: Codable, Sendable {
+    @Expandable<CardMandatePaymentMethodDetailsIndia>
+    public var india: String?
 }
 
 public struct CardMandatePaymentMethodDetailsList: Codable, Sendable {

@@ -13,7 +13,7 @@ import NIOHTTP1
 
 public struct CustomerCashBalanceTransactionRoutes: Sendable {
 
-    /// Create an incoming testmode bank transfer
+    /// Create a test incoming bank transfer
     public var create: @Sendable (_ customer: String, _ params: CustomerCashBalanceTransactionCreateParams) async throws -> CustomerCashBalanceTransaction
 
     /// Retrieves a specific cash balance transaction, which updated the customer’s cash balance.

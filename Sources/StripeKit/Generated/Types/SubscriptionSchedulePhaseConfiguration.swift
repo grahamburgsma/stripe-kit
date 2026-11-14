@@ -52,7 +52,7 @@ public struct SubscriptionSchedulePhaseConfiguration: Codable, Sendable {
     public var description: String?
     /// The stackable discounts that will be applied to the subscription on this phase. Subscription item
     /// discounts are applied before subscription discounts.
-    @ExpandableCollection<DiscountsResourceStackableDiscount>
+    @ExpandableCollection<StackableDiscountWithDiscountSettingsAndDiscountEnd>
     public var discounts: [String]?
     /// The end of this phase of the subscription schedule.
     public var endDate: Int
@@ -80,6 +80,9 @@ public struct SubscriptionSchedulePhaseConfiguration: Codable, Sendable {
     /// and where funds from each payment will be transferred to for each of the subscription's invoices.
     @Expandable<SubscriptionTransferData>
     public var transferData: String?
+    /// If set to true the entire phase is counted as a trial and the customer will not be charged for any
+    /// fees.
+    public var trial: Bool?
     /// When the trial ends within the phase.
     public var trialEnd: Int?
 
@@ -103,6 +106,7 @@ public struct SubscriptionSchedulePhaseConfiguration: Codable, Sendable {
         case prorationBehavior = "proration_behavior"
         case startDate = "start_date"
         case transferData = "transfer_data"
+        case trial
         case trialEnd = "trial_end"
     }
 }

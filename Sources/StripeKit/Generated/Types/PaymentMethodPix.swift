@@ -8,6 +8,9 @@
 import Foundation
 
 public struct PaymentMethodPix: Codable, Sendable {
+    /// Uniquely identifies this particular Pix account. You can use this attribute to check whether two Pix
+    /// accounts are the same.
+    public var fingerprint: String?
 }
 
 public struct PaymentMethodPixList: Codable, Sendable {

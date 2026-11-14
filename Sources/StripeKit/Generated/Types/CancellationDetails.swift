@@ -14,8 +14,19 @@ public struct CancellationDetails: Codable, Sendable {
     /// The customer submitted reason for why they canceled, if the subscription was canceled explicitly by
     /// the user.
     public var feedback: CancellationDetailsFeedback?
+    /// Customized feedback options that provide deeper insight into why the subscription was canceled, if
+    /// the subscription was canceled explicitly by the user.
+    @Expandable<FeedbackOption>
+    public var feedbackOption: String?
     /// Why this subscription was canceled.
     public var reason: CancellationDetailsReason?
+
+    public enum CodingKeys: String, CodingKey {
+        case comment
+        case feedback
+        case feedbackOption = "feedback_option"
+        case reason
+    }
 }
 
 /// The customer submitted reason for why they canceled, if the subscription was canceled explicitly by
@@ -33,6 +44,7 @@ public enum CancellationDetailsFeedback: String, Codable, Sendable {
 
 /// Why this subscription was canceled.
 public enum CancellationDetailsReason: String, Codable, Sendable {
+    case canceledByRetentionPolicy = "canceled_by_retention_policy"
     case cancellationRequested = "cancellation_requested"
     case paymentDisputed = "payment_disputed"
     case paymentFailed = "payment_failed"

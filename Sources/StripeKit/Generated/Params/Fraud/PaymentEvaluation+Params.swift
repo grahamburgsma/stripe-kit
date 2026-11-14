@@ -183,9 +183,9 @@ public struct PaymentEvaluationCreatePaymentDetailsPaymentMethodDetailsBillingDe
 
 /// Details about the payment's customer presence and type.
 public struct PaymentEvaluationCreatePaymentDetailsMoneyMovementDetails: StripeParams {
-    /// Describes the type of money movement. Currently only `card` is supported.
+    /// Describes the type of money movement.
     public var moneyMovementType: PaymentEvaluationCreatePaymentDetailsMoneyMovementDetailsMoneyMovementType
-    /// Describes card money movement details for the payment evaluation.
+    /// Describes card money movement details.
     public var card: PaymentEvaluationCreatePaymentDetailsMoneyMovementDetailsCard?
 
     public init(moneyMovementType: PaymentEvaluationCreatePaymentDetailsMoneyMovementDetailsMoneyMovementType, card: PaymentEvaluationCreatePaymentDetailsMoneyMovementDetailsCard? = nil) {
@@ -199,7 +199,7 @@ public struct PaymentEvaluationCreatePaymentDetailsMoneyMovementDetails: StripeP
     }
 }
 
-/// Describes card money movement details for the payment evaluation.
+/// Describes card money movement details.
 public struct PaymentEvaluationCreatePaymentDetailsMoneyMovementDetailsCard: StripeParams {
     /// Describes the presence of the customer during the payment.
     public var customerPresence: PaymentEvaluationCreatePaymentDetailsMoneyMovementDetailsCardCustomerPresence?

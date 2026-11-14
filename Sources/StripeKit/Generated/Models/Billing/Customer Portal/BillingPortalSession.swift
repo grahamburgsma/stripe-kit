@@ -15,6 +15,9 @@ import Foundation
 /// not visit the URL. Create sessions on-demand when customers intend to manage their subscriptions and
 /// billing details. Related guide: [Customer management](/customer-management)
 public struct BillingPortalSession: Codable, Sendable {
+    /// Behavior after the portal session expires.
+    @Expandable<PortalAfterExpiration>
+    public var afterExpiration: String?
     /// The configuration used by this session, describing the features available.
     @Expandable<BillingPortalConfiguration>
     public var configuration: String?
@@ -31,8 +34,8 @@ public struct BillingPortalSession: Codable, Sendable {
     public var flow: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// The IETF language tag of the locale Customer Portal is displayed in. If blank or auto, the
     /// customer’s `preferred_locales` or browser’s locale is used.
@@ -51,6 +54,7 @@ public struct BillingPortalSession: Codable, Sendable {
     public var url: String
 
     public enum CodingKeys: String, CodingKey {
+        case afterExpiration = "after_expiration"
         case configuration
         case created
         case customer

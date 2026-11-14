@@ -14,7 +14,8 @@ public struct ClimateProduct: Codable, Sendable {
     public var created: Int
     /// Current prices for a metric ton of carbon removal in a currency's smallest unit.
     public var currentPricesPerMetricTon: [String: ClimateRemovalsProductsPrice]
-    /// The year in which the carbon removal is expected to be delivered.
+    /// The year in which the carbon removal is expected to be delivered. If the year is in the past, this
+    /// represents spot inventory with guaranteed delivery.
     public var deliveryYear: Int?
     /// Unique identifier for the object. For convenience, Climate product IDs are human-readable strings
     /// that start with `climsku_`. See [carbon removal

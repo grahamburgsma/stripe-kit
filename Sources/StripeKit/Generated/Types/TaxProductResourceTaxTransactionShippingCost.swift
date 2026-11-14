@@ -8,12 +8,12 @@
 import Foundation
 
 public struct TaxProductResourceTaxTransactionShippingCost: Codable, Sendable {
-    /// The shipping amount in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal). If `tax_behavior=inclusive`, then this
-    /// amount includes taxes. Otherwise, taxes were calculated on top of this amount.
+    /// The shipping amount in the [smallest currency unit](https://docs.stripe.com/currencies#minor-units).
+    /// If `tax_behavior=inclusive`, then this amount includes taxes. Otherwise, taxes were calculated on
+    /// top of this amount.
     public var amount: Int
     /// The amount of tax calculated for shipping, in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// unit](https://docs.stripe.com/currencies#minor-units).
     public var amountTax: Int
     /// The ID of an existing [ShippingRate](https://docs.stripe.com/api/shipping_rates/object).
     public var shippingRate: String?

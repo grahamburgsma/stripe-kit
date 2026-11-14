@@ -7,16 +7,16 @@
 
 import Foundation
 
-/// You can now model subscriptions more flexibly using the [Prices API](https://api.stripe.com#prices).
-/// It replaces the Plans API and is backwards compatible to simplify your migration. Plans define the
-/// base price, currency, and billing cycle for recurring purchases of products.
-/// [Products](https://api.stripe.com#products) help you track inventory or provisioning, and plans help
-/// you track pricing. Different physical goods or levels of service should be represented by products,
-/// and pricing options should be represented by plans. This approach lets you change prices without
-/// having to change your provisioning scheme. For example, you might have a single "gold" product that
-/// has plans for $10/month, $100/year, €9/month, and €90/year. Related guides: [Set up a
-/// subscription](https://docs.stripe.com/billing/subscriptions/set-up-subscription) and more about
-/// [products and prices](https://docs.stripe.com/products-prices/overview).
+/// You can now model subscriptions more flexibly using the [Prices
+/// API](https://docs.stripe.com/api#prices). It replaces the Plans API and is backwards compatible to
+/// simplify your migration. Plans define the base price, currency, and billing cycle for recurring
+/// purchases of products. [Products](https://docs.stripe.com/api#products) help you track inventory or
+/// provisioning, and plans help you track pricing. Different physical goods or levels of service should
+/// be represented by products, and pricing options should be represented by plans. This approach lets
+/// you change prices without having to change your provisioning scheme. For example, you might have a
+/// single "gold" product that has plans for $10/month, $100/year, €9/month, and €90/year. Related
+/// guides: [Set up a subscription](https://docs.stripe.com/billing/subscriptions/set-up-subscription)
+/// and more about [products and prices](https://docs.stripe.com/products-prices/overview).
 public struct Plan: Codable, Sendable {
     /// Whether the plan can be used for new purchases.
     public var active: Bool
@@ -44,8 +44,8 @@ public struct Plan: Codable, Sendable {
     /// The number of intervals (specified in the `interval` attribute) between subscription billings. For
     /// example, `interval=month` and `interval_count=3` bills every 3 months.
     public var intervalCount: Int
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

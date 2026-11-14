@@ -8,8 +8,8 @@
 import Foundation
 
 public struct AccountCreateParams: StripeParams {
-    /// An [account token](https://api.stripe.com#create_account_token), used to securely provide details to
-    /// the account.
+    /// An [account token](https://docs.stripe.com/api#create_account_token), used to securely provide
+    /// details to the account.
     public var accountToken: String?
     /// Business information about the account.
     public var businessProfile: AccountCreateBusinessProfile?
@@ -31,7 +31,8 @@ public struct AccountCreateParams: StripeParams {
     /// [controller.requirement_collection](/api/accounts/object#account_object-controller-requirement_collection)
     /// is `application`, which includes Custom accounts.
     public var company: AccountCreateCompany?
-    /// A hash of configuration describing the account controller's attributes.
+    /// Configures the account's Dashboard access, loss liability, requirements collection, and Stripe fee
+    /// responsibility.
     public var controller: AccountCreateController?
     /// The country in which the account holder resides, or in which the business is legally established.
     /// This should be an ISO 3166-1 alpha-2 country code. For example, if you are in the United States and
@@ -88,7 +89,9 @@ public struct AccountCreateParams: StripeParams {
     /// is `application`, which includes Custom accounts. This property defaults to a `full` service
     /// agreement when empty.
     public var tosAcceptance: AccountCreateTosAcceptance?
-    /// The type of Stripe account to create. May be one of `custom`, `express` or `standard`.
+    /// The `type` parameter is deprecated. Use
+    /// [`controller`](/api/accounts/create#create_account-controller) instead to configure dashboard
+    /// access, fee payer, loss liability, and requirement collection.
     public var type: AccountCreateType?
 
     public init(accountToken: String? = nil, businessProfile: AccountCreateBusinessProfile? = nil, businessType: AccountCreateBusinessType? = nil, capabilities: AccountCreateCapabilities? = nil, company: AccountCreateCompany? = nil, controller: AccountCreateController? = nil, country: String? = nil, defaultCurrency: String? = nil, documents: AccountCreateDocuments? = nil, email: String? = nil, expand: [String]? = nil, externalAccount: String? = nil, groups: AccountCreateGroups? = nil, individual: AccountCreateIndividual? = nil, metadata: [String: String]? = nil, settings: AccountCreateSettings? = nil, tosAcceptance: AccountCreateTosAcceptance? = nil, type: AccountCreateType? = nil) {
@@ -135,20 +138,41 @@ public struct AccountCreateParams: StripeParams {
 }
 
 public struct AccountRejectParams: StripeParams {
-    /// The reason for rejecting the account. Can be `fraud`, `terms_of_service`, or `other`.
-    public var reason: String
+    /// The reason for rejecting the account. Can be `fraud_payment_method_casher`,
+    /// `fraud_payment_method_tester`, `fraud_no_intent_to_fulfill`, `fraud_other`, `credit`,
+    /// `terms_of_service`, or `other`.
+    public var reason: AccountRejectReason
+    /// Specifies which fields in the response should be expanded.
+    public var expand: [String]?
+    /// Whether to pause payouts on the account as part of the rejection. Defaults to `pause`. Use `none` to
+    /// leave payouts enabled.
+    public var payoutsAction: AccountRejectPayoutsAction?
+
+    public init(reason: AccountRejectReason, expand: [String]? = nil, payoutsAction: AccountRejectPayoutsAction? = nil) {
+        self.reason = reason
+        self.expand = expand
+        self.payoutsAction = payoutsAction
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case expand
+        case payoutsAction = "payouts_action"
+        case reason
+    }
+}
+
+public struct AccountUnrejectParams: StripeParams {
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
 
-    public init(reason: String, expand: [String]? = nil) {
-        self.reason = reason
+    public init(expand: [String]? = nil) {
         self.expand = expand
     }
 }
 
 public struct AccountUpdateParams: StripeParams {
-    /// An [account token](https://api.stripe.com#create_account_token), used to securely provide details to
-    /// the account.
+    /// An [account token](https://docs.stripe.com/api#create_account_token), used to securely provide
+    /// details to the account.
     public var accountToken: String?
     /// Business information about the account.
     public var businessProfile: AccountUpdateBusinessProfile?
@@ -275,6 +299,9 @@ public struct AccountCreateBusinessProfile: StripeParams {
     /// Internal-only description of the product sold by, or service provided by, the business. Used by
     /// Stripe for risk and underwriting purposes.
     public var productDescription: String?
+    /// A link to the business's publicly available terms related to the Specified Commercial Transaction
+    /// Act. Used by the Checkout product and for Japanese payment methods.
+    public var specifiedCommercialTransactionsActUrl: String?
     /// A publicly available mailing address for sending support issues to.
     public var supportAddress: AccountCreateBusinessProfileSupportAddress?
     /// A publicly available email address for sending support issues to.
@@ -286,7 +313,7 @@ public struct AccountCreateBusinessProfile: StripeParams {
     /// The business's publicly available website.
     public var url: String?
 
-    public init(annualRevenue: AccountCreateBusinessProfileAnnualRevenue? = nil, estimatedWorkerCount: Int? = nil, mcc: String? = nil, minorityOwnedBusinessDesignation: [AccountCreateBusinessProfileMinorityOwnedBusinessDesignation]? = nil, monthlyEstimatedRevenue: AccountCreateBusinessProfileMonthlyEstimatedRevenue? = nil, name: String? = nil, productDescription: String? = nil, supportAddress: AccountCreateBusinessProfileSupportAddress? = nil, supportEmail: String? = nil, supportPhone: String? = nil, supportUrl: String? = nil, url: String? = nil) {
+    public init(annualRevenue: AccountCreateBusinessProfileAnnualRevenue? = nil, estimatedWorkerCount: Int? = nil, mcc: String? = nil, minorityOwnedBusinessDesignation: [AccountCreateBusinessProfileMinorityOwnedBusinessDesignation]? = nil, monthlyEstimatedRevenue: AccountCreateBusinessProfileMonthlyEstimatedRevenue? = nil, name: String? = nil, productDescription: String? = nil, specifiedCommercialTransactionsActUrl: String? = nil, supportAddress: AccountCreateBusinessProfileSupportAddress? = nil, supportEmail: String? = nil, supportPhone: String? = nil, supportUrl: String? = nil, url: String? = nil) {
         self.annualRevenue = annualRevenue
         self.estimatedWorkerCount = estimatedWorkerCount
         self.mcc = mcc
@@ -294,6 +321,7 @@ public struct AccountCreateBusinessProfile: StripeParams {
         self.monthlyEstimatedRevenue = monthlyEstimatedRevenue
         self.name = name
         self.productDescription = productDescription
+        self.specifiedCommercialTransactionsActUrl = specifiedCommercialTransactionsActUrl
         self.supportAddress = supportAddress
         self.supportEmail = supportEmail
         self.supportPhone = supportPhone
@@ -309,6 +337,7 @@ public struct AccountCreateBusinessProfile: StripeParams {
         case monthlyEstimatedRevenue = "monthly_estimated_revenue"
         case name
         case productDescription = "product_description"
+        case specifiedCommercialTransactionsActUrl = "specified_commercial_transactions_act_url"
         case supportAddress = "support_address"
         case supportEmail = "support_email"
         case supportPhone = "support_phone"
@@ -408,6 +437,8 @@ public struct AccountCreateCapabilities: StripeParams {
     public var almaPayments: AccountCreateCapabilitiesAlmaPayments?
     /// The amazon_pay_payments capability.
     public var amazonPayPayments: AccountCreateCapabilitiesAmazonPayPayments?
+    /// The app_distribution capability.
+    public var appDistribution: AccountCreateCapabilitiesAppDistribution?
     /// The au_becs_debit_payments capability.
     public var auBecsDebitPayments: AccountCreateCapabilitiesAuBecsDebitPayments?
     /// The bacs_debit_payments capability.
@@ -418,8 +449,12 @@ public struct AccountCreateCapabilities: StripeParams {
     public var bankTransferPayments: AccountCreateCapabilitiesBankTransferPayments?
     /// The billie_payments capability.
     public var billiePayments: AccountCreateCapabilitiesBilliePayments?
+    /// The bizum_payments capability.
+    public var bizumPayments: AccountCreateCapabilitiesBizumPayments?
     /// The blik_payments capability.
     public var blikPayments: AccountCreateCapabilitiesBlikPayments?
+    /// The blik_recurring_payments capability.
+    public var blikRecurringPayments: AccountCreateCapabilitiesBlikRecurringPayments?
     /// The boleto_payments capability.
     public var boletoPayments: AccountCreateCapabilitiesBoletoPayments?
     /// The card_issuing capability.
@@ -484,6 +519,8 @@ public struct AccountCreateCapabilities: StripeParams {
     public var paycoPayments: AccountCreateCapabilitiesPaycoPayments?
     /// The paynow_payments capability.
     public var paynowPayments: AccountCreateCapabilitiesPaynowPayments?
+    /// The paypay_payments capability.
+    public var paypayPayments: AccountCreateCapabilitiesPaypayPayments?
     /// The payto_payments capability.
     public var paytoPayments: AccountCreateCapabilitiesPaytoPayments?
     /// The pix_payments capability.
@@ -496,12 +533,18 @@ public struct AccountCreateCapabilities: StripeParams {
     public var samsungPayPayments: AccountCreateCapabilitiesSamsungPayPayments?
     /// The satispay_payments capability.
     public var satispayPayments: AccountCreateCapabilitiesSatispayPayments?
+    /// The scalapay_payments capability.
+    public var scalapayPayments: AccountCreateCapabilitiesScalapayPayments?
     /// The sepa_bank_transfer_payments capability.
     public var sepaBankTransferPayments: AccountCreateCapabilitiesSepaBankTransferPayments?
     /// The sepa_debit_payments capability.
     public var sepaDebitPayments: AccountCreateCapabilitiesSepaDebitPayments?
+    /// The sequra_payments capability.
+    public var sequraPayments: AccountCreateCapabilitiesSequraPayments?
     /// The sofort_payments capability.
     public var sofortPayments: AccountCreateCapabilitiesSofortPayments?
+    /// The sunbit_payments capability.
+    public var sunbitPayments: AccountCreateCapabilitiesSunbitPayments?
     /// The swish_payments capability.
     public var swishPayments: AccountCreateCapabilitiesSwishPayments?
     /// The tax_reporting_us_1099_k capability.
@@ -514,25 +557,32 @@ public struct AccountCreateCapabilities: StripeParams {
     public var treasury: AccountCreateCapabilitiesTreasury?
     /// The twint_payments capability.
     public var twintPayments: AccountCreateCapabilitiesTwintPayments?
+    /// The upi_payments capability.
+    public var upiPayments: AccountCreateCapabilitiesUpiPayments?
     /// The us_bank_account_ach_payments capability.
     public var usBankAccountAchPayments: AccountCreateCapabilitiesUsBankAccountAchPayments?
     /// The us_bank_transfer_payments capability.
     public var usBankTransferPayments: AccountCreateCapabilitiesUsBankTransferPayments?
+    /// The wero_payments capability.
+    public var weroPayments: AccountCreateCapabilitiesWeroPayments?
     /// The zip_payments capability.
     public var zipPayments: AccountCreateCapabilitiesZipPayments?
 
-    public init(acssDebitPayments: AccountCreateCapabilitiesAcssDebitPayments? = nil, affirmPayments: AccountCreateCapabilitiesAffirmPayments? = nil, afterpayClearpayPayments: AccountCreateCapabilitiesAfterpayClearpayPayments? = nil, almaPayments: AccountCreateCapabilitiesAlmaPayments? = nil, amazonPayPayments: AccountCreateCapabilitiesAmazonPayPayments? = nil, auBecsDebitPayments: AccountCreateCapabilitiesAuBecsDebitPayments? = nil, bacsDebitPayments: AccountCreateCapabilitiesBacsDebitPayments? = nil, bancontactPayments: AccountCreateCapabilitiesBancontactPayments? = nil, bankTransferPayments: AccountCreateCapabilitiesBankTransferPayments? = nil, billiePayments: AccountCreateCapabilitiesBilliePayments? = nil, blikPayments: AccountCreateCapabilitiesBlikPayments? = nil, boletoPayments: AccountCreateCapabilitiesBoletoPayments? = nil, cardIssuing: AccountCreateCapabilitiesCardIssuing? = nil, cardPayments: AccountCreateCapabilitiesCardPayments? = nil, cartesBancairesPayments: AccountCreateCapabilitiesCartesBancairesPayments? = nil, cashappPayments: AccountCreateCapabilitiesCashappPayments? = nil, cryptoPayments: AccountCreateCapabilitiesCryptoPayments? = nil, epsPayments: AccountCreateCapabilitiesEpsPayments? = nil, fpxPayments: AccountCreateCapabilitiesFpxPayments? = nil, gbBankTransferPayments: AccountCreateCapabilitiesGbBankTransferPayments? = nil, giropayPayments: AccountCreateCapabilitiesGiropayPayments? = nil, grabpayPayments: AccountCreateCapabilitiesGrabpayPayments? = nil, idealPayments: AccountCreateCapabilitiesIdealPayments? = nil, indiaInternationalPayments: AccountCreateCapabilitiesIndiaInternationalPayments? = nil, jcbPayments: AccountCreateCapabilitiesJcbPayments? = nil, jpBankTransferPayments: AccountCreateCapabilitiesJpBankTransferPayments? = nil, kakaoPayPayments: AccountCreateCapabilitiesKakaoPayPayments? = nil, klarnaPayments: AccountCreateCapabilitiesKlarnaPayments? = nil, konbiniPayments: AccountCreateCapabilitiesKonbiniPayments? = nil, krCardPayments: AccountCreateCapabilitiesKrCardPayments? = nil, legacyPayments: AccountCreateCapabilitiesLegacyPayments? = nil, linkPayments: AccountCreateCapabilitiesLinkPayments? = nil, mbWayPayments: AccountCreateCapabilitiesMbWayPayments? = nil, mobilepayPayments: AccountCreateCapabilitiesMobilepayPayments? = nil, multibancoPayments: AccountCreateCapabilitiesMultibancoPayments? = nil, mxBankTransferPayments: AccountCreateCapabilitiesMxBankTransferPayments? = nil, naverPayPayments: AccountCreateCapabilitiesNaverPayPayments? = nil, nzBankAccountBecsDebitPayments: AccountCreateCapabilitiesNzBankAccountBecsDebitPayments? = nil, oxxoPayments: AccountCreateCapabilitiesOxxoPayments? = nil, p24Payments: AccountCreateCapabilitiesP24Payments? = nil, payByBankPayments: AccountCreateCapabilitiesPayByBankPayments? = nil, paycoPayments: AccountCreateCapabilitiesPaycoPayments? = nil, paynowPayments: AccountCreateCapabilitiesPaynowPayments? = nil, paytoPayments: AccountCreateCapabilitiesPaytoPayments? = nil, pixPayments: AccountCreateCapabilitiesPixPayments? = nil, promptpayPayments: AccountCreateCapabilitiesPromptpayPayments? = nil, revolutPayPayments: AccountCreateCapabilitiesRevolutPayPayments? = nil, samsungPayPayments: AccountCreateCapabilitiesSamsungPayPayments? = nil, satispayPayments: AccountCreateCapabilitiesSatispayPayments? = nil, sepaBankTransferPayments: AccountCreateCapabilitiesSepaBankTransferPayments? = nil, sepaDebitPayments: AccountCreateCapabilitiesSepaDebitPayments? = nil, sofortPayments: AccountCreateCapabilitiesSofortPayments? = nil, swishPayments: AccountCreateCapabilitiesSwishPayments? = nil, taxReportingUs1099K: AccountCreateCapabilitiesTaxReportingUs1099K? = nil, taxReportingUs1099Misc: AccountCreateCapabilitiesTaxReportingUs1099Misc? = nil, transfers: AccountCreateCapabilitiesTransfers? = nil, treasury: AccountCreateCapabilitiesTreasury? = nil, twintPayments: AccountCreateCapabilitiesTwintPayments? = nil, usBankAccountAchPayments: AccountCreateCapabilitiesUsBankAccountAchPayments? = nil, usBankTransferPayments: AccountCreateCapabilitiesUsBankTransferPayments? = nil, zipPayments: AccountCreateCapabilitiesZipPayments? = nil) {
+    public init(acssDebitPayments: AccountCreateCapabilitiesAcssDebitPayments? = nil, affirmPayments: AccountCreateCapabilitiesAffirmPayments? = nil, afterpayClearpayPayments: AccountCreateCapabilitiesAfterpayClearpayPayments? = nil, almaPayments: AccountCreateCapabilitiesAlmaPayments? = nil, amazonPayPayments: AccountCreateCapabilitiesAmazonPayPayments? = nil, appDistribution: AccountCreateCapabilitiesAppDistribution? = nil, auBecsDebitPayments: AccountCreateCapabilitiesAuBecsDebitPayments? = nil, bacsDebitPayments: AccountCreateCapabilitiesBacsDebitPayments? = nil, bancontactPayments: AccountCreateCapabilitiesBancontactPayments? = nil, bankTransferPayments: AccountCreateCapabilitiesBankTransferPayments? = nil, billiePayments: AccountCreateCapabilitiesBilliePayments? = nil, bizumPayments: AccountCreateCapabilitiesBizumPayments? = nil, blikPayments: AccountCreateCapabilitiesBlikPayments? = nil, blikRecurringPayments: AccountCreateCapabilitiesBlikRecurringPayments? = nil, boletoPayments: AccountCreateCapabilitiesBoletoPayments? = nil, cardIssuing: AccountCreateCapabilitiesCardIssuing? = nil, cardPayments: AccountCreateCapabilitiesCardPayments? = nil, cartesBancairesPayments: AccountCreateCapabilitiesCartesBancairesPayments? = nil, cashappPayments: AccountCreateCapabilitiesCashappPayments? = nil, cryptoPayments: AccountCreateCapabilitiesCryptoPayments? = nil, epsPayments: AccountCreateCapabilitiesEpsPayments? = nil, fpxPayments: AccountCreateCapabilitiesFpxPayments? = nil, gbBankTransferPayments: AccountCreateCapabilitiesGbBankTransferPayments? = nil, giropayPayments: AccountCreateCapabilitiesGiropayPayments? = nil, grabpayPayments: AccountCreateCapabilitiesGrabpayPayments? = nil, idealPayments: AccountCreateCapabilitiesIdealPayments? = nil, indiaInternationalPayments: AccountCreateCapabilitiesIndiaInternationalPayments? = nil, jcbPayments: AccountCreateCapabilitiesJcbPayments? = nil, jpBankTransferPayments: AccountCreateCapabilitiesJpBankTransferPayments? = nil, kakaoPayPayments: AccountCreateCapabilitiesKakaoPayPayments? = nil, klarnaPayments: AccountCreateCapabilitiesKlarnaPayments? = nil, konbiniPayments: AccountCreateCapabilitiesKonbiniPayments? = nil, krCardPayments: AccountCreateCapabilitiesKrCardPayments? = nil, legacyPayments: AccountCreateCapabilitiesLegacyPayments? = nil, linkPayments: AccountCreateCapabilitiesLinkPayments? = nil, mbWayPayments: AccountCreateCapabilitiesMbWayPayments? = nil, mobilepayPayments: AccountCreateCapabilitiesMobilepayPayments? = nil, multibancoPayments: AccountCreateCapabilitiesMultibancoPayments? = nil, mxBankTransferPayments: AccountCreateCapabilitiesMxBankTransferPayments? = nil, naverPayPayments: AccountCreateCapabilitiesNaverPayPayments? = nil, nzBankAccountBecsDebitPayments: AccountCreateCapabilitiesNzBankAccountBecsDebitPayments? = nil, oxxoPayments: AccountCreateCapabilitiesOxxoPayments? = nil, p24Payments: AccountCreateCapabilitiesP24Payments? = nil, payByBankPayments: AccountCreateCapabilitiesPayByBankPayments? = nil, paycoPayments: AccountCreateCapabilitiesPaycoPayments? = nil, paynowPayments: AccountCreateCapabilitiesPaynowPayments? = nil, paypayPayments: AccountCreateCapabilitiesPaypayPayments? = nil, paytoPayments: AccountCreateCapabilitiesPaytoPayments? = nil, pixPayments: AccountCreateCapabilitiesPixPayments? = nil, promptpayPayments: AccountCreateCapabilitiesPromptpayPayments? = nil, revolutPayPayments: AccountCreateCapabilitiesRevolutPayPayments? = nil, samsungPayPayments: AccountCreateCapabilitiesSamsungPayPayments? = nil, satispayPayments: AccountCreateCapabilitiesSatispayPayments? = nil, scalapayPayments: AccountCreateCapabilitiesScalapayPayments? = nil, sepaBankTransferPayments: AccountCreateCapabilitiesSepaBankTransferPayments? = nil, sepaDebitPayments: AccountCreateCapabilitiesSepaDebitPayments? = nil, sequraPayments: AccountCreateCapabilitiesSequraPayments? = nil, sofortPayments: AccountCreateCapabilitiesSofortPayments? = nil, sunbitPayments: AccountCreateCapabilitiesSunbitPayments? = nil, swishPayments: AccountCreateCapabilitiesSwishPayments? = nil, taxReportingUs1099K: AccountCreateCapabilitiesTaxReportingUs1099K? = nil, taxReportingUs1099Misc: AccountCreateCapabilitiesTaxReportingUs1099Misc? = nil, transfers: AccountCreateCapabilitiesTransfers? = nil, treasury: AccountCreateCapabilitiesTreasury? = nil, twintPayments: AccountCreateCapabilitiesTwintPayments? = nil, upiPayments: AccountCreateCapabilitiesUpiPayments? = nil, usBankAccountAchPayments: AccountCreateCapabilitiesUsBankAccountAchPayments? = nil, usBankTransferPayments: AccountCreateCapabilitiesUsBankTransferPayments? = nil, weroPayments: AccountCreateCapabilitiesWeroPayments? = nil, zipPayments: AccountCreateCapabilitiesZipPayments? = nil) {
         self.acssDebitPayments = acssDebitPayments
         self.affirmPayments = affirmPayments
         self.afterpayClearpayPayments = afterpayClearpayPayments
         self.almaPayments = almaPayments
         self.amazonPayPayments = amazonPayPayments
+        self.appDistribution = appDistribution
         self.auBecsDebitPayments = auBecsDebitPayments
         self.bacsDebitPayments = bacsDebitPayments
         self.bancontactPayments = bancontactPayments
         self.bankTransferPayments = bankTransferPayments
         self.billiePayments = billiePayments
+        self.bizumPayments = bizumPayments
         self.blikPayments = blikPayments
+        self.blikRecurringPayments = blikRecurringPayments
         self.boletoPayments = boletoPayments
         self.cardIssuing = cardIssuing
         self.cardPayments = cardPayments
@@ -565,23 +615,29 @@ public struct AccountCreateCapabilities: StripeParams {
         self.payByBankPayments = payByBankPayments
         self.paycoPayments = paycoPayments
         self.paynowPayments = paynowPayments
+        self.paypayPayments = paypayPayments
         self.paytoPayments = paytoPayments
         self.pixPayments = pixPayments
         self.promptpayPayments = promptpayPayments
         self.revolutPayPayments = revolutPayPayments
         self.samsungPayPayments = samsungPayPayments
         self.satispayPayments = satispayPayments
+        self.scalapayPayments = scalapayPayments
         self.sepaBankTransferPayments = sepaBankTransferPayments
         self.sepaDebitPayments = sepaDebitPayments
+        self.sequraPayments = sequraPayments
         self.sofortPayments = sofortPayments
+        self.sunbitPayments = sunbitPayments
         self.swishPayments = swishPayments
         self.taxReportingUs1099K = taxReportingUs1099K
         self.taxReportingUs1099Misc = taxReportingUs1099Misc
         self.transfers = transfers
         self.treasury = treasury
         self.twintPayments = twintPayments
+        self.upiPayments = upiPayments
         self.usBankAccountAchPayments = usBankAccountAchPayments
         self.usBankTransferPayments = usBankTransferPayments
+        self.weroPayments = weroPayments
         self.zipPayments = zipPayments
     }
 
@@ -591,12 +647,15 @@ public struct AccountCreateCapabilities: StripeParams {
         case afterpayClearpayPayments = "afterpay_clearpay_payments"
         case almaPayments = "alma_payments"
         case amazonPayPayments = "amazon_pay_payments"
+        case appDistribution = "app_distribution"
         case auBecsDebitPayments = "au_becs_debit_payments"
         case bacsDebitPayments = "bacs_debit_payments"
         case bancontactPayments = "bancontact_payments"
         case bankTransferPayments = "bank_transfer_payments"
         case billiePayments = "billie_payments"
+        case bizumPayments = "bizum_payments"
         case blikPayments = "blik_payments"
+        case blikRecurringPayments = "blik_recurring_payments"
         case boletoPayments = "boleto_payments"
         case cardIssuing = "card_issuing"
         case cardPayments = "card_payments"
@@ -629,23 +688,29 @@ public struct AccountCreateCapabilities: StripeParams {
         case payByBankPayments = "pay_by_bank_payments"
         case paycoPayments = "payco_payments"
         case paynowPayments = "paynow_payments"
+        case paypayPayments = "paypay_payments"
         case paytoPayments = "payto_payments"
         case pixPayments = "pix_payments"
         case promptpayPayments = "promptpay_payments"
         case revolutPayPayments = "revolut_pay_payments"
         case samsungPayPayments = "samsung_pay_payments"
         case satispayPayments = "satispay_payments"
+        case scalapayPayments = "scalapay_payments"
         case sepaBankTransferPayments = "sepa_bank_transfer_payments"
         case sepaDebitPayments = "sepa_debit_payments"
+        case sequraPayments = "sequra_payments"
         case sofortPayments = "sofort_payments"
+        case sunbitPayments = "sunbit_payments"
         case swishPayments = "swish_payments"
         case taxReportingUs1099K = "tax_reporting_us_1099_k"
         case taxReportingUs1099Misc = "tax_reporting_us_1099_misc"
         case transfers
         case treasury
         case twintPayments = "twint_payments"
+        case upiPayments = "upi_payments"
         case usBankAccountAchPayments = "us_bank_account_ach_payments"
         case usBankTransferPayments = "us_bank_transfer_payments"
+        case weroPayments = "wero_payments"
         case zipPayments = "zip_payments"
     }
 }
@@ -700,6 +765,18 @@ public struct AccountCreateCapabilitiesAlmaPayments: StripeParams {
 
 /// The amazon_pay_payments capability.
 public struct AccountCreateCapabilitiesAmazonPayPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The app_distribution capability.
+public struct AccountCreateCapabilitiesAppDistribution: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -770,8 +847,32 @@ public struct AccountCreateCapabilitiesBilliePayments: StripeParams {
     }
 }
 
+/// The bizum_payments capability.
+public struct AccountCreateCapabilitiesBizumPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The blik_payments capability.
 public struct AccountCreateCapabilitiesBlikPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The blik_recurring_payments capability.
+public struct AccountCreateCapabilitiesBlikRecurringPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -1166,6 +1267,18 @@ public struct AccountCreateCapabilitiesPaynowPayments: StripeParams {
     }
 }
 
+/// The paypay_payments capability.
+public struct AccountCreateCapabilitiesPaypayPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The payto_payments capability.
 public struct AccountCreateCapabilitiesPaytoPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
@@ -1238,6 +1351,18 @@ public struct AccountCreateCapabilitiesSatispayPayments: StripeParams {
     }
 }
 
+/// The scalapay_payments capability.
+public struct AccountCreateCapabilitiesScalapayPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The sepa_bank_transfer_payments capability.
 public struct AccountCreateCapabilitiesSepaBankTransferPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
@@ -1262,8 +1387,32 @@ public struct AccountCreateCapabilitiesSepaDebitPayments: StripeParams {
     }
 }
 
+/// The sequra_payments capability.
+public struct AccountCreateCapabilitiesSequraPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The sofort_payments capability.
 public struct AccountCreateCapabilitiesSofortPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The sunbit_payments capability.
+public struct AccountCreateCapabilitiesSunbitPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -1346,6 +1495,18 @@ public struct AccountCreateCapabilitiesTwintPayments: StripeParams {
     }
 }
 
+/// The upi_payments capability.
+public struct AccountCreateCapabilitiesUpiPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The us_bank_account_ach_payments capability.
 public struct AccountCreateCapabilitiesUsBankAccountAchPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
@@ -1360,6 +1521,18 @@ public struct AccountCreateCapabilitiesUsBankAccountAchPayments: StripeParams {
 
 /// The us_bank_transfer_payments capability.
 public struct AccountCreateCapabilitiesUsBankTransferPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The wero_payments capability.
+public struct AccountCreateCapabilitiesWeroPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -1394,6 +1567,8 @@ public struct AccountCreateCompany: StripeParams {
     public var addressKana: AccountCreateCompanyAddressKana?
     /// The Kanji variation of the company's primary address (Japan only).
     public var addressKanji: AccountCreateCompanyAddressKanji?
+    /// The location where the business is administered.
+    public var administrativeAddress: AccountCreateCompanyAdministrativeAddress?
     /// Whether the company's directors have been provided. Set this Boolean to `true` after creating all
     /// the company's directors with [the Persons API](/api/persons) for accounts with a
     /// `relationship.director` requirement. This value is not automatically set to `true` after creating
@@ -1431,6 +1606,10 @@ public struct AccountCreateCompany: StripeParams {
     public var ownershipExemptionReason: AccountCreateCompanyOwnershipExemptionReason?
     /// The company's phone number (used for verification).
     public var phone: String?
+    /// A location where the business has a meaningful physical operating presence.
+    public var physicalAddress: AccountCreateCompanyPhysicalAddress?
+    /// The primary location where the business conducts operations.
+    public var principalPlaceOfBusiness: AccountCreateCompanyPrincipalPlaceOfBusiness?
     /// When the business was incorporated or registered.
     public var registrationDate: AccountCreateCompanyRegistrationDate?
     /// The identification number given to a company when it is registered or incorporated, if distinct from
@@ -1446,6 +1625,8 @@ public struct AccountCreateCompany: StripeParams {
     public var structure: AccountCreateCompanyStructure?
     /// The business ID number of the company, as appropriate for the company’s country. (Examples are an
     /// Employer ID Number in the U.S., a Business Number in Canada, or a Company Number in the UK.)
+    /// Changing this value requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var taxId: String?
     /// The jurisdiction in which the `tax_id` is registered (Germany-based companies only).
     public var taxIdRegistrar: String?
@@ -1454,10 +1635,11 @@ public struct AccountCreateCompany: StripeParams {
     /// Information on the verification state of the company.
     public var verification: AccountCreateCompanyVerification?
 
-    public init(address: AccountCreateCompanyAddress? = nil, addressKana: AccountCreateCompanyAddressKana? = nil, addressKanji: AccountCreateCompanyAddressKanji? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: AccountCreateCompanyDirectorshipDeclaration? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: String? = nil, nameKana: String? = nil, nameKanji: String? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: AccountCreateCompanyOwnershipDeclaration? = nil, ownershipExemptionReason: AccountCreateCompanyOwnershipExemptionReason? = nil, phone: String? = nil, registrationDate: AccountCreateCompanyRegistrationDate? = nil, registrationNumber: String? = nil, representativeDeclaration: AccountCreateCompanyRepresentativeDeclaration? = nil, structure: AccountCreateCompanyStructure? = nil, taxId: String? = nil, taxIdRegistrar: String? = nil, vatId: String? = nil, verification: AccountCreateCompanyVerification? = nil) {
+    public init(address: AccountCreateCompanyAddress? = nil, addressKana: AccountCreateCompanyAddressKana? = nil, addressKanji: AccountCreateCompanyAddressKanji? = nil, administrativeAddress: AccountCreateCompanyAdministrativeAddress? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: AccountCreateCompanyDirectorshipDeclaration? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: String? = nil, nameKana: String? = nil, nameKanji: String? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: AccountCreateCompanyOwnershipDeclaration? = nil, ownershipExemptionReason: AccountCreateCompanyOwnershipExemptionReason? = nil, phone: String? = nil, physicalAddress: AccountCreateCompanyPhysicalAddress? = nil, principalPlaceOfBusiness: AccountCreateCompanyPrincipalPlaceOfBusiness? = nil, registrationDate: AccountCreateCompanyRegistrationDate? = nil, registrationNumber: String? = nil, representativeDeclaration: AccountCreateCompanyRepresentativeDeclaration? = nil, structure: AccountCreateCompanyStructure? = nil, taxId: String? = nil, taxIdRegistrar: String? = nil, vatId: String? = nil, verification: AccountCreateCompanyVerification? = nil) {
         self.address = address
         self.addressKana = addressKana
         self.addressKanji = addressKanji
+        self.administrativeAddress = administrativeAddress
         self.directorsProvided = directorsProvided
         self.directorshipDeclaration = directorshipDeclaration
         self.executivesProvided = executivesProvided
@@ -1470,6 +1652,8 @@ public struct AccountCreateCompany: StripeParams {
         self.ownershipDeclaration = ownershipDeclaration
         self.ownershipExemptionReason = ownershipExemptionReason
         self.phone = phone
+        self.physicalAddress = physicalAddress
+        self.principalPlaceOfBusiness = principalPlaceOfBusiness
         self.registrationDate = registrationDate
         self.registrationNumber = registrationNumber
         self.representativeDeclaration = representativeDeclaration
@@ -1484,6 +1668,7 @@ public struct AccountCreateCompany: StripeParams {
         case address
         case addressKana = "address_kana"
         case addressKanji = "address_kanji"
+        case administrativeAddress = "administrative_address"
         case directorsProvided = "directors_provided"
         case directorshipDeclaration = "directorship_declaration"
         case executivesProvided = "executives_provided"
@@ -1496,6 +1681,8 @@ public struct AccountCreateCompany: StripeParams {
         case ownershipDeclaration = "ownership_declaration"
         case ownershipExemptionReason = "ownership_exemption_reason"
         case phone
+        case physicalAddress = "physical_address"
+        case principalPlaceOfBusiness = "principal_place_of_business"
         case registrationDate = "registration_date"
         case registrationNumber = "registration_number"
         case representativeDeclaration = "representative_declaration"
@@ -1617,6 +1804,40 @@ public struct AccountCreateCompanyAddressKanji: StripeParams {
     }
 }
 
+/// The location where the business is administered.
+public struct AccountCreateCompanyAdministrativeAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
 /// This hash is used to attest that the directors information provided to Stripe is both current and
 /// correct.
 public struct AccountCreateCompanyDirectorshipDeclaration: StripeParams {
@@ -1660,6 +1881,74 @@ public struct AccountCreateCompanyOwnershipDeclaration: StripeParams {
         case date
         case ip
         case userAgent = "user_agent"
+    }
+}
+
+/// A location where the business has a meaningful physical operating presence.
+public struct AccountCreateCompanyPhysicalAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
+/// The primary location where the business conducts operations.
+public struct AccountCreateCompanyPrincipalPlaceOfBusiness: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
     }
 }
 
@@ -1713,11 +2002,11 @@ public struct AccountCreateCompanyVerification: StripeParams {
 
 /// A document verifying the business.
 public struct AccountCreateCompanyVerificationDocument: StripeParams {
-    /// The back of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The back of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. The uploaded file needs to be a color image (smaller
     /// than 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The front of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. The uploaded file needs to be a color image (smaller
     /// than 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
@@ -1728,7 +2017,8 @@ public struct AccountCreateCompanyVerificationDocument: StripeParams {
     }
 }
 
-/// A hash of configuration describing the account controller's attributes.
+/// Configures the account's Dashboard access, loss liability, requirements collection, and Stripe fee
+/// responsibility.
 public struct AccountCreateController: StripeParams {
     /// A hash of configuration for who pays Stripe fees for product usage on this account.
     public var fees: AccountCreateControllerFees?
@@ -1758,9 +2048,12 @@ public struct AccountCreateController: StripeParams {
 
 /// A hash of configuration for who pays Stripe fees for product usage on this account.
 public struct AccountCreateControllerFees: StripeParams {
-    /// A value indicating the responsible payer of Stripe fees on this account. Defaults to `account`.
-    /// Learn more about [fee behavior on connected
-    /// accounts](https://docs.stripe.com/connect/direct-charges-fee-payer-behavior).
+    /// Controls who pays Stripe fees for direct charges and other pricing-control-eligible Stripe products.
+    /// Setting `controller.losses.payments=application` requires `controller.fees.payer=application`. For
+    /// destination charges and separate charges and transfers, Stripe bills the platform regardless of this
+    /// setting. Defaults to `account`. Learn more about [fee behavior on connected
+    /// accounts](https://docs.stripe.com/connect/direct-charges-fee-payer-behavior), including application
+    /// fees and pricing considerations.
     public var payer: AccountCreateControllerFeesPayer?
 
     public init(payer: AccountCreateControllerFeesPayer? = nil) {
@@ -1771,8 +2064,10 @@ public struct AccountCreateControllerFees: StripeParams {
 /// A hash of configuration for products that have negative balance liability, and whether Stripe or a
 /// Connect application is responsible for them.
 public struct AccountCreateControllerLosses: StripeParams {
-    /// A value indicating who is liable when this account can't pay back negative balances resulting from
-    /// payments. Defaults to `stripe`.
+    /// Controls who is responsible for payment-related negative balances on this account. The platform
+    /// remains liable for negative balances on its own account. To use Stripe negative balance liability,
+    /// your integration must meet [Managed Risk
+    /// requirements](https://docs.stripe.com/connect/risk-management/managed-risk). Defaults to `stripe`.
     public var payments: AccountCreateControllerLossesPayments?
 
     public init(payments: AccountCreateControllerLossesPayments? = nil) {
@@ -1800,7 +2095,8 @@ public struct AccountCreateDocuments: StripeParams {
     public var bankAccountOwnershipVerification: AccountCreateDocumentsBankAccountOwnershipVerification?
     /// One or more documents that demonstrate proof of a company's license to operate.
     public var companyLicense: AccountCreateDocumentsCompanyLicense?
-    /// One or more documents showing the company's Memorandum of Association.
+    /// One or more documents showing the company's governing document (for example, a memorandum of
+    /// association, constitution, or articles of association).
     public var companyMemorandumOfAssociation: AccountCreateDocumentsCompanyMemorandumOfAssociation?
     /// (Certain countries only) One or more documents showing the ministerial decree legalizing the
     /// company's establishment.
@@ -1812,13 +2108,12 @@ public struct AccountCreateDocuments: StripeParams {
     public var companyTaxIdVerification: AccountCreateDocumentsCompanyTaxIdVerification?
     /// One or more documents that demonstrate proof of address.
     public var proofOfAddress: AccountCreateDocumentsProofOfAddress?
-    /// One or more documents showing the company’s proof of registration with the national business
-    /// registry.
-    public var proofOfRegistration: AccountCreateDocumentsProofOfRegistration?
+    /// One or more documents that demonstrate proof of business presence.
+    public var proofOfBusinessPresence: AccountCreateDocumentsProofOfBusinessPresence?
     /// One or more documents that demonstrate proof of ultimate beneficial ownership.
     public var proofOfUltimateBeneficialOwnership: AccountCreateDocumentsProofOfUltimateBeneficialOwnership?
 
-    public init(bankAccountOwnershipVerification: AccountCreateDocumentsBankAccountOwnershipVerification? = nil, companyLicense: AccountCreateDocumentsCompanyLicense? = nil, companyMemorandumOfAssociation: AccountCreateDocumentsCompanyMemorandumOfAssociation? = nil, companyMinisterialDecree: AccountCreateDocumentsCompanyMinisterialDecree? = nil, companyRegistrationVerification: AccountCreateDocumentsCompanyRegistrationVerification? = nil, companyTaxIdVerification: AccountCreateDocumentsCompanyTaxIdVerification? = nil, proofOfAddress: AccountCreateDocumentsProofOfAddress? = nil, proofOfRegistration: AccountCreateDocumentsProofOfRegistration? = nil, proofOfUltimateBeneficialOwnership: AccountCreateDocumentsProofOfUltimateBeneficialOwnership? = nil) {
+    public init(bankAccountOwnershipVerification: AccountCreateDocumentsBankAccountOwnershipVerification? = nil, companyLicense: AccountCreateDocumentsCompanyLicense? = nil, companyMemorandumOfAssociation: AccountCreateDocumentsCompanyMemorandumOfAssociation? = nil, companyMinisterialDecree: AccountCreateDocumentsCompanyMinisterialDecree? = nil, companyRegistrationVerification: AccountCreateDocumentsCompanyRegistrationVerification? = nil, companyTaxIdVerification: AccountCreateDocumentsCompanyTaxIdVerification? = nil, proofOfAddress: AccountCreateDocumentsProofOfAddress? = nil, proofOfBusinessPresence: AccountCreateDocumentsProofOfBusinessPresence? = nil, proofOfUltimateBeneficialOwnership: AccountCreateDocumentsProofOfUltimateBeneficialOwnership? = nil) {
         self.bankAccountOwnershipVerification = bankAccountOwnershipVerification
         self.companyLicense = companyLicense
         self.companyMemorandumOfAssociation = companyMemorandumOfAssociation
@@ -1826,7 +2121,7 @@ public struct AccountCreateDocuments: StripeParams {
         self.companyRegistrationVerification = companyRegistrationVerification
         self.companyTaxIdVerification = companyTaxIdVerification
         self.proofOfAddress = proofOfAddress
-        self.proofOfRegistration = proofOfRegistration
+        self.proofOfBusinessPresence = proofOfBusinessPresence
         self.proofOfUltimateBeneficialOwnership = proofOfUltimateBeneficialOwnership
     }
 
@@ -1838,7 +2133,7 @@ public struct AccountCreateDocuments: StripeParams {
         case companyRegistrationVerification = "company_registration_verification"
         case companyTaxIdVerification = "company_tax_id_verification"
         case proofOfAddress = "proof_of_address"
-        case proofOfRegistration = "proof_of_registration"
+        case proofOfBusinessPresence = "proof_of_business_presence"
         case proofOfUltimateBeneficialOwnership = "proof_of_ultimate_beneficial_ownership"
     }
 }
@@ -1848,7 +2143,7 @@ public struct AccountCreateDocuments: StripeParams {
 /// Must be a document associated with the account’s primary active bank account that displays the last
 /// 4 digits of the account number, either a statement or a check.
 public struct AccountCreateDocumentsBankAccountOwnershipVerification: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1859,7 +2154,7 @@ public struct AccountCreateDocumentsBankAccountOwnershipVerification: StripePara
 
 /// One or more documents that demonstrate proof of a company's license to operate.
 public struct AccountCreateDocumentsCompanyLicense: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1868,9 +2163,10 @@ public struct AccountCreateDocumentsCompanyLicense: StripeParams {
     }
 }
 
-/// One or more documents showing the company's Memorandum of Association.
+/// One or more documents showing the company's governing document (for example, a memorandum of
+/// association, constitution, or articles of association).
 public struct AccountCreateDocumentsCompanyMemorandumOfAssociation: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1882,7 +2178,7 @@ public struct AccountCreateDocumentsCompanyMemorandumOfAssociation: StripeParams
 /// (Certain countries only) One or more documents showing the ministerial decree legalizing the
 /// company's establishment.
 public struct AccountCreateDocumentsCompanyMinisterialDecree: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1894,7 +2190,7 @@ public struct AccountCreateDocumentsCompanyMinisterialDecree: StripeParams {
 /// One or more documents that demonstrate proof of a company's registration with the appropriate local
 /// authorities.
 public struct AccountCreateDocumentsCompanyRegistrationVerification: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1905,7 +2201,7 @@ public struct AccountCreateDocumentsCompanyRegistrationVerification: StripeParam
 
 /// One or more documents that demonstrate proof of a company's tax ID.
 public struct AccountCreateDocumentsCompanyTaxIdVerification: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1916,7 +2212,7 @@ public struct AccountCreateDocumentsCompanyTaxIdVerification: StripeParams {
 
 /// One or more documents that demonstrate proof of address.
 public struct AccountCreateDocumentsProofOfAddress: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -1925,34 +2221,20 @@ public struct AccountCreateDocumentsProofOfAddress: StripeParams {
     }
 }
 
-/// One or more documents showing the company’s proof of registration with the national business
-/// registry.
-public struct AccountCreateDocumentsProofOfRegistration: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+/// One or more documents that demonstrate proof of business presence.
+public struct AccountCreateDocumentsProofOfBusinessPresence: StripeParams {
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
-    /// Information regarding the person signing the document if applicable.
-    public var signer: AccountCreateDocumentsProofOfRegistrationSigner?
 
-    public init(files: [String]? = nil, signer: AccountCreateDocumentsProofOfRegistrationSigner? = nil) {
+    public init(files: [String]? = nil) {
         self.files = files
-        self.signer = signer
-    }
-}
-
-/// Information regarding the person signing the document if applicable.
-public struct AccountCreateDocumentsProofOfRegistrationSigner: StripeParams {
-    /// The token of the person signing the document, if applicable.
-    public var person: String?
-
-    public init(person: String? = nil) {
-        self.person = person
     }
 }
 
 /// One or more documents that demonstrate proof of ultimate beneficial ownership.
 public struct AccountCreateDocumentsProofOfUltimateBeneficialOwnership: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
     /// Information regarding the person signing the document if applicable.
@@ -2320,13 +2602,13 @@ public struct AccountCreateIndividualVerification: StripeParams {
 /// A document showing address, either a passport, local ID card, or utility bill from a well-known
 /// utility company.
 public struct AccountCreateIndividualVerificationAdditionalDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -2337,13 +2619,13 @@ public struct AccountCreateIndividualVerificationAdditionalDocument: StripeParam
 
 /// An identifying document, either a passport or local ID card.
 public struct AccountCreateIndividualVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -2369,10 +2651,14 @@ public struct AccountCreateSettings: StripeParams {
     public var payments: AccountCreateSettingsPayments?
     /// Settings specific to the account's payouts.
     public var payouts: AccountCreateSettingsPayouts?
+    /// Settings specific to the PayPay payments method.
+    public var paypayPayments: AccountCreateSettingsPaypayPayments?
+    /// Settings specific to SEPA Direct Debit payments.
+    public var sepaDebitPayments: AccountCreateSettingsSepaDebitPayments?
     /// Settings specific to the account's Treasury FinancialAccounts.
     public var treasury: AccountCreateSettingsTreasury?
 
-    public init(bacsDebitPayments: AccountCreateSettingsBacsDebitPayments? = nil, branding: AccountCreateSettingsBranding? = nil, cardIssuing: AccountCreateSettingsCardIssuing? = nil, cardPayments: AccountCreateSettingsCardPayments? = nil, invoices: AccountCreateSettingsInvoices? = nil, payments: AccountCreateSettingsPayments? = nil, payouts: AccountCreateSettingsPayouts? = nil, treasury: AccountCreateSettingsTreasury? = nil) {
+    public init(bacsDebitPayments: AccountCreateSettingsBacsDebitPayments? = nil, branding: AccountCreateSettingsBranding? = nil, cardIssuing: AccountCreateSettingsCardIssuing? = nil, cardPayments: AccountCreateSettingsCardPayments? = nil, invoices: AccountCreateSettingsInvoices? = nil, payments: AccountCreateSettingsPayments? = nil, payouts: AccountCreateSettingsPayouts? = nil, paypayPayments: AccountCreateSettingsPaypayPayments? = nil, sepaDebitPayments: AccountCreateSettingsSepaDebitPayments? = nil, treasury: AccountCreateSettingsTreasury? = nil) {
         self.bacsDebitPayments = bacsDebitPayments
         self.branding = branding
         self.cardIssuing = cardIssuing
@@ -2380,6 +2666,8 @@ public struct AccountCreateSettings: StripeParams {
         self.invoices = invoices
         self.payments = payments
         self.payouts = payouts
+        self.paypayPayments = paypayPayments
+        self.sepaDebitPayments = sepaDebitPayments
         self.treasury = treasury
     }
 
@@ -2391,6 +2679,8 @@ public struct AccountCreateSettings: StripeParams {
         case invoices
         case payments
         case payouts
+        case paypayPayments = "paypay_payments"
+        case sepaDebitPayments = "sepa_debit_payments"
         case treasury
     }
 }
@@ -2659,6 +2949,96 @@ public struct AccountCreateSettingsPayoutsSchedule: StripeParams {
     }
 }
 
+/// Settings specific to the PayPay payments method.
+public struct AccountCreateSettingsPaypayPayments: StripeParams {
+    /// Additional files that are required to support the onboarding process of your business.
+    public var additionalFiles: [String]?
+    /// The type of goods your business sells. Use `digital_content` if you sell digital content. Use
+    /// `other` for all other types of goods or services.
+    public var goodsType: AccountCreateSettingsPaypayPaymentsGoodsType?
+    /// Details regarding your business's website.
+    public var site: AccountCreateSettingsPaypayPaymentsSite?
+
+    public init(additionalFiles: [String]? = nil, goodsType: AccountCreateSettingsPaypayPaymentsGoodsType? = nil, site: AccountCreateSettingsPaypayPaymentsSite? = nil) {
+        self.additionalFiles = additionalFiles
+        self.goodsType = goodsType
+        self.site = site
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case additionalFiles = "additional_files"
+        case goodsType = "goods_type"
+        case site
+    }
+}
+
+/// Details regarding your business's website.
+public struct AccountCreateSettingsPaypayPaymentsSite: StripeParams {
+    /// Additional information about your business's website.
+    public var accessible: [String: String]?
+    /// Additional information about your business's website.
+    public var inDevelopment: AccountCreateSettingsPaypayPaymentsSiteInDevelopment?
+    /// Additional information about your business's website.
+    public var restricted: AccountCreateSettingsPaypayPaymentsSiteRestricted?
+    /// The status of your business's website.
+    public var type: AccountCreateSettingsPaypayPaymentsSiteType?
+
+    public init(accessible: [String: String]? = nil, inDevelopment: AccountCreateSettingsPaypayPaymentsSiteInDevelopment? = nil, restricted: AccountCreateSettingsPaypayPaymentsSiteRestricted? = nil, type: AccountCreateSettingsPaypayPaymentsSiteType? = nil) {
+        self.accessible = accessible
+        self.inDevelopment = inDevelopment
+        self.restricted = restricted
+        self.type = type
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case accessible
+        case inDevelopment = "in_development"
+        case restricted
+        case type
+    }
+}
+
+/// Additional information about your business's website.
+public struct AccountCreateSettingsPaypayPaymentsSiteInDevelopment: StripeParams {
+    /// The password needed to access your business's website.
+    public var password: String
+    /// The username needed to access your business's website.
+    public var username: String?
+
+    public init(password: String, username: String? = nil) {
+        self.password = password
+        self.username = username
+    }
+}
+
+/// Additional information about your business's website.
+public struct AccountCreateSettingsPaypayPaymentsSiteRestricted: StripeParams {
+    /// The file explaining the payment flow for your business.
+    public var paymentFlowFile: String?
+
+    public init(paymentFlowFile: String? = nil) {
+        self.paymentFlowFile = paymentFlowFile
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case paymentFlowFile = "payment_flow_file"
+    }
+}
+
+/// Settings specific to SEPA Direct Debit payments.
+public struct AccountCreateSettingsSepaDebitPayments: StripeParams {
+    /// The business creditor id for european payments.
+    public var creditorId: String?
+
+    public init(creditorId: String? = nil) {
+        self.creditorId = creditorId
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case creditorId = "creditor_id"
+    }
+}
+
 /// Settings specific to the account's Treasury FinancialAccounts.
 public struct AccountCreateSettingsTreasury: StripeParams {
     /// Details on the account's acceptance of the Stripe Treasury Services Agreement.
@@ -2746,6 +3126,9 @@ public struct AccountUpdateBusinessProfile: StripeParams {
     /// Internal-only description of the product sold by, or service provided by, the business. Used by
     /// Stripe for risk and underwriting purposes.
     public var productDescription: String?
+    /// A link to the business's publicly available terms related to the Specified Commercial Transaction
+    /// Act. Only used for accounts in Japan.
+    public var specifiedCommercialTransactionsActUrl: String?
     /// A publicly available mailing address for sending support issues to.
     public var supportAddress: AccountUpdateBusinessProfileSupportAddress?
     /// A publicly available email address for sending support issues to.
@@ -2757,7 +3140,7 @@ public struct AccountUpdateBusinessProfile: StripeParams {
     /// The business's publicly available website.
     public var url: String?
 
-    public init(annualRevenue: AccountUpdateBusinessProfileAnnualRevenue? = nil, estimatedWorkerCount: Int? = nil, mcc: String? = nil, minorityOwnedBusinessDesignation: [AccountUpdateBusinessProfileMinorityOwnedBusinessDesignation]? = nil, monthlyEstimatedRevenue: AccountUpdateBusinessProfileMonthlyEstimatedRevenue? = nil, name: String? = nil, productDescription: String? = nil, supportAddress: AccountUpdateBusinessProfileSupportAddress? = nil, supportEmail: String? = nil, supportPhone: String? = nil, supportUrl: String? = nil, url: String? = nil) {
+    public init(annualRevenue: AccountUpdateBusinessProfileAnnualRevenue? = nil, estimatedWorkerCount: Int? = nil, mcc: String? = nil, minorityOwnedBusinessDesignation: [AccountUpdateBusinessProfileMinorityOwnedBusinessDesignation]? = nil, monthlyEstimatedRevenue: AccountUpdateBusinessProfileMonthlyEstimatedRevenue? = nil, name: String? = nil, productDescription: String? = nil, specifiedCommercialTransactionsActUrl: String? = nil, supportAddress: AccountUpdateBusinessProfileSupportAddress? = nil, supportEmail: String? = nil, supportPhone: String? = nil, supportUrl: String? = nil, url: String? = nil) {
         self.annualRevenue = annualRevenue
         self.estimatedWorkerCount = estimatedWorkerCount
         self.mcc = mcc
@@ -2765,6 +3148,7 @@ public struct AccountUpdateBusinessProfile: StripeParams {
         self.monthlyEstimatedRevenue = monthlyEstimatedRevenue
         self.name = name
         self.productDescription = productDescription
+        self.specifiedCommercialTransactionsActUrl = specifiedCommercialTransactionsActUrl
         self.supportAddress = supportAddress
         self.supportEmail = supportEmail
         self.supportPhone = supportPhone
@@ -2780,6 +3164,7 @@ public struct AccountUpdateBusinessProfile: StripeParams {
         case monthlyEstimatedRevenue = "monthly_estimated_revenue"
         case name
         case productDescription = "product_description"
+        case specifiedCommercialTransactionsActUrl = "specified_commercial_transactions_act_url"
         case supportAddress = "support_address"
         case supportEmail = "support_email"
         case supportPhone = "support_phone"
@@ -2879,6 +3264,8 @@ public struct AccountUpdateCapabilities: StripeParams {
     public var almaPayments: AccountUpdateCapabilitiesAlmaPayments?
     /// The amazon_pay_payments capability.
     public var amazonPayPayments: AccountUpdateCapabilitiesAmazonPayPayments?
+    /// The app_distribution capability.
+    public var appDistribution: AccountUpdateCapabilitiesAppDistribution?
     /// The au_becs_debit_payments capability.
     public var auBecsDebitPayments: AccountUpdateCapabilitiesAuBecsDebitPayments?
     /// The bacs_debit_payments capability.
@@ -2889,8 +3276,12 @@ public struct AccountUpdateCapabilities: StripeParams {
     public var bankTransferPayments: AccountUpdateCapabilitiesBankTransferPayments?
     /// The billie_payments capability.
     public var billiePayments: AccountUpdateCapabilitiesBilliePayments?
+    /// The bizum_payments capability.
+    public var bizumPayments: AccountUpdateCapabilitiesBizumPayments?
     /// The blik_payments capability.
     public var blikPayments: AccountUpdateCapabilitiesBlikPayments?
+    /// The blik_recurring_payments capability.
+    public var blikRecurringPayments: AccountUpdateCapabilitiesBlikRecurringPayments?
     /// The boleto_payments capability.
     public var boletoPayments: AccountUpdateCapabilitiesBoletoPayments?
     /// The card_issuing capability.
@@ -2955,6 +3346,8 @@ public struct AccountUpdateCapabilities: StripeParams {
     public var paycoPayments: AccountUpdateCapabilitiesPaycoPayments?
     /// The paynow_payments capability.
     public var paynowPayments: AccountUpdateCapabilitiesPaynowPayments?
+    /// The paypay_payments capability.
+    public var paypayPayments: AccountUpdateCapabilitiesPaypayPayments?
     /// The payto_payments capability.
     public var paytoPayments: AccountUpdateCapabilitiesPaytoPayments?
     /// The pix_payments capability.
@@ -2967,12 +3360,18 @@ public struct AccountUpdateCapabilities: StripeParams {
     public var samsungPayPayments: AccountUpdateCapabilitiesSamsungPayPayments?
     /// The satispay_payments capability.
     public var satispayPayments: AccountUpdateCapabilitiesSatispayPayments?
+    /// The scalapay_payments capability.
+    public var scalapayPayments: AccountUpdateCapabilitiesScalapayPayments?
     /// The sepa_bank_transfer_payments capability.
     public var sepaBankTransferPayments: AccountUpdateCapabilitiesSepaBankTransferPayments?
     /// The sepa_debit_payments capability.
     public var sepaDebitPayments: AccountUpdateCapabilitiesSepaDebitPayments?
+    /// The sequra_payments capability.
+    public var sequraPayments: AccountUpdateCapabilitiesSequraPayments?
     /// The sofort_payments capability.
     public var sofortPayments: AccountUpdateCapabilitiesSofortPayments?
+    /// The sunbit_payments capability.
+    public var sunbitPayments: AccountUpdateCapabilitiesSunbitPayments?
     /// The swish_payments capability.
     public var swishPayments: AccountUpdateCapabilitiesSwishPayments?
     /// The tax_reporting_us_1099_k capability.
@@ -2985,25 +3384,32 @@ public struct AccountUpdateCapabilities: StripeParams {
     public var treasury: AccountUpdateCapabilitiesTreasury?
     /// The twint_payments capability.
     public var twintPayments: AccountUpdateCapabilitiesTwintPayments?
+    /// The upi_payments capability.
+    public var upiPayments: AccountUpdateCapabilitiesUpiPayments?
     /// The us_bank_account_ach_payments capability.
     public var usBankAccountAchPayments: AccountUpdateCapabilitiesUsBankAccountAchPayments?
     /// The us_bank_transfer_payments capability.
     public var usBankTransferPayments: AccountUpdateCapabilitiesUsBankTransferPayments?
+    /// The wero_payments capability.
+    public var weroPayments: AccountUpdateCapabilitiesWeroPayments?
     /// The zip_payments capability.
     public var zipPayments: AccountUpdateCapabilitiesZipPayments?
 
-    public init(acssDebitPayments: AccountUpdateCapabilitiesAcssDebitPayments? = nil, affirmPayments: AccountUpdateCapabilitiesAffirmPayments? = nil, afterpayClearpayPayments: AccountUpdateCapabilitiesAfterpayClearpayPayments? = nil, almaPayments: AccountUpdateCapabilitiesAlmaPayments? = nil, amazonPayPayments: AccountUpdateCapabilitiesAmazonPayPayments? = nil, auBecsDebitPayments: AccountUpdateCapabilitiesAuBecsDebitPayments? = nil, bacsDebitPayments: AccountUpdateCapabilitiesBacsDebitPayments? = nil, bancontactPayments: AccountUpdateCapabilitiesBancontactPayments? = nil, bankTransferPayments: AccountUpdateCapabilitiesBankTransferPayments? = nil, billiePayments: AccountUpdateCapabilitiesBilliePayments? = nil, blikPayments: AccountUpdateCapabilitiesBlikPayments? = nil, boletoPayments: AccountUpdateCapabilitiesBoletoPayments? = nil, cardIssuing: AccountUpdateCapabilitiesCardIssuing? = nil, cardPayments: AccountUpdateCapabilitiesCardPayments? = nil, cartesBancairesPayments: AccountUpdateCapabilitiesCartesBancairesPayments? = nil, cashappPayments: AccountUpdateCapabilitiesCashappPayments? = nil, cryptoPayments: AccountUpdateCapabilitiesCryptoPayments? = nil, epsPayments: AccountUpdateCapabilitiesEpsPayments? = nil, fpxPayments: AccountUpdateCapabilitiesFpxPayments? = nil, gbBankTransferPayments: AccountUpdateCapabilitiesGbBankTransferPayments? = nil, giropayPayments: AccountUpdateCapabilitiesGiropayPayments? = nil, grabpayPayments: AccountUpdateCapabilitiesGrabpayPayments? = nil, idealPayments: AccountUpdateCapabilitiesIdealPayments? = nil, indiaInternationalPayments: AccountUpdateCapabilitiesIndiaInternationalPayments? = nil, jcbPayments: AccountUpdateCapabilitiesJcbPayments? = nil, jpBankTransferPayments: AccountUpdateCapabilitiesJpBankTransferPayments? = nil, kakaoPayPayments: AccountUpdateCapabilitiesKakaoPayPayments? = nil, klarnaPayments: AccountUpdateCapabilitiesKlarnaPayments? = nil, konbiniPayments: AccountUpdateCapabilitiesKonbiniPayments? = nil, krCardPayments: AccountUpdateCapabilitiesKrCardPayments? = nil, legacyPayments: AccountUpdateCapabilitiesLegacyPayments? = nil, linkPayments: AccountUpdateCapabilitiesLinkPayments? = nil, mbWayPayments: AccountUpdateCapabilitiesMbWayPayments? = nil, mobilepayPayments: AccountUpdateCapabilitiesMobilepayPayments? = nil, multibancoPayments: AccountUpdateCapabilitiesMultibancoPayments? = nil, mxBankTransferPayments: AccountUpdateCapabilitiesMxBankTransferPayments? = nil, naverPayPayments: AccountUpdateCapabilitiesNaverPayPayments? = nil, nzBankAccountBecsDebitPayments: AccountUpdateCapabilitiesNzBankAccountBecsDebitPayments? = nil, oxxoPayments: AccountUpdateCapabilitiesOxxoPayments? = nil, p24Payments: AccountUpdateCapabilitiesP24Payments? = nil, payByBankPayments: AccountUpdateCapabilitiesPayByBankPayments? = nil, paycoPayments: AccountUpdateCapabilitiesPaycoPayments? = nil, paynowPayments: AccountUpdateCapabilitiesPaynowPayments? = nil, paytoPayments: AccountUpdateCapabilitiesPaytoPayments? = nil, pixPayments: AccountUpdateCapabilitiesPixPayments? = nil, promptpayPayments: AccountUpdateCapabilitiesPromptpayPayments? = nil, revolutPayPayments: AccountUpdateCapabilitiesRevolutPayPayments? = nil, samsungPayPayments: AccountUpdateCapabilitiesSamsungPayPayments? = nil, satispayPayments: AccountUpdateCapabilitiesSatispayPayments? = nil, sepaBankTransferPayments: AccountUpdateCapabilitiesSepaBankTransferPayments? = nil, sepaDebitPayments: AccountUpdateCapabilitiesSepaDebitPayments? = nil, sofortPayments: AccountUpdateCapabilitiesSofortPayments? = nil, swishPayments: AccountUpdateCapabilitiesSwishPayments? = nil, taxReportingUs1099K: AccountUpdateCapabilitiesTaxReportingUs1099K? = nil, taxReportingUs1099Misc: AccountUpdateCapabilitiesTaxReportingUs1099Misc? = nil, transfers: AccountUpdateCapabilitiesTransfers? = nil, treasury: AccountUpdateCapabilitiesTreasury? = nil, twintPayments: AccountUpdateCapabilitiesTwintPayments? = nil, usBankAccountAchPayments: AccountUpdateCapabilitiesUsBankAccountAchPayments? = nil, usBankTransferPayments: AccountUpdateCapabilitiesUsBankTransferPayments? = nil, zipPayments: AccountUpdateCapabilitiesZipPayments? = nil) {
+    public init(acssDebitPayments: AccountUpdateCapabilitiesAcssDebitPayments? = nil, affirmPayments: AccountUpdateCapabilitiesAffirmPayments? = nil, afterpayClearpayPayments: AccountUpdateCapabilitiesAfterpayClearpayPayments? = nil, almaPayments: AccountUpdateCapabilitiesAlmaPayments? = nil, amazonPayPayments: AccountUpdateCapabilitiesAmazonPayPayments? = nil, appDistribution: AccountUpdateCapabilitiesAppDistribution? = nil, auBecsDebitPayments: AccountUpdateCapabilitiesAuBecsDebitPayments? = nil, bacsDebitPayments: AccountUpdateCapabilitiesBacsDebitPayments? = nil, bancontactPayments: AccountUpdateCapabilitiesBancontactPayments? = nil, bankTransferPayments: AccountUpdateCapabilitiesBankTransferPayments? = nil, billiePayments: AccountUpdateCapabilitiesBilliePayments? = nil, bizumPayments: AccountUpdateCapabilitiesBizumPayments? = nil, blikPayments: AccountUpdateCapabilitiesBlikPayments? = nil, blikRecurringPayments: AccountUpdateCapabilitiesBlikRecurringPayments? = nil, boletoPayments: AccountUpdateCapabilitiesBoletoPayments? = nil, cardIssuing: AccountUpdateCapabilitiesCardIssuing? = nil, cardPayments: AccountUpdateCapabilitiesCardPayments? = nil, cartesBancairesPayments: AccountUpdateCapabilitiesCartesBancairesPayments? = nil, cashappPayments: AccountUpdateCapabilitiesCashappPayments? = nil, cryptoPayments: AccountUpdateCapabilitiesCryptoPayments? = nil, epsPayments: AccountUpdateCapabilitiesEpsPayments? = nil, fpxPayments: AccountUpdateCapabilitiesFpxPayments? = nil, gbBankTransferPayments: AccountUpdateCapabilitiesGbBankTransferPayments? = nil, giropayPayments: AccountUpdateCapabilitiesGiropayPayments? = nil, grabpayPayments: AccountUpdateCapabilitiesGrabpayPayments? = nil, idealPayments: AccountUpdateCapabilitiesIdealPayments? = nil, indiaInternationalPayments: AccountUpdateCapabilitiesIndiaInternationalPayments? = nil, jcbPayments: AccountUpdateCapabilitiesJcbPayments? = nil, jpBankTransferPayments: AccountUpdateCapabilitiesJpBankTransferPayments? = nil, kakaoPayPayments: AccountUpdateCapabilitiesKakaoPayPayments? = nil, klarnaPayments: AccountUpdateCapabilitiesKlarnaPayments? = nil, konbiniPayments: AccountUpdateCapabilitiesKonbiniPayments? = nil, krCardPayments: AccountUpdateCapabilitiesKrCardPayments? = nil, legacyPayments: AccountUpdateCapabilitiesLegacyPayments? = nil, linkPayments: AccountUpdateCapabilitiesLinkPayments? = nil, mbWayPayments: AccountUpdateCapabilitiesMbWayPayments? = nil, mobilepayPayments: AccountUpdateCapabilitiesMobilepayPayments? = nil, multibancoPayments: AccountUpdateCapabilitiesMultibancoPayments? = nil, mxBankTransferPayments: AccountUpdateCapabilitiesMxBankTransferPayments? = nil, naverPayPayments: AccountUpdateCapabilitiesNaverPayPayments? = nil, nzBankAccountBecsDebitPayments: AccountUpdateCapabilitiesNzBankAccountBecsDebitPayments? = nil, oxxoPayments: AccountUpdateCapabilitiesOxxoPayments? = nil, p24Payments: AccountUpdateCapabilitiesP24Payments? = nil, payByBankPayments: AccountUpdateCapabilitiesPayByBankPayments? = nil, paycoPayments: AccountUpdateCapabilitiesPaycoPayments? = nil, paynowPayments: AccountUpdateCapabilitiesPaynowPayments? = nil, paypayPayments: AccountUpdateCapabilitiesPaypayPayments? = nil, paytoPayments: AccountUpdateCapabilitiesPaytoPayments? = nil, pixPayments: AccountUpdateCapabilitiesPixPayments? = nil, promptpayPayments: AccountUpdateCapabilitiesPromptpayPayments? = nil, revolutPayPayments: AccountUpdateCapabilitiesRevolutPayPayments? = nil, samsungPayPayments: AccountUpdateCapabilitiesSamsungPayPayments? = nil, satispayPayments: AccountUpdateCapabilitiesSatispayPayments? = nil, scalapayPayments: AccountUpdateCapabilitiesScalapayPayments? = nil, sepaBankTransferPayments: AccountUpdateCapabilitiesSepaBankTransferPayments? = nil, sepaDebitPayments: AccountUpdateCapabilitiesSepaDebitPayments? = nil, sequraPayments: AccountUpdateCapabilitiesSequraPayments? = nil, sofortPayments: AccountUpdateCapabilitiesSofortPayments? = nil, sunbitPayments: AccountUpdateCapabilitiesSunbitPayments? = nil, swishPayments: AccountUpdateCapabilitiesSwishPayments? = nil, taxReportingUs1099K: AccountUpdateCapabilitiesTaxReportingUs1099K? = nil, taxReportingUs1099Misc: AccountUpdateCapabilitiesTaxReportingUs1099Misc? = nil, transfers: AccountUpdateCapabilitiesTransfers? = nil, treasury: AccountUpdateCapabilitiesTreasury? = nil, twintPayments: AccountUpdateCapabilitiesTwintPayments? = nil, upiPayments: AccountUpdateCapabilitiesUpiPayments? = nil, usBankAccountAchPayments: AccountUpdateCapabilitiesUsBankAccountAchPayments? = nil, usBankTransferPayments: AccountUpdateCapabilitiesUsBankTransferPayments? = nil, weroPayments: AccountUpdateCapabilitiesWeroPayments? = nil, zipPayments: AccountUpdateCapabilitiesZipPayments? = nil) {
         self.acssDebitPayments = acssDebitPayments
         self.affirmPayments = affirmPayments
         self.afterpayClearpayPayments = afterpayClearpayPayments
         self.almaPayments = almaPayments
         self.amazonPayPayments = amazonPayPayments
+        self.appDistribution = appDistribution
         self.auBecsDebitPayments = auBecsDebitPayments
         self.bacsDebitPayments = bacsDebitPayments
         self.bancontactPayments = bancontactPayments
         self.bankTransferPayments = bankTransferPayments
         self.billiePayments = billiePayments
+        self.bizumPayments = bizumPayments
         self.blikPayments = blikPayments
+        self.blikRecurringPayments = blikRecurringPayments
         self.boletoPayments = boletoPayments
         self.cardIssuing = cardIssuing
         self.cardPayments = cardPayments
@@ -3036,23 +3442,29 @@ public struct AccountUpdateCapabilities: StripeParams {
         self.payByBankPayments = payByBankPayments
         self.paycoPayments = paycoPayments
         self.paynowPayments = paynowPayments
+        self.paypayPayments = paypayPayments
         self.paytoPayments = paytoPayments
         self.pixPayments = pixPayments
         self.promptpayPayments = promptpayPayments
         self.revolutPayPayments = revolutPayPayments
         self.samsungPayPayments = samsungPayPayments
         self.satispayPayments = satispayPayments
+        self.scalapayPayments = scalapayPayments
         self.sepaBankTransferPayments = sepaBankTransferPayments
         self.sepaDebitPayments = sepaDebitPayments
+        self.sequraPayments = sequraPayments
         self.sofortPayments = sofortPayments
+        self.sunbitPayments = sunbitPayments
         self.swishPayments = swishPayments
         self.taxReportingUs1099K = taxReportingUs1099K
         self.taxReportingUs1099Misc = taxReportingUs1099Misc
         self.transfers = transfers
         self.treasury = treasury
         self.twintPayments = twintPayments
+        self.upiPayments = upiPayments
         self.usBankAccountAchPayments = usBankAccountAchPayments
         self.usBankTransferPayments = usBankTransferPayments
+        self.weroPayments = weroPayments
         self.zipPayments = zipPayments
     }
 
@@ -3062,12 +3474,15 @@ public struct AccountUpdateCapabilities: StripeParams {
         case afterpayClearpayPayments = "afterpay_clearpay_payments"
         case almaPayments = "alma_payments"
         case amazonPayPayments = "amazon_pay_payments"
+        case appDistribution = "app_distribution"
         case auBecsDebitPayments = "au_becs_debit_payments"
         case bacsDebitPayments = "bacs_debit_payments"
         case bancontactPayments = "bancontact_payments"
         case bankTransferPayments = "bank_transfer_payments"
         case billiePayments = "billie_payments"
+        case bizumPayments = "bizum_payments"
         case blikPayments = "blik_payments"
+        case blikRecurringPayments = "blik_recurring_payments"
         case boletoPayments = "boleto_payments"
         case cardIssuing = "card_issuing"
         case cardPayments = "card_payments"
@@ -3100,23 +3515,29 @@ public struct AccountUpdateCapabilities: StripeParams {
         case payByBankPayments = "pay_by_bank_payments"
         case paycoPayments = "payco_payments"
         case paynowPayments = "paynow_payments"
+        case paypayPayments = "paypay_payments"
         case paytoPayments = "payto_payments"
         case pixPayments = "pix_payments"
         case promptpayPayments = "promptpay_payments"
         case revolutPayPayments = "revolut_pay_payments"
         case samsungPayPayments = "samsung_pay_payments"
         case satispayPayments = "satispay_payments"
+        case scalapayPayments = "scalapay_payments"
         case sepaBankTransferPayments = "sepa_bank_transfer_payments"
         case sepaDebitPayments = "sepa_debit_payments"
+        case sequraPayments = "sequra_payments"
         case sofortPayments = "sofort_payments"
+        case sunbitPayments = "sunbit_payments"
         case swishPayments = "swish_payments"
         case taxReportingUs1099K = "tax_reporting_us_1099_k"
         case taxReportingUs1099Misc = "tax_reporting_us_1099_misc"
         case transfers
         case treasury
         case twintPayments = "twint_payments"
+        case upiPayments = "upi_payments"
         case usBankAccountAchPayments = "us_bank_account_ach_payments"
         case usBankTransferPayments = "us_bank_transfer_payments"
+        case weroPayments = "wero_payments"
         case zipPayments = "zip_payments"
     }
 }
@@ -3171,6 +3592,18 @@ public struct AccountUpdateCapabilitiesAlmaPayments: StripeParams {
 
 /// The amazon_pay_payments capability.
 public struct AccountUpdateCapabilitiesAmazonPayPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The app_distribution capability.
+public struct AccountUpdateCapabilitiesAppDistribution: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -3241,8 +3674,32 @@ public struct AccountUpdateCapabilitiesBilliePayments: StripeParams {
     }
 }
 
+/// The bizum_payments capability.
+public struct AccountUpdateCapabilitiesBizumPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The blik_payments capability.
 public struct AccountUpdateCapabilitiesBlikPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The blik_recurring_payments capability.
+public struct AccountUpdateCapabilitiesBlikRecurringPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -3637,6 +4094,18 @@ public struct AccountUpdateCapabilitiesPaynowPayments: StripeParams {
     }
 }
 
+/// The paypay_payments capability.
+public struct AccountUpdateCapabilitiesPaypayPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The payto_payments capability.
 public struct AccountUpdateCapabilitiesPaytoPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
@@ -3709,6 +4178,18 @@ public struct AccountUpdateCapabilitiesSatispayPayments: StripeParams {
     }
 }
 
+/// The scalapay_payments capability.
+public struct AccountUpdateCapabilitiesScalapayPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The sepa_bank_transfer_payments capability.
 public struct AccountUpdateCapabilitiesSepaBankTransferPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
@@ -3733,8 +4214,32 @@ public struct AccountUpdateCapabilitiesSepaDebitPayments: StripeParams {
     }
 }
 
+/// The sequra_payments capability.
+public struct AccountUpdateCapabilitiesSequraPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The sofort_payments capability.
 public struct AccountUpdateCapabilitiesSofortPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The sunbit_payments capability.
+public struct AccountUpdateCapabilitiesSunbitPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -3817,6 +4322,18 @@ public struct AccountUpdateCapabilitiesTwintPayments: StripeParams {
     }
 }
 
+/// The upi_payments capability.
+public struct AccountUpdateCapabilitiesUpiPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
 /// The us_bank_account_ach_payments capability.
 public struct AccountUpdateCapabilitiesUsBankAccountAchPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
@@ -3831,6 +4348,18 @@ public struct AccountUpdateCapabilitiesUsBankAccountAchPayments: StripeParams {
 
 /// The us_bank_transfer_payments capability.
 public struct AccountUpdateCapabilitiesUsBankTransferPayments: StripeParams {
+    /// Passing true requests the capability for the account, if it is not already requested. A requested
+    /// capability may not immediately become active. Any requirements to activate the capability are
+    /// returned in the `requirements` arrays.
+    public var requested: Bool?
+
+    public init(requested: Bool? = nil) {
+        self.requested = requested
+    }
+}
+
+/// The wero_payments capability.
+public struct AccountUpdateCapabilitiesWeroPayments: StripeParams {
     /// Passing true requests the capability for the account, if it is not already requested. A requested
     /// capability may not immediately become active. Any requirements to activate the capability are
     /// returned in the `requirements` arrays.
@@ -3865,6 +4394,8 @@ public struct AccountUpdateCompany: StripeParams {
     public var addressKana: AccountUpdateCompanyAddressKana?
     /// The Kanji variation of the company's primary address (Japan only).
     public var addressKanji: AccountUpdateCompanyAddressKanji?
+    /// The location where the business is administered.
+    public var administrativeAddress: AccountUpdateCompanyAdministrativeAddress?
     /// Whether the company's directors have been provided. Set this Boolean to `true` after creating all
     /// the company's directors with [the Persons API](/api/persons) for accounts with a
     /// `relationship.director` requirement. This value is not automatically set to `true` after creating
@@ -3902,6 +4433,10 @@ public struct AccountUpdateCompany: StripeParams {
     public var ownershipExemptionReason: AccountUpdateCompanyOwnershipExemptionReason?
     /// The company's phone number (used for verification).
     public var phone: String?
+    /// A location where the business has a meaningful physical operating presence.
+    public var physicalAddress: AccountUpdateCompanyPhysicalAddress?
+    /// The primary location where the business conducts operations.
+    public var principalPlaceOfBusiness: AccountUpdateCompanyPrincipalPlaceOfBusiness?
     public var registrationDate: AccountUpdateCompanyRegistrationDate?
     /// The identification number given to a company when it is registered or incorporated, if distinct from
     /// the identification number used for filing taxes. (Examples are the CIN for companies and LLP IN for
@@ -3916,6 +4451,8 @@ public struct AccountUpdateCompany: StripeParams {
     public var structure: AccountUpdateCompanyStructure?
     /// The business ID number of the company, as appropriate for the company’s country. (Examples are an
     /// Employer ID Number in the U.S., a Business Number in Canada, or a Company Number in the UK.)
+    /// Changing this value requires that the account re-accept the [terms of
+    /// service](/api/accounts/object#account_object-tos_acceptance).
     public var taxId: String?
     /// The jurisdiction in which the `tax_id` is registered (Germany-based companies only).
     public var taxIdRegistrar: String?
@@ -3924,10 +4461,11 @@ public struct AccountUpdateCompany: StripeParams {
     /// Information on the verification state of the company.
     public var verification: AccountUpdateCompanyVerification?
 
-    public init(address: AccountUpdateCompanyAddress? = nil, addressKana: AccountUpdateCompanyAddressKana? = nil, addressKanji: AccountUpdateCompanyAddressKanji? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: AccountUpdateCompanyDirectorshipDeclaration? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: String? = nil, nameKana: String? = nil, nameKanji: String? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: AccountUpdateCompanyOwnershipDeclaration? = nil, ownershipExemptionReason: AccountUpdateCompanyOwnershipExemptionReason? = nil, phone: String? = nil, registrationDate: AccountUpdateCompanyRegistrationDate? = nil, registrationNumber: String? = nil, representativeDeclaration: AccountUpdateCompanyRepresentativeDeclaration? = nil, structure: AccountUpdateCompanyStructure? = nil, taxId: String? = nil, taxIdRegistrar: String? = nil, vatId: String? = nil, verification: AccountUpdateCompanyVerification? = nil) {
+    public init(address: AccountUpdateCompanyAddress? = nil, addressKana: AccountUpdateCompanyAddressKana? = nil, addressKanji: AccountUpdateCompanyAddressKanji? = nil, administrativeAddress: AccountUpdateCompanyAdministrativeAddress? = nil, directorsProvided: Bool? = nil, directorshipDeclaration: AccountUpdateCompanyDirectorshipDeclaration? = nil, executivesProvided: Bool? = nil, exportLicenseId: String? = nil, exportPurposeCode: String? = nil, name: String? = nil, nameKana: String? = nil, nameKanji: String? = nil, ownersProvided: Bool? = nil, ownershipDeclaration: AccountUpdateCompanyOwnershipDeclaration? = nil, ownershipExemptionReason: AccountUpdateCompanyOwnershipExemptionReason? = nil, phone: String? = nil, physicalAddress: AccountUpdateCompanyPhysicalAddress? = nil, principalPlaceOfBusiness: AccountUpdateCompanyPrincipalPlaceOfBusiness? = nil, registrationDate: AccountUpdateCompanyRegistrationDate? = nil, registrationNumber: String? = nil, representativeDeclaration: AccountUpdateCompanyRepresentativeDeclaration? = nil, structure: AccountUpdateCompanyStructure? = nil, taxId: String? = nil, taxIdRegistrar: String? = nil, vatId: String? = nil, verification: AccountUpdateCompanyVerification? = nil) {
         self.address = address
         self.addressKana = addressKana
         self.addressKanji = addressKanji
+        self.administrativeAddress = administrativeAddress
         self.directorsProvided = directorsProvided
         self.directorshipDeclaration = directorshipDeclaration
         self.executivesProvided = executivesProvided
@@ -3940,6 +4478,8 @@ public struct AccountUpdateCompany: StripeParams {
         self.ownershipDeclaration = ownershipDeclaration
         self.ownershipExemptionReason = ownershipExemptionReason
         self.phone = phone
+        self.physicalAddress = physicalAddress
+        self.principalPlaceOfBusiness = principalPlaceOfBusiness
         self.registrationDate = registrationDate
         self.registrationNumber = registrationNumber
         self.representativeDeclaration = representativeDeclaration
@@ -3954,6 +4494,7 @@ public struct AccountUpdateCompany: StripeParams {
         case address
         case addressKana = "address_kana"
         case addressKanji = "address_kanji"
+        case administrativeAddress = "administrative_address"
         case directorsProvided = "directors_provided"
         case directorshipDeclaration = "directorship_declaration"
         case executivesProvided = "executives_provided"
@@ -3966,6 +4507,8 @@ public struct AccountUpdateCompany: StripeParams {
         case ownershipDeclaration = "ownership_declaration"
         case ownershipExemptionReason = "ownership_exemption_reason"
         case phone
+        case physicalAddress = "physical_address"
+        case principalPlaceOfBusiness = "principal_place_of_business"
         case registrationDate = "registration_date"
         case registrationNumber = "registration_number"
         case representativeDeclaration = "representative_declaration"
@@ -4087,6 +4630,40 @@ public struct AccountUpdateCompanyAddressKanji: StripeParams {
     }
 }
 
+/// The location where the business is administered.
+public struct AccountUpdateCompanyAdministrativeAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
 /// This hash is used to attest that the directors information provided to Stripe is both current and
 /// correct.
 public struct AccountUpdateCompanyDirectorshipDeclaration: StripeParams {
@@ -4130,6 +4707,74 @@ public struct AccountUpdateCompanyOwnershipDeclaration: StripeParams {
         case date
         case ip
         case userAgent = "user_agent"
+    }
+}
+
+/// A location where the business has a meaningful physical operating presence.
+public struct AccountUpdateCompanyPhysicalAddress: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
+    }
+}
+
+/// The primary location where the business conducts operations.
+public struct AccountUpdateCompanyPrincipalPlaceOfBusiness: StripeParams {
+    /// City, district, suburb, town, or village.
+    public var city: String?
+    /// Two-letter country code ([ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)).
+    public var country: String?
+    /// Address line 1, such as the street, PO Box, or company name.
+    public var line1: String?
+    /// Address line 2, such as the apartment, suite, unit, or building.
+    public var line2: String?
+    /// ZIP or postal code.
+    public var postalCode: String?
+    /// State, county, province, or region ([ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2)).
+    public var state: String?
+
+    public init(city: String? = nil, country: String? = nil, line1: String? = nil, line2: String? = nil, postalCode: String? = nil, state: String? = nil) {
+        self.city = city
+        self.country = country
+        self.line1 = line1
+        self.line2 = line2
+        self.postalCode = postalCode
+        self.state = state
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case city
+        case country
+        case line1
+        case line2
+        case postalCode = "postal_code"
+        case state
     }
 }
 
@@ -4183,11 +4828,11 @@ public struct AccountUpdateCompanyVerification: StripeParams {
 
 /// A document verifying the business.
 public struct AccountUpdateCompanyVerificationDocument: StripeParams {
-    /// The back of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The back of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. The uploaded file needs to be a color image (smaller
     /// than 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The front of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. The uploaded file needs to be a color image (smaller
     /// than 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
@@ -4207,7 +4852,8 @@ public struct AccountUpdateDocuments: StripeParams {
     public var bankAccountOwnershipVerification: AccountUpdateDocumentsBankAccountOwnershipVerification?
     /// One or more documents that demonstrate proof of a company's license to operate.
     public var companyLicense: AccountUpdateDocumentsCompanyLicense?
-    /// One or more documents showing the company's Memorandum of Association.
+    /// One or more documents showing the company's governing document (for example, a memorandum of
+    /// association, constitution, or articles of association).
     public var companyMemorandumOfAssociation: AccountUpdateDocumentsCompanyMemorandumOfAssociation?
     /// (Certain countries only) One or more documents showing the ministerial decree legalizing the
     /// company's establishment.
@@ -4219,13 +4865,15 @@ public struct AccountUpdateDocuments: StripeParams {
     public var companyTaxIdVerification: AccountUpdateDocumentsCompanyTaxIdVerification?
     /// One or more documents that demonstrate proof of address.
     public var proofOfAddress: AccountUpdateDocumentsProofOfAddress?
+    /// One or more documents that demonstrate proof of business presence.
+    public var proofOfBusinessPresence: AccountUpdateDocumentsProofOfBusinessPresence?
     /// One or more documents showing the company’s proof of registration with the national business
     /// registry.
     public var proofOfRegistration: AccountUpdateDocumentsProofOfRegistration?
     /// One or more documents that demonstrate proof of ultimate beneficial ownership.
     public var proofOfUltimateBeneficialOwnership: AccountUpdateDocumentsProofOfUltimateBeneficialOwnership?
 
-    public init(bankAccountOwnershipVerification: AccountUpdateDocumentsBankAccountOwnershipVerification? = nil, companyLicense: AccountUpdateDocumentsCompanyLicense? = nil, companyMemorandumOfAssociation: AccountUpdateDocumentsCompanyMemorandumOfAssociation? = nil, companyMinisterialDecree: AccountUpdateDocumentsCompanyMinisterialDecree? = nil, companyRegistrationVerification: AccountUpdateDocumentsCompanyRegistrationVerification? = nil, companyTaxIdVerification: AccountUpdateDocumentsCompanyTaxIdVerification? = nil, proofOfAddress: AccountUpdateDocumentsProofOfAddress? = nil, proofOfRegistration: AccountUpdateDocumentsProofOfRegistration? = nil, proofOfUltimateBeneficialOwnership: AccountUpdateDocumentsProofOfUltimateBeneficialOwnership? = nil) {
+    public init(bankAccountOwnershipVerification: AccountUpdateDocumentsBankAccountOwnershipVerification? = nil, companyLicense: AccountUpdateDocumentsCompanyLicense? = nil, companyMemorandumOfAssociation: AccountUpdateDocumentsCompanyMemorandumOfAssociation? = nil, companyMinisterialDecree: AccountUpdateDocumentsCompanyMinisterialDecree? = nil, companyRegistrationVerification: AccountUpdateDocumentsCompanyRegistrationVerification? = nil, companyTaxIdVerification: AccountUpdateDocumentsCompanyTaxIdVerification? = nil, proofOfAddress: AccountUpdateDocumentsProofOfAddress? = nil, proofOfBusinessPresence: AccountUpdateDocumentsProofOfBusinessPresence? = nil, proofOfRegistration: AccountUpdateDocumentsProofOfRegistration? = nil, proofOfUltimateBeneficialOwnership: AccountUpdateDocumentsProofOfUltimateBeneficialOwnership? = nil) {
         self.bankAccountOwnershipVerification = bankAccountOwnershipVerification
         self.companyLicense = companyLicense
         self.companyMemorandumOfAssociation = companyMemorandumOfAssociation
@@ -4233,6 +4881,7 @@ public struct AccountUpdateDocuments: StripeParams {
         self.companyRegistrationVerification = companyRegistrationVerification
         self.companyTaxIdVerification = companyTaxIdVerification
         self.proofOfAddress = proofOfAddress
+        self.proofOfBusinessPresence = proofOfBusinessPresence
         self.proofOfRegistration = proofOfRegistration
         self.proofOfUltimateBeneficialOwnership = proofOfUltimateBeneficialOwnership
     }
@@ -4245,6 +4894,7 @@ public struct AccountUpdateDocuments: StripeParams {
         case companyRegistrationVerification = "company_registration_verification"
         case companyTaxIdVerification = "company_tax_id_verification"
         case proofOfAddress = "proof_of_address"
+        case proofOfBusinessPresence = "proof_of_business_presence"
         case proofOfRegistration = "proof_of_registration"
         case proofOfUltimateBeneficialOwnership = "proof_of_ultimate_beneficial_ownership"
     }
@@ -4255,7 +4905,7 @@ public struct AccountUpdateDocuments: StripeParams {
 /// Must be a document associated with the account’s primary active bank account that displays the last
 /// 4 digits of the account number, either a statement or a check.
 public struct AccountUpdateDocumentsBankAccountOwnershipVerification: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -4266,7 +4916,7 @@ public struct AccountUpdateDocumentsBankAccountOwnershipVerification: StripePara
 
 /// One or more documents that demonstrate proof of a company's license to operate.
 public struct AccountUpdateDocumentsCompanyLicense: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -4275,9 +4925,10 @@ public struct AccountUpdateDocumentsCompanyLicense: StripeParams {
     }
 }
 
-/// One or more documents showing the company's Memorandum of Association.
+/// One or more documents showing the company's governing document (for example, a memorandum of
+/// association, constitution, or articles of association).
 public struct AccountUpdateDocumentsCompanyMemorandumOfAssociation: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -4289,7 +4940,7 @@ public struct AccountUpdateDocumentsCompanyMemorandumOfAssociation: StripeParams
 /// (Certain countries only) One or more documents showing the ministerial decree legalizing the
 /// company's establishment.
 public struct AccountUpdateDocumentsCompanyMinisterialDecree: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -4301,7 +4952,7 @@ public struct AccountUpdateDocumentsCompanyMinisterialDecree: StripeParams {
 /// One or more documents that demonstrate proof of a company's registration with the appropriate local
 /// authorities.
 public struct AccountUpdateDocumentsCompanyRegistrationVerification: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -4312,7 +4963,7 @@ public struct AccountUpdateDocumentsCompanyRegistrationVerification: StripeParam
 
 /// One or more documents that demonstrate proof of a company's tax ID.
 public struct AccountUpdateDocumentsCompanyTaxIdVerification: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -4323,7 +4974,18 @@ public struct AccountUpdateDocumentsCompanyTaxIdVerification: StripeParams {
 
 /// One or more documents that demonstrate proof of address.
 public struct AccountUpdateDocumentsProofOfAddress: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `account_requirement`.
+    public var files: [String]?
+
+    public init(files: [String]? = nil) {
+        self.files = files
+    }
+}
+
+/// One or more documents that demonstrate proof of business presence.
+public struct AccountUpdateDocumentsProofOfBusinessPresence: StripeParams {
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
 
@@ -4335,7 +4997,7 @@ public struct AccountUpdateDocumentsProofOfAddress: StripeParams {
 /// One or more documents showing the company’s proof of registration with the national business
 /// registry.
 public struct AccountUpdateDocumentsProofOfRegistration: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
     /// Information regarding the person signing the document if applicable.
@@ -4359,7 +5021,7 @@ public struct AccountUpdateDocumentsProofOfRegistrationSigner: StripeParams {
 
 /// One or more documents that demonstrate proof of ultimate beneficial ownership.
 public struct AccountUpdateDocumentsProofOfUltimateBeneficialOwnership: StripeParams {
-    /// One or more document ids returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// One or more document ids returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `account_requirement`.
     public var files: [String]?
     /// Information regarding the person signing the document if applicable.
@@ -4727,13 +5389,13 @@ public struct AccountUpdateIndividualVerification: StripeParams {
 /// A document showing address, either a passport, local ID card, or utility bill from a well-known
 /// utility company.
 public struct AccountUpdateIndividualVerificationAdditionalDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -4744,13 +5406,13 @@ public struct AccountUpdateIndividualVerificationAdditionalDocument: StripeParam
 
 /// An identifying document, either a passport or local ID card.
 public struct AccountUpdateIndividualVerificationDocument: StripeParams {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var back: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`. The uploaded file needs to be a color image (smaller than 8,000px by
-    /// 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`. The uploaded file needs to be a color image (smaller than
+    /// 8,000px by 8,000px), in JPG, PNG, or PDF format, and less than 10 MB in size.
     public var front: String?
 
     public init(back: String? = nil, front: String? = nil) {
@@ -4776,10 +5438,14 @@ public struct AccountUpdateSettings: StripeParams {
     public var payments: AccountUpdateSettingsPayments?
     /// Settings specific to the account's payouts.
     public var payouts: AccountUpdateSettingsPayouts?
+    /// Settings specific to the PayPay payments method.
+    public var paypayPayments: AccountUpdateSettingsPaypayPayments?
+    /// Settings specific to SEPA Direct Debit payments.
+    public var sepaDebitPayments: AccountUpdateSettingsSepaDebitPayments?
     /// Settings specific to the account's Treasury FinancialAccounts.
     public var treasury: AccountUpdateSettingsTreasury?
 
-    public init(bacsDebitPayments: AccountUpdateSettingsBacsDebitPayments? = nil, branding: AccountUpdateSettingsBranding? = nil, cardIssuing: AccountUpdateSettingsCardIssuing? = nil, cardPayments: AccountUpdateSettingsCardPayments? = nil, invoices: AccountUpdateSettingsInvoices? = nil, payments: AccountUpdateSettingsPayments? = nil, payouts: AccountUpdateSettingsPayouts? = nil, treasury: AccountUpdateSettingsTreasury? = nil) {
+    public init(bacsDebitPayments: AccountUpdateSettingsBacsDebitPayments? = nil, branding: AccountUpdateSettingsBranding? = nil, cardIssuing: AccountUpdateSettingsCardIssuing? = nil, cardPayments: AccountUpdateSettingsCardPayments? = nil, invoices: AccountUpdateSettingsInvoices? = nil, payments: AccountUpdateSettingsPayments? = nil, payouts: AccountUpdateSettingsPayouts? = nil, paypayPayments: AccountUpdateSettingsPaypayPayments? = nil, sepaDebitPayments: AccountUpdateSettingsSepaDebitPayments? = nil, treasury: AccountUpdateSettingsTreasury? = nil) {
         self.bacsDebitPayments = bacsDebitPayments
         self.branding = branding
         self.cardIssuing = cardIssuing
@@ -4787,6 +5453,8 @@ public struct AccountUpdateSettings: StripeParams {
         self.invoices = invoices
         self.payments = payments
         self.payouts = payouts
+        self.paypayPayments = paypayPayments
+        self.sepaDebitPayments = sepaDebitPayments
         self.treasury = treasury
     }
 
@@ -4798,6 +5466,8 @@ public struct AccountUpdateSettings: StripeParams {
         case invoices
         case payments
         case payouts
+        case paypayPayments = "paypay_payments"
+        case sepaDebitPayments = "sepa_debit_payments"
         case treasury
     }
 }
@@ -5068,6 +5738,96 @@ public struct AccountUpdateSettingsPayoutsSchedule: StripeParams {
         case monthlyPayoutDays = "monthly_payout_days"
         case weeklyAnchor = "weekly_anchor"
         case weeklyPayoutDays = "weekly_payout_days"
+    }
+}
+
+/// Settings specific to the PayPay payments method.
+public struct AccountUpdateSettingsPaypayPayments: StripeParams {
+    /// Additional files that are required to support the onboarding process of your business.
+    public var additionalFiles: [String]?
+    /// The type of goods your business sells. Use `digital_content` if you sell digital content. Use
+    /// `other` for all other types of goods or services.
+    public var goodsType: AccountUpdateSettingsPaypayPaymentsGoodsType?
+    /// Details regarding your business's website.
+    public var site: AccountUpdateSettingsPaypayPaymentsSite?
+
+    public init(additionalFiles: [String]? = nil, goodsType: AccountUpdateSettingsPaypayPaymentsGoodsType? = nil, site: AccountUpdateSettingsPaypayPaymentsSite? = nil) {
+        self.additionalFiles = additionalFiles
+        self.goodsType = goodsType
+        self.site = site
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case additionalFiles = "additional_files"
+        case goodsType = "goods_type"
+        case site
+    }
+}
+
+/// Details regarding your business's website.
+public struct AccountUpdateSettingsPaypayPaymentsSite: StripeParams {
+    /// Additional information about your business's website.
+    public var accessible: [String: String]?
+    /// Additional information about your business's website.
+    public var inDevelopment: AccountUpdateSettingsPaypayPaymentsSiteInDevelopment?
+    /// Additional information about your business's website.
+    public var restricted: AccountUpdateSettingsPaypayPaymentsSiteRestricted?
+    /// The status of your business's website.
+    public var type: AccountUpdateSettingsPaypayPaymentsSiteType?
+
+    public init(accessible: [String: String]? = nil, inDevelopment: AccountUpdateSettingsPaypayPaymentsSiteInDevelopment? = nil, restricted: AccountUpdateSettingsPaypayPaymentsSiteRestricted? = nil, type: AccountUpdateSettingsPaypayPaymentsSiteType? = nil) {
+        self.accessible = accessible
+        self.inDevelopment = inDevelopment
+        self.restricted = restricted
+        self.type = type
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case accessible
+        case inDevelopment = "in_development"
+        case restricted
+        case type
+    }
+}
+
+/// Additional information about your business's website.
+public struct AccountUpdateSettingsPaypayPaymentsSiteInDevelopment: StripeParams {
+    /// The password needed to access your business's website.
+    public var password: String
+    /// The username needed to access your business's website.
+    public var username: String?
+
+    public init(password: String, username: String? = nil) {
+        self.password = password
+        self.username = username
+    }
+}
+
+/// Additional information about your business's website.
+public struct AccountUpdateSettingsPaypayPaymentsSiteRestricted: StripeParams {
+    /// The file explaining the payment flow for your business.
+    public var paymentFlowFile: String?
+
+    public init(paymentFlowFile: String? = nil) {
+        self.paymentFlowFile = paymentFlowFile
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case paymentFlowFile = "payment_flow_file"
+    }
+}
+
+/// Settings specific to SEPA Direct Debit payments.
+public struct AccountUpdateSettingsSepaDebitPayments: StripeParams {
+    /// The business creditor id for european payments.
+    public var creditorId: String?
+
+    public init(creditorId: String? = nil) {
+        self.creditorId = creditorId
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case creditorId = "creditor_id"
     }
 }
 

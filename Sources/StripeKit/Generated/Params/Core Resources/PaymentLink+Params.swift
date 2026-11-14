@@ -34,10 +34,10 @@ public struct PaymentLinkCreateParams: StripeParams {
     /// price.
     public var currency: String?
     /// Collect additional information from your customer using custom fields. Up to 3 fields are supported.
-    /// You can't set this parameter if `ui_mode` is `custom`.
+    /// You can't set this parameter if `ui_mode` is `elements`.
     public var customFields: [PaymentLinkCreateCustomFields]?
     /// Display additional text for your customers using custom text. You can't set this parameter if
-    /// `ui_mode` is `custom`.
+    /// `ui_mode` is `elements`.
     public var customText: PaymentLinkCreateCustomText?
     /// Configures whether [checkout sessions](https://docs.stripe.com/api/checkout/sessions) created by
     /// this payment link create a [Customer](https://docs.stripe.com/api/customers).
@@ -48,6 +48,10 @@ public struct PaymentLinkCreateParams: StripeParams {
     public var inactiveMessage: String?
     /// Generate a post-purchase Invoice for one-time payments.
     public var invoiceCreation: PaymentLinkCreateInvoiceCreation?
+    /// Settings for Managed Payments for this Payment Link and resulting
+    /// [CheckoutSessions](/api/checkout/sessions/object), [PaymentIntents](/api/payment_intents/object),
+    /// [Invoices](/api/invoices/object), and [Subscriptions](/api/subscriptions/object).
+    public var managedPayments: PaymentLinkCreateManagedPayments?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
@@ -74,6 +78,8 @@ public struct PaymentLinkCreateParams: StripeParams {
     /// guide on [configuring subscriptions with a free
     /// trial](https://docs.stripe.com/payments/checkout/free-trials).
     public var paymentMethodCollection: PaymentLinkCreatePaymentMethodCollection?
+    /// Payment-method-specific configuration.
+    public var paymentMethodOptions: PaymentLinkCreatePaymentMethodOptions?
     /// The list of payment method types that customers can use. If no value is passed, Stripe will
     /// dynamically show relevant payment methods from your [payment method
     /// settings](https://dashboard.stripe.com/settings/payment_methods) (20+ payment methods
@@ -103,7 +109,7 @@ public struct PaymentLinkCreateParams: StripeParams {
     /// payment will be transferred to.
     public var transferData: PaymentLinkCreateTransferData?
 
-    public init(lineItems: [PaymentLinkCreateLineItems], afterCompletion: PaymentLinkCreateAfterCompletion? = nil, allowPromotionCodes: Bool? = nil, applicationFeeAmount: Int? = nil, applicationFeePercent: Double? = nil, automaticTax: PaymentLinkCreateAutomaticTax? = nil, billingAddressCollection: PaymentLinkCreateBillingAddressCollection? = nil, consentCollection: PaymentLinkCreateConsentCollection? = nil, currency: String? = nil, customFields: [PaymentLinkCreateCustomFields]? = nil, customText: PaymentLinkCreateCustomText? = nil, customerCreation: PaymentLinkCreateCustomerCreation? = nil, expand: [String]? = nil, inactiveMessage: String? = nil, invoiceCreation: PaymentLinkCreateInvoiceCreation? = nil, metadata: [String: String]? = nil, nameCollection: PaymentLinkCreateNameCollection? = nil, onBehalfOf: String? = nil, optionalItems: [PaymentLinkCreateOptionalItems]? = nil, paymentIntentData: PaymentLinkCreatePaymentIntentData? = nil, paymentMethodCollection: PaymentLinkCreatePaymentMethodCollection? = nil, paymentMethodTypes: [PaymentLinkCreatePaymentMethodTypes]? = nil, phoneNumberCollection: PaymentLinkCreatePhoneNumberCollection? = nil, restrictions: PaymentLinkCreateRestrictions? = nil, shippingAddressCollection: PaymentLinkCreateShippingAddressCollection? = nil, shippingOptions: [PaymentLinkCreateShippingOptions]? = nil, submitType: PaymentLinkCreateSubmitType? = nil, subscriptionData: PaymentLinkCreateSubscriptionData? = nil, taxIdCollection: PaymentLinkCreateTaxIdCollection? = nil, transferData: PaymentLinkCreateTransferData? = nil) {
+    public init(lineItems: [PaymentLinkCreateLineItems], afterCompletion: PaymentLinkCreateAfterCompletion? = nil, allowPromotionCodes: Bool? = nil, applicationFeeAmount: Int? = nil, applicationFeePercent: Double? = nil, automaticTax: PaymentLinkCreateAutomaticTax? = nil, billingAddressCollection: PaymentLinkCreateBillingAddressCollection? = nil, consentCollection: PaymentLinkCreateConsentCollection? = nil, currency: String? = nil, customFields: [PaymentLinkCreateCustomFields]? = nil, customText: PaymentLinkCreateCustomText? = nil, customerCreation: PaymentLinkCreateCustomerCreation? = nil, expand: [String]? = nil, inactiveMessage: String? = nil, invoiceCreation: PaymentLinkCreateInvoiceCreation? = nil, managedPayments: PaymentLinkCreateManagedPayments? = nil, metadata: [String: String]? = nil, nameCollection: PaymentLinkCreateNameCollection? = nil, onBehalfOf: String? = nil, optionalItems: [PaymentLinkCreateOptionalItems]? = nil, paymentIntentData: PaymentLinkCreatePaymentIntentData? = nil, paymentMethodCollection: PaymentLinkCreatePaymentMethodCollection? = nil, paymentMethodOptions: PaymentLinkCreatePaymentMethodOptions? = nil, paymentMethodTypes: [PaymentLinkCreatePaymentMethodTypes]? = nil, phoneNumberCollection: PaymentLinkCreatePhoneNumberCollection? = nil, restrictions: PaymentLinkCreateRestrictions? = nil, shippingAddressCollection: PaymentLinkCreateShippingAddressCollection? = nil, shippingOptions: [PaymentLinkCreateShippingOptions]? = nil, submitType: PaymentLinkCreateSubmitType? = nil, subscriptionData: PaymentLinkCreateSubscriptionData? = nil, taxIdCollection: PaymentLinkCreateTaxIdCollection? = nil, transferData: PaymentLinkCreateTransferData? = nil) {
         self.lineItems = lineItems
         self.afterCompletion = afterCompletion
         self.allowPromotionCodes = allowPromotionCodes
@@ -119,12 +125,14 @@ public struct PaymentLinkCreateParams: StripeParams {
         self.expand = expand
         self.inactiveMessage = inactiveMessage
         self.invoiceCreation = invoiceCreation
+        self.managedPayments = managedPayments
         self.metadata = metadata
         self.nameCollection = nameCollection
         self.onBehalfOf = onBehalfOf
         self.optionalItems = optionalItems
         self.paymentIntentData = paymentIntentData
         self.paymentMethodCollection = paymentMethodCollection
+        self.paymentMethodOptions = paymentMethodOptions
         self.paymentMethodTypes = paymentMethodTypes
         self.phoneNumberCollection = phoneNumberCollection
         self.restrictions = restrictions
@@ -152,12 +160,14 @@ public struct PaymentLinkCreateParams: StripeParams {
         case inactiveMessage = "inactive_message"
         case invoiceCreation = "invoice_creation"
         case lineItems = "line_items"
+        case managedPayments = "managed_payments"
         case metadata
         case nameCollection = "name_collection"
         case onBehalfOf = "on_behalf_of"
         case optionalItems = "optional_items"
         case paymentIntentData = "payment_intent_data"
         case paymentMethodCollection = "payment_method_collection"
+        case paymentMethodOptions = "payment_method_options"
         case paymentMethodTypes = "payment_method_types"
         case phoneNumberCollection = "phone_number_collection"
         case restrictions
@@ -178,15 +188,25 @@ public struct PaymentLinkUpdateParams: StripeParams {
     public var afterCompletion: PaymentLinkUpdateAfterCompletion?
     /// Enables user redeemable promotion codes.
     public var allowPromotionCodes: Bool?
+    /// The amount of the application fee (if any) that will be requested to be applied to the payment and
+    /// transferred to the application owner's Stripe account. Can only be applied when there are no line
+    /// items with recurring prices.
+    public var applicationFeeAmount: Int?
+    /// A non-negative decimal between 0 and 100, with at most two decimal places. This represents the
+    /// percentage of the subscription invoice total that will be transferred to the application owner's
+    /// Stripe account. There must be at least 1 line item with a recurring price to use this field.
+    public var applicationFeePercent: Double?
     /// Configuration for automatic tax collection.
     public var automaticTax: PaymentLinkUpdateAutomaticTax?
     /// Configuration for collecting the customer's billing address. Defaults to `auto`.
     public var billingAddressCollection: PaymentLinkUpdateBillingAddressCollection?
+    /// Configure fields to gather active consent from customers.
+    public var consentCollection: PaymentLinkUpdateConsentCollection?
     /// Collect additional information from your customer using custom fields. Up to 3 fields are supported.
-    /// You can't set this parameter if `ui_mode` is `custom`.
+    /// You can't set this parameter if `ui_mode` is `elements`.
     public var customFields: [PaymentLinkUpdateCustomFields]?
     /// Display additional text for your customers using custom text. You can't set this parameter if
-    /// `ui_mode` is `custom`.
+    /// `ui_mode` is `elements`.
     public var customText: PaymentLinkUpdateCustomText?
     /// Configures whether [checkout sessions](https://docs.stripe.com/api/checkout/sessions) created by
     /// this payment link create a [Customer](https://docs.stripe.com/api/customers).
@@ -208,6 +228,14 @@ public struct PaymentLinkUpdateParams: StripeParams {
     public var metadata: [String: String]?
     /// Controls settings applied for collecting the customer's name.
     public var nameCollection: PaymentLinkUpdateNameCollection?
+    /// The account on behalf of which to charge.
+    public var onBehalfOf: String?
+    /// A list of optional items the customer can add to their order at checkout. Use this parameter to pass
+    /// one-time or recurring [Prices](https://docs.stripe.com/api/prices). There is a maximum of 10
+    /// optional items allowed on a payment link, and the existing limits on the number of line items
+    /// allowed on a payment link apply to the combined number of line items and optional items. There is a
+    /// maximum of 20 combined line items and optional items.
+    public var optionalItems: [PaymentLinkUpdateOptionalItems]?
     /// A subset of parameters to be passed to PaymentIntent creation for Checkout Sessions in `payment`
     /// mode.
     public var paymentIntentData: PaymentLinkUpdatePaymentIntentData?
@@ -218,6 +246,8 @@ public struct PaymentLinkUpdateParams: StripeParams {
     /// guide on [configuring subscriptions with a free
     /// trial](https://docs.stripe.com/payments/checkout/free-trials).
     public var paymentMethodCollection: PaymentLinkUpdatePaymentMethodCollection?
+    /// Payment-method-specific configuration.
+    public var paymentMethodOptions: PaymentLinkUpdatePaymentMethodOptions?
     /// The list of payment method types that customers can use. Pass an empty string to enable dynamic
     /// payment methods that use your [payment method
     /// settings](https://dashboard.stripe.com/settings/payment_methods).
@@ -229,6 +259,9 @@ public struct PaymentLinkUpdateParams: StripeParams {
     public var restrictions: PaymentLinkUpdateRestrictions?
     /// Configuration for collecting the customer's shipping address.
     public var shippingAddressCollection: PaymentLinkUpdateShippingAddressCollection?
+    /// The shipping rate options to apply to [checkout
+    /// sessions](https://docs.stripe.com/api/checkout/sessions) created by this payment link.
+    public var shippingOptions: [PaymentLinkUpdateShippingOptions]?
     /// Describes the type of transaction being performed in order to customize relevant text on the page,
     /// such as the submit button. Changing this value will also affect the hostname in the
     /// [url](https://docs.stripe.com/api/payment_links/payment_links/object#url) property (example:
@@ -239,13 +272,19 @@ public struct PaymentLinkUpdateParams: StripeParams {
     public var subscriptionData: PaymentLinkUpdateSubscriptionData?
     /// Controls tax ID collection during checkout.
     public var taxIdCollection: PaymentLinkUpdateTaxIdCollection?
+    /// The account (if any) the payments will be attributed to for tax reporting, and where funds from each
+    /// payment will be transferred to.
+    public var transferData: PaymentLinkUpdateTransferData?
 
-    public init(active: Bool? = nil, afterCompletion: PaymentLinkUpdateAfterCompletion? = nil, allowPromotionCodes: Bool? = nil, automaticTax: PaymentLinkUpdateAutomaticTax? = nil, billingAddressCollection: PaymentLinkUpdateBillingAddressCollection? = nil, customFields: [PaymentLinkUpdateCustomFields]? = nil, customText: PaymentLinkUpdateCustomText? = nil, customerCreation: PaymentLinkUpdateCustomerCreation? = nil, expand: [String]? = nil, inactiveMessage: String? = nil, invoiceCreation: PaymentLinkUpdateInvoiceCreation? = nil, lineItems: [PaymentLinkUpdateLineItems]? = nil, metadata: [String: String]? = nil, nameCollection: PaymentLinkUpdateNameCollection? = nil, paymentIntentData: PaymentLinkUpdatePaymentIntentData? = nil, paymentMethodCollection: PaymentLinkUpdatePaymentMethodCollection? = nil, paymentMethodTypes: [PaymentLinkUpdatePaymentMethodTypes]? = nil, phoneNumberCollection: PaymentLinkUpdatePhoneNumberCollection? = nil, restrictions: PaymentLinkUpdateRestrictions? = nil, shippingAddressCollection: PaymentLinkUpdateShippingAddressCollection? = nil, submitType: PaymentLinkUpdateSubmitType? = nil, subscriptionData: PaymentLinkUpdateSubscriptionData? = nil, taxIdCollection: PaymentLinkUpdateTaxIdCollection? = nil) {
+    public init(active: Bool? = nil, afterCompletion: PaymentLinkUpdateAfterCompletion? = nil, allowPromotionCodes: Bool? = nil, applicationFeeAmount: Int? = nil, applicationFeePercent: Double? = nil, automaticTax: PaymentLinkUpdateAutomaticTax? = nil, billingAddressCollection: PaymentLinkUpdateBillingAddressCollection? = nil, consentCollection: PaymentLinkUpdateConsentCollection? = nil, customFields: [PaymentLinkUpdateCustomFields]? = nil, customText: PaymentLinkUpdateCustomText? = nil, customerCreation: PaymentLinkUpdateCustomerCreation? = nil, expand: [String]? = nil, inactiveMessage: String? = nil, invoiceCreation: PaymentLinkUpdateInvoiceCreation? = nil, lineItems: [PaymentLinkUpdateLineItems]? = nil, metadata: [String: String]? = nil, nameCollection: PaymentLinkUpdateNameCollection? = nil, onBehalfOf: String? = nil, optionalItems: [PaymentLinkUpdateOptionalItems]? = nil, paymentIntentData: PaymentLinkUpdatePaymentIntentData? = nil, paymentMethodCollection: PaymentLinkUpdatePaymentMethodCollection? = nil, paymentMethodOptions: PaymentLinkUpdatePaymentMethodOptions? = nil, paymentMethodTypes: [PaymentLinkUpdatePaymentMethodTypes]? = nil, phoneNumberCollection: PaymentLinkUpdatePhoneNumberCollection? = nil, restrictions: PaymentLinkUpdateRestrictions? = nil, shippingAddressCollection: PaymentLinkUpdateShippingAddressCollection? = nil, shippingOptions: [PaymentLinkUpdateShippingOptions]? = nil, submitType: PaymentLinkUpdateSubmitType? = nil, subscriptionData: PaymentLinkUpdateSubscriptionData? = nil, taxIdCollection: PaymentLinkUpdateTaxIdCollection? = nil, transferData: PaymentLinkUpdateTransferData? = nil) {
         self.active = active
         self.afterCompletion = afterCompletion
         self.allowPromotionCodes = allowPromotionCodes
+        self.applicationFeeAmount = applicationFeeAmount
+        self.applicationFeePercent = applicationFeePercent
         self.automaticTax = automaticTax
         self.billingAddressCollection = billingAddressCollection
+        self.consentCollection = consentCollection
         self.customFields = customFields
         self.customText = customText
         self.customerCreation = customerCreation
@@ -255,23 +294,31 @@ public struct PaymentLinkUpdateParams: StripeParams {
         self.lineItems = lineItems
         self.metadata = metadata
         self.nameCollection = nameCollection
+        self.onBehalfOf = onBehalfOf
+        self.optionalItems = optionalItems
         self.paymentIntentData = paymentIntentData
         self.paymentMethodCollection = paymentMethodCollection
+        self.paymentMethodOptions = paymentMethodOptions
         self.paymentMethodTypes = paymentMethodTypes
         self.phoneNumberCollection = phoneNumberCollection
         self.restrictions = restrictions
         self.shippingAddressCollection = shippingAddressCollection
+        self.shippingOptions = shippingOptions
         self.submitType = submitType
         self.subscriptionData = subscriptionData
         self.taxIdCollection = taxIdCollection
+        self.transferData = transferData
     }
 
     public enum CodingKeys: String, CodingKey {
         case active
         case afterCompletion = "after_completion"
         case allowPromotionCodes = "allow_promotion_codes"
+        case applicationFeeAmount = "application_fee_amount"
+        case applicationFeePercent = "application_fee_percent"
         case automaticTax = "automatic_tax"
         case billingAddressCollection = "billing_address_collection"
+        case consentCollection = "consent_collection"
         case customFields = "custom_fields"
         case customText = "custom_text"
         case customerCreation = "customer_creation"
@@ -281,15 +328,20 @@ public struct PaymentLinkUpdateParams: StripeParams {
         case lineItems = "line_items"
         case metadata
         case nameCollection = "name_collection"
+        case onBehalfOf = "on_behalf_of"
+        case optionalItems = "optional_items"
         case paymentIntentData = "payment_intent_data"
         case paymentMethodCollection = "payment_method_collection"
+        case paymentMethodOptions = "payment_method_options"
         case paymentMethodTypes = "payment_method_types"
         case phoneNumberCollection = "phone_number_collection"
         case restrictions
         case shippingAddressCollection = "shipping_address_collection"
+        case shippingOptions = "shipping_options"
         case submitType = "submit_type"
         case subscriptionData = "subscription_data"
         case taxIdCollection = "tax_id_collection"
+        case transferData = "transfer_data"
     }
 }
 
@@ -406,16 +458,20 @@ public struct PaymentLinkCreateLineItemsPriceDataProductData: StripeParams {
     public var metadata: [String: String]?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: PaymentLinkCreateLineItemsPriceDataProductDataTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal.
     public var unitLabel: String?
 
-    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, unitLabel: String? = nil) {
+    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, taxDetails: PaymentLinkCreateLineItemsPriceDataProductDataTaxDetails? = nil, unitLabel: String? = nil) {
         self.name = name
         self.description = description
         self.images = images
         self.metadata = metadata
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
     }
 
@@ -425,7 +481,29 @@ public struct PaymentLinkCreateLineItemsPriceDataProductData: StripeParams {
         case metadata
         case name
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
+    }
+}
+
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct PaymentLinkCreateLineItemsPriceDataProductDataTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }
 
@@ -536,7 +614,8 @@ public struct PaymentLinkCreateConsentCollection: StripeParams {
     public var paymentMethodReuseAgreement: PaymentLinkCreateConsentCollectionPaymentMethodReuseAgreement?
     /// If set to `auto`, enables the collection of customer consent for promotional communications. The
     /// Checkout Session will determine whether to display an option to opt into promotional communication
-    /// from the merchant depending on the customer's locale. Only available to US merchants.
+    /// from the merchant depending on the customer's locale. Only available to US merchants and US
+    /// customers.
     public var promotions: PaymentLinkCreateConsentCollectionPromotions?
     /// If set to `required`, it requires customers to check a terms of service checkbox before being able
     /// to pay. There must be a valid terms of service URL set in your [Dashboard
@@ -600,7 +679,7 @@ public struct PaymentLinkCreateCustomFields: StripeParams {
 
 /// The label for the field, displayed to the customer.
 public struct PaymentLinkCreateCustomFieldsLabel: StripeParams {
-    /// Custom text for the label, displayed to the customer. Up to 50 characters.
+    /// Custom text for the label, displayed to the customer. Up to 100 characters.
     public var custom: String
     /// The type of the label.
     public var type: PaymentLinkCreateCustomFieldsLabelType
@@ -615,8 +694,7 @@ public struct PaymentLinkCreateCustomFieldsLabel: StripeParams {
 public struct PaymentLinkCreateCustomFieldsDropdown: StripeParams {
     /// The options available for the customer to select. Up to 200 options allowed.
     public var options: [PaymentLinkCreateCustomFieldsDropdownOptions]
-    /// The value that will pre-fill the field on the payment page.Must match a `value` in the `options`
-    /// array.
+    /// The value that pre-fills the field on the payment page. Must match a `value` in the `options` array.
     public var defaultValue: String?
 
     public init(options: [PaymentLinkCreateCustomFieldsDropdownOptions], defaultValue: String? = nil) {
@@ -646,7 +724,7 @@ public struct PaymentLinkCreateCustomFieldsDropdownOptions: StripeParams {
 
 /// Configuration for `type=numeric` fields.
 public struct PaymentLinkCreateCustomFieldsNumeric: StripeParams {
-    /// The value that will pre-fill the field on the payment page.
+    /// The value that pre-fills the field on the payment page.
     public var defaultValue: String?
     /// The maximum character length constraint for the customer's input.
     public var maximumLength: Int?
@@ -668,7 +746,7 @@ public struct PaymentLinkCreateCustomFieldsNumeric: StripeParams {
 
 /// Configuration for `type=text` fields.
 public struct PaymentLinkCreateCustomFieldsText: StripeParams {
-    /// The value that will pre-fill the field on the payment page.
+    /// The value that pre-fills the field on the payment page.
     public var defaultValue: String?
     /// The maximum character length constraint for the customer's input.
     public var maximumLength: Int?
@@ -689,7 +767,7 @@ public struct PaymentLinkCreateCustomFieldsText: StripeParams {
 }
 
 /// Display additional text for your customers using custom text. You can't set this parameter if
-/// `ui_mode` is `custom`.
+/// `ui_mode` is `elements`.
 public struct PaymentLinkCreateCustomText: StripeParams {
     /// Custom text that should be displayed after the payment confirmation button.
     public var afterSubmit: PaymentLinkCreateCustomTextAfterSubmit?
@@ -716,7 +794,7 @@ public struct PaymentLinkCreateCustomText: StripeParams {
 }
 
 public struct PaymentLinkCreateCustomTextAfterSubmit: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -725,7 +803,7 @@ public struct PaymentLinkCreateCustomTextAfterSubmit: StripeParams {
 }
 
 public struct PaymentLinkCreateCustomTextShippingAddress: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -734,7 +812,7 @@ public struct PaymentLinkCreateCustomTextShippingAddress: StripeParams {
 }
 
 public struct PaymentLinkCreateCustomTextSubmit: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -743,7 +821,7 @@ public struct PaymentLinkCreateCustomTextSubmit: StripeParams {
 }
 
 public struct PaymentLinkCreateCustomTextTermsOfServiceAcceptance: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -854,6 +932,19 @@ public struct PaymentLinkCreateInvoiceCreationInvoiceDataRenderingOptions: Strip
     public enum CodingKeys: String, CodingKey {
         case amountTaxDisplay = "amount_tax_display"
         case template
+    }
+}
+
+/// Settings for Managed Payments for this Payment Link and resulting
+/// [CheckoutSessions](/api/checkout/sessions/object), [PaymentIntents](/api/payment_intents/object),
+/// [Invoices](/api/invoices/object), and [Subscriptions](/api/subscriptions/object).
+public struct PaymentLinkCreateManagedPayments: StripeParams {
+    /// Set to `true` to enable [Managed Payments](https://docs.stripe.com/payments/managed-payments),
+    /// Stripe's merchant of record solution, for this session.
+    public var enabled: Bool?
+
+    public init(enabled: Bool? = nil) {
+        self.enabled = enabled
     }
 }
 
@@ -1001,6 +1092,41 @@ public struct PaymentLinkCreatePaymentIntentData: StripeParams {
     }
 }
 
+/// Payment-method-specific configuration.
+public struct PaymentLinkCreatePaymentMethodOptions: StripeParams {
+    /// Configuration for `card` payment methods.
+    public var card: PaymentLinkCreatePaymentMethodOptionsCard?
+
+    public init(card: PaymentLinkCreatePaymentMethodOptionsCard? = nil) {
+        self.card = card
+    }
+}
+
+/// Configuration for `card` payment methods.
+public struct PaymentLinkCreatePaymentMethodOptionsCard: StripeParams {
+    /// Restrictions to apply to the card payment method. For example, you can block specific card brands.
+    public var restrictions: PaymentLinkCreatePaymentMethodOptionsCardRestrictions?
+
+    public init(restrictions: PaymentLinkCreatePaymentMethodOptionsCardRestrictions? = nil) {
+        self.restrictions = restrictions
+    }
+}
+
+/// Restrictions to apply to the card payment method. For example, you can block specific card brands.
+public struct PaymentLinkCreatePaymentMethodOptionsCardRestrictions: StripeParams {
+    /// The card brands to block. If a customer enters or selects a card belonging to a blocked brand, they
+    /// can't complete the payment.
+    public var brandsBlocked: [PaymentLinkCreatePaymentMethodOptionsCardRestrictionsBrandsBlocked]?
+
+    public init(brandsBlocked: [PaymentLinkCreatePaymentMethodOptionsCardRestrictionsBrandsBlocked]? = nil) {
+        self.brandsBlocked = brandsBlocked
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case brandsBlocked = "brands_blocked"
+    }
+}
+
 /// Controls phone number collection settings during checkout. We recommend that you review your privacy
 /// policy and check with your legal contacts.
 public struct PaymentLinkCreatePhoneNumberCollection: StripeParams {
@@ -1103,12 +1229,45 @@ public struct PaymentLinkCreateSubscriptionData: StripeParams {
 
 /// All invoices will be billed using the specified settings.
 public struct PaymentLinkCreateSubscriptionDataInvoiceSettings: StripeParams {
+    /// The account tax IDs associated with the subscription. Will be set on invoices generated by the
+    /// subscription.
+    public var accountTaxIds: [String]?
+    /// A list of up to 4 custom fields to be displayed on the invoice.
+    public var customFields: [PaymentLinkCreateSubscriptionDataInvoiceSettingsCustomFields]?
+    /// An arbitrary string attached to the object. Often useful for displaying to users.
+    public var description: String?
+    /// Footer to be displayed on the invoice.
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: PaymentLinkCreateSubscriptionDataInvoiceSettingsIssuer?
 
-    public init(issuer: PaymentLinkCreateSubscriptionDataInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [PaymentLinkCreateSubscriptionDataInvoiceSettingsCustomFields]? = nil, description: String? = nil, footer: String? = nil, issuer: PaymentLinkCreateSubscriptionDataInvoiceSettingsIssuer? = nil) {
+        self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
+        case description
+        case footer
+        case issuer
+    }
+}
+
+public struct PaymentLinkCreateSubscriptionDataInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -1160,7 +1319,7 @@ public struct PaymentLinkCreateTaxIdCollection: StripeParams {
     /// Enable tax ID collection during checkout. Defaults to `false`.
     public var enabled: Bool
     /// Describes whether a tax ID is required during checkout. Defaults to `never`. You can't set this
-    /// parameter if `ui_mode` is `custom`.
+    /// parameter if `ui_mode` is `elements`.
     public var required: PaymentLinkCreateTaxIdCollectionRequired?
 
     public init(enabled: Bool, required: PaymentLinkCreateTaxIdCollectionRequired? = nil) {
@@ -1265,6 +1424,47 @@ public struct PaymentLinkUpdateAutomaticTaxLiability: StripeParams {
     }
 }
 
+/// Configure fields to gather active consent from customers.
+public struct PaymentLinkUpdateConsentCollection: StripeParams {
+    /// Determines the display of payment method reuse agreement text in the UI. If set to `hidden`, it will
+    /// hide legal text related to the reuse of a payment method.
+    public var paymentMethodReuseAgreement: PaymentLinkUpdateConsentCollectionPaymentMethodReuseAgreement?
+    /// If set to `auto`, enables the collection of customer consent for promotional communications. The
+    /// Checkout Session will determine whether to display an option to opt into promotional communication
+    /// from the merchant depending on the customer's locale. Only available to US merchants and US
+    /// customers.
+    public var promotions: PaymentLinkUpdateConsentCollectionPromotions?
+    /// If set to `required`, it requires customers to check a terms of service checkbox before being able
+    /// to pay. There must be a valid terms of service URL set in your [Dashboard
+    /// settings](https://dashboard.stripe.com/settings/public).
+    public var termsOfService: PaymentLinkUpdateConsentCollectionTermsOfService?
+
+    public init(paymentMethodReuseAgreement: PaymentLinkUpdateConsentCollectionPaymentMethodReuseAgreement? = nil, promotions: PaymentLinkUpdateConsentCollectionPromotions? = nil, termsOfService: PaymentLinkUpdateConsentCollectionTermsOfService? = nil) {
+        self.paymentMethodReuseAgreement = paymentMethodReuseAgreement
+        self.promotions = promotions
+        self.termsOfService = termsOfService
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case paymentMethodReuseAgreement = "payment_method_reuse_agreement"
+        case promotions
+        case termsOfService = "terms_of_service"
+    }
+}
+
+/// Determines the display of payment method reuse agreement text in the UI. If set to `hidden`, it will
+/// hide legal text related to the reuse of a payment method.
+public struct PaymentLinkUpdateConsentCollectionPaymentMethodReuseAgreement: StripeParams {
+    /// Determines the position and visibility of the payment method reuse agreement in the UI. When set to
+    /// `auto`, Stripe's defaults will be used. When set to `hidden`, the payment method reuse agreement
+    /// text will always be hidden in the UI.
+    public var position: PaymentLinkUpdateConsentCollectionPaymentMethodReuseAgreementPosition
+
+    public init(position: PaymentLinkUpdateConsentCollectionPaymentMethodReuseAgreementPosition) {
+        self.position = position
+    }
+}
+
 public struct PaymentLinkUpdateCustomFields: StripeParams {
     /// String of your choice that your integration can use to reconcile this field. Must be unique to this
     /// field, alphanumeric, and up to 200 characters.
@@ -1296,7 +1496,7 @@ public struct PaymentLinkUpdateCustomFields: StripeParams {
 
 /// The label for the field, displayed to the customer.
 public struct PaymentLinkUpdateCustomFieldsLabel: StripeParams {
-    /// Custom text for the label, displayed to the customer. Up to 50 characters.
+    /// Custom text for the label, displayed to the customer. Up to 100 characters.
     public var custom: String
     /// The type of the label.
     public var type: PaymentLinkUpdateCustomFieldsLabelType
@@ -1311,8 +1511,7 @@ public struct PaymentLinkUpdateCustomFieldsLabel: StripeParams {
 public struct PaymentLinkUpdateCustomFieldsDropdown: StripeParams {
     /// The options available for the customer to select. Up to 200 options allowed.
     public var options: [PaymentLinkUpdateCustomFieldsDropdownOptions]
-    /// The value that will pre-fill the field on the payment page.Must match a `value` in the `options`
-    /// array.
+    /// The value that pre-fills the field on the payment page. Must match a `value` in the `options` array.
     public var defaultValue: String?
 
     public init(options: [PaymentLinkUpdateCustomFieldsDropdownOptions], defaultValue: String? = nil) {
@@ -1342,7 +1541,7 @@ public struct PaymentLinkUpdateCustomFieldsDropdownOptions: StripeParams {
 
 /// Configuration for `type=numeric` fields.
 public struct PaymentLinkUpdateCustomFieldsNumeric: StripeParams {
-    /// The value that will pre-fill the field on the payment page.
+    /// The value that pre-fills the field on the payment page.
     public var defaultValue: String?
     /// The maximum character length constraint for the customer's input.
     public var maximumLength: Int?
@@ -1364,7 +1563,7 @@ public struct PaymentLinkUpdateCustomFieldsNumeric: StripeParams {
 
 /// Configuration for `type=text` fields.
 public struct PaymentLinkUpdateCustomFieldsText: StripeParams {
-    /// The value that will pre-fill the field on the payment page.
+    /// The value that pre-fills the field on the payment page.
     public var defaultValue: String?
     /// The maximum character length constraint for the customer's input.
     public var maximumLength: Int?
@@ -1385,7 +1584,7 @@ public struct PaymentLinkUpdateCustomFieldsText: StripeParams {
 }
 
 /// Display additional text for your customers using custom text. You can't set this parameter if
-/// `ui_mode` is `custom`.
+/// `ui_mode` is `elements`.
 public struct PaymentLinkUpdateCustomText: StripeParams {
     /// Custom text that should be displayed after the payment confirmation button.
     public var afterSubmit: PaymentLinkUpdateCustomTextAfterSubmit?
@@ -1412,7 +1611,7 @@ public struct PaymentLinkUpdateCustomText: StripeParams {
 }
 
 public struct PaymentLinkUpdateCustomTextAfterSubmit: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -1421,7 +1620,7 @@ public struct PaymentLinkUpdateCustomTextAfterSubmit: StripeParams {
 }
 
 public struct PaymentLinkUpdateCustomTextShippingAddress: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -1430,7 +1629,7 @@ public struct PaymentLinkUpdateCustomTextShippingAddress: StripeParams {
 }
 
 public struct PaymentLinkUpdateCustomTextSubmit: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -1439,7 +1638,7 @@ public struct PaymentLinkUpdateCustomTextSubmit: StripeParams {
 }
 
 public struct PaymentLinkUpdateCustomTextTermsOfServiceAcceptance: StripeParams {
-    /// Text may be up to 1200 characters in length.
+    /// Text can be up to 1200 characters in length.
     public var message: String
 
     public init(message: String) {
@@ -1634,6 +1833,49 @@ public struct PaymentLinkUpdateNameCollectionIndividual: StripeParams {
     }
 }
 
+public struct PaymentLinkUpdateOptionalItems: StripeParams {
+    /// The ID of the [Price](https://docs.stripe.com/api/prices) or
+    /// [Plan](https://docs.stripe.com/api/plans) object.
+    public var price: String
+    /// The initial quantity of the line item created when a customer chooses to add this optional item to
+    /// their order.
+    public var quantity: Int
+    /// When set, provides configuration for the customer to adjust the quantity of the line item created
+    /// when a customer chooses to add this optional item to their order.
+    public var adjustableQuantity: PaymentLinkUpdateOptionalItemsAdjustableQuantity?
+
+    public init(price: String, quantity: Int, adjustableQuantity: PaymentLinkUpdateOptionalItemsAdjustableQuantity? = nil) {
+        self.price = price
+        self.quantity = quantity
+        self.adjustableQuantity = adjustableQuantity
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case adjustableQuantity = "adjustable_quantity"
+        case price
+        case quantity
+    }
+}
+
+/// When set, provides configuration for the customer to adjust the quantity of the line item created
+/// when a customer chooses to add this optional item to their order.
+public struct PaymentLinkUpdateOptionalItemsAdjustableQuantity: StripeParams {
+    /// Set to true if the quantity can be adjusted to any non-negative integer.
+    public var enabled: Bool
+    /// The maximum quantity of this item the customer can purchase. By default this value is 99.
+    public var maximum: Int?
+    /// The minimum quantity of this item the customer must purchase, if they choose to purchase it. Because
+    /// this item is optional, the customer will always be able to remove it from their order, even if the
+    /// `minimum` configured here is greater than 0. By default this value is 0.
+    public var minimum: Int?
+
+    public init(enabled: Bool, maximum: Int? = nil, minimum: Int? = nil) {
+        self.enabled = enabled
+        self.maximum = maximum
+        self.minimum = minimum
+    }
+}
+
 /// A subset of parameters to be passed to PaymentIntent creation for Checkout Sessions in `payment`
 /// mode.
 public struct PaymentLinkUpdatePaymentIntentData: StripeParams {
@@ -1643,6 +1885,18 @@ public struct PaymentLinkUpdatePaymentIntentData: StripeParams {
     /// on [Payment Intents](https://docs.stripe.com/api/payment_intents) generated from this payment link.
     /// Unlike object-level metadata, this field is declarative. Updates will clear prior values.
     public var metadata: [String: String]?
+    /// Indicates that you intend to [make future
+    /// payments](https://docs.stripe.com/payments/payment-intents#future-usage) with the payment method
+    /// collected by this Checkout Session. When setting this to `on_session`, Checkout will show a notice
+    /// to the customer that their payment details will be saved. When setting this to `off_session`,
+    /// Checkout will show a notice to the customer that their payment details will be saved and used for
+    /// future payments. If a Customer has been provided or Checkout creates a new Customer,Checkout will
+    /// attach the payment method to the Customer. If Checkout does not create a Customer, the payment
+    /// method is not attached to a Customer. To reuse the payment method, you can retrieve it from the
+    /// Checkout Session's PaymentIntent. When processing card payments, Checkout also uses
+    /// `setup_future_usage` to dynamically optimize your payment flow and comply with regional legislation
+    /// and network rules, such as SCA.
+    public var setupFutureUsage: PaymentLinkUpdatePaymentIntentDataSetupFutureUsage?
     /// Text that appears on the customer's statement as the statement descriptor for a non-card charge.
     /// This value overrides the account's default statement descriptor. For information about requirements,
     /// including the 22-character limit, see [the Statement Descriptor
@@ -1659,9 +1913,10 @@ public struct PaymentLinkUpdatePaymentIntentData: StripeParams {
     /// for connected accounts](https://docs.stripe.com/connect/separate-charges-and-transfers) for details.
     public var transferGroup: String?
 
-    public init(description: String? = nil, metadata: [String: String]? = nil, statementDescriptor: String? = nil, statementDescriptorSuffix: String? = nil, transferGroup: String? = nil) {
+    public init(description: String? = nil, metadata: [String: String]? = nil, setupFutureUsage: PaymentLinkUpdatePaymentIntentDataSetupFutureUsage? = nil, statementDescriptor: String? = nil, statementDescriptorSuffix: String? = nil, transferGroup: String? = nil) {
         self.description = description
         self.metadata = metadata
+        self.setupFutureUsage = setupFutureUsage
         self.statementDescriptor = statementDescriptor
         self.statementDescriptorSuffix = statementDescriptorSuffix
         self.transferGroup = transferGroup
@@ -1670,9 +1925,42 @@ public struct PaymentLinkUpdatePaymentIntentData: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case description
         case metadata
+        case setupFutureUsage = "setup_future_usage"
         case statementDescriptor = "statement_descriptor"
         case statementDescriptorSuffix = "statement_descriptor_suffix"
         case transferGroup = "transfer_group"
+    }
+}
+
+public struct PaymentLinkUpdatePaymentMethodOptions: StripeParams {
+    /// Configuration for `card` payment methods.
+    public var card: PaymentLinkUpdatePaymentMethodOptionsCard?
+
+    public init(card: PaymentLinkUpdatePaymentMethodOptionsCard? = nil) {
+        self.card = card
+    }
+}
+
+public struct PaymentLinkUpdatePaymentMethodOptionsCard: StripeParams {
+    /// Restrictions to apply to the card payment method. For example, you can block specific card brands.
+    public var restrictions: PaymentLinkUpdatePaymentMethodOptionsCardRestrictions?
+
+    public init(restrictions: PaymentLinkUpdatePaymentMethodOptionsCardRestrictions? = nil) {
+        self.restrictions = restrictions
+    }
+}
+
+public struct PaymentLinkUpdatePaymentMethodOptionsCardRestrictions: StripeParams {
+    /// The card brands to block. If a customer enters or selects a card belonging to a blocked brand, they
+    /// can't complete the payment.
+    public var brandsBlocked: [PaymentLinkUpdatePaymentMethodOptionsCardRestrictionsBrandsBlocked]?
+
+    public init(brandsBlocked: [PaymentLinkUpdatePaymentMethodOptionsCardRestrictionsBrandsBlocked]? = nil) {
+        self.brandsBlocked = brandsBlocked
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case brandsBlocked = "brands_blocked"
     }
 }
 
@@ -1725,6 +2013,19 @@ public struct PaymentLinkUpdateShippingAddressCollection: StripeParams {
     }
 }
 
+public struct PaymentLinkUpdateShippingOptions: StripeParams {
+    /// The ID of the Shipping Rate to use for this shipping option.
+    public var shippingRate: String?
+
+    public init(shippingRate: String? = nil) {
+        self.shippingRate = shippingRate
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case shippingRate = "shipping_rate"
+    }
+}
+
 /// When creating a subscription, the specified configuration data will be used. There must be at least
 /// one line item with a recurring price to use `subscription_data`.
 public struct PaymentLinkUpdateSubscriptionData: StripeParams {
@@ -1757,12 +2058,45 @@ public struct PaymentLinkUpdateSubscriptionData: StripeParams {
 
 /// All invoices will be billed using the specified settings.
 public struct PaymentLinkUpdateSubscriptionDataInvoiceSettings: StripeParams {
+    /// The account tax IDs associated with the subscription. Will be set on invoices generated by the
+    /// subscription.
+    public var accountTaxIds: [String]?
+    /// A list of up to 4 custom fields to be displayed on the invoice.
+    public var customFields: [PaymentLinkUpdateSubscriptionDataInvoiceSettingsCustomFields]?
+    /// An arbitrary string attached to the object. Often useful for displaying to users.
+    public var description: String?
+    /// Footer to be displayed on the invoice.
+    public var footer: String?
     /// The connected account that issues the invoice. The invoice is presented with the branding and
     /// support information of the specified account.
     public var issuer: PaymentLinkUpdateSubscriptionDataInvoiceSettingsIssuer?
 
-    public init(issuer: PaymentLinkUpdateSubscriptionDataInvoiceSettingsIssuer? = nil) {
+    public init(accountTaxIds: [String]? = nil, customFields: [PaymentLinkUpdateSubscriptionDataInvoiceSettingsCustomFields]? = nil, description: String? = nil, footer: String? = nil, issuer: PaymentLinkUpdateSubscriptionDataInvoiceSettingsIssuer? = nil) {
+        self.accountTaxIds = accountTaxIds
+        self.customFields = customFields
+        self.description = description
+        self.footer = footer
         self.issuer = issuer
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case accountTaxIds = "account_tax_ids"
+        case customFields = "custom_fields"
+        case description
+        case footer
+        case issuer
+    }
+}
+
+public struct PaymentLinkUpdateSubscriptionDataInvoiceSettingsCustomFields: StripeParams {
+    /// The name of the custom field. This may be up to 40 characters.
+    public var name: String
+    /// The value of the custom field. This may be up to 140 characters.
+    public var value: String
+
+    public init(name: String, value: String) {
+        self.name = name
+        self.value = value
     }
 }
 
@@ -1813,11 +2147,25 @@ public struct PaymentLinkUpdateTaxIdCollection: StripeParams {
     /// Enable tax ID collection during checkout. Defaults to `false`.
     public var enabled: Bool
     /// Describes whether a tax ID is required during checkout. Defaults to `never`. You can't set this
-    /// parameter if `ui_mode` is `custom`.
+    /// parameter if `ui_mode` is `elements`.
     public var required: PaymentLinkUpdateTaxIdCollectionRequired?
 
     public init(enabled: Bool, required: PaymentLinkUpdateTaxIdCollectionRequired? = nil) {
         self.enabled = enabled
         self.required = required
+    }
+}
+
+public struct PaymentLinkUpdateTransferData: StripeParams {
+    /// If specified, successful charges will be attributed to the destination account for tax reporting,
+    /// and the funds from charges will be transferred to the destination account. The ID of the resulting
+    /// transfer will be returned on the successful charge's `transfer` field.
+    public var destination: String
+    /// The amount that will be transferred automatically when a charge succeeds.
+    public var amount: Int?
+
+    public init(destination: String, amount: Int? = nil) {
+        self.destination = destination
+        self.amount = amount
     }
 }

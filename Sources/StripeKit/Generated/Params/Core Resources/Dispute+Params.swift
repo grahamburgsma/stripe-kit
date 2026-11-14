@@ -22,6 +22,8 @@ public struct DisputeUpdateParams: StripeParams {
     public var evidence: DisputeUpdateEvidence?
     /// Specifies which fields in the response should be expanded.
     public var expand: [String]?
+    /// Intended submission method for the dispute.
+    public var intendedSubmissionMethod: DisputeUpdateIntendedSubmissionMethod?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
@@ -32,11 +34,20 @@ public struct DisputeUpdateParams: StripeParams {
     /// another request with this attribute set to `true` (the default).
     public var submit: Bool?
 
-    public init(evidence: DisputeUpdateEvidence? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, submit: Bool? = nil) {
+    public init(evidence: DisputeUpdateEvidence? = nil, expand: [String]? = nil, intendedSubmissionMethod: DisputeUpdateIntendedSubmissionMethod? = nil, metadata: [String: String]? = nil, submit: Bool? = nil) {
         self.evidence = evidence
         self.expand = expand
+        self.intendedSubmissionMethod = intendedSubmissionMethod
         self.metadata = metadata
         self.submit = submit
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case evidence
+        case expand
+        case intendedSubmissionMethod = "intended_submission_method"
+        case metadata
+        case submit
     }
 }
 
@@ -47,6 +58,8 @@ public struct DisputeUpdateEvidence: StripeParams {
     /// digital product. This information should include IP addresses, corresponding timestamps, and any
     /// detailed recorded activity. Has a maximum character count of 20,000.
     public var accessActivityLog: String?
+    /// Evidence to submit when appealing a dispute.
+    public var appeal: DisputeUpdateEvidenceAppeal?
     /// The billing address provided by the customer.
     public var billingAddress: String?
     /// (ID of a [file upload](https://stripe.com/docs/guides/file-upload)) Your subscription cancellation
@@ -128,8 +141,9 @@ public struct DisputeUpdateEvidence: StripeParams {
     /// Any additional evidence or statements. Has a maximum character count of 20,000.
     public var uncategorizedText: String?
 
-    public init(accessActivityLog: String? = nil, billingAddress: String? = nil, cancellationPolicy: String? = nil, cancellationPolicyDisclosure: String? = nil, cancellationRebuttal: String? = nil, customerCommunication: String? = nil, customerEmailAddress: String? = nil, customerName: String? = nil, customerPurchaseIp: String? = nil, customerSignature: String? = nil, duplicateChargeDocumentation: String? = nil, duplicateChargeExplanation: String? = nil, duplicateChargeId: String? = nil, enhancedEvidence: DisputeUpdateEvidenceEnhancedEvidence? = nil, productDescription: String? = nil, receipt: String? = nil, refundPolicy: String? = nil, refundPolicyDisclosure: String? = nil, refundRefusalExplanation: String? = nil, serviceDate: String? = nil, serviceDocumentation: String? = nil, shippingAddress: String? = nil, shippingCarrier: String? = nil, shippingDate: String? = nil, shippingDocumentation: String? = nil, shippingTrackingNumber: String? = nil, uncategorizedFile: String? = nil, uncategorizedText: String? = nil) {
+    public init(accessActivityLog: String? = nil, appeal: DisputeUpdateEvidenceAppeal? = nil, billingAddress: String? = nil, cancellationPolicy: String? = nil, cancellationPolicyDisclosure: String? = nil, cancellationRebuttal: String? = nil, customerCommunication: String? = nil, customerEmailAddress: String? = nil, customerName: String? = nil, customerPurchaseIp: String? = nil, customerSignature: String? = nil, duplicateChargeDocumentation: String? = nil, duplicateChargeExplanation: String? = nil, duplicateChargeId: String? = nil, enhancedEvidence: DisputeUpdateEvidenceEnhancedEvidence? = nil, productDescription: String? = nil, receipt: String? = nil, refundPolicy: String? = nil, refundPolicyDisclosure: String? = nil, refundRefusalExplanation: String? = nil, serviceDate: String? = nil, serviceDocumentation: String? = nil, shippingAddress: String? = nil, shippingCarrier: String? = nil, shippingDate: String? = nil, shippingDocumentation: String? = nil, shippingTrackingNumber: String? = nil, uncategorizedFile: String? = nil, uncategorizedText: String? = nil) {
         self.accessActivityLog = accessActivityLog
+        self.appeal = appeal
         self.billingAddress = billingAddress
         self.cancellationPolicy = cancellationPolicy
         self.cancellationPolicyDisclosure = cancellationPolicyDisclosure
@@ -161,6 +175,7 @@ public struct DisputeUpdateEvidence: StripeParams {
 
     public enum CodingKeys: String, CodingKey {
         case accessActivityLog = "access_activity_log"
+        case appeal
         case billingAddress = "billing_address"
         case cancellationPolicy = "cancellation_policy"
         case cancellationPolicyDisclosure = "cancellation_policy_disclosure"
@@ -191,20 +206,66 @@ public struct DisputeUpdateEvidence: StripeParams {
     }
 }
 
+public struct DisputeUpdateEvidenceAppeal: StripeParams {
+    /// Evidence for a card dispute appeal.
+    public var card: DisputeUpdateEvidenceAppealCard?
+
+    public init(card: DisputeUpdateEvidenceAppealCard? = nil) {
+        self.card = card
+    }
+}
+
+public struct DisputeUpdateEvidenceAppealCard: StripeParams {
+    /// An explanation of the reason for filing the appeal.
+    public var reasonForFiling: String?
+    /// One or more document IDs returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `dispute_evidence` to support the appeal.
+    public var supportingFiles: [String]?
+
+    public init(reasonForFiling: String? = nil, supportingFiles: [String]? = nil) {
+        self.reasonForFiling = reasonForFiling
+        self.supportingFiles = supportingFiles
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case reasonForFiling = "reason_for_filing"
+        case supportingFiles = "supporting_files"
+    }
+}
+
 public struct DisputeUpdateEvidenceEnhancedEvidence: StripeParams {
+    /// Evidence provided for Mastercard compliance evidence submission.
+    public var mastercardCompliance: DisputeUpdateEvidenceEnhancedEvidenceMastercardCompliance?
     /// Evidence provided for Visa Compelling Evidence 3.0 evidence submission.
     public var visaCompellingEvidence3: DisputeUpdateEvidenceEnhancedEvidenceVisaCompellingEvidence3?
     /// Evidence provided for Visa compliance evidence submission.
     public var visaCompliance: DisputeUpdateEvidenceEnhancedEvidenceVisaCompliance?
 
-    public init(visaCompellingEvidence3: DisputeUpdateEvidenceEnhancedEvidenceVisaCompellingEvidence3? = nil, visaCompliance: DisputeUpdateEvidenceEnhancedEvidenceVisaCompliance? = nil) {
+    public init(mastercardCompliance: DisputeUpdateEvidenceEnhancedEvidenceMastercardCompliance? = nil, visaCompellingEvidence3: DisputeUpdateEvidenceEnhancedEvidenceVisaCompellingEvidence3? = nil, visaCompliance: DisputeUpdateEvidenceEnhancedEvidenceVisaCompliance? = nil) {
+        self.mastercardCompliance = mastercardCompliance
         self.visaCompellingEvidence3 = visaCompellingEvidence3
         self.visaCompliance = visaCompliance
     }
 
     public enum CodingKeys: String, CodingKey {
+        case mastercardCompliance = "mastercard_compliance"
         case visaCompellingEvidence3 = "visa_compelling_evidence_3"
         case visaCompliance = "visa_compliance"
+    }
+}
+
+/// Evidence provided for Mastercard compliance evidence submission.
+public struct DisputeUpdateEvidenceEnhancedEvidenceMastercardCompliance: StripeParams {
+    /// A field acknowledging the fee incurred when countering a Mastercard compliance dispute. If this
+    /// field is set to true, evidence can be submitted for the compliance dispute.
+    public var feeAcknowledged: Bool?
+
+    public init(feeAcknowledged: Bool? = nil) {
+        self.feeAcknowledged = feeAcknowledged
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case feeAcknowledged = "fee_acknowledged"
     }
 }
 

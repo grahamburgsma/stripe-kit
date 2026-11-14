@@ -83,6 +83,7 @@ public enum IssuingAuthorizationRequestReason: String, Codable, Sendable {
     case notAllowed = "not_allowed"
     case pinBlocked = "pin_blocked"
     case spendingControls = "spending_controls"
+    case stripeInternalError = "stripe_internal_error"
     case suspectedFraud = "suspected_fraud"
     case verificationFailed = "verification_failed"
     case webhookApproved = "webhook_approved"

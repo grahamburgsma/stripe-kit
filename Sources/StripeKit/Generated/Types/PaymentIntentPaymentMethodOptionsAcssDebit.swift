@@ -26,7 +26,7 @@ public struct PaymentIntentPaymentMethodOptionsAcssDebit: Codable, Sendable {
     /// string in YYYY-MM-DD format. The date must be in the future and between 3 and 15 calendar days from
     /// now.
     public var targetDate: String?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: PaymentIntentPaymentMethodOptionsAcssDebitVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -54,7 +54,7 @@ public enum PaymentIntentPaymentMethodOptionsAcssDebitSetupFutureUsage: String, 
     case onSession = "on_session"
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum PaymentIntentPaymentMethodOptionsAcssDebitVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

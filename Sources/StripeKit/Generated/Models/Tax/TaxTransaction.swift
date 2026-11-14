@@ -24,8 +24,8 @@ public struct TaxTransaction: Codable, Sendable {
     public var id: String
     /// The tax collected or refunded, by line item.
     public var lineItems: TransactionLineItemList?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -45,7 +45,11 @@ public struct TaxTransaction: Codable, Sendable {
     /// The shipping cost details for the transaction.
     @Expandable<TaxProductResourceTaxTransactionShippingCost>
     public var shippingCost: String?
-    /// Timestamp of date at which the tax rules and rates in effect applies for the calculation.
+    /// The calculation uses the tax rules and rates that are in effect at this timestamp. You can use a
+    /// date up to 31 days in the past or up to 31 days in the future. If you use a future date, Stripe
+    /// doesn't guarantee that the expected tax rules and rate being used match the actual rules and rate
+    /// that will be in effect on that date. We deploy tax changes before their effective date, but not
+    /// within a fixed window.
     public var taxDate: Int
     /// If `reversal`, this transaction reverses an earlier transaction.
     public var type: TaxTransactionType

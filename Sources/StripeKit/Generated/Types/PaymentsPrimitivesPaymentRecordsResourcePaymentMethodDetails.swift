@@ -13,38 +13,40 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Coda
     public var achCreditTransfer: String?
     @Expandable<PaymentMethodDetailsAchDebit>
     public var achDebit: String?
-    @Expandable<PaymentMethodDetailsAcssDebit>
+    @Expandable<PaymentMethodDetailsPaymentRecordAcssDebit>
     public var acssDebit: String?
-    @Expandable<PaymentMethodDetailsAffirm>
+    @Expandable<PaymentMethodDetailsPaymentRecordAffirm>
     public var affirm: String?
-    @Expandable<PaymentMethodDetailsAfterpayClearpay>
+    @Expandable<PaymentMethodDetailsPaymentRecordAfterpayClearpay>
     public var afterpayClearpay: String?
-    @Expandable<PaymentFlowsPrivatePaymentMethodsAlipayDetails>
+    @Expandable<PaymentMethodDetailsPaymentRecordAlipay>
     public var alipay: String?
-    @Expandable<PaymentMethodDetailsAlma>
+    @Expandable<PaymentMethodDetailsPaymentRecordAlma>
     public var alma: String?
-    @Expandable<PaymentMethodDetailsAmazonPay>
+    @Expandable<PaymentMethodDetailsPaymentRecordAmazonPay>
     public var amazonPay: String?
-    @Expandable<PaymentMethodDetailsAuBecsDebit>
+    @Expandable<PaymentMethodDetailsPaymentRecordAuBecsDebit>
     public var auBecsDebit: String?
-    @Expandable<PaymentMethodDetailsBacsDebit>
+    @Expandable<PaymentMethodDetailsPaymentRecordBacsDebit>
     public var bacsDebit: String?
-    @Expandable<PaymentMethodDetailsBancontact>
+    @Expandable<PaymentMethodDetailsPaymentRecordBancontact>
     public var bancontact: String?
-    @Expandable<PaymentMethodDetailsBillie>
+    @Expandable<PaymentMethodDetailsPaymentRecordBillie>
     public var billie: String?
     /// The billing details associated with the method of payment.
     @Expandable<PaymentsPrimitivesPaymentRecordsResourceBillingDetails>
     public var billingDetails: String?
-    @Expandable<PaymentMethodDetailsBlik>
+    @Expandable<PaymentMethodDetailsPaymentRecordBizum>
+    public var bizum: String?
+    @Expandable<PaymentMethodDetailsPaymentRecordBlik>
     public var blik: String?
-    @Expandable<PaymentMethodDetailsBoleto>
+    @Expandable<PaymentMethodDetailsPaymentRecordBoleto>
     public var boleto: String?
     @Expandable<PaymentsPrimitivesPaymentRecordsResourcePaymentMethodCardDetails>
     public var card: String?
     @Expandable<PaymentMethodDetailsCardPresent>
     public var cardPresent: String?
-    @Expandable<PaymentMethodDetailsCashapp>
+    @Expandable<PaymentMethodDetailsPaymentRecordCashapp>
     public var cashapp: String?
     @Expandable<PaymentMethodDetailsCrypto>
     public var crypto: String?
@@ -52,45 +54,47 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Coda
     public var custom: String?
     @Expandable<PaymentMethodDetailsCustomerBalance>
     public var customerBalance: String?
-    @Expandable<PaymentMethodDetailsEps>
+    @Expandable<PaymentMethodDetailsPaymentRecordEps>
     public var eps: String?
     @Expandable<PaymentMethodDetailsFpx>
     public var fpx: String?
-    @Expandable<PaymentMethodDetailsGiropay>
+    @Expandable<PaymentMethodDetailsPaymentRecordGiropay>
     public var giropay: String?
     @Expandable<PaymentMethodDetailsGrabpay>
     public var grabpay: String?
-    @Expandable<PaymentMethodDetailsIdeal>
+    @Expandable<PaymentMethodDetailsPaymentRecordIdeal>
     public var ideal: String?
     @Expandable<PaymentMethodDetailsInteracPresent>
     public var interacPresent: String?
-    @Expandable<PaymentMethodDetailsKakaoPay>
+    @Expandable<PaymentMethodDetailsPaymentRecordKakaoPay>
     public var kakaoPay: String?
-    @Expandable<PaymentMethodDetailsKlarna>
+    @Expandable<PaymentMethodDetailsPaymentRecordKlarna>
     public var klarna: String?
     @Expandable<PaymentMethodDetailsPaymentRecordKonbini>
     public var konbini: String?
     @Expandable<PaymentMethodDetailsKrCard>
     public var krCard: String?
-    @Expandable<PaymentMethodDetailsLink>
+    @Expandable<PaymentMethodDetailsPaymentRecordLink>
     public var link: String?
     @Expandable<PaymentMethodDetailsPaymentRecordMbWay>
     public var mbWay: String?
-    @Expandable<PaymentMethodDetailsMobilepay>
+    @Expandable<PaymentMethodDetailsPaymentRecordMobilepay>
     public var mobilepay: String?
-    @Expandable<PaymentMethodDetailsMultibanco>
+    @Expandable<PaymentMethodDetailsPaymentRecordMomo>
+    public var momo: String?
+    @Expandable<PaymentMethodDetailsPaymentRecordMultibanco>
     public var multibanco: String?
-    @Expandable<PaymentMethodDetailsNaverPay>
+    @Expandable<PaymentMethodDetailsPaymentRecordNaverPay>
     public var naverPay: String?
-    @Expandable<PaymentMethodDetailsNzBankAccount>
+    @Expandable<PaymentMethodDetailsPaymentRecordNzBankAccount>
     public var nzBankAccount: String?
-    @Expandable<PaymentMethodDetailsOxxo>
+    @Expandable<PaymentMethodDetailsPaymentRecordOxxo>
     public var oxxo: String?
-    @Expandable<PaymentMethodDetailsP24>
+    @Expandable<PaymentMethodDetailsPaymentRecordP24>
     public var p24: String?
-    @Expandable<PaymentMethodDetailsPayByBank>
+    @Expandable<PaymentMethodDetailsPaymentRecordPayByBank>
     public var payByBank: String?
-    @Expandable<PaymentMethodDetailsPayco>
+    @Expandable<PaymentMethodDetailsPaymentRecordPayco>
     public var payco: String?
     /// ID of the Stripe PaymentMethod used to make this payment.
     public var paymentMethod: String?
@@ -98,35 +102,45 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Coda
     public var paynow: String?
     @Expandable<PaymentMethodDetailsPaypal>
     public var paypal: String?
-    @Expandable<PaymentMethodDetailsPayto>
+    @Expandable<PaymentMethodDetailsPaymentRecordPaypay>
+    public var paypay: String?
+    @Expandable<PaymentMethodDetailsPaymentRecordPayto>
     public var payto: String?
-    @Expandable<PaymentMethodDetailsPix>
+    @Expandable<PaymentMethodDetailsPaymentRecordPix>
     public var pix: String?
     @Expandable<PaymentMethodDetailsPaymentRecordPromptpay>
     public var promptpay: String?
-    @Expandable<PaymentMethodDetailsRevolutPay>
+    @Expandable<PaymentMethodDetailsPaymentRecordRevolutPay>
     public var revolutPay: String?
-    @Expandable<PaymentMethodDetailsSamsungPay>
+    @Expandable<PaymentMethodDetailsPaymentRecordSamsungPay>
     public var samsungPay: String?
-    @Expandable<PaymentMethodDetailsSatispay>
+    @Expandable<PaymentMethodDetailsPaymentRecordSatispay>
     public var satispay: String?
+    @Expandable<PaymentMethodDetailsPaymentRecordScalapay>
+    public var scalapay: String?
     @Expandable<PaymentMethodDetailsSepaCreditTransfer>
     public var sepaCreditTransfer: String?
-    @Expandable<PaymentMethodDetailsSepaDebit>
+    @Expandable<PaymentMethodDetailsPaymentRecordSepaDebit>
     public var sepaDebit: String?
-    @Expandable<PaymentMethodDetailsSofort>
+    @Expandable<PaymentMethodDetailsPaymentRecordSequra>
+    public var sequra: String?
+    @Expandable<PaymentMethodDetailsPaymentRecordSofort>
     public var sofort: String?
     @Expandable<PaymentMethodDetailsStripeAccount>
     public var stripeAccount: String?
-    @Expandable<PaymentMethodDetailsSwish>
+    @Expandable<PaymentMethodDetailsPaymentRecordSunbit>
+    public var sunbit: String?
+    @Expandable<PaymentMethodDetailsPaymentRecordSwish>
     public var swish: String?
-    @Expandable<PaymentMethodDetailsTwint>
+    @Expandable<PaymentMethodDetailsPaymentRecordTwint>
     public var twint: String?
     /// The type of transaction-specific details of the payment method used in the payment. See
     /// [PaymentMethod.type](https://docs.stripe.com/api/payment_methods/object#payment_method_object-type)
     /// for the full list of possible types. An additional hash is included on `payment_method_details` with
     /// a name matching this value. It contains information specific to the payment method.
     public var type: String
+    @Expandable<PaymentMethodDetailsPaymentRecordUpi>
+    public var upi: String?
     @Expandable<PaymentMethodDetailsPaymentRecordUsBankAccount>
     public var usBankAccount: String?
     @Expandable<PaymentMethodDetailsWechat>
@@ -150,6 +164,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Coda
         case bancontact
         case billie
         case billingDetails = "billing_details"
+        case bizum
         case blik
         case boleto
         case card
@@ -171,6 +186,7 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Coda
         case link
         case mbWay = "mb_way"
         case mobilepay
+        case momo
         case multibanco
         case naverPay = "naver_pay"
         case nzBankAccount = "nz_bank_account"
@@ -181,19 +197,24 @@ public struct PaymentsPrimitivesPaymentRecordsResourcePaymentMethodDetails: Coda
         case paymentMethod = "payment_method"
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaCreditTransfer = "sepa_credit_transfer"
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
         case stripeAccount = "stripe_account"
+        case sunbit
         case swish
         case twint
         case type
+        case upi
         case usBankAccount = "us_bank_account"
         case wechat
         case wechatPay = "wechat_pay"

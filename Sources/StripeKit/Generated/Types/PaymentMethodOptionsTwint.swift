@@ -39,6 +39,7 @@ public struct PaymentMethodOptionsTwint: Codable, Sendable {
 /// [SCA](/strong-customer-authentication).
 public enum PaymentMethodOptionsTwintSetupFutureUsage: String, Codable, Sendable {
     case none
+    case offSession = "off_session"
 }
 
 public struct PaymentMethodOptionsTwintList: Codable, Sendable {

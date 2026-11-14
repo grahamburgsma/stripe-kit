@@ -44,9 +44,15 @@ public struct AccountRoutes: Sendable {
 
     /// With Connect, you can reject accounts that you have flagged as suspicious. Only accounts where your
     /// platform is liable for negative account balances, which includes Custom and Express accounts, can be
-    /// rejected. Test-mode accounts can be rejected at any time. Live-mode accounts can only be rejected
-    /// after all balances are zero.
+    /// rejected.
     public var reject: @Sendable (_ account: String, _ params: AccountRejectParams) async throws -> Account
+
+    /// With Connect, you can unreject accounts that you have previously rejected. Only accounts that were
+    /// rejected by your platform can be unrejected. This API cannot be used to unreject accounts that were
+    /// rejected by Stripe. Unreject will only enable charges and/or payouts if there are no other
+    /// restrictions other than those placed by a previous rejection. If you have separately paused charges
+    /// and/or payouts outside of rejection, those pauses will remain in place after unrejection.
+    public var unreject: @Sendable (_ account: String, _ params: AccountUnrejectParams?) async throws -> Account
 }
 
 extension AccountRoutes {
@@ -100,6 +106,14 @@ extension AccountRoutes {
                 return try await handler.send(
                     method: .POST,
                     path: "/v1/accounts/\(account)/reject",
+                    body: .bytes(ByteBuffer(string: body))
+                ) as Account
+            },
+            unreject: { account, params in
+                let body = params?.toFormBody() ?? ""
+                return try await handler.send(
+                    method: .POST,
+                    path: "/v1/accounts/\(account)/unreject",
                     body: .bytes(ByteBuffer(string: body))
                 ) as Account
             }

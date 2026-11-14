@@ -13,5 +13,6 @@ public enum ReceivedCreditCreateInitiatingPaymentMethodDetailsType: String, Coda
 
 public enum ReceivedCreditCreateNetwork: String, Codable, Sendable {
     case ach
+    case rtp
     case usDomesticWire = "us_domestic_wire"
 }

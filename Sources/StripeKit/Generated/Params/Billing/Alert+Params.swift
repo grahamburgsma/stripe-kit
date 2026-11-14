@@ -61,7 +61,7 @@ public struct AlertDeactivateParams: StripeParams {
 
 /// The configuration of the usage threshold.
 public struct AlertCreateUsageThreshold: StripeParams {
-    /// Defines at which value the alert will fire.
+    /// Defines the threshold value that triggers the alert. The value must be greater than 0.
     public var gte: Int
     /// The [Billing Meter](/api/billing/meter) ID whose usage is monitored.
     public var meter: String

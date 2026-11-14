@@ -12,7 +12,7 @@ public struct SetupIntentPaymentMethodOptionsAcssDebit: Codable, Sendable {
     public var currency: SetupIntentPaymentMethodOptionsAcssDebitCurrency?
     @Expandable<SetupIntentPaymentMethodOptionsMandateOptionsAcssDebit>
     public var mandateOptions: String?
-    /// Bank account verification method.
+    /// Bank account verification method. The default value is `automatic`.
     public var verificationMethod: SetupIntentPaymentMethodOptionsAcssDebitVerificationMethod?
 
     public enum CodingKeys: String, CodingKey {
@@ -28,7 +28,7 @@ public enum SetupIntentPaymentMethodOptionsAcssDebitCurrency: String, Codable, S
     case usd
 }
 
-/// Bank account verification method.
+/// Bank account verification method. The default value is `automatic`.
 public enum SetupIntentPaymentMethodOptionsAcssDebitVerificationMethod: String, Codable, Sendable {
     case automatic
     case instant

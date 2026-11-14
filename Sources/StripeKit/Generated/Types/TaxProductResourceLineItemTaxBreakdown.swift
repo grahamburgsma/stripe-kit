@@ -8,7 +8,7 @@
 import Foundation
 
 public struct TaxProductResourceLineItemTaxBreakdown: Codable, Sendable {
-    /// The amount of tax, in the [smallest currency unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// The amount of tax, in the [smallest currency unit](https://docs.stripe.com/currencies#minor-units).
     public var amount: Int
     @Expandable<TaxProductResourceJurisdiction>
     public var jurisdiction: String?
@@ -23,7 +23,7 @@ public struct TaxProductResourceLineItemTaxBreakdown: Codable, Sendable {
     /// this field may be extended as new tax rules are supported.
     public var taxabilityReason: TaxProductResourceLineItemTaxBreakdownTaxabilityReason
     /// The amount on which tax is calculated, in the [smallest currency
-    /// unit](https://docs.stripe.com/currencies#zero-decimal).
+    /// unit](https://docs.stripe.com/currencies#minor-units).
     public var taxableAmount: Int
 
     public enum CodingKeys: String, CodingKey {
@@ -41,6 +41,7 @@ public struct TaxProductResourceLineItemTaxBreakdown: Codable, Sendable {
 public enum TaxProductResourceLineItemTaxBreakdownSourcing: String, Codable, Sendable {
     case destination
     case origin
+    case performance
 }
 
 /// The reasoning behind this tax, for example, if the product is tax exempt. The possible values for

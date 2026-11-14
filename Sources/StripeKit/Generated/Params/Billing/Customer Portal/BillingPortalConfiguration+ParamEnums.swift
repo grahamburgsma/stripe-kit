@@ -38,6 +38,18 @@ public enum BillingPortalConfigurationCreateFeaturesSubscriptionCancelProrationB
     case none
 }
 
+public enum BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationIntervalOptionsInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum BillingPortalConfigurationCreateFeaturesSubscriptionPauseDurationType: String, Codable, Sendable {
+    case indefinite
+    case intervalOptions = "interval_options"
+}
+
 public enum BillingPortalConfigurationCreateFeaturesSubscriptionUpdateBillingCycleAnchor: String, Codable, Sendable {
     case now
     case unchanged
@@ -94,6 +106,18 @@ public enum BillingPortalConfigurationUpdateFeaturesSubscriptionCancelProrationB
     case alwaysInvoice = "always_invoice"
     case createProrations = "create_prorations"
     case none
+}
+
+public enum BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationIntervalOptionsInterval: String, Codable, Sendable {
+    case day
+    case month
+    case week
+    case year
+}
+
+public enum BillingPortalConfigurationUpdateFeaturesSubscriptionPauseDurationType: String, Codable, Sendable {
+    case indefinite
+    case intervalOptions = "interval_options"
 }
 
 public enum BillingPortalConfigurationUpdateFeaturesSubscriptionUpdateBillingCycleAnchor: String, Codable, Sendable {

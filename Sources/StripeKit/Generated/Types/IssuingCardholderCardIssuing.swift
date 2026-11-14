@@ -9,8 +9,8 @@ import Foundation
 
 public struct IssuingCardholderCardIssuing: Codable, Sendable {
     /// Information about cardholder acceptance of Celtic [Authorized User
-    /// Terms](https://stripe.com/docs/issuing/cards#accept-authorized-user-terms). Required for cards
-    /// backed by a Celtic program.
+    /// Terms](https://docs.stripe.com/issuing/compliance-us#issuing-terms). Required for cards backed by a
+    /// Celtic program.
     @Expandable<IssuingCardholderUserTermsAcceptance>
     public var userTermsAcceptance: String?
 

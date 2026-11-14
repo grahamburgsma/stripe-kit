@@ -27,8 +27,8 @@ public struct DisputeRoutes: Sendable {
     public var list: @Sendable (_ expand: [String]?) async throws -> DisputeList
 
     /// Closing the dispute for a charge indicates that you do not have any evidence to submit and are
-    /// essentially dismissing the dispute, acknowledging it as lost. The status of the dispute will change
-    /// from needs_response to lost. Closing a dispute is irreversible.
+    /// essentially dismissing the dispute (accepting it), acknowledging it as lost. The status of the
+    /// dispute will change from needs_response to lost. Closing a dispute is irreversible.
     public var close: @Sendable (_ dispute: String, _ params: DisputeCloseParams?) async throws -> Dispute
 }
 

@@ -11,9 +11,9 @@ public struct PaymentMethodFpx: Codable, Sendable {
     /// Account holder type, if provided. Can be one of `individual` or `company`.
     public var accountHolderType: PaymentMethodFpxAccountHolderType?
     /// The customer's bank, if provided. Can be one of `affin_bank`, `agrobank`, `alliance_bank`, `ambank`,
-    /// `bank_islam`, `bank_muamalat`, `bank_rakyat`, `bsn`, `cimb`, `hong_leong_bank`, `hsbc`, `kfh`,
-    /// `maybank2u`, `ocbc`, `public_bank`, `rhb`, `standard_chartered`, `uob`, `deutsche_bank`,
-    /// `maybank2e`, `pb_enterprise`, or `bank_of_china`.
+    /// `bank_islam`, `bank_muamalat`, `bnp_paribas`, `bank_rakyat`, `bsn`, `cimb`, `citibank`,
+    /// `hong_leong_bank`, `hsbc`, `kfh`, `maybank2u`, `ocbc`, `public_bank`, `rhb`, `standard_chartered`,
+    /// `uob`, `deutsche_bank`, `maybank2e`, `mbsb_bank`, `pb_enterprise`, or `bank_of_china`.
     public var bank: PaymentMethodFpxBank
 
     public enum CodingKeys: String, CodingKey {
@@ -29,9 +29,9 @@ public enum PaymentMethodFpxAccountHolderType: String, Codable, Sendable {
 }
 
 /// The customer's bank, if provided. Can be one of `affin_bank`, `agrobank`, `alliance_bank`, `ambank`,
-/// `bank_islam`, `bank_muamalat`, `bank_rakyat`, `bsn`, `cimb`, `hong_leong_bank`, `hsbc`, `kfh`,
-/// `maybank2u`, `ocbc`, `public_bank`, `rhb`, `standard_chartered`, `uob`, `deutsche_bank`,
-/// `maybank2e`, `pb_enterprise`, or `bank_of_china`.
+/// `bank_islam`, `bank_muamalat`, `bnp_paribas`, `bank_rakyat`, `bsn`, `cimb`, `citibank`,
+/// `hong_leong_bank`, `hsbc`, `kfh`, `maybank2u`, `ocbc`, `public_bank`, `rhb`, `standard_chartered`,
+/// `uob`, `deutsche_bank`, `maybank2e`, `mbsb_bank`, `pb_enterprise`, or `bank_of_china`.
 public enum PaymentMethodFpxBank: String, Codable, Sendable {
     case affinBank = "affin_bank"
     case agrobank
@@ -41,14 +41,17 @@ public enum PaymentMethodFpxBank: String, Codable, Sendable {
     case bankMuamalat = "bank_muamalat"
     case bankOfChina = "bank_of_china"
     case bankRakyat = "bank_rakyat"
+    case bnpParibas = "bnp_paribas"
     case bsn
     case cimb
+    case citibank
     case deutscheBank = "deutsche_bank"
     case hongLeongBank = "hong_leong_bank"
     case hsbc
     case kfh
     case maybank2e
     case maybank2u
+    case mbsbBank = "mbsb_bank"
     case ocbc
     case pbEnterprise = "pb_enterprise"
     case publicBank = "public_bank"

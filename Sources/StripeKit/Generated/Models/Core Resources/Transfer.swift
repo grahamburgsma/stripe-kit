@@ -10,9 +10,9 @@ import Foundation
 /// A `Transfer` object is created when you move funds between Stripe accounts as part of Connect.
 /// Before April 6, 2017, transfers also represented movement of funds from a Stripe account to a card
 /// or bank account. This behavior has since been split out into a
-/// [Payout](https://api.stripe.com#payout_object) object, with corresponding payout endpoints. For more
-/// information, read about the [transfer/payout split](https://docs.stripe.com/transfer-payout-split).
-/// Related guide: [Creating separate charges and
+/// [Payout](https://docs.stripe.com/api#payout_object) object, with corresponding payout endpoints. For
+/// more information, read about the [transfer/payout
+/// split](https://docs.stripe.com/transfer-payout-split). Related guide: [Creating separate charges and
 /// transfers](https://docs.stripe.com/connect/separate-charges-and-transfers)
 public struct Transfer: Codable, Sendable {
     /// Amount in cents (or local equivalent) to be transferred.
@@ -39,8 +39,8 @@ public struct Transfer: Codable, Sendable {
     public var destinationPayment: String?
     /// Unique identifier for the object.
     public var id: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

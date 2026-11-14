@@ -25,11 +25,10 @@ public struct LineItemUpdateParams: StripeParams {
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
-    /// empty value to `metadata`. For
-    /// [type=subscription](https://docs.stripe.com/api/invoices/line_item#invoice_line_item_object-type)
-    /// line items, the incoming metadata specified on the request is directly used to set this value, in
-    /// contrast to [type=invoiceitem](api/invoices/line_item#invoice_line_item_object-type) line items,
-    /// where any existing metadata on the invoice line is merged with the incoming data.
+    /// empty value to `metadata`. For [type=subscription](/api/invoices/line_item) line items, the incoming
+    /// metadata specified on the request is directly used to set this value, in contrast to
+    /// [type=invoiceitem](/api/invoices/line_item) line items, where any existing metadata on the invoice
+    /// line is merged with the incoming data.
     public var metadata: [String: String]?
     /// The period associated with this invoice item. When set to different values, the period will be
     /// rendered on the invoice. If you have [Stripe Revenue
@@ -42,9 +41,13 @@ public struct LineItemUpdateParams: StripeParams {
     public var priceData: LineItemUpdatePriceData?
     /// The pricing information for the invoice item.
     public var pricing: LineItemUpdatePricing?
-    /// Non-negative integer. The quantity of units for the line item.
+    /// Non-negative integer. The quantity of units for the line item. Use `quantity_decimal` instead to
+    /// provide decimal precision. This field will be deprecated in favor of `quantity_decimal` in a future
+    /// version.
     public var quantity: Int?
-    /// A list of up to 10 tax amounts for this line item. This can be useful if you calculate taxes on your
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the line item.
+    public var quantityDecimal: String?
+    /// A list of up to 20 tax amounts for this line item. This can be useful if you calculate taxes on your
     /// own or use a third-party to calculate them. You cannot set tax amounts if any line item has
     /// [tax_rates](https://docs.stripe.com/api/invoices/line_item#invoice_line_item_object-tax_rates) or if
     /// the invoice has
@@ -56,7 +59,7 @@ public struct LineItemUpdateParams: StripeParams {
     /// apply to this line item. Pass an empty string to remove previously-defined tax rates.
     public var taxRates: [String]?
 
-    public init(amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [LineItemUpdateDiscounts]? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, period: LineItemUpdatePeriod? = nil, priceData: LineItemUpdatePriceData? = nil, pricing: LineItemUpdatePricing? = nil, quantity: Int? = nil, taxAmounts: [LineItemUpdateTaxAmounts]? = nil, taxRates: [String]? = nil) {
+    public init(amount: Int? = nil, description: String? = nil, discountable: Bool? = nil, discounts: [LineItemUpdateDiscounts]? = nil, expand: [String]? = nil, metadata: [String: String]? = nil, period: LineItemUpdatePeriod? = nil, priceData: LineItemUpdatePriceData? = nil, pricing: LineItemUpdatePricing? = nil, quantity: Int? = nil, quantityDecimal: String? = nil, taxAmounts: [LineItemUpdateTaxAmounts]? = nil, taxRates: [String]? = nil) {
         self.amount = amount
         self.description = description
         self.discountable = discountable
@@ -67,6 +70,7 @@ public struct LineItemUpdateParams: StripeParams {
         self.priceData = priceData
         self.pricing = pricing
         self.quantity = quantity
+        self.quantityDecimal = quantityDecimal
         self.taxAmounts = taxAmounts
         self.taxRates = taxRates
     }
@@ -82,6 +86,7 @@ public struct LineItemUpdateParams: StripeParams {
         case priceData = "price_data"
         case pricing
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case taxAmounts = "tax_amounts"
         case taxRates = "tax_rates"
     }
@@ -187,16 +192,20 @@ public struct LineItemUpdatePriceDataProductData: StripeParams {
     public var metadata: [String: String]?
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    public var taxDetails: LineItemUpdatePriceDataProductDataTaxDetails?
     /// A label that represents units of this product. When set, this will be included in customers'
     /// receipts, invoices, Checkout, and the customer portal.
     public var unitLabel: String?
 
-    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, unitLabel: String? = nil) {
+    public init(name: String, description: String? = nil, images: [String]? = nil, metadata: [String: String]? = nil, taxCode: String? = nil, taxDetails: LineItemUpdatePriceDataProductDataTaxDetails? = nil, unitLabel: String? = nil) {
         self.name = name
         self.description = description
         self.images = images
         self.metadata = metadata
         self.taxCode = taxCode
+        self.taxDetails = taxDetails
         self.unitLabel = unitLabel
     }
 
@@ -206,7 +215,29 @@ public struct LineItemUpdatePriceDataProductData: StripeParams {
         case metadata
         case name
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case unitLabel = "unit_label"
+    }
+}
+
+/// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+/// location.
+public struct LineItemUpdatePriceDataProductDataTaxDetails: StripeParams {
+    /// A tax location ID. Depending on the [tax
+    /// code](/tax/tax-for-tickets/reference/tax-location-performance), this is required, optional, or not
+    /// supported.
+    public var performanceLocation: String?
+    /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
+    public var taxCode: String?
+
+    public init(performanceLocation: String? = nil, taxCode: String? = nil) {
+        self.performanceLocation = performanceLocation
+        self.taxCode = taxCode
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case performanceLocation = "performance_location"
+        case taxCode = "tax_code"
     }
 }
 

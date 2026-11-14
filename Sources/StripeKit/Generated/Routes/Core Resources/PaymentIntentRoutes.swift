@@ -49,8 +49,9 @@ public struct PaymentIntentRoutes: Sendable {
     /// requires_capture, requires_confirmation, requires_action or, in rare cases, processing. After it’s
     /// canceled, no additional charges are made by the PaymentIntent and any operations on the
     /// PaymentIntent fail with an error. For PaymentIntents with a status of requires_capture, the
-    /// remaining amount_capturable is automatically refunded. You can’t cancel the PaymentIntent for a
-    /// Checkout Session. Expire the Checkout Session instead.
+    /// remaining amount_capturable is automatically refunded. You can directly cancel the PaymentIntent for
+    /// a Checkout Session only when the PaymentIntent has a status of requires_capture. Otherwise, you must
+    /// expire the Checkout Session.
     public var cancel: @Sendable (_ intent: String, _ params: PaymentIntentCancelParams?) async throws -> PaymentIntent
 
     /// Capture the funds of an existing uncaptured PaymentIntent when its status is requires_capture.
@@ -85,7 +86,8 @@ public struct PaymentIntentRoutes: Sendable {
     /// no other fields on the PaymentIntent or Charge update. The PaymentIntent object remains capturable
     /// for the previously authorized amount. Each PaymentIntent can have a maximum of 10 incremental
     /// authorization attempts, including declines. After it’s captured, a PaymentIntent can no longer be
-    /// incremented. Learn more about incremental authorizations.
+    /// incremented. Learn more about incremental authorizations with in-person payments and online
+    /// payments.
     public var incrementAuthorization: @Sendable (_ intent: String, _ params: PaymentIntentIncrementAuthorizationParams) async throws -> PaymentIntent
 
     /// Verifies microdeposits on a PaymentIntent object.

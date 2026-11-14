@@ -42,7 +42,7 @@ public struct PaymentLink: Codable, Sendable {
     /// Must be a [supported currency](https://stripe.com/docs/currencies).
     public var currency: String
     /// Collect additional information from your customer using custom fields. Up to 3 fields are supported.
-    /// You can't set this parameter if `ui_mode` is `custom`.
+    /// You can't set this parameter if `ui_mode` is `elements`.
     @ExpandableCollection<PaymentLinksResourceCustomFields>
     public var customFields: [String]?
     @Expandable<PaymentLinksResourceCustomText>
@@ -58,9 +58,14 @@ public struct PaymentLink: Codable, Sendable {
     public var invoiceCreation: String?
     /// The line items representing what is being sold.
     public var lineItems: ItemList?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
+    /// Settings for Managed Payments for this Payment Link and resulting
+    /// [CheckoutSessions](/api/checkout/sessions/object), [PaymentIntents](/api/payment_intents/object),
+    /// [Invoices](/api/invoices/object), and [Subscriptions](/api/subscriptions/object).
+    @Expandable<PaymentPagesCheckoutSessionManagedPayments>
+    public var managedPayments: String?
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
     public var metadata: [String: String]
@@ -81,6 +86,9 @@ public struct PaymentLink: Codable, Sendable {
     public var paymentIntentData: String?
     /// Configuration for collecting a payment method during checkout. Defaults to `always`.
     public var paymentMethodCollection: PaymentLinkPaymentMethodCollection
+    /// Payment-method-specific configuration.
+    @Expandable<PaymentLinksResourcePaymentMethodOptions>
+    public var paymentMethodOptions: String?
     /// The list of payment method types that customers can use. When `null`, Stripe will dynamically show
     /// relevant payment methods you've enabled in your [payment method
     /// settings](https://dashboard.stripe.com/settings/payment_methods).
@@ -131,6 +139,7 @@ public struct PaymentLink: Codable, Sendable {
         case invoiceCreation = "invoice_creation"
         case lineItems = "line_items"
         case livemode
+        case managedPayments = "managed_payments"
         case metadata
         case nameCollection = "name_collection"
         case object
@@ -138,6 +147,7 @@ public struct PaymentLink: Codable, Sendable {
         case optionalItems = "optional_items"
         case paymentIntentData = "payment_intent_data"
         case paymentMethodCollection = "payment_method_collection"
+        case paymentMethodOptions = "payment_method_options"
         case paymentMethodTypes = "payment_method_types"
         case phoneNumberCollection = "phone_number_collection"
         case restrictions

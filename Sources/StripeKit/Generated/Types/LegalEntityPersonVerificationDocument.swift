@@ -8,8 +8,8 @@
 import Foundation
 
 public struct LegalEntityPersonVerificationDocument: Codable, Sendable {
-    /// The back of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`.
+    /// The back of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`.
     @Expandable<File>
     public var back: String?
     /// A user-displayable string describing the verification state of this document. For example, if a
@@ -23,8 +23,8 @@ public struct LegalEntityPersonVerificationDocument: Codable, Sendable {
     /// `document_photo_mismatch`, `document_too_large`, or `document_type_not_supported`. A
     /// machine-readable code specifying the verification state for this document.
     public var detailsCode: String?
-    /// The front of an ID returned by a [file upload](https://api.stripe.com#create_file) with a `purpose`
-    /// value of `identity_document`.
+    /// The front of an ID returned by a [file upload](https://docs.stripe.com/api#create_file) with a
+    /// `purpose` value of `identity_document`.
     @Expandable<File>
     public var front: String?
 

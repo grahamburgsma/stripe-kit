@@ -8,7 +8,9 @@
 import Foundation
 
 public struct BillingPortalSessionCreateParams: StripeParams {
-    /// The ID of an existing [configuration](https://docs.stripe.com/api/customer_portal/configuration) to
+    /// Behavior after the portal session expires.
+    public var afterExpiration: BillingPortalSessionCreateAfterExpiration?
+    /// The ID of an existing [configuration](https://docs.stripe.com/api/customer_portal/configurations) to
     /// use for this session, describing its functionality and features. If not specified, the session uses
     /// the default configuration.
     public var configuration: String?
@@ -35,7 +37,8 @@ public struct BillingPortalSessionCreateParams: StripeParams {
     /// website.
     public var returnUrl: String?
 
-    public init(configuration: String? = nil, customer: String? = nil, customerAccount: String? = nil, expand: [String]? = nil, flowData: BillingPortalSessionCreateFlowData? = nil, locale: BillingPortalSessionCreateLocale? = nil, onBehalfOf: String? = nil, returnUrl: String? = nil) {
+    public init(afterExpiration: BillingPortalSessionCreateAfterExpiration? = nil, configuration: String? = nil, customer: String? = nil, customerAccount: String? = nil, expand: [String]? = nil, flowData: BillingPortalSessionCreateFlowData? = nil, locale: BillingPortalSessionCreateLocale? = nil, onBehalfOf: String? = nil, returnUrl: String? = nil) {
+        self.afterExpiration = afterExpiration
         self.configuration = configuration
         self.customer = customer
         self.customerAccount = customerAccount
@@ -47,6 +50,7 @@ public struct BillingPortalSessionCreateParams: StripeParams {
     }
 
     public enum CodingKeys: String, CodingKey {
+        case afterExpiration = "after_expiration"
         case configuration
         case customer
         case customerAccount = "customer_account"
@@ -55,6 +59,39 @@ public struct BillingPortalSessionCreateParams: StripeParams {
         case locale
         case onBehalfOf = "on_behalf_of"
         case returnUrl = "return_url"
+    }
+}
+
+/// Behavior after the portal session expires.
+public struct BillingPortalSessionCreateAfterExpiration: StripeParams {
+    /// The behavior to apply when the session expires.
+    public var type: BillingPortalSessionCreateAfterExpirationType
+    /// Configuration for authenticating the customer after the session expires.
+    public var customerLogin: BillingPortalSessionCreateAfterExpirationCustomerLogin?
+
+    public init(type: BillingPortalSessionCreateAfterExpirationType, customerLogin: BillingPortalSessionCreateAfterExpirationCustomerLogin? = nil) {
+        self.type = type
+        self.customerLogin = customerLogin
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case customerLogin = "customer_login"
+        case type
+    }
+}
+
+/// Configuration for authenticating the customer after the session expires.
+public struct BillingPortalSessionCreateAfterExpirationCustomerLogin: StripeParams {
+    /// The Unix timestamp after which the customer can no longer recover this session. Leave unset to allow
+    /// recovery without a deadline.
+    public var expiresAt: Int?
+
+    public init(expiresAt: Int? = nil) {
+        self.expiresAt = expiresAt
+    }
+
+    public enum CodingKeys: String, CodingKey {
+        case expiresAt = "expires_at"
     }
 }
 
@@ -68,15 +105,18 @@ public struct BillingPortalSessionCreateFlowData: StripeParams {
     public var afterCompletion: BillingPortalSessionCreateFlowDataAfterCompletion?
     /// Configuration when `flow_data.type=subscription_cancel`.
     public var subscriptionCancel: BillingPortalSessionCreateFlowDataSubscriptionCancel?
+    /// Configuration when `flow_data.type=subscription_pause`.
+    public var subscriptionPause: BillingPortalSessionCreateFlowDataSubscriptionPause?
     /// Configuration when `flow_data.type=subscription_update`.
     public var subscriptionUpdate: BillingPortalSessionCreateFlowDataSubscriptionUpdate?
     /// Configuration when `flow_data.type=subscription_update_confirm`.
     public var subscriptionUpdateConfirm: BillingPortalSessionCreateFlowDataSubscriptionUpdateConfirm?
 
-    public init(type: BillingPortalSessionCreateFlowDataType, afterCompletion: BillingPortalSessionCreateFlowDataAfterCompletion? = nil, subscriptionCancel: BillingPortalSessionCreateFlowDataSubscriptionCancel? = nil, subscriptionUpdate: BillingPortalSessionCreateFlowDataSubscriptionUpdate? = nil, subscriptionUpdateConfirm: BillingPortalSessionCreateFlowDataSubscriptionUpdateConfirm? = nil) {
+    public init(type: BillingPortalSessionCreateFlowDataType, afterCompletion: BillingPortalSessionCreateFlowDataAfterCompletion? = nil, subscriptionCancel: BillingPortalSessionCreateFlowDataSubscriptionCancel? = nil, subscriptionPause: BillingPortalSessionCreateFlowDataSubscriptionPause? = nil, subscriptionUpdate: BillingPortalSessionCreateFlowDataSubscriptionUpdate? = nil, subscriptionUpdateConfirm: BillingPortalSessionCreateFlowDataSubscriptionUpdateConfirm? = nil) {
         self.type = type
         self.afterCompletion = afterCompletion
         self.subscriptionCancel = subscriptionCancel
+        self.subscriptionPause = subscriptionPause
         self.subscriptionUpdate = subscriptionUpdate
         self.subscriptionUpdateConfirm = subscriptionUpdateConfirm
     }
@@ -84,6 +124,7 @@ public struct BillingPortalSessionCreateFlowData: StripeParams {
     public enum CodingKeys: String, CodingKey {
         case afterCompletion = "after_completion"
         case subscriptionCancel = "subscription_cancel"
+        case subscriptionPause = "subscription_pause"
         case subscriptionUpdate = "subscription_update"
         case subscriptionUpdateConfirm = "subscription_update_confirm"
         case type
@@ -178,6 +219,16 @@ public struct BillingPortalSessionCreateFlowDataSubscriptionCancelRetentionCoupo
 
     public init(coupon: String) {
         self.coupon = coupon
+    }
+}
+
+/// Configuration when `flow_data.type=subscription_pause`.
+public struct BillingPortalSessionCreateFlowDataSubscriptionPause: StripeParams {
+    /// The ID of the subscription to be paused.
+    public var subscription: String
+
+    public init(subscription: String) {
+        self.subscription = subscription
     }
 }
 

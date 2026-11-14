@@ -9,10 +9,10 @@ import Foundation
 
 /// Money Movement details attached to this payment.
 public struct InsightsResourcesPaymentEvaluationMoneyMovementDetails: Codable, Sendable {
-    /// Describes card money movement details for the payment evaluation.
+    /// Describes card money movement details.
     @Expandable<InsightsResourcesPaymentEvaluationMoneyMovementCard>
     public var card: String?
-    /// Describes the type of money movement. Currently only `card` is supported.
+    /// Describes the type of money movement.
     public var moneyMovementType: InsightsResourcesPaymentEvaluationMoneyMovementDetailsMoneyMovementType
 
     public enum CodingKeys: String, CodingKey {
@@ -21,7 +21,7 @@ public struct InsightsResourcesPaymentEvaluationMoneyMovementDetails: Codable, S
     }
 }
 
-/// Describes the type of money movement. Currently only `card` is supported.
+/// Describes the type of money movement.
 public enum InsightsResourcesPaymentEvaluationMoneyMovementDetailsMoneyMovementType: String, Codable, Sendable {
     case card
 }

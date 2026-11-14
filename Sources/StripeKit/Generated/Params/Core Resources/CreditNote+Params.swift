@@ -112,7 +112,8 @@ public struct CreditNoteVoidParams: StripeParams {
 }
 
 public struct CreditNoteCreateLines: StripeParams {
-    /// Type of the credit note line item, one of `invoice_line_item` or `custom_line_item`
+    /// Type of the credit note line item, one of `invoice_line_item` or `custom_line_item`.
+    /// `custom_line_item` is not valid when the invoice is set up with `automatic_tax[enabled]=true`.
     public var type: CreditNoteCreateLinesType
     /// The line item amount to credit. Only valid when `type` is `invoice_line_item`. If invoice is set up
     /// with `automatic_tax[enabled]=true`, this amount is tax exclusive
@@ -121,12 +122,18 @@ public struct CreditNoteCreateLines: StripeParams {
     public var description: String?
     /// The invoice line item to credit. Only valid when the `type` is `invoice_line_item`.
     public var invoiceLineItem: String?
+    /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
+    /// This can be useful for storing additional information about the object in a structured format.
+    /// Individual keys can be unset by posting an empty value to them. All keys can be unset by posting an
+    /// empty value to `metadata`.
+    public var metadata: [String: String]?
     /// The line item quantity to credit.
     public var quantity: Int?
-    /// A list of up to 10 tax amounts for the credit note line item. Cannot be mixed with `tax_rates`.
+    /// A list of up to 20 tax amounts for the credit note line item. Not valid when `tax_rates` is used or
+    /// if invoice is set up with `automatic_tax[enabled]=true`.
     public var taxAmounts: [CreditNoteCreateLinesTaxAmounts]?
     /// The tax rates which apply to the credit note line item. Only valid when the `type` is
-    /// `custom_line_item` and cannot be mixed with `tax_amounts`.
+    /// `custom_line_item` and `tax_amounts` is not used.
     public var taxRates: [String]?
     /// The integer unit amount in cents (or local equivalent) of the credit note line item. This
     /// `unit_amount` will be multiplied by the quantity to get the full amount to credit for this line
@@ -136,11 +143,12 @@ public struct CreditNoteCreateLines: StripeParams {
     /// decimal places. Only one of `unit_amount` and `unit_amount_decimal` can be set.
     public var unitAmountDecimal: String?
 
-    public init(type: CreditNoteCreateLinesType, amount: Int? = nil, description: String? = nil, invoiceLineItem: String? = nil, quantity: Int? = nil, taxAmounts: [CreditNoteCreateLinesTaxAmounts]? = nil, taxRates: [String]? = nil, unitAmount: Int? = nil, unitAmountDecimal: String? = nil) {
+    public init(type: CreditNoteCreateLinesType, amount: Int? = nil, description: String? = nil, invoiceLineItem: String? = nil, metadata: [String: String]? = nil, quantity: Int? = nil, taxAmounts: [CreditNoteCreateLinesTaxAmounts]? = nil, taxRates: [String]? = nil, unitAmount: Int? = nil, unitAmountDecimal: String? = nil) {
         self.type = type
         self.amount = amount
         self.description = description
         self.invoiceLineItem = invoiceLineItem
+        self.metadata = metadata
         self.quantity = quantity
         self.taxAmounts = taxAmounts
         self.taxRates = taxRates
@@ -152,6 +160,7 @@ public struct CreditNoteCreateLines: StripeParams {
         case amount
         case description
         case invoiceLineItem = "invoice_line_item"
+        case metadata
         case quantity
         case taxAmounts = "tax_amounts"
         case taxRates = "tax_rates"

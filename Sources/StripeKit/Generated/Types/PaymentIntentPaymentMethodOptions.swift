@@ -28,6 +28,8 @@ public struct PaymentIntentPaymentMethodOptions: Codable, Sendable {
     public var bancontact: String?
     @Expandable<PaymentMethodOptionsBillie>
     public var billie: String?
+    @Expandable<PaymentMethodOptionsBizum>
+    public var bizum: String?
     @Expandable<PaymentIntentPaymentMethodOptionsBlik>
     public var blik: String?
     @Expandable<PaymentMethodOptionsBoleto>
@@ -86,6 +88,8 @@ public struct PaymentIntentPaymentMethodOptions: Codable, Sendable {
     public var paynow: String?
     @Expandable<PaymentMethodOptionsPaypal>
     public var paypal: String?
+    @Expandable<PaymentMethodOptionsPaypay>
+    public var paypay: String?
     @Expandable<PaymentIntentPaymentMethodOptionsPayto>
     public var payto: String?
     @Expandable<PaymentMethodOptionsPix>
@@ -98,14 +102,22 @@ public struct PaymentIntentPaymentMethodOptions: Codable, Sendable {
     public var samsungPay: String?
     @Expandable<PaymentMethodOptionsSatispay>
     public var satispay: String?
+    @Expandable<PaymentMethodOptionsScalapay>
+    public var scalapay: String?
     @Expandable<PaymentIntentPaymentMethodOptionsSepaDebit>
     public var sepaDebit: String?
+    @Expandable<PaymentMethodOptionsSequra>
+    public var sequra: String?
     @Expandable<PaymentMethodOptionsSofort>
     public var sofort: String?
+    @Expandable<PaymentMethodOptionsSunbit>
+    public var sunbit: String?
     @Expandable<PaymentIntentPaymentMethodOptionsSwish>
     public var swish: String?
     @Expandable<PaymentMethodOptionsTwint>
     public var twint: String?
+    @Expandable<PaymentMethodOptionsUpi>
+    public var upi: String?
     @Expandable<PaymentIntentPaymentMethodOptionsUsBankAccount>
     public var usBankAccount: String?
     @Expandable<PaymentMethodOptionsWechatPay>
@@ -124,6 +136,7 @@ public struct PaymentIntentPaymentMethodOptions: Codable, Sendable {
         case bacsDebit = "bacs_debit"
         case bancontact
         case billie
+        case bizum
         case blik
         case boleto
         case card
@@ -153,16 +166,21 @@ public struct PaymentIntentPaymentMethodOptions: Codable, Sendable {
         case payco
         case paynow
         case paypal
+        case paypay
         case payto
         case pix
         case promptpay
         case revolutPay = "revolut_pay"
         case samsungPay = "samsung_pay"
         case satispay
+        case scalapay
         case sepaDebit = "sepa_debit"
+        case sequra
         case sofort
+        case sunbit
         case swish
         case twint
+        case upi
         case usBankAccount = "us_bank_account"
         case wechatPay = "wechat_pay"
         case zip

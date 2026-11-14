@@ -9,8 +9,8 @@ import Foundation
 
 /// Products describe the specific goods or services you offer to your customers. For example, you might
 /// offer a Standard and Premium version of your goods or service; each version would be a separate
-/// Product. They can be used in conjunction with [Prices](https://api.stripe.com#prices) to configure
-/// pricing in Payment Links, Checkout, and Subscriptions. Related guides: [Set up a
+/// Product. They can be used in conjunction with [Prices](https://docs.stripe.com/api#prices) to
+/// configure pricing in Payment Links, Checkout, and Subscriptions. Related guides: [Set up a
 /// subscription](https://docs.stripe.com/billing/subscriptions/set-up-subscription), [share a Payment
 /// Link](https://docs.stripe.com/payment-links), [accept payments with
 /// Checkout](https://docs.stripe.com/payments/accept-a-payment#create-product-prices-upfront), and more
@@ -31,8 +31,8 @@ public struct Product: Codable, Sendable {
     public var id: String
     /// A list of up to 8 URLs of images for this product, meant to be displayable to the customer.
     public var images: [String]
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// A list of up to 15 marketing features for this product. These are displayed in [pricing
     /// tables](https://docs.stripe.com/payments/checkout/pricing-table).
@@ -57,6 +57,10 @@ public struct Product: Codable, Sendable {
     /// A [tax code](https://docs.stripe.com/tax/tax-categories) ID.
     @Expandable<TaxCode>
     public var taxCode: String?
+    /// Tax details for this product, including the [tax code](/tax/tax-codes) and an optional performance
+    /// location.
+    @Expandable<TaxProductTaxDetailsResourceTaxDetails>
+    public var taxDetails: String?
     /// The type of the product. The product is either of type `good`, which is eligible for use with Orders
     /// and SKUs, or `service`, which is eligible for use with Subscriptions and Plans.
     public var type: ProductType
@@ -84,6 +88,7 @@ public struct Product: Codable, Sendable {
         case shippable
         case statementDescriptor = "statement_descriptor"
         case taxCode = "tax_code"
+        case taxDetails = "tax_details"
         case type
         case unitLabel = "unit_label"
         case updated

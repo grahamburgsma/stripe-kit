@@ -8,7 +8,7 @@
 import Foundation
 
 public struct LegalEntityCompanyVerificationDocument: Codable, Sendable {
-    /// The back of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The back of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. Note that `additional_verification` files are [not
     /// downloadable](/file-upload#uploading-a-file).
     @Expandable<File>
@@ -21,7 +21,7 @@ public struct LegalEntityCompanyVerificationDocument: Codable, Sendable {
     /// `document_type_not_supported`, or `document_too_large`. A machine-readable code specifying the
     /// verification state for this document.
     public var detailsCode: String?
-    /// The front of a document returned by a [file upload](https://api.stripe.com#create_file) with a
+    /// The front of a document returned by a [file upload](https://docs.stripe.com/api#create_file) with a
     /// `purpose` value of `additional_verification`. Note that `additional_verification` files are [not
     /// downloadable](/file-upload#uploading-a-file).
     @Expandable<File>

@@ -16,8 +16,8 @@ public struct MeterEventAdjustment: Codable, Sendable {
     public var cancel: String?
     /// The name of the meter event. Corresponds with the `event_name` field on a meter.
     public var eventName: String
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// String representing the object's type. Objects of the same type share the same value.
     public var object: MeterEventAdjustmentObject

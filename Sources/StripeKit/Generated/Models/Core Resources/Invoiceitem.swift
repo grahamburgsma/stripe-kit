@@ -41,13 +41,19 @@ public struct Invoiceitem: Codable, Sendable {
     /// Use `expand[]=discounts` to expand each discount.
     @ExpandableCollection<Discount>
     public var discounts: [String]?
+    /// Array of field names that can't be modified. Attempting to update a frozen field returns an error.
+    public var frozenFields: [String]?
     /// Unique identifier for the object.
     public var id: String
     /// The ID of the invoice this invoice item belongs to.
     @Expandable<Invoice>
     public var invoice: String?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// The rules that control when this invoice item is eligible for invoicing. All rules must be satisfied
+    /// for the item to be invoiced.
+    @ExpandableCollection<InvoicingRule>
+    public var invoicingRules: [String]?
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -70,9 +76,13 @@ public struct Invoiceitem: Codable, Sendable {
     public var proration: Bool
     @Expandable<ProrationDetails>
     public var prorationDetails: String?
-    /// Quantity of units for the invoice item. If the invoice item is a proration, the quantity of the
-    /// subscription that the proration was computed for.
+    /// Quantity of units for the invoice item in integer format, with any decimal precision truncated. For
+    /// the item's full-precision decimal quantity, use `quantity_decimal`. This field will be deprecated in
+    /// favor of `quantity_decimal` in a future version. If the invoice item is a proration, the quantity of
+    /// the subscription that the proration was computed for.
     public var quantity: Int
+    /// Non-negative decimal with at most 12 decimal places. The quantity of units for the invoice item.
+    public var quantityDecimal: String
     /// The tax rates which apply to the invoice item. When set, the `default_tax_rates` on the invoice do
     /// not apply to this invoice item.
     @ExpandableCollection<TaxRate>
@@ -90,8 +100,10 @@ public struct Invoiceitem: Codable, Sendable {
         case description
         case discountable
         case discounts
+        case frozenFields = "frozen_fields"
         case id
         case invoice
+        case invoicingRules = "invoicing_rules"
         case livemode
         case metadata
         case netAmount = "net_amount"
@@ -102,6 +114,7 @@ public struct Invoiceitem: Codable, Sendable {
         case proration
         case prorationDetails = "proration_details"
         case quantity
+        case quantityDecimal = "quantity_decimal"
         case taxRates = "tax_rates"
         case testClock = "test_clock"
     }

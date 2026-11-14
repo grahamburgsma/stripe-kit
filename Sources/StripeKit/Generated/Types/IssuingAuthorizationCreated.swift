@@ -7,9 +7,10 @@
 
 import Foundation
 
-/// Occurs whenever an authorization is created.
+/// Occurs whenever an authorization is created. For verification authorizations, this event is only
+/// accessible via private preview.
 public struct IssuingAuthorizationCreated: Codable, Sendable {
-    public var object: Authorization
+    public var object: IssuingAuthorization
 }
 
 public struct IssuingAuthorizationCreatedList: Codable, Sendable {

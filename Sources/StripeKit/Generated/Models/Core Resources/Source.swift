@@ -9,11 +9,10 @@ import Foundation
 
 /// `Source` objects allow you to accept a variety of payment methods. They represent a customer's
 /// payment instrument, and can be used with the Stripe API just like a `Card` object: once chargeable,
-/// they can be charged, or can be attached to customers. Stripe doesn't recommend using the deprecated
-/// [Sources API](https://docs.stripe.com/api/sources). We recommend that you adopt the [PaymentMethods
-/// API](https://docs.stripe.com/api/payment_methods). This newer API provides access to our latest
-/// features and payment method types. Related guides: [Sources API](https://docs.stripe.com/sources)
-/// and [Sources & Customers](https://docs.stripe.com/sources/customers).
+/// they can be charged, or can be attached to customers. This API is deprecated. Use the
+/// [PaymentMethods API](https://docs.stripe.com/api/payment_methods) instead. Related guides: [Sources
+/// API](https://docs.stripe.com/sources) and [Sources &
+/// Customers](https://docs.stripe.com/sources/customers).
 public struct Source: Codable, Sendable {
     public var achCreditTransfer: SourceTypeAchCreditTransfer?
     public var achDebit: SourceTypeAchDebit?
@@ -55,8 +54,8 @@ public struct Source: Codable, Sendable {
     public var id: String
     public var ideal: SourceTypeIdeal?
     public var klarna: SourceTypeKlarna?
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.

@@ -7,9 +7,10 @@
 
 import Foundation
 
-/// This is an object representing a Stripe account. You can retrieve it to see properties on the
-/// account like its current requirements or if the account is enabled to make live charges or receive
-/// payouts. For accounts where
+/// For new integrations, we recommend using the [Accounts v2 API](/api/v2/core/accounts), in place of
+/// /v1/accounts and /v1/customers to represent a user. This is an object representing a Stripe account.
+/// You can retrieve it to see properties on the account like its current requirements or if the account
+/// is enabled to make live charges or receive payouts. For accounts where
 /// [controller.requirement_collection](/api/accounts/object#account_object-controller-requirement_collection)
 /// is `application`, which includes Custom accounts, the properties below are always returned. For
 /// accounts where

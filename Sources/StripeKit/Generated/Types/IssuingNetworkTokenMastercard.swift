@@ -8,13 +8,13 @@
 import Foundation
 
 public struct IssuingNetworkTokenMastercard: Codable, Sendable {
-    /// A unique reference ID from MasterCard to represent the card account number.
+    /// A unique reference ID from Mastercard to represent the card account number.
     public var cardReferenceId: String?
     /// The network-unique identifier for the token.
     public var tokenReferenceId: String
-    /// The ID of the entity requesting tokenization, specific to MasterCard.
+    /// The ID of the entity requesting tokenization, specific to Mastercard.
     public var tokenRequestorId: String
-    /// The name of the entity requesting tokenization, if known. This is directly provided from MasterCard.
+    /// The name of the entity requesting tokenization, if known. This is directly provided from Mastercard.
     public var tokenRequestorName: String?
 
     public enum CodingKeys: String, CodingKey {

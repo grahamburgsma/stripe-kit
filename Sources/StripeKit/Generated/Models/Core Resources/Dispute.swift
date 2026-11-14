@@ -34,11 +34,13 @@ public struct Dispute: Codable, Sendable {
     public var evidenceDetails: String?
     /// Unique identifier for the object.
     public var id: String
+    /// Intended submission method for the dispute.
+    public var intendedSubmissionMethod: DisputeIntendedSubmissionMethod?
     /// If true, it's still possible to refund the disputed payment. After the payment has been fully
     /// refunded, no further funds are withdrawn from your Stripe account as a result of this dispute.
     public var isChargeRefundable: Bool
-    /// Has the value `true` if the object exists in live mode or the value `false` if the object exists in
-    /// test mode.
+    /// If the object exists in live mode, the value is `true`. If the object exists in test mode, the value
+    /// is `false`.
     public var livemode: Bool
     /// Set of [key-value pairs](https://docs.stripe.com/api/metadata) that you can attach to an object.
     /// This can be useful for storing additional information about the object in a structured format.
@@ -59,8 +61,8 @@ public struct Dispute: Codable, Sendable {
     /// more about [dispute reasons](https://docs.stripe.com/disputes/categories).
     public var reason: String
     /// The current status of a dispute. Possible values include:`warning_needs_response`,
-    /// `warning_under_review`, `warning_closed`, `needs_response`, `under_review`, `won`, `lost`, or
-    /// `prevented`.
+    /// `warning_under_review`, `warning_closed`, `needs_response`, `under_review`, `appeal_needs_response`,
+    /// `appeal_under_review`, `won`, `lost`, or `prevented`.
     public var status: DisputeStatus
 
     public enum CodingKeys: String, CodingKey {
@@ -73,6 +75,7 @@ public struct Dispute: Codable, Sendable {
         case evidence
         case evidenceDetails = "evidence_details"
         case id
+        case intendedSubmissionMethod = "intended_submission_method"
         case isChargeRefundable = "is_charge_refundable"
         case livemode
         case metadata
@@ -85,15 +88,25 @@ public struct Dispute: Codable, Sendable {
     }
 }
 
+/// Intended submission method for the dispute.
+public enum DisputeIntendedSubmissionMethod: String, Codable, Sendable {
+    case manual
+    case preferManual = "prefer_manual"
+    case preferSmartDisputes = "prefer_smart_disputes"
+    case smartDisputes = "smart_disputes"
+}
+
 /// String representing the object's type. Objects of the same type share the same value.
 public enum DisputeObject: String, Codable, Sendable {
     case dispute
 }
 
 /// The current status of a dispute. Possible values include:`warning_needs_response`,
-/// `warning_under_review`, `warning_closed`, `needs_response`, `under_review`, `won`, `lost`, or
-/// `prevented`.
+/// `warning_under_review`, `warning_closed`, `needs_response`, `under_review`, `appeal_needs_response`,
+/// `appeal_under_review`, `won`, `lost`, or `prevented`.
 public enum DisputeStatus: String, Codable, Sendable {
+    case appealNeedsResponse = "appeal_needs_response"
+    case appealUnderReview = "appeal_under_review"
     case lost
     case needsResponse = "needs_response"
     case prevented
